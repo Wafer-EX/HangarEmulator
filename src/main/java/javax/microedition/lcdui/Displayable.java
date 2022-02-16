@@ -5,6 +5,7 @@ import things.CanvasPanel;
 public abstract class Displayable {
     private String title;
     private Ticker ticker;
+    private CommandListener commandListener;
 
     public String getTitle() {
         return title;
@@ -26,11 +27,17 @@ public abstract class Displayable {
         return true;
     }
 
-    public void addCommand(Command cmd) { }
+    public void addCommand(Command cmd) {
+        if (cmd == null) {
+            throw new NullPointerException();
+        }
+    }
 
     public void removeCommand(Command cmd) { }
 
-    public void setCommandListener(CommandListener l) { }
+    public void setCommandListener(CommandListener l) {
+        commandListener = l;
+    }
 
     public int getWidth() {
         return CanvasPanel.getInstance().getWidth();
