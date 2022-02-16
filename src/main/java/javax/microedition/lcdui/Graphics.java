@@ -14,9 +14,10 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final java.awt.Graphics graphics;
+    private java.awt.Font font;
 
-    public Graphics(java.awt.Graphics g) {
-        graphics = g;
+    public Graphics(java.awt.Graphics graphics) {
+        this.graphics = graphics;
     }
 
     public void setColor(int red, int green, int blue) {
@@ -50,12 +51,15 @@ public class Graphics {
     }
 
     public Font getFont() {
-        return new Font(graphics.getFont());
+        return new Font(font);
     }
 
-    public void setFont(Font font) { }
+    public void setFont(Font font) {
+        this.font = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), font.getSize());
+    }
 
     public void drawString(String str, int x, int y, int anchor) {
+        // TODO: text align
         graphics.drawString(str, x, y);
     }
 }
