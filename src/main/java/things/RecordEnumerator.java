@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordEnumerator implements RecordEnumeration, Serializable {
-    private boolean isDestroyed = false;
-
+    public boolean isDestroyed = false;
     public final List<byte[]> data;
     public int enumerationIndex = 0;
 

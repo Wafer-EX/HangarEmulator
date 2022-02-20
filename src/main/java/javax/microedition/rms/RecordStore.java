@@ -13,9 +13,10 @@ public class RecordStore {
     public static final int AUTHMODE_ANY = 1;
 
     private static final Hashtable<String, RecordStore> openedRecords = new Hashtable();
+    private static String recordsPath = String.format("records/%s/", MIDletResources.getMIDletName());
+
     private File file;
     private RecordEnumerator recordEnumerator;
-    private static String recordsPath = "records/" + MIDletResources.getMIDletName();
 
     private RecordStore(File file, RecordEnumerator recordEnumerator) {
         this.file = file;
@@ -26,8 +27,9 @@ public class RecordStore {
         if (recordStoreName == null)
             throw new IllegalArgumentException();
 
-        if (openedRecords.containsKey(recordStoreName))
+        if (openedRecords.containsKey(recordStoreName)) {
             return openedRecords.get(recordStoreName);
+        }
 
         var file = new File(recordsPath + recordStoreName);
         RecordStore recordStore = null;
@@ -37,18 +39,14 @@ public class RecordStore {
                 var fileInputStream = new FileInputStream(file);
                 var objectInputStream = new ObjectInputStream(fileInputStream);
 
-                var dataRecorder = (RecordEnumerator)objectInputStream.readObject();
-                recordStore = new RecordStore(file, dataRecorder);
+                var recordEnumerator = (RecordEnumerator)objectInputStream.readObject();
+                recordStore = new RecordStore(file, recordEnumerator);
             }
             else if (createIfNecessary) {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-
-                var fileOutputStream = new FileOutputStream(file);
-                var objectOutputStream = new ObjectOutputStream(fileOutputStream);
-
                 recordStore = new RecordStore(file, new RecordEnumerator());
-                objectOutputStream.writeObject(recordStore.recordEnumerator);
+                recordStore.writeRecordEnumerator();
             }
             else throw new RecordStoreNotFoundException();
         }
