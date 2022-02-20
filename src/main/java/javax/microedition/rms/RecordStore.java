@@ -2,9 +2,16 @@ package javax.microedition.rms;
 
 import things.DataRecorder;
 
+import java.util.Hashtable;
+
 public class RecordStore {
+    private static final Hashtable<String, RecordStore> openedRecords = new Hashtable();
+
     public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
-        return new RecordStore();
+        if (!openedRecords.containsKey(recordStoreName)) {
+            openedRecords.put(recordStoreName, createRecordStore(recordStoreName, createIfNecessary));
+        }
+        return openedRecords.get(recordStoreName);
     }
 
     public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {

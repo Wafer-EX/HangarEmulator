@@ -28,7 +28,7 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_POUND = 35;
 
     protected Canvas() {
-        CanvasPanel.setCanvas(this);
+        CanvasPanel.setDisplayable(this);
     }
 
     public boolean hasPointerEvents(){

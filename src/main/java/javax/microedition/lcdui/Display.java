@@ -45,11 +45,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return CanvasPanel.getCanvas();
+        return CanvasPanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable){
-        CanvasPanel.setCanvas((Canvas)displayable);
+        CanvasPanel.setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) {

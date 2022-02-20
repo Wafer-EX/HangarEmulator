@@ -1,11 +1,12 @@
 package things;
 
+import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
 
 public class CanvasPanel extends JPanel {
     private static CanvasPanel instance;
-    private static javax.microedition.lcdui.Canvas canvas;
+    private static Displayable displayable;
     private static Graphics graphics;
 
     private CanvasPanel() { }
@@ -17,12 +18,12 @@ public class CanvasPanel extends JPanel {
         return instance;
     }
 
-    public static javax.microedition.lcdui.Canvas getCanvas() {
-        return canvas;
+    public static Displayable getDisplayable() {
+        return displayable;
     }
 
-    public static void setCanvas(javax.microedition.lcdui.Canvas canvas) {
-        CanvasPanel.canvas = canvas;
+    public static void setDisplayable(Displayable displayable) {
+        CanvasPanel.displayable = displayable;
     }
 
     @Override
@@ -32,16 +33,22 @@ public class CanvasPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        if (canvas != null) {
+        if (displayable != null) {
             CanvasPanel.graphics = graphics;
-            canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+            if (displayable instanceof javax.microedition.lcdui.Canvas) {
+                var canvas = (javax.microedition.lcdui.Canvas) displayable;
+                canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+            }
         }
     }
 
     @Override
     public void repaint() {
-        if (canvas != null && graphics != null) {
-            canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+        if (displayable != null && graphics != null) {
+            if (displayable instanceof javax.microedition.lcdui.Canvas) {
+                var canvas = (javax.microedition.lcdui.Canvas) displayable;
+                canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+            }
         }
         super.repaint();
     }
