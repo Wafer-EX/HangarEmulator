@@ -1,7 +1,6 @@
 package things;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 

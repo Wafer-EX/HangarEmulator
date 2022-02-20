@@ -22,6 +22,20 @@ public class Graphics {
         this.graphics = graphics;
     }
 
+    public void translate(int x, int y) {
+        graphics.translate(x, y);
+    }
+
+    public int getTranslateX() {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public int getTranslateY() {
+        // TODO: write method logic
+        return 0;
+    }
+
     public void setColor(int red, int green, int blue) {
         graphics.setColor(new Color(red, green, blue));
     }
@@ -105,8 +119,8 @@ public class Graphics {
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("drawSubstring");
+        // TODO: rewrite method logic
+        drawString(str, x, y, anchor);
     }
 
     public void drawChar(char character, int x, int y, int anchor) throws NotImplementedException {
@@ -147,7 +161,7 @@ public class Graphics {
 
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws NotImplementedException {
         // TODO: write method logic
-        throw new NotImplementedException("drawRegion");
+        throw new NotImplementedException("drawRGB");
     }
 
     public int getDisplayColor(int color) {
