@@ -3,7 +3,7 @@ package javax.microedition.rms;
 public interface RecordEnumeration {
     public int numRecords();
 
-    public byte[] nextRecord();
+    public byte[] nextRecord() throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException;
 
     public void reset();
 
