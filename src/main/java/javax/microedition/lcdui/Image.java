@@ -1,10 +1,12 @@
 package javax.microedition.lcdui;
 
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.MIDletResources;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class Image {
     public final java.awt.Image image;
@@ -17,9 +19,29 @@ public class Image {
         return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB));
     }
 
+    public static Image createImage(Image source) throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createImage");
+    }
+
     public static Image createImage(String name) throws IOException {
         var stream = MIDletResources.getResourceFromJar(name);
         return new Image(ImageIO.read(stream));
+    }
+
+    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createImage");
+    }
+
+    public static Image createImage(Image image, int x, int y, int width, int height, int transform) throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createImage");
+    }
+
+    public Graphics getGraphics() throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("getGraphics");
     }
 
     public int getWidth() {
@@ -28,5 +50,25 @@ public class Image {
 
     public int getHeight() {
         return image.getHeight(null);
+    }
+
+    public boolean isMutable() {
+        // TODO: it is correct?
+        return true;
+    }
+
+    public static Image createImage(InputStream stream) throws IOException, NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createImage");
+    }
+
+    public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createRGBImage");
+    }
+
+    public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws NotImplementedException {
+        // TODO: write method logic
+        throw new NotImplementedException("createRGBImage");
     }
 }

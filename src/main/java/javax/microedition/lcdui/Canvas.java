@@ -2,6 +2,8 @@ package javax.microedition.lcdui;
 
 import things.CanvasPanel;
 
+import java.awt.*;
+
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
     public static final int DOWN = 6;
@@ -25,28 +27,59 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
 
-    public Canvas() {
-        CanvasPanel.setCanvas(this);
+    protected Canvas() {
+        CanvasPanel.setDisplayable(this);
     }
 
     public boolean hasPointerEvents(){
         return false;
     }
 
-    public abstract void paint(Graphics graphics);
-
-    public void repaint() {
-        CanvasPanel.getInstance().repaint();
+    public boolean hasPointerMotionEvents() {
+        return false;
     }
 
-    public void serviceRepaints() { }
+    public boolean hasRepeatEvents() {
+        return false;
+    }
+
+    public int getKeyCode(int gameAction) {
+        // TODO: write method logic
+        return gameAction;
+    }
+
+    public String getKeyName(int keyCode) {
+        // TODO: write method logic
+        return null;
+    }
+
+    public int getGameAction(int keyCode) {
+        return keyCode;
+    }
+
+    public void setFullScreenMode(boolean mode) { }
 
     public abstract void keyPressed(int keyCode);
 
     public abstract void keyReleased(int keyCode);
 
-
-    public int getGameAction(int keyCode) {
-        return keyCode;
+    public void repaint() {
+        CanvasPanel.getInstance().repaint();
     }
+
+    public void serviceRepaints() {
+        // TODO: write method logic
+    }
+
+    protected void showNotify() {
+        // TODO: write method logic
+    }
+
+    protected void hideNotify() {
+        // TODO: write method logic
+    }
+
+    public abstract void paint(Graphics graphics);
+
+    protected void sizeChanged(int w, int h) { }
 }
