@@ -1,7 +1,8 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-import things.ImageUtils;
+import things.utils.FontUtils;
+import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
@@ -118,11 +119,12 @@ public class Graphics {
     }
 
     public void drawString(String str, int x, int y, int anchor) {
-        // TODO: write text align logic
+        x = FontUtils.AlignX(getFont(), str, x, anchor);
+        y = FontUtils.AlignY(getFont(), str, y, anchor);
         graphics.drawString(str, x, y);
     }
 
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws NotImplementedException {
+    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
         // TODO: rewrite method logic
         drawString(str, x, y, anchor);
     }
