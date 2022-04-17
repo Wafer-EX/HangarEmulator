@@ -1,10 +1,8 @@
 package javax.microedition.rms;
 
-import things.CanvasPanel;
 import things.MIDletResources;
 import things.RecordEnumerator;
 
-import javax.microedition.lcdui.Canvas;
 import java.io.*;
 import java.util.Hashtable;
 

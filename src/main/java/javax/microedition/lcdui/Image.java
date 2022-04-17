@@ -5,6 +5,7 @@ import things.MIDletResources;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -29,9 +30,17 @@ public class Image {
         return new Image(ImageIO.read(stream));
     }
 
-    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createImage");
+    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NullPointerException {
+        if (imageData == null) {
+            throw new NullPointerException();
+        }
+        try {
+            ByteArrayInputStream imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
+            Image image = createImage(imageInputStream);
+            return image;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public static Image createImage(Image image, int x, int y, int width, int height, int transform) throws NotImplementedException {
@@ -57,9 +66,17 @@ public class Image {
         return true;
     }
 
-    public static Image createImage(InputStream stream) throws IOException, NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createImage");
+    public static Image createImage(InputStream stream) throws IOException {
+        if (stream == null) {
+            throw new NullPointerException();
+        }
+        try {
+            BufferedImage bufferedImage = ImageIO.read(stream);
+            Image image = new Image(bufferedImage);
+            return image;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NotImplementedException {
