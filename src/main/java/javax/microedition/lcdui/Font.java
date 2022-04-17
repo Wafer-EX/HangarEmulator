@@ -28,16 +28,16 @@ public class Font {
     }
 
     public static Font getFont(int face, int style, int size) {
-        int convertedSize = FontUtils.ConvertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
+        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
         return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, style, convertedSize));
     }
 
     public int getSize() {
-        return FontUtils.ConvertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
     }
 
     public int getStyle() {
-        return se_font.getStyle();
+        return FontUtils.discardMismatchedStyle(se_font.getStyle());
     }
 
     public int getFace() {

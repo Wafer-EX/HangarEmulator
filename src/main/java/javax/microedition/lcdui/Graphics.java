@@ -68,7 +68,7 @@ public class Graphics {
     }
 
     public void setFont(Font font) {
-        int convertedSize = FontUtils.ConvertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
+        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
         this.se_font = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
     }
 
@@ -125,8 +125,8 @@ public class Graphics {
     }
 
     public void drawString(String str, int x, int y, int anchor) {
-        x = FontUtils.AlignX(getFont(), str, x, anchor);
-        y = FontUtils.AlignY(getFont(), str, y, anchor);
+        x = FontUtils.alignX(getFont(), str, x, anchor);
+        y = FontUtils.alignY(getFont(), str, y, anchor);
         se_graphics.drawString(str, x, y);
     }
 
@@ -146,8 +146,8 @@ public class Graphics {
     }
 
     public void drawImage(Image img, int x, int y, int anchor) {
-        x = ImageUtils.AlignX(img.getWidth(), x, anchor);
-        y = ImageUtils.AlignY(img.getHeight(), y, anchor);
+        x = ImageUtils.alignX(img.getWidth(), x, anchor);
+        y = ImageUtils.alignY(img.getHeight(), y, anchor);
         se_graphics.drawImage(img.image, x, y, null);
     }
 
@@ -155,8 +155,8 @@ public class Graphics {
         BufferedImage bufferedImage = (BufferedImage) src.image;
         BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
 
-        x_dest = ImageUtils.AlignX(subImage.getWidth(), x_dest, anchor);
-        y_dest = ImageUtils.AlignY(subImage.getHeight(), y_dest, anchor);
+        x_dest = ImageUtils.alignX(subImage.getWidth(), x_dest, anchor);
+        y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
 
         switch (transform) {
             case Sprite.TRANS_MIRROR:
@@ -171,8 +171,8 @@ public class Graphics {
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
-        x_dest = ImageUtils.AlignX(width, x_dest, anchor);
-        y_dest = ImageUtils.AlignY(height, y_dest, anchor);
+        x_dest = ImageUtils.alignX(width, x_dest, anchor);
+        y_dest = ImageUtils.alignY(height, y_dest, anchor);
         se_graphics.copyArea(x_src, y_src, width, height, x_dest, y_dest);
     }
 
