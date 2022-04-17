@@ -1,8 +1,10 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import things.ImageUtils;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Graphics {
     public static final int HCENTER = 1;
@@ -135,22 +137,25 @@ public class Graphics {
     }
 
     public void drawImage(Image img, int x, int y, int anchor) {
-        if ((anchor & Graphics.RIGHT) != 0) x -= img.getWidth();
-        else if ((anchor & Graphics.HCENTER) != 0) x -= img.getWidth() / 2;
-
-        if ((anchor & Graphics.BOTTOM) != 0) y -= img.getHeight();
-        else if ((anchor & Graphics.VCENTER) != 0) y -= img.getHeight() / 2;
-
+        x = ImageUtils.AlignX(img.getWidth(), x, anchor);
+        y = ImageUtils.AlignY(img.getHeight(), y, anchor);
         graphics.drawImage(img.image, x, y, null);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("drawRegion");
+        BufferedImage bufferedImage = (BufferedImage) src.image;
+        BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
+
+        // TODO: write logic for transform
+
+        x_dest = ImageUtils.AlignX(subImage.getWidth(), x_dest, anchor);
+        y_dest = ImageUtils.AlignY(subImage.getHeight(), y_dest, anchor);
+        graphics.drawImage(subImage, x_dest, y_dest, null);
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
-        // TODO: write align logic
+        x_dest = ImageUtils.AlignX(width, x_dest, anchor);
+        y_dest = ImageUtils.AlignY(height, y_dest, anchor);
         graphics.copyArea(x_src, y_src, width, height, x_dest, y_dest);
     }
 
