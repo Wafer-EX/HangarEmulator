@@ -1,6 +1,6 @@
 package javax.microedition.midlet;
 
-public abstract  class MIDlet {
+public abstract class MIDlet {
     protected MIDlet() { }
 
     public abstract void startApp() throws MIDletStateChangeException;

@@ -2,8 +2,6 @@ package javax.microedition.lcdui;
 
 import things.CanvasPanel;
 
-import java.awt.*;
-
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
     public static final int DOWN = 6;

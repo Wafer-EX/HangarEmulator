@@ -2,10 +2,6 @@ package javax.microedition.lcdui;
 
 import things.CanvasPanel;
 
-import java.awt.*;
-import java.awt.font.FontRenderContext;
-import java.awt.geom.AffineTransform;
-
 public class Font {
     public static final int STYLE_PLAIN = 0;
     public static final int STYLE_BOLD = 1;
