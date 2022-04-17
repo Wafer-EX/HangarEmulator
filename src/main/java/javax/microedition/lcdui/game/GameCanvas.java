@@ -10,7 +10,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int FIRE_PRESSED = 1 << Canvas.FIRE;
     public static final int GAME_A_PRESSED = 1 << Canvas.GAME_A;
     public static final int GAME_B_PRESSED = 1 << Canvas.GAME_B;
-    public static final int GAME_C_PRESSED = 1 << Canvas.GAME_С;
+    public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     protected GameCanvas(boolean suppressKeyEvents) {
