@@ -68,14 +68,14 @@ public class FontUtils {
     public static int alignY(Font font, String str, int y, int anchor) {
         var graphics = CanvasPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(font.se_font);
-        var stringHeight = metrics.getStringBounds(str, graphics);
+        var stringSize = metrics.getStringBounds(str, graphics);
 
         int alignedY = y;
         if ((anchor & Graphics.BOTTOM) != 0) {
-            alignedY -= stringHeight.getMaxY();
+            alignedY -= stringSize.getMaxY();
         }
-        else if ((anchor & Graphics.VCENTER) != 0) {
-            alignedY -= stringHeight.getCenterY();
+        else if ((anchor & Graphics.TOP) != 0) {
+            alignedY += stringSize.getMaxY() + font.getHeight() / 2;
         }
         return alignedY;
     }

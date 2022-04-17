@@ -28,8 +28,9 @@ public class Font {
     }
 
     public static Font getFont(int face, int style, int size) {
+        int convertedStyle = FontUtils.discardMismatchedStyle(style);
         int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
-        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, style, convertedSize));
+        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize));
     }
 
     public int getSize() {
@@ -63,17 +64,19 @@ public class Font {
     }
 
     public int getHeight() {
-        var metrics = CanvasPanel.getInstance().getGraphics().getFontMetrics(se_font);
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(se_font);
         return metrics.getHeight();
     }
 
     public int getBaselinePosition() {
         // TODO: it is correct?
-        return se_font.getSize();
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
     }
 
     public int charWidth(char ch) {
-        var metrics = CanvasPanel.getInstance().getGraphics().getFontMetrics(se_font);
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(se_font);
         return metrics.charWidth(ch);
     }
 

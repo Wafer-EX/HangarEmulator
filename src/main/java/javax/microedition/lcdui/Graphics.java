@@ -125,8 +125,9 @@ public class Graphics {
     }
 
     public void drawString(String str, int x, int y, int anchor) {
-        x = FontUtils.alignX(getFont(), str, x, anchor);
-        y = FontUtils.alignY(getFont(), str, y, anchor);
+        var font = getFont();
+        x = FontUtils.alignX(font, str, x, anchor);
+        y = FontUtils.alignY(font, str, y, anchor);
         se_graphics.drawString(str, x, y);
     }
 
