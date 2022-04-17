@@ -3,6 +3,7 @@ package javax.microedition.lcdui;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.ImageUtils;
 
+import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -146,11 +147,19 @@ public class Graphics {
         BufferedImage bufferedImage = (BufferedImage) src.image;
         BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
 
-        // TODO: write logic for transform
-
         x_dest = ImageUtils.AlignX(subImage.getWidth(), x_dest, anchor);
         y_dest = ImageUtils.AlignY(subImage.getHeight(), y_dest, anchor);
-        graphics.drawImage(subImage, x_dest, y_dest, null);
+
+        switch (transform) {
+            case Sprite.TRANS_MIRROR:
+                x_dest += width;
+                width = -width;
+                break;
+            default:
+                // TODO: write logic for rotation
+                throw new NotImplementedException("drawRegion");
+        }
+        graphics.drawImage(subImage, x_dest, y_dest, width, height, null);
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
