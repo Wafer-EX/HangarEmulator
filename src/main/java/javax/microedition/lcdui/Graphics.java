@@ -131,8 +131,8 @@ public class Graphics {
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
-        // TODO: rewrite method logic
-        drawString(str, x, y, anchor);
+        String substring = str.substring(offset, offset + len);
+        drawString(substring, x, y, anchor);
     }
 
     public void drawChar(char character, int x, int y, int anchor) throws NotImplementedException {
