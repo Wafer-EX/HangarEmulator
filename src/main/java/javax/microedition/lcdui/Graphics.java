@@ -164,9 +164,7 @@ public class Graphics {
                 x_dest += width;
                 width = -width;
                 break;
-            default:
-                // TODO: write logic for rotation
-                throw new NotImplementedException("drawRegion");
+            // TODO: write logic for rotation
         }
         se_graphics.drawImage(subImage, x_dest, y_dest, width, height, null);
     }
