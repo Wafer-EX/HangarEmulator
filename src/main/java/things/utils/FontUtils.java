@@ -59,6 +59,17 @@ public class FontUtils {
     }
 
     public static int AlignY(Font font, String str, int y, int anchor) {
-        return y;
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(font.se_font);
+        var stringHeight = metrics.getStringBounds(str, graphics);
+
+        int alignedY = y;
+        if ((anchor & Graphics.RIGHT) != 0) {
+            alignedY -= stringHeight.getMaxY();
+        }
+        else if ((anchor & Graphics.HCENTER) != 0) {
+            alignedY -= stringHeight.getCenterY();
+        }
+        return alignedY;
     }
 }
