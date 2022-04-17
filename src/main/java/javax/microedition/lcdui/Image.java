@@ -36,8 +36,7 @@ public class Image {
         }
         try {
             ByteArrayInputStream imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            BufferedImage bufferedImage = ImageIO.read(imageInputStream);
-            Image image = new Image(bufferedImage);
+            Image image = createImage(imageInputStream);
             return image;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
