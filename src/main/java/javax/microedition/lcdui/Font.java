@@ -1,6 +1,7 @@
 package javax.microedition.lcdui;
 
 import things.CanvasPanel;
+import things.utils.FontUtils;
 
 public class Font {
     public static final int STYLE_PLAIN = 0;
@@ -16,32 +17,28 @@ public class Font {
     public static final int FONT_STATIC_TEXT = 0;
     public static final int FONT_INPUT_TEXT = 1;
 
-    public java.awt.Font font;
+    public java.awt.Font se_font;
 
     public Font(java.awt.Font font) {
-        this.font = font;
+        this.se_font = font;
     }
 
     public static Font getDefaultFont() {
-        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.PLAIN, 14));
+        return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
     }
 
     public static Font getFont(int face, int style, int size) {
-        switch (size) {
-            case SIZE_SMALL: size = 10; break;
-            case SIZE_MEDIUM: size = 12; break;
-            case SIZE_LARGE: size = 14; break;
-        }
-        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, style, size));
+        int convertedStyle = FontUtils.discardMismatchedStyle(style);
+        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
+        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize));
     }
 
     public int getSize() {
-        // TODO: font size converter
-        return font.getSize();
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
     }
 
     public int getStyle() {
-        return font.getStyle();
+        return FontUtils.discardMismatchedStyle(se_font.getStyle());
     }
 
     public int getFace() {
@@ -50,15 +47,15 @@ public class Font {
     }
 
     public boolean isPlain() {
-        return font.isPlain();
+        return se_font.isPlain();
     }
 
     public boolean isBold() {
-        return font.isBold();
+        return se_font.isBold();
     }
 
     public boolean isItalic() {
-        return font.isItalic();
+        return se_font.isItalic();
     }
 
     public boolean isUnderlined() {
@@ -67,17 +64,19 @@ public class Font {
     }
 
     public int getHeight() {
-        var metrics = CanvasPanel.getInstance().getGraphics().getFontMetrics(font);
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(se_font);
         return metrics.getHeight();
     }
 
     public int getBaselinePosition() {
         // TODO: it is correct?
-        return font.getSize();
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
     }
 
     public int charWidth(char ch) {
-        var metrics = CanvasPanel.getInstance().getGraphics().getFontMetrics(font);
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(se_font);
         return metrics.charWidth(ch);
     }
 
@@ -87,7 +86,8 @@ public class Font {
     }
 
     public int stringWidth(String str) {
-        var metrics = CanvasPanel.getInstance().getGraphics().getFontMetrics(font);
+        var graphics = CanvasPanel.getInstance().getGraphics();
+        var metrics = graphics.getFontMetrics(se_font);
         return metrics.stringWidth(str);
     }
 
