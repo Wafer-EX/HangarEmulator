@@ -17,6 +17,7 @@ public class Graphics {
 
     private final java.awt.Graphics graphics;
     private java.awt.Font font;
+    private int translateX = 0, translateY = 0;
 
     public Graphics(java.awt.Graphics graphics) {
         this.graphics = graphics;
@@ -24,16 +25,16 @@ public class Graphics {
 
     public void translate(int x, int y) {
         graphics.translate(x, y);
+        translateX += x;
+        translateY += y;
     }
 
     public int getTranslateX() {
-        // TODO: write method logic
-        return 0;
+        return translateX;
     }
 
     public int getTranslateY() {
-        // TODO: write method logic
-        return 0;
+        return translateY;
     }
 
     public void setColor(int red, int green, int blue) {
@@ -62,19 +63,19 @@ public class Graphics {
     }
 
     public int getClipX() {
-        return graphics.getClip().getBounds().x;
+        return graphics.getClipBounds().x;
     }
 
     public int getClipY() {
-        return graphics.getClip().getBounds().y;
+        return graphics.getClipBounds().y;
     }
 
     public int getClipWidth() {
-        return graphics.getClip().getBounds().width;
+        return graphics.getClipBounds().width;
     }
 
     public int getClipHeight() {
-        return graphics.getClip().getBounds().height;
+        return graphics.getClipBounds().height;
     }
 
     public void clipRect(int x, int y, int width, int height) {
