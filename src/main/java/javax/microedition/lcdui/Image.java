@@ -67,9 +67,17 @@ public class Image {
         return true;
     }
 
-    public static Image createImage(InputStream stream) throws IOException, NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createImage");
+    public static Image createImage(InputStream stream) throws IOException {
+        if (stream == null) {
+            throw new NullPointerException();
+        }
+        try {
+            BufferedImage bufferedImage = ImageIO.read(stream);
+            Image image = new Image(bufferedImage);
+            return image;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NotImplementedException {
