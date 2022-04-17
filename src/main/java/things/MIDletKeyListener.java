@@ -29,8 +29,14 @@ public class MIDletKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        int convertedKeyCode = convertKeyCode(e.getKeyCode());
         var displayable = CanvasPanel.getDisplayable();
+        int convertedKeyCode = 0;
+        if (displayable instanceof GameCanvas) {
+            convertedKeyCode = convertGameKeyCode(e.getKeyCode());
+        }
+        else {
+            convertedKeyCode = convertKeyCode(e.getKeyCode());
+        }
 
         if (displayable instanceof Canvas) {
             var canvas = (Canvas)displayable;
