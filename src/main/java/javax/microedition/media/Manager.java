@@ -6,12 +6,13 @@ import java.io.InputStream;
 
 public final class Manager implements Controllable {
     public static Player createPlayer(InputStream stream, String type) {
-        if (type == "audio/midi") {
-            Player player = new MidiPlayer(stream);
-            return player;
+        Player player = null;
+        switch (type) {
+            case "audio/midi":
+                player = new MidiPlayer(stream);
+                break;
+            // TODO: write logic for other types
         }
-        else {
-            return null;
-        }
+        return player;
     }
 }

@@ -37,7 +37,7 @@ public class RecordStore {
                 var fileInputStream = new FileInputStream(file);
                 var objectInputStream = new ObjectInputStream(fileInputStream);
 
-                var recordEnumerator = (RecordEnumerator)objectInputStream.readObject();
+                var recordEnumerator = (RecordEnumerator) objectInputStream.readObject();
                 recordStore = new RecordStore(file, recordEnumerator);
             }
             else if (createIfNecessary) {

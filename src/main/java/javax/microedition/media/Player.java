@@ -11,6 +11,8 @@ public interface Player extends Controllable {
 
     public int getState();
 
+    public void prefetch();
+
     public void start();
 
     public void stop();
