@@ -44,4 +44,9 @@ public class MidiPlayer extends ExtendedPlayer {
         sequencer.stop();
         setState(REALIZED);
     }
+
+    @Override
+    public void close() {
+        // TODO: write method logic
+    }
 }

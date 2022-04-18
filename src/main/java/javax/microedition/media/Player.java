@@ -16,4 +16,12 @@ public interface Player extends Controllable {
     public void start();
 
     public void stop();
+
+    public void deallocate();
+
+    public void close();
+
+    public void addPlayerListener(PlayerListener playerListener);
+
+    public void removePlayerListener(PlayerListener playerListener);
 }
