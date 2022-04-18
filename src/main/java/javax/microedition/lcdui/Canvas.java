@@ -61,6 +61,11 @@ public abstract class Canvas extends Displayable {
 
     public abstract void keyReleased(int keyCode);
 
+    public final void repaint(int x, int y, int width, int height) {
+        CanvasPanel.getInstance().repaint(x, y, width, height);
+    }
+
+
     public void repaint() {
         CanvasPanel.getInstance().repaint();
     }

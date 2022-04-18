@@ -60,6 +60,11 @@ public class RecordStore {
         return recordStore;
     }
 
+    public int getNumRecords() throws RecordStoreNotOpenException {
+        // TODO: write method logic
+        return 0;
+    }
+
     public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {
         return recordEnumerator;
     }
