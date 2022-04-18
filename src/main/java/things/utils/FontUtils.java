@@ -74,7 +74,7 @@ public class FontUtils {
         if ((anchor & Graphics.BOTTOM) != 0) {
             alignedY -= stringSize.getMaxY();
         }
-        else if ((anchor & Graphics.TOP) != 0) {
+        else if (anchor == 0 || (anchor & Graphics.TOP) != 0) {
             alignedY += stringSize.getMaxY() + font.getHeight() / 2;
         }
         return alignedY;
