@@ -1,3 +1,3 @@
 package javax.microedition.media;
 
-public interface Control { }
+public interface Control extends Controllable { }
