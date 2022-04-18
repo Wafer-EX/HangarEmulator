@@ -1,10 +1,17 @@
 package javax.microedition.media;
 
+import things.implementations.MidiPlayer;
+
 import java.io.InputStream;
 
-public final class Manager {
+public final class Manager implements Controllable {
     public static Player createPlayer(InputStream stream, String type) {
-        // TODO: write method logic
-        return null;
+        if (type == "audio/midi") {
+            Player player = new MidiPlayer(stream);
+            return player;
+        }
+        else {
+            return null;
+        }
     }
 }
