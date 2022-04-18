@@ -11,4 +11,6 @@ public interface PlayerListener {
     public static final String VOLUME_CHANGED = "VOLUME_CHANGED";
     public static final String ERROR = "ERROR";
     public static final String CLOSED = "CLOSED";
+
+    public void playerUpdate(Player player, String event, Object eventData);
 }

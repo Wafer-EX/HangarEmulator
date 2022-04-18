@@ -6,6 +6,7 @@ import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
 
 import static javax.microedition.media.Player.PREFETCHED;
+import static javax.microedition.media.Player.STARTED;
 
 public class PlayerMetaEventListener implements MetaEventListener {
     private ExtendedPlayer player;
@@ -16,7 +17,7 @@ public class PlayerMetaEventListener implements MetaEventListener {
 
     @Override
     public void meta(MetaMessage meta) {
-        if (meta.getType() == 47) {
+        if (meta.getType() == 47 && player.getState() == STARTED) {
             player.setState(PREFETCHED);
             player.start();
         }

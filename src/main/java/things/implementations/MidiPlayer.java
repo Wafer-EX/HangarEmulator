@@ -11,12 +11,11 @@ public class MidiPlayer extends ExtendedPlayer {
 
     public MidiPlayer(InputStream stream) {
         try {
-            this.sequencer = MidiSystem.getSequencer();
-            this.sequencer.open();
-            this.sequencer.setSequence(stream);
+            sequencer = MidiSystem.getSequencer();
+            sequencer.open();
+            sequencer.setSequence(stream);
             setState(PREFETCHED);
-        }
-        catch (Exception exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
     }
@@ -24,6 +23,7 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public void prefetch() {
         // TODO: write method logic
+        setState(PREFETCHED);
     }
 
     @Override
