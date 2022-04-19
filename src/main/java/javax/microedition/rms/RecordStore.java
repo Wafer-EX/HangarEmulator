@@ -25,7 +25,6 @@ public class RecordStore implements Serializable {
     }
 
     public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, IllegalArgumentException {
-        System.out.println("openRecordStore");
         if (recordStoreName == null) {
             throw new IllegalArgumentException();
         }
@@ -79,7 +78,7 @@ public class RecordStore implements Serializable {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.add(subArray);
-        return recordEnumerator.numRecords() - 1;
+        return recordEnumerator.numRecords();
     }
 
     public void closeRecordStore() throws RecordStoreNotOpenException, RecordStoreException {
@@ -95,7 +94,7 @@ public class RecordStore implements Serializable {
     }
 
     public void setRecord(int recordId, byte[] arr, int offset, int numBytes) throws RecordStoreException {
-        if (recordEnumerator.records.size() <= recordId) {
+        if (recordEnumerator.records.size() < recordId) {
             throw new RecordStoreException();
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);

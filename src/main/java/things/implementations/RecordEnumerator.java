@@ -10,7 +10,7 @@ import java.util.List;
 
 public class RecordEnumerator implements RecordEnumeration, Serializable {
     public List<byte[]> records;
-    private int currentRecord = 0;
+    private int currentRecord = 1;
     private boolean isDestroyed = false;
 
     public RecordEnumerator() {
