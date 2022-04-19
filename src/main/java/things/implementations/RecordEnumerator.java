@@ -1,4 +1,4 @@
-package things;
+package things.implementations;
 
 import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordEnumeration;
@@ -9,51 +9,63 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordEnumerator implements RecordEnumeration, Serializable {
-    public boolean isDestroyed = false;
-    public final List<byte[]> data;
-    public int enumerationIndex = 0;
+    public final List<byte[]> records;
+    private int currentRecord = 0;
+    private boolean isDestroyed = false;
 
     public RecordEnumerator() {
-        data = new ArrayList();
+        records = new ArrayList();
     }
 
     @Override
     public int numRecords() {
-        return data.size();
+        if (isDestroyed) {
+            throw new IllegalStateException();
+        }
+        return records.size();
     }
 
     @Override
     public byte[] nextRecord() throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException {
-        if (enumerationIndex + 1 >= data.size()) {
+        if (isDestroyed) {
+            throw new IllegalStateException();
+        }
+        try {
+            int nextId = nextRecordId();
+            byte[] nextRecord = records.get(nextId);
+            return nextRecord.clone();
+        } catch (InvalidRecordIDException exception) {
             throw new InvalidRecordIDException();
         }
-        enumerationIndex += 1;
-        var nextData = data.get(enumerationIndex);
-        return nextData.clone();
     }
 
     @Override
     public int nextRecordId() throws InvalidRecordIDException {
-        if (enumerationIndex + 1 >= data.size()) {
+        if (isDestroyed) {
+            throw new IllegalStateException();
+        }
+        if (currentRecord + 1 > records.size() - 1) {
             throw new InvalidRecordIDException();
         }
-        enumerationIndex += 1;
-        return enumerationIndex;
+        currentRecord += 1;
+        return currentRecord;
     }
 
     @Override
     public void reset() {
-        enumerationIndex = 0;
+        if (isDestroyed) {
+            throw new IllegalStateException();
+        }
+        currentRecord = 0;
     }
 
     @Override
     public void destroy() {
-        // TODO: add this to all methods
         if (isDestroyed) {
             throw new IllegalStateException();
         }
-        data.clear();
-        enumerationIndex = 0;
+        records.clear();
+        currentRecord = 0;
         isDestroyed = true;
     }
 }

@@ -1,7 +1,7 @@
 package javax.microedition.rms;
 
 import things.MIDletResources;
-import things.RecordEnumerator;
+import things.implementations.RecordEnumerator;
 
 import java.io.*;
 import java.util.Hashtable;
@@ -70,18 +70,18 @@ public class RecordStore {
     }
 
     public int addRecord(byte[] arr, int offset, int numBytes) throws RecordStoreException {
-        recordEnumerator.data.add(arr);
+        recordEnumerator.records.add(arr);
         writeRecordEnumerator();
-        return recordEnumerator.data.size() - 1;
+        return recordEnumerator.records.size() - 1;
     }
 
     public void closeRecordStore() throws RecordStoreException { }
 
     public void setRecord(int recordId, byte[] arr, int offset, int numBytes) throws RecordStoreException {
-        if (recordEnumerator.data.size() <= recordId) {
+        if (recordEnumerator.records.size() <= recordId) {
             throw new RecordStoreException();
         }
-        recordEnumerator.data.set(recordId, arr);
+        recordEnumerator.records.set(recordId, arr);
         writeRecordEnumerator();
     }
 
