@@ -9,6 +9,10 @@ public abstract class MIDlet {
 
     public abstract void destroyApp(boolean unconditional) throws MIDletStateChangeException;
 
+    public void notifyDestroyed() {
+        System.exit(0);
+    }
+
     public final String getAppProperty(String key) {
         return null;
     }
