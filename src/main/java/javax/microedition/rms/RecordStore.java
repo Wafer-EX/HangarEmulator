@@ -98,7 +98,7 @@ public class RecordStore implements Serializable {
             throw new RecordStoreException();
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
-        recordEnumerator.records.set(recordId, subArray);
+        recordEnumerator.records.set(recordId - 1, subArray);
     }
 
     public static String[] listRecordStores() {
