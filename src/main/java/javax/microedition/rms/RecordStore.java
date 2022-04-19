@@ -1,58 +1,67 @@
 package javax.microedition.rms;
 
-import things.MIDletResources;
 import things.implementations.RecordEnumerator;
 
 import java.io.*;
 import java.util.Arrays;
 import java.util.Hashtable;
 
-public class RecordStore {
+import static things.utils.RecordStoreUtils.*;
+
+public class RecordStore implements Serializable {
     public static final int AUTHMODE_PRIVATE = 0;
     public static final int AUTHMODE_ANY = 1;
 
-    private static String recordsPath = String.format("records/%s/", MIDletResources.getMIDletName());
-    private File file;
     private static final Hashtable<String, RecordStore> openedRecords = new Hashtable();
-    private static RecordEnumerator recordEnumerator;
+    private RecordEnumerator recordEnumerator;
+    private File recordEnumeratorPath;
+    private String name;
+    private boolean isOpened = true;
 
-    private RecordStore(File file, RecordEnumerator recordEnumerator) {
-        this.file = file;
+    private RecordStore(String name, File recordEnumeratorPath, RecordEnumerator recordEnumerator) {
+        this.name = name;
+        this.recordEnumeratorPath = recordEnumeratorPath;
         this.recordEnumerator = recordEnumerator;
     }
 
     public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, IllegalArgumentException {
+        System.out.println("openRecordStore");
+        if (recordStoreName == null) {
+            throw new IllegalArgumentException();
+        }
         if (openedRecords.containsKey(recordStoreName)) {
             return openedRecords.get(recordStoreName);
         }
 
-        var file = new File(recordsPath + recordStoreName);
-        RecordStore recordStore = null;
+        RecordStore recordStore;
+        var file = new File(getRecordsPath() + recordStoreName);
 
-        try {
-            if (file.exists()) {
-                var fileInputStream = new FileInputStream(file);
-                var objectInputStream = new ObjectInputStream(fileInputStream);
-                var recordEnumerator = objectInputStream.readObject();
-                recordStore = new RecordStore(file, (RecordEnumerator) recordEnumerator);
-                openedRecords.put(recordStoreName, recordStore);
-            }
-            else if (createIfNecessary) {
+        if (file.exists()) {
+            var recordEnumerator = new RecordEnumerator();
+            recordEnumerator.records = readRecordEnumeratorData(file);
+            recordStore = new RecordStore(recordStoreName, file, recordEnumerator);
+        }
+        else if (createIfNecessary) {
+            try {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-                recordStore = new RecordStore(file, new RecordEnumerator());
-                openedRecords.put(recordStoreName, recordStore);
-                recordStore.writeRecordEnumerator();
+                var recordEnumerator = new RecordEnumerator();
+                writeRecordEnumeratorData(recordEnumerator.records, file);
+                recordStore = new RecordStore(recordStoreName, file, new RecordEnumerator());
             }
-            else throw new RecordStoreNotFoundException();
+            catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
-        catch (IOException | ClassNotFoundException exception) {
-            throw new RecordStoreException();
+        else {
+            throw new RecordStoreNotFoundException();
         }
-        catch (RecordStoreNotFoundException exception) {
-            throw exception;
-        }
+        openedRecords.put(recordStoreName, recordStore);
         return recordStore;
+    }
+
+    public String getName() throws RecordStoreNotOpenException {
+        return name;
     }
 
     public int getNumRecords() throws RecordStoreNotOpenException {
@@ -60,13 +69,8 @@ public class RecordStore {
     }
 
     public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {
-        if (filter == null && comparator == null) {
-            return recordEnumerator;
-        }
-        else {
-            // TODO: write logic for filter and comparator
-            return recordEnumerator;
-        }
+        // TODO: write logic for filter and comparator
+        return recordEnumerator;
     }
 
     public int addRecord(byte[] arr, int offset, int numBytes) throws RecordStoreException {
@@ -75,12 +79,19 @@ public class RecordStore {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.add(subArray);
-        writeRecordEnumerator();
-        return recordEnumerator.records.size() - 1;
+        return recordEnumerator.numRecords() - 1;
     }
 
-    public void closeRecordStore() throws RecordStoreException {
-        // TODO: write method logic
+    public void closeRecordStore() throws RecordStoreNotOpenException, RecordStoreException {
+        // TODO: write method logic?
+        if (!isOpened) {
+            throw new RecordStoreNotOpenException();
+        }
+        writeRecordEnumeratorData(recordEnumerator.records, recordEnumeratorPath);
+    }
+
+    public byte[] getRecord(int recordId) {
+        return recordEnumerator.records.get(recordId - 1);
     }
 
     public void setRecord(int recordId, byte[] arr, int offset, int numBytes) throws RecordStoreException {
@@ -89,11 +100,10 @@ public class RecordStore {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.set(recordId, subArray);
-        writeRecordEnumerator();
     }
 
     public static String[] listRecordStores() {
-        File[] appFiles = new File(recordsPath).listFiles();
+        File[] appFiles = new File(getRecordsPath()).listFiles();
         if (appFiles.length == 0) {
             return null;
         }
@@ -103,17 +113,6 @@ public class RecordStore {
                 appFileNames[i] = appFiles[i].getName();
             }
             return appFileNames;
-        }
-    }
-
-    private void writeRecordEnumerator() {
-        try {
-            var fileOutputStream = new FileOutputStream(file);
-            var objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(recordEnumerator);
-        }
-        catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
 }

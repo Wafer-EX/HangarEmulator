@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordEnumerator implements RecordEnumeration, Serializable {
-    public final List<byte[]> records;
+    public List<byte[]> records;
     private int currentRecord = 0;
     private boolean isDestroyed = false;
 
@@ -44,7 +44,7 @@ public class RecordEnumerator implements RecordEnumeration, Serializable {
         if (isDestroyed) {
             throw new IllegalStateException();
         }
-        if (currentRecord + 1 > records.size() - 1) {
+        if (currentRecord + 1 > records.size()) {
             throw new InvalidRecordIDException();
         }
         currentRecord += 1;
