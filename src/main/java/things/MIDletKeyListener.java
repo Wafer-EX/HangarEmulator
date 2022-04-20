@@ -1,6 +1,5 @@
 package things;
 
-import com.nokia.mid.ui.FullCanvas;
 import things.utils.KeyCodeConverter;
 
 import javax.microedition.lcdui.Canvas;

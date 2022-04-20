@@ -4,12 +4,16 @@ import things.MIDletLoader;
 
 import javax.microedition.midlet.MIDlet;
 import javax.swing.*;
+import java.awt.*;
 
 public class HangarEmu {
     public static void main(String[] args) {
         JFrame mainWindow = new JFrame("HangarEmu");
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        CanvasPanel.getInstance().setPreferredSize(new Dimension(240, 320));
         mainWindow.add(CanvasPanel.getInstance());
+
         mainWindow.addKeyListener(new MIDletKeyListener());
         mainWindow.pack();
         mainWindow.setVisible(true);

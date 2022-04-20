@@ -85,7 +85,5 @@ public abstract class Canvas extends Displayable {
 
     public abstract void paint(Graphics graphics);
 
-    protected void sizeChanged(int w, int h) {
-        CanvasPanel.getInstance();
-    }
+    public void sizeChanged(int w, int h) { }
 }
