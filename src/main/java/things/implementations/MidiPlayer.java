@@ -40,12 +40,13 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public void stop() {
         sequencer.stop();
-        setState(REALIZED);
+        setState(PREFETCHED);
     }
 
     @Override
     public void close() {
         // TODO: write method logic
+        setState(CLOSED);
     }
 
     @Override
