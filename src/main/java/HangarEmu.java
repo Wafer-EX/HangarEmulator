@@ -4,6 +4,7 @@ import things.MIDletLoader;
 
 import javax.microedition.midlet.MIDlet;
 import javax.swing.*;
+import java.awt.*;
 
 public class HangarEmu {
     public static void main(String[] args) {

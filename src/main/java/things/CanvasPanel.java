@@ -7,9 +7,10 @@ import java.awt.*;
 public class CanvasPanel extends JPanel {
     private static CanvasPanel instance;
     private static Displayable displayable;
-    private static Graphics graphics;
 
-    private CanvasPanel() { }
+    private CanvasPanel() {
+        setPreferredSize(new Dimension(240, 320));
+    }
 
     public static CanvasPanel getInstance() {
         if (instance == null) {
@@ -27,29 +28,13 @@ public class CanvasPanel extends JPanel {
     }
 
     @Override
-    public Dimension getPreferredSize() {
-        return new Dimension(240, 320);
-    }
-
-    @Override
     public void paintComponent(Graphics graphics) {
         if (displayable != null) {
-            CanvasPanel.graphics = graphics;
             if (displayable instanceof javax.microedition.lcdui.Canvas) {
                 var canvas = (javax.microedition.lcdui.Canvas) displayable;
+                canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }
-    }
-
-    @Override
-    public void repaint() {
-        if (displayable != null && graphics != null) {
-            if (displayable instanceof javax.microedition.lcdui.Canvas) {
-                var canvas = (javax.microedition.lcdui.Canvas) displayable;
-                canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
-            }
-        }
-        super.repaint();
     }
 }

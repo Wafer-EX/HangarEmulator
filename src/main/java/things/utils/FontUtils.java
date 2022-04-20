@@ -5,7 +5,7 @@ import things.CanvasPanel;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 
-public class FontUtils {
+public final class FontUtils {
     public static final int MICRO_EDITION = 0;
     public static final int STANDART_EDITION = 1;
     public static final int SE_SIZE_SMALL = 10;

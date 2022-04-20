@@ -132,8 +132,13 @@ public class Graphics {
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
-        String substring = str.substring(offset, offset + len);
-        drawString(substring, x, y, anchor);
+        if (offset < str.length()) {
+            if (offset + len > str.length()) {
+                len = str.length() - offset;
+            }
+            String substring = str.substring(offset, offset + len);
+            drawString(substring, x, y, anchor);
+        }
     }
 
     public void drawChar(char character, int x, int y, int anchor) throws NotImplementedException {
