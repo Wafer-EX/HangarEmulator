@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class ExtendedPlayer implements Player {
-    private int currentState;
+    private int currentState = UNREALIZED;
     private List<PlayerListener> playerListeners;
 
     public void setState(int state) {
@@ -22,6 +22,7 @@ public abstract class ExtendedPlayer implements Player {
     @Override
     public void deallocate() {
         // TODO: write method logic
+        setState(REALIZED);
     }
 
     @Override

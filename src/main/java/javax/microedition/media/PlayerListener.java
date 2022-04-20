@@ -1,6 +1,5 @@
 package javax.microedition.media;
 
-// TODO: write interface methods
 public interface PlayerListener {
     public static final String STARTED = "STARTED";
     public static final String STOPPED = "STOPPED";

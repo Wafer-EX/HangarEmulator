@@ -21,6 +21,8 @@ public interface Player extends Controllable {
 
     public void close();
 
+    public void setLoopCount(int count);
+
     public void addPlayerListener(PlayerListener playerListener);
 
     public void removePlayerListener(PlayerListener playerListener);
