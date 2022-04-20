@@ -1,7 +1,5 @@
 package things.implementations;
 
-import things.implementations.additions.PlayerMetaEventListener;
-
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import java.io.InputStream;
@@ -15,7 +13,8 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.open();
             sequencer.setSequence(stream);
             setState(PREFETCHED);
-        } catch (Exception exception) {
+        }
+        catch (Exception exception) {
             exception.printStackTrace();
         }
     }
@@ -34,7 +33,6 @@ public class MidiPlayer extends ExtendedPlayer {
             }
             sequencer.setMicrosecondPosition(0);
             sequencer.start();
-            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
             setState(STARTED);
         }
     }
@@ -48,5 +46,17 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public void close() {
         // TODO: write method logic
+    }
+
+    @Override
+    public void setLoopCount(int count) {
+        if (getState() != STARTED) {
+            if (count > 0) {
+                sequencer.setLoopCount(count - 1);
+            }
+            else {
+                sequencer.setLoopCount(count);
+            }
+        }
     }
 }
