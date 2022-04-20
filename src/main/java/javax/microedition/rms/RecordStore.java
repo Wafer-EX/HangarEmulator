@@ -36,16 +36,13 @@ public class RecordStore implements Serializable {
         var file = new File(getRecordsPath() + recordStoreName);
 
         if (file.exists()) {
-            var recordEnumerator = new RecordEnumerator();
-            recordEnumerator.records = readRecordEnumeratorData(file);
+            var recordEnumerator = readRecordEnumerator(file);
             recordStore = new RecordStore(recordStoreName, file, recordEnumerator);
         }
         else if (createIfNecessary) {
             try {
                 file.getParentFile().mkdirs();
                 file.createNewFile();
-                var recordEnumerator = new RecordEnumerator();
-                writeRecordEnumeratorData(recordEnumerator.records, file);
                 recordStore = new RecordStore(recordStoreName, file, new RecordEnumerator());
             }
             catch (IOException e) {
@@ -56,6 +53,7 @@ public class RecordStore implements Serializable {
             throw new RecordStoreNotFoundException();
         }
         openedRecords.put(recordStoreName, recordStore);
+        writeRecordEnumerator(recordStore.recordEnumerator, file);
         return recordStore;
     }
 
@@ -69,6 +67,7 @@ public class RecordStore implements Serializable {
 
     public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {
         // TODO: write logic for filter and comparator
+        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
         return recordEnumerator;
     }
 
@@ -78,6 +77,7 @@ public class RecordStore implements Serializable {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.add(subArray);
+        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
         return recordEnumerator.numRecords();
     }
 
@@ -86,7 +86,7 @@ public class RecordStore implements Serializable {
         if (!isOpened) {
             throw new RecordStoreNotOpenException();
         }
-        writeRecordEnumeratorData(recordEnumerator.records, recordEnumeratorPath);
+        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
     }
 
     public byte[] getRecord(int recordId) {
