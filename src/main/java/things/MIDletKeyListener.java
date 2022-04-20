@@ -1,5 +1,6 @@
 package things;
 
+import com.nokia.mid.ui.FullCanvas;
 import things.utils.KeyCodeConverter;
 
 import javax.microedition.lcdui.Canvas;
@@ -15,9 +16,9 @@ public class MIDletKeyListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         var displayable = CanvasPanel.getDisplayable();
         if (displayable instanceof Canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToStandart(e.getKeyCode());
+            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (displayable instanceof GameCanvas) {
-                convertedKeyCode = KeyCodeConverter.standartToNokia(convertedKeyCode);
+                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;
             canvas.keyPressed(convertedKeyCode);
@@ -28,9 +29,9 @@ public class MIDletKeyListener implements KeyListener {
     public void keyReleased(KeyEvent e) {
         var displayable = CanvasPanel.getDisplayable();
         if (displayable instanceof Canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToStandart(e.getKeyCode());
+            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (displayable instanceof GameCanvas) {
-                convertedKeyCode = KeyCodeConverter.standartToNokia(convertedKeyCode);
+                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
 
             var canvas = (Canvas)displayable;

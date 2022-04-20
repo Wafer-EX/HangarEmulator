@@ -5,7 +5,7 @@ import things.MIDletResources;
 import java.io.*;
 import java.util.List;
 
-public class RecordStoreUtils {
+public final class RecordStoreUtils {
     public static String getRecordsPath() {
         return String.format("records/%s/", MIDletResources.getMIDletName());
     }

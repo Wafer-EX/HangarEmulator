@@ -2,7 +2,7 @@ package things.utils;
 
 import javax.microedition.lcdui.Graphics;
 
-public class ImageUtils {
+public final class ImageUtils {
     public static int alignX(int imageWidth, int x, int anchor) {
         int alignedX = x;
         if ((anchor & Graphics.RIGHT) != 0) {

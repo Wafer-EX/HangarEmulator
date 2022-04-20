@@ -6,7 +6,7 @@ import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 
 public final class KeyCodeConverter {
-    public static int awtToStandart(int keyCode) {
+    public static int awtToDefault(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP: return Canvas.UP;
             case KeyEvent.VK_DOWN: return Canvas.DOWN;
@@ -33,7 +33,7 @@ public final class KeyCodeConverter {
         }
     }
 
-    public static int standartToNokia(int keyCode) {
+    public static int defaultToNokia(int keyCode) {
         switch (keyCode) {
             case Canvas.UP: return FullCanvas.KEY_UP_ARROW;
             case Canvas.DOWN: return FullCanvas.KEY_DOWN_ARROW;

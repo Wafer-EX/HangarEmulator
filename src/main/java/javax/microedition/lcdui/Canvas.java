@@ -1,6 +1,7 @@
 package javax.microedition.lcdui;
 
 import things.CanvasPanel;
+import things.utils.CanvasUtils;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
@@ -52,7 +53,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public int getGameAction(int keyCode) {
-        return keyCode;
+        return CanvasUtils.keyCodeToGameAction(keyCode);
     }
 
     public void setFullScreenMode(boolean mode) { }
@@ -84,5 +85,7 @@ public abstract class Canvas extends Displayable {
 
     public abstract void paint(Graphics graphics);
 
-    protected void sizeChanged(int w, int h) { }
+    protected void sizeChanged(int w, int h) {
+        CanvasPanel.getInstance();
+    }
 }
