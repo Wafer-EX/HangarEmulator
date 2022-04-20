@@ -8,7 +8,9 @@ public class CanvasPanel extends JPanel {
     private static CanvasPanel instance;
     private static Displayable displayable;
 
-    private CanvasPanel() { }
+    private CanvasPanel() {
+        setPreferredSize(new Dimension(240, 320));
+    }
 
     public static CanvasPanel getInstance() {
         if (instance == null) {
