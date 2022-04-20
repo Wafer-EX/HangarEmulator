@@ -25,7 +25,7 @@ public final class CanvasUtils {
             case FullCanvas.KEY_SOFTKEY2: return Canvas.GAME_B;
             case FullCanvas.KEY_SOFTKEY3: return Canvas.FIRE;
 
-            default: return 0;
+            default: return keyCode;
         }
     }
 }

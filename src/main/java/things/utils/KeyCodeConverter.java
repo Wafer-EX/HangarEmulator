@@ -29,7 +29,7 @@ public final class KeyCodeConverter {
             case KeyEvent.VK_NUMPAD9: return Canvas.KEY_NUM9;
             case KeyEvent.VK_Q: return Canvas.KEY_STAR;
             case KeyEvent.VK_W: return Canvas.KEY_POUND;
-            default: return 0;
+            default: return keyCode;
         }
     }
 
