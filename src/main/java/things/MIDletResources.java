@@ -26,7 +26,9 @@ public class MIDletResources {
 
     public static InputStream getResourceFromJar(String resourcePath) {
         try {
-            resourcePath = resourcePath.substring(1);
+            if (resourcePath.charAt(0) == '/') {
+                resourcePath = resourcePath.substring(1);
+            }
             return classLoader.getResourceAsStream(resourcePath);
         }
         catch (Exception ex) {
@@ -53,10 +55,6 @@ public class MIDletResources {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes();
             var iconPath = attributes.getValue("MIDlet-Icon");
-            if (iconPath.charAt(0) != '/') {
-                iconPath = "/" + iconPath;
-            }
-
             var inputStream = getResourceFromJar(iconPath);
             return ImageIO.read(inputStream);
         }
