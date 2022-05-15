@@ -1,6 +1,7 @@
 package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Graphics;
 
 public abstract class GameCanvas extends Canvas {
     public static final int UP_PRESSED = 1 << Canvas.UP;
@@ -15,5 +16,9 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
+    }
+
+    public void paint(Graphics g) {
+        // TODO: write method logic
     }
 }
