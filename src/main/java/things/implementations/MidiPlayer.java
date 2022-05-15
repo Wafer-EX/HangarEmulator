@@ -1,5 +1,8 @@
 package things.implementations;
 
+import things.implementations.additions.PlayerMetaEventListener;
+
+import javax.microedition.media.PlayerListener;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import java.io.InputStream;
@@ -12,6 +15,7 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer = MidiSystem.getSequencer();
             sequencer.open();
             sequencer.setSequence(stream);
+            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
             setState(PREFETCHED);
         }
         catch (Exception exception) {
@@ -34,19 +38,32 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.setMicrosecondPosition(0);
             sequencer.start();
             setState(STARTED);
+            for (var playerListener : playerListeners) {
+                playerListener.playerUpdate(this, PlayerListener.STARTED, null);
+            }
         }
     }
 
     @Override
     public void stop() {
-        sequencer.stop();
-        setState(PREFETCHED);
+        if (getState() != PREFETCHED) {
+            sequencer.stop();
+            setState(PREFETCHED);
+            for (var playerListener : playerListeners) {
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, null);
+            }
+        }
     }
 
     @Override
     public void close() {
         // TODO: write method logic
-        setState(CLOSED);
+        if (getState() != CLOSED) {
+            setState(CLOSED);
+            for (var playerListener : playerListeners) {
+                playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
+            }
+        }
     }
 
     @Override
