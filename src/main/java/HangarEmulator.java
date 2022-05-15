@@ -6,7 +6,7 @@ import things.MIDletResources;
 import javax.microedition.midlet.MIDlet;
 import javax.swing.*;
 
-public class HangarEmu {
+public class HangarEmulator {
     public static void main(String[] args) {
         JFrame mainWindow = new JFrame();
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
