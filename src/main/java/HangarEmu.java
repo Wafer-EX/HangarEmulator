@@ -1,10 +1,10 @@
 import things.CanvasPanel;
 import things.MIDletKeyListener;
 import things.MIDletLoader;
+import things.MIDletResources;
 
 import javax.microedition.midlet.MIDlet;
 import javax.swing.*;
-import java.awt.*;
 
 public class HangarEmu {
     public static void main(String[] args) {
@@ -21,7 +21,8 @@ public class HangarEmu {
         SwingUtilities.invokeLater(() -> {
             try {
                 MIDlet midlet = MIDletLoader.loadMIDlet(file.getSelectedFile().getAbsolutePath());
-                System.setProperty("microedition.platform", "");
+                mainWindow.setTitle(System.getProperty("MIDlet-Name"));
+                mainWindow.setIconImage(MIDletResources.getMIDletIcon());
                 midlet.startApp();
             }
             catch (Exception ex) {

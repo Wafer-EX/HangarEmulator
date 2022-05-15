@@ -1,5 +1,8 @@
 package things;
 
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
@@ -42,6 +45,37 @@ public class MIDletResources {
         catch (Exception ex) {
             ex.printStackTrace();
             return null;
+        }
+    }
+
+    public static Image getMIDletIcon() {
+        try {
+            var manifest = jarFile.getManifest();
+            var attributes = manifest.getMainAttributes();
+            var iconPath = attributes.getValue("MIDlet-Icon");
+            if (iconPath.charAt(0) != '/') {
+                iconPath = "/" + iconPath;
+            }
+
+            var inputStream = getResourceFromJar(iconPath);
+            return ImageIO.read(inputStream);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static void initializeProperties() {
+        try {
+            var manifest = jarFile.getManifest();
+            var attributes = manifest.getMainAttributes().entrySet();
+            for (var attribute : attributes) {
+                System.setProperty(attribute.getKey().toString(), attribute.getValue().toString());
+            }
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 }

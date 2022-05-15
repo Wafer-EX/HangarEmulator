@@ -8,7 +8,7 @@ import java.util.List;
 
 public abstract class ExtendedPlayer implements Player {
     private int currentState = UNREALIZED;
-    private List<PlayerListener> playerListeners;
+    public List<PlayerListener> playerListeners = new ArrayList<>();
 
     public void setState(int state) {
         this.currentState = state;
@@ -26,15 +26,20 @@ public abstract class ExtendedPlayer implements Player {
     }
 
     @Override
-    public void addPlayerListener(PlayerListener playerListener) {
-        if (playerListeners == null) {
-            playerListeners = new ArrayList<>();
+    public void addPlayerListener(PlayerListener playerListener) throws IllegalStateException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
         }
-        playerListeners.add(playerListener);
+        if (playerListener != null) {
+            playerListeners.add(playerListener);
+        }
     }
 
     @Override
-    public void removePlayerListener(PlayerListener playerListener) {
+    public void removePlayerListener(PlayerListener playerListener) throws IllegalStateException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
         playerListeners.remove(playerListener);
     }
 
