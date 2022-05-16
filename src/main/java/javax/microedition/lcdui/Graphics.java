@@ -165,11 +165,29 @@ public class Graphics {
         y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
 
         switch (transform) {
+            // TODO: write logic for rotation
+            case Sprite.TRANS_ROT90:
+                break;
+            case Sprite.TRANS_ROT180:
+                x_dest += width;
+                width = -width;
+                y_dest += height;
+                height = -height;
+                break;
+            case Sprite.TRANS_ROT270:
+                break;
             case Sprite.TRANS_MIRROR:
                 x_dest += width;
                 width = -width;
                 break;
-            // TODO: write logic for rotation
+            case Sprite.TRANS_MIRROR_ROT90:
+                break;
+            case Sprite.TRANS_MIRROR_ROT180:
+                y_dest += height;
+                height = -height;
+                break;
+            case Sprite.TRANS_MIRROR_ROT270:
+                break;
         }
         se_graphics.drawImage(subImage, x_dest, y_dest, width, height, null);
     }
