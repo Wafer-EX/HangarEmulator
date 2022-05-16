@@ -32,7 +32,9 @@ public class CanvasPanel extends JPanel {
         if (displayable != null) {
             if (displayable instanceof javax.microedition.lcdui.Canvas) {
                 var canvas = (javax.microedition.lcdui.Canvas) displayable;
-                canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
+                if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
+                    canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
+                }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }
