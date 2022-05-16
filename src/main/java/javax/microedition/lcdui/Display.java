@@ -48,7 +48,7 @@ public class Display {
         return CanvasPanel.getDisplayable();
     }
 
-    public void setCurrent(Displayable displayable){
+    public void setCurrent(Displayable displayable) {
         CanvasPanel.setDisplayable(displayable);
     }
 
@@ -63,8 +63,8 @@ public class Display {
     }
 
     public void callSerially(Runnable r) throws NotImplementedException {
-        // TODO: write methid logic
-        throw new NotImplementedException("callSerially");
+        // TODO: write method logic
+        //throw new NotImplementedException("callSerially");
     }
 
     public boolean flashBacklight(int duration) {

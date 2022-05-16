@@ -43,8 +43,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public int getKeyCode(int gameAction) {
-        // TODO: write method logic
-        return gameAction;
+        return CanvasUtils.gameActionToKeyCode(gameAction);
     }
 
     public String getKeyName(int keyCode) {
@@ -65,7 +64,6 @@ public abstract class Canvas extends Displayable {
     public final void repaint(int x, int y, int width, int height) {
         CanvasPanel.getInstance().repaint(x, y, width, height);
     }
-
 
     public void repaint() {
         CanvasPanel.getInstance().repaint();
