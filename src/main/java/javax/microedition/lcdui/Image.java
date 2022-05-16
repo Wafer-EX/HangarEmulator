@@ -11,13 +11,15 @@ import java.io.InputStream;
 
 public class Image {
     public final java.awt.Image image;
+    private boolean isMutable;
 
-    private Image(java.awt.Image image) {
+    private Image(java.awt.Image image, boolean isMutable) {
         this.image = image;
+        this.isMutable = isMutable;
     }
 
     public static Image createImage(int width, int height) {
-        return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB));
+        return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), true);
     }
 
     public static Image createImage(Image source) {
@@ -31,7 +33,7 @@ public class Image {
                 var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
                 var writableRaster = bufferedImage.copyData(null);
                 var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
-                return new Image(bufferedImageClone);
+                return new Image(bufferedImageClone, false);
             }
             else {
                 return source;
@@ -41,7 +43,7 @@ public class Image {
 
     public static Image createImage(String name) throws IOException {
         var stream = MIDletResources.getResourceFromJar(name);
-        return new Image(ImageIO.read(stream));
+        return new Image(ImageIO.read(stream), false);
     }
 
     public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NullPointerException {
@@ -62,9 +64,13 @@ public class Image {
         throw new NotImplementedException("createImage");
     }
 
-    public Graphics getGraphics() throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("getGraphics");
+    public Graphics getGraphics() throws IllegalStateException {
+        if (isMutable()) {
+            return new Graphics(image.getGraphics());
+        }
+        else {
+            throw new IllegalStateException();
+        }
     }
 
     public int getWidth() {
@@ -76,8 +82,7 @@ public class Image {
     }
 
     public boolean isMutable() {
-        // TODO: it is correct?
-        return true;
+        return isMutable;
     }
 
     public static Image createImage(InputStream stream) throws IOException {
@@ -86,7 +91,7 @@ public class Image {
         }
         try {
             BufferedImage bufferedImage = ImageIO.read(stream);
-            Image image = new Image(bufferedImage);
+            Image image = new Image(bufferedImage, false);
             return image;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
