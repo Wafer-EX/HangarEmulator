@@ -20,9 +20,23 @@ public class Image {
         return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB));
     }
 
-    public static Image createImage(Image source) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createImage");
+    public static Image createImage(Image source) {
+        if (source == null) {
+            throw new NullPointerException();
+        }
+        else {
+            if (source.isMutable()) {
+                var bufferedImage = (BufferedImage) source.image;
+                var colorModel = bufferedImage.getColorModel();
+                var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+                var writableRaster = bufferedImage.copyData(null);
+                var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
+                return new Image(bufferedImageClone);
+            }
+            else {
+                return source;
+            }
+        }
     }
 
     public static Image createImage(String name) throws IOException {
