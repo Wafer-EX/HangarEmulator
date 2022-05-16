@@ -24,6 +24,15 @@ public class RecordStore implements Serializable {
         this.recordEnumerator = recordEnumerator;
     }
 
+    public static void deleteRecordStore(String recordStoreName) throws RecordStoreException, RecordStoreNotFoundException {
+        if (openedRecords.containsKey(recordStoreName)) {
+            openedRecords.remove("recordStoreName");
+        }
+        else {
+            throw new RecordStoreNotFoundException();
+        }
+    }
+
     public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, IllegalArgumentException {
         if (recordStoreName == null) {
             throw new IllegalArgumentException();
