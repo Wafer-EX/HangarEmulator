@@ -6,6 +6,7 @@ import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
+import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Graphics {
@@ -157,39 +158,52 @@ public class Graphics {
         se_graphics.drawImage(img.image, x, y, null);
     }
 
-    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws NotImplementedException {
-        BufferedImage bufferedImage = (BufferedImage) src.image;
-        BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
+    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
+        if (width > 0 && height > 0) {
+            BufferedImage bufferedImage = (BufferedImage) src.image;
+            BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
 
-        x_dest = ImageUtils.alignX(subImage.getWidth(), x_dest, anchor);
-        y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
+            x_dest = ImageUtils.alignX(subImage.getWidth(), x_dest, anchor);
+            y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
 
-        switch (transform) {
-            // TODO: write logic for rotation
-            case Sprite.TRANS_ROT90:
-                break;
-            case Sprite.TRANS_ROT180:
-                x_dest += width;
-                width = -width;
-                y_dest += height;
-                height = -height;
-                break;
-            case Sprite.TRANS_ROT270:
-                break;
-            case Sprite.TRANS_MIRROR:
-                x_dest += width;
-                width = -width;
-                break;
-            case Sprite.TRANS_MIRROR_ROT90:
-                break;
-            case Sprite.TRANS_MIRROR_ROT180:
-                y_dest += height;
-                height = -height;
-                break;
-            case Sprite.TRANS_MIRROR_ROT270:
-                break;
+            switch (transform) {
+                case Sprite.TRANS_ROT180:
+                    x_dest += width;
+                    width = -width;
+                    y_dest += height;
+                    height = -height;
+                    break;
+                case Sprite.TRANS_MIRROR:
+                    x_dest += width;
+                    width = -width;
+                    break;
+                case Sprite.TRANS_MIRROR_ROT180:
+                    y_dest += height;
+                    height = -height;
+                    break;
+                default:
+                    var subImageGraphics = subImage.createGraphics();
+                    var affineTransform = new AffineTransform();
+                    // TODO: write logic for mirror, check exists rotations
+                    switch (transform) {
+                        case Sprite.TRANS_ROT90:
+                            affineTransform.rotate(Math.toRadians(90));
+                            break;
+                        case Sprite.TRANS_ROT270:
+                            affineTransform.rotate(Math.toRadians(270));
+                            break;
+                        case Sprite.TRANS_MIRROR_ROT90:
+                            affineTransform.rotate(Math.toRadians(90));
+                            break;
+                        case Sprite.TRANS_MIRROR_ROT270:
+                            affineTransform.rotate(Math.toRadians(270));
+                            break;
+                    }
+                    subImageGraphics.setTransform(affineTransform);
+                    break;
+            }
+            se_graphics.drawImage(subImage, x_dest, y_dest, width, height, null);
         }
-        se_graphics.drawImage(subImage, x_dest, y_dest, width, height, null);
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
