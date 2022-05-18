@@ -73,13 +73,9 @@ public abstract class Canvas extends Displayable {
         // TODO: write method logic
     }
 
-    protected void showNotify() {
-        // TODO: write method logic
-    }
+    protected void showNotify() { }
 
-    protected void hideNotify() {
-        // TODO: write method logic
-    }
+    protected void hideNotify() { }
 
     public abstract void paint(Graphics graphics);
 
