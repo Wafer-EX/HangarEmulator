@@ -1,7 +1,11 @@
 package javax.microedition.lcdui.game;
 
+import things.CanvasPanel;
+
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
     public static final int UP_PRESSED = 1 << Canvas.UP;
@@ -14,11 +18,24 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
+    private Image image;
+
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
+        int width = CanvasPanel.getInstance().getWidth();
+        int height = CanvasPanel.getInstance().getWidth();
+        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 
+    protected Graphics getGraphics() {
+        return new Graphics(image.getGraphics());
+    }
+
+    @Override
     public void paint(Graphics g) {
-        // TODO: write method logic
+        if (g == null) {
+            throw new NullPointerException();
+        }
+        CanvasPanel.getInstance().getGraphics().drawImage(image, 0, 0, null);
     }
 }

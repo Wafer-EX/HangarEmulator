@@ -13,7 +13,7 @@ public class Image {
     public final java.awt.Image image;
     private boolean isMutable;
 
-    private Image(java.awt.Image image, boolean isMutable) {
+    public Image(java.awt.Image image, boolean isMutable) {
         this.image = image;
         this.isMutable = isMutable;
     }

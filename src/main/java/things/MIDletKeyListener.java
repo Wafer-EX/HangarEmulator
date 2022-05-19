@@ -1,13 +1,15 @@
 package things;
 
+import things.enums.Keyboards;
 import things.utils.KeyCodeConverter;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.game.GameCanvas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class MIDletKeyListener implements KeyListener {
+    private Keyboards currentKeyboard = Keyboards.Nokia;
+
     @Override
     public void keyTyped(KeyEvent e) { }
 
@@ -16,7 +18,7 @@ public class MIDletKeyListener implements KeyListener {
         var displayable = CanvasPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (displayable instanceof GameCanvas) {
+            if (currentKeyboard == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;
@@ -29,7 +31,7 @@ public class MIDletKeyListener implements KeyListener {
         var displayable = CanvasPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (displayable instanceof GameCanvas) {
+            if (currentKeyboard == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
 

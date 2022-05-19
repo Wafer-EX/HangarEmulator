@@ -26,10 +26,15 @@ public class MIDletResources {
 
     public static InputStream getResourceFromJar(String resourcePath) {
         try {
-            if (resourcePath.charAt(0) == '/') {
-                resourcePath = resourcePath.substring(1);
+            if (resourcePath == null) {
+                throw new IllegalArgumentException();
             }
-            return classLoader.getResourceAsStream(resourcePath);
+            else {
+                if (resourcePath.charAt(0) == '/') {
+                    resourcePath = resourcePath.substring(1);
+                }
+                return classLoader.getResourceAsStream(resourcePath);
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
