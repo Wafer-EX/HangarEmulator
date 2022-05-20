@@ -24,6 +24,9 @@ public class CanvasPanel extends JPanel {
     }
 
     public static void setDisplayable(Displayable displayable) {
+        if (displayable != null && displayable instanceof javax.microedition.lcdui.Canvas) {
+            ((javax.microedition.lcdui.Canvas) displayable).hideNotify();
+        }
         CanvasPanel.displayable = displayable;
     }
 
@@ -35,6 +38,7 @@ public class CanvasPanel extends JPanel {
                 if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
                     canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
                 }
+                canvas.showNotify();
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }
