@@ -27,4 +27,8 @@ public class MIDletLoader {
             return null;
         }
     }
+
+    public static MIDlet getLastLoaded() {
+        return midlet;
+    }
 }

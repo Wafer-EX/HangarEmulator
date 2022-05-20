@@ -1,6 +1,6 @@
 package javax.microedition.lcdui;
 
-import things.CanvasPanel;
+import things.HangarPanel;
 
 public abstract class Displayable {
     private String title;
@@ -40,11 +40,11 @@ public abstract class Displayable {
     }
 
     public int getWidth() {
-        return CanvasPanel.getInstance().getWidth();
+        return HangarPanel.getInstance().getWidth();
     }
 
     public int getHeight() {
-        return CanvasPanel.getInstance().getHeight();
+        return HangarPanel.getInstance().getHeight();
     }
 
     protected void sizeChanged(int w, int h) { }

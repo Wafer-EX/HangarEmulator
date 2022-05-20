@@ -1,6 +1,6 @@
 package javax.microedition.lcdui;
 
-import things.CanvasPanel;
+import things.HangarPanel;
 import things.utils.FontUtils;
 
 public class Font {
@@ -64,7 +64,7 @@ public class Font {
     }
 
     public int getHeight() {
-        var graphics = CanvasPanel.getInstance().getGraphics();
+        var graphics = HangarPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(se_font);
         return metrics.getHeight();
     }
@@ -75,7 +75,7 @@ public class Font {
     }
 
     public int charWidth(char ch) {
-        var graphics = CanvasPanel.getInstance().getGraphics();
+        var graphics = HangarPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(se_font);
         return metrics.charWidth(ch);
     }
@@ -86,7 +86,7 @@ public class Font {
     }
 
     public int stringWidth(String str) {
-        var graphics = CanvasPanel.getInstance().getGraphics();
+        var graphics = HangarPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(se_font);
         return metrics.stringWidth(str);
     }

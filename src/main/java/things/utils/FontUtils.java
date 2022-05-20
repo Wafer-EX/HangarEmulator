@@ -1,6 +1,6 @@
 package things.utils;
 
-import things.CanvasPanel;
+import things.HangarPanel;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -66,7 +66,7 @@ public final class FontUtils {
     }
 
     public static int alignY(Font font, String str, int y, int anchor) {
-        var graphics = CanvasPanel.getInstance().getGraphics();
+        var graphics = HangarPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(font.se_font);
         var stringSize = metrics.getStringBounds(str, graphics);
 

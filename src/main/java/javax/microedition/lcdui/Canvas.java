@@ -1,6 +1,6 @@
 package javax.microedition.lcdui;
 
-import things.CanvasPanel;
+import things.HangarPanel;
 import things.utils.CanvasUtils;
 
 public abstract class Canvas extends Displayable {
@@ -27,7 +27,7 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_POUND = 35;
 
     protected Canvas() {
-        CanvasPanel.setDisplayable(this);
+        HangarPanel.setDisplayable(this);
     }
 
     public boolean hasPointerEvents(){
@@ -62,11 +62,11 @@ public abstract class Canvas extends Displayable {
     public abstract void keyReleased(int keyCode);
 
     public final void repaint(int x, int y, int width, int height) {
-        CanvasPanel.getInstance().repaint(x, y, width, height);
+        HangarPanel.getInstance().repaint(x, y, width, height);
     }
 
     public void repaint() {
-        CanvasPanel.getInstance().repaint();
+        HangarPanel.getInstance().repaint();
     }
 
     public void serviceRepaints() {
