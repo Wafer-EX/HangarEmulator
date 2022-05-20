@@ -2,6 +2,7 @@ package things.implementations;
 
 import things.implementations.additions.PlayerMetaEventListener;
 
+import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
@@ -21,6 +22,14 @@ public class MidiPlayer extends ExtendedPlayer {
         catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    @Override
+    public long getMediaTime() throws IllegalStateException {
+        if (getState() == Player.CLOSED) {
+            throw  new IllegalStateException();
+        }
+        return sequencer.getMicrosecondLength();
     }
 
     @Override
