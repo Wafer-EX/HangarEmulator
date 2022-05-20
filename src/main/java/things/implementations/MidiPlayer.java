@@ -17,6 +17,7 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.open();
             sequencer.setSequence(stream);
             sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
+            sequencer.setMicrosecondPosition(0);
             setState(PREFETCHED);
         }
         catch (Exception exception) {
@@ -44,7 +45,6 @@ public class MidiPlayer extends ExtendedPlayer {
             if (getState() == UNREALIZED || getState() == REALIZED) {
                 prefetch();
             }
-            sequencer.setMicrosecondPosition(0);
             sequencer.start();
             setState(STARTED);
             for (var playerListener : playerListeners) {
@@ -66,9 +66,9 @@ public class MidiPlayer extends ExtendedPlayer {
 
     @Override
     public void close() {
-        // TODO: write method logic
         if (getState() != CLOSED) {
             setState(CLOSED);
+            sequencer.close();
             for (var playerListener : playerListeners) {
                 playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
             }
