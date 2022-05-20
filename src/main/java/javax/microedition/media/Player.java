@@ -9,6 +9,8 @@ public interface Player extends Controllable {
     public static final int CLOSED = 0;
     public static final long TIME_UNKNOWN = -1;
 
+    public long getMediaTime();
+
     public int getState();
 
     public void prefetch();

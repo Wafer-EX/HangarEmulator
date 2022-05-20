@@ -35,6 +35,7 @@ public class CanvasPanel extends JPanel {
                 if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
                     canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
                 }
+                canvas.showNotify();
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }

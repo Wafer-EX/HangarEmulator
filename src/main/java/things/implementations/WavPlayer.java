@@ -1,41 +1,35 @@
 package things.implementations;
 
-import things.implementations.additions.PlayerMetaEventListener;
-
-import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.Sequencer;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 
-public class MidiPlayer extends ExtendedPlayer {
-    private Sequencer sequencer;
+public class WavPlayer extends ExtendedPlayer {
+    private Clip clip;
 
-    public MidiPlayer(InputStream stream) {
+    public WavPlayer(InputStream stream) {
         try {
-            sequencer = MidiSystem.getSequencer();
-            sequencer.open();
-            sequencer.setSequence(stream);
-            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
-            sequencer.setMicrosecondPosition(0);
+            var bufferedInputStream = new BufferedInputStream(stream);
+            var audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
+            clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            clip.setMicrosecondPosition(0);
             setState(PREFETCHED);
         }
-        catch (Exception exception) {
-            exception.printStackTrace();
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
     @Override
-    public long getMediaTime() throws IllegalStateException {
-        if (getState() == Player.CLOSED) {
-            throw  new IllegalStateException();
-        }
-        return sequencer.getMicrosecondLength();
+    public long getMediaTime() {
+        return clip.getMicrosecondLength();
     }
 
     @Override
     public void prefetch() {
-        // TODO: write method logic
         setState(PREFETCHED);
     }
 
@@ -45,7 +39,8 @@ public class MidiPlayer extends ExtendedPlayer {
             if (getState() == UNREALIZED || getState() == REALIZED) {
                 prefetch();
             }
-            sequencer.start();
+            clip.setMicrosecondPosition(0);
+            clip.start();
             setState(STARTED);
             for (var playerListener : playerListeners) {
                 playerListener.playerUpdate(this, PlayerListener.STARTED, null);
@@ -56,7 +51,7 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public void stop() {
         if (getState() != PREFETCHED) {
-            sequencer.stop();
+            clip.stop();
             setState(PREFETCHED);
             for (var playerListener : playerListeners) {
                 playerListener.playerUpdate(this, PlayerListener.STOPPED, null);
@@ -67,8 +62,8 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public void close() {
         if (getState() != CLOSED) {
+            clip.close();
             setState(CLOSED);
-            sequencer.close();
             for (var playerListener : playerListeners) {
                 playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
             }
@@ -77,13 +72,6 @@ public class MidiPlayer extends ExtendedPlayer {
 
     @Override
     public void setLoopCount(int count) {
-        if (getState() != STARTED) {
-            if (count > 0) {
-                sequencer.setLoopCount(count - 1);
-            }
-            else {
-                sequencer.setLoopCount(count);
-            }
-        }
+        // TODO: write method logic
     }
 }
