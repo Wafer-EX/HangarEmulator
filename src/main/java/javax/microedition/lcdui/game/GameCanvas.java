@@ -1,6 +1,6 @@
 package javax.microedition.lcdui.game;
 
-import things.CanvasPanel;
+import things.HangarPanel;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
@@ -22,8 +22,8 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        int width = CanvasPanel.getInstance().getWidth();
-        int height = CanvasPanel.getInstance().getWidth();
+        int width = HangarPanel.getInstance().getWidth();
+        int height = HangarPanel.getInstance().getWidth();
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 
@@ -36,6 +36,6 @@ public abstract class GameCanvas extends Canvas {
         if (g == null) {
             throw new NullPointerException();
         }
-        CanvasPanel.getInstance().getGraphics().drawImage(image, 0, 0, null);
+        HangarPanel.getInstance().getGraphics().drawImage(image, 0, 0, null);
     }
 }

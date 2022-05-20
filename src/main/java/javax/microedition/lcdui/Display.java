@@ -1,7 +1,7 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-import things.CanvasPanel;
+import things.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -45,11 +45,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return CanvasPanel.getDisplayable();
+        return HangarPanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        CanvasPanel.setDisplayable(displayable);
+        HangarPanel.setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) {

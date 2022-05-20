@@ -4,17 +4,17 @@ import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
 
-public class CanvasPanel extends JPanel {
-    private static CanvasPanel instance;
+public class HangarPanel extends JPanel {
+    private static HangarPanel instance;
     private static Displayable displayable;
 
-    private CanvasPanel() {
+    private HangarPanel() {
         setPreferredSize(new Dimension(240, 320));
     }
 
-    public static CanvasPanel getInstance() {
+    public static HangarPanel getInstance() {
         if (instance == null) {
-            instance = new CanvasPanel();
+            instance = new HangarPanel();
         }
         return instance;
     }
@@ -24,8 +24,10 @@ public class CanvasPanel extends JPanel {
     }
 
     public static void setDisplayable(Displayable displayable) {
-        CanvasPanel.displayable = displayable;
+        HangarPanel.displayable = displayable;
     }
+
+    private javax.microedition.lcdui.Graphics graphicsss;
 
     @Override
     public void paintComponent(Graphics graphics) {
@@ -35,7 +37,8 @@ public class CanvasPanel extends JPanel {
                 if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
                     canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
                 }
-                canvas.showNotify();
+                // TODO: this method works very-very strange
+                //canvas.showNotify();
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }

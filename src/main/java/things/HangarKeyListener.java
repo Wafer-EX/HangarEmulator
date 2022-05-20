@@ -7,18 +7,16 @@ import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
-public class MIDletKeyListener implements KeyListener {
-    private Keyboards currentKeyboard = Keyboards.Nokia;
-
+public class HangarKeyListener implements KeyListener {
     @Override
     public void keyTyped(KeyEvent e) { }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        var displayable = CanvasPanel.getDisplayable();
+        var displayable = HangarPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (currentKeyboard == Keyboards.Nokia) {
+            if (HangarSettings.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;
@@ -28,10 +26,10 @@ public class MIDletKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        var displayable = CanvasPanel.getDisplayable();
+        var displayable = HangarPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (currentKeyboard == Keyboards.Nokia) {
+            if (HangarSettings.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
 
