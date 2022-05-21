@@ -11,6 +11,10 @@ import java.util.HashMap;
 public class HangarKeyListener implements KeyListener {
     private HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
 
+    public HashMap<Integer, Boolean> getPressedKeys() {
+        return pressedKeys;
+    }
+
     @Override
     public void keyTyped(KeyEvent e) { }
 
