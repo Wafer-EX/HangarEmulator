@@ -10,6 +10,8 @@ public abstract class ExtendedPlayer implements Player {
     private int currentState = UNREALIZED;
     public List<PlayerListener> playerListeners = new ArrayList<>();
 
+    public abstract int getLoopCount();
+
     public void setState(int state) {
         this.currentState = state;
     }
