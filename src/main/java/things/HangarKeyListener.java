@@ -8,6 +8,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class HangarKeyListener implements KeyListener {
+    private boolean keyIsRepeated = false;
+
     @Override
     public void keyTyped(KeyEvent e) { }
 
@@ -20,7 +22,14 @@ public class HangarKeyListener implements KeyListener {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;
-            canvas.keyPressed(convertedKeyCode);
+
+            if (!keyIsRepeated) {
+                canvas.keyPressed(convertedKeyCode);
+                keyIsRepeated = true;
+            }
+            else {
+                canvas.keyRepeated(convertedKeyCode);
+            }
         }
     }
 
@@ -35,6 +44,7 @@ public class HangarKeyListener implements KeyListener {
 
             var canvas = (Canvas)displayable;
             canvas.keyReleased(convertedKeyCode);
+            keyIsRepeated = false;
         }
     }
 }
