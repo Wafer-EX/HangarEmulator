@@ -27,8 +27,6 @@ public class HangarPanel extends JPanel {
         HangarPanel.displayable = displayable;
     }
 
-    private javax.microedition.lcdui.Graphics graphicsss;
-
     @Override
     public void paintComponent(Graphics graphics) {
         if (displayable != null) {

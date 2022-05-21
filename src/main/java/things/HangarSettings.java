@@ -28,6 +28,12 @@ public class HangarSettings extends JFrame {
         keyboardCombobox.addActionListener(event -> {
             var source = (JComboBox) event.getSource();
             selectedKeyboard = (Keyboards) source.getSelectedItem();
+
+            var keyListeners = HangarPanel.getInstance().getKeyListeners();
+            if (keyListeners.length > 0) {
+                var hangarKeyListeners = (HangarKeyListener) keyListeners[0];
+                hangarKeyListeners.getPressedKeys().clear();
+            }
         });
 
         keyboardPanel.add(keyboardCombobox);

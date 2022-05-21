@@ -57,9 +57,11 @@ public abstract class Canvas extends Displayable {
 
     public void setFullScreenMode(boolean mode) { }
 
-    public abstract void keyPressed(int keyCode);
+    public void keyPressed(int keyCode) { }
 
-    public abstract void keyReleased(int keyCode);
+    public void keyRepeated(int keyCode) { }
+
+    public void keyReleased(int keyCode) { }
 
     public final void repaint(int x, int y, int width, int height) {
         HangarPanel.getInstance().repaint(x, y, width, height);
