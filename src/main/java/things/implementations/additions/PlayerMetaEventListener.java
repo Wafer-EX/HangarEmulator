@@ -19,6 +19,11 @@ public class PlayerMetaEventListener implements MetaEventListener {
             for (var playerListener : player.playerListeners) {
                 playerListener.playerUpdate(player, PlayerListener.END_OF_MEDIA, null);
             }
+            if (player.getLoopCount() > 0 || player.getLoopCount() == -1) {
+                for (var playerListener : player.playerListeners) {
+                    playerListener.playerUpdate(player, PlayerListener.STARTED, player.getMediaTime());
+                }
+            }
         }
     }
 }

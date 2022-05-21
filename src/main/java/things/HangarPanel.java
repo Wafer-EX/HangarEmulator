@@ -25,6 +25,10 @@ public class HangarPanel extends JPanel {
 
     public static void setDisplayable(Displayable displayable) {
         HangarPanel.displayable = displayable;
+        if (getDisplayable() instanceof javax.microedition.lcdui.Canvas) {
+            var canvas = (javax.microedition.lcdui.Canvas) displayable;
+            canvas.showNotify();
+        }
     }
 
     @Override
@@ -35,8 +39,6 @@ public class HangarPanel extends JPanel {
                 if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
                     canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
                 }
-                // TODO: this method works very-very strange
-                //canvas.showNotify();
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
         }

@@ -43,7 +43,7 @@ public class WavPlayer extends ExtendedPlayer {
             clip.start();
             setState(STARTED);
             for (var playerListener : playerListeners) {
-                playerListener.playerUpdate(this, PlayerListener.STARTED, null);
+                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
             }
         }
     }
@@ -54,7 +54,7 @@ public class WavPlayer extends ExtendedPlayer {
             clip.stop();
             setState(PREFETCHED);
             for (var playerListener : playerListeners) {
-                playerListener.playerUpdate(this, PlayerListener.STOPPED, null);
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
             }
         }
     }
@@ -73,5 +73,10 @@ public class WavPlayer extends ExtendedPlayer {
     @Override
     public void setLoopCount(int count) {
         // TODO: write method logic
+    }
+
+    @Override
+    public int getLoopCount() {
+        return 1;
     }
 }

@@ -16,8 +16,9 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer = MidiSystem.getSequencer();
             sequencer.open();
             sequencer.setSequence(stream);
-            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
+            sequencer.setLoopCount(1);
             sequencer.setMicrosecondPosition(0);
+            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
             setState(PREFETCHED);
         }
         catch (Exception exception) {
@@ -28,7 +29,7 @@ public class MidiPlayer extends ExtendedPlayer {
     @Override
     public long getMediaTime() throws IllegalStateException {
         if (getState() == Player.CLOSED) {
-            throw  new IllegalStateException();
+            throw new IllegalStateException();
         }
         return sequencer.getMicrosecondLength();
     }
@@ -48,18 +49,18 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.start();
             setState(STARTED);
             for (var playerListener : playerListeners) {
-                playerListener.playerUpdate(this, PlayerListener.STARTED, null);
+                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
             }
         }
     }
 
     @Override
     public void stop() {
-        if (getState() != PREFETCHED) {
+        if (sequencer.isRunning()) {
             sequencer.stop();
             setState(PREFETCHED);
             for (var playerListener : playerListeners) {
-                playerListener.playerUpdate(this, PlayerListener.STOPPED, null);
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
             }
         }
     }
@@ -85,5 +86,10 @@ public class MidiPlayer extends ExtendedPlayer {
                 sequencer.setLoopCount(count);
             }
         }
+    }
+
+    @Override
+    public int getLoopCount() {
+        return sequencer.getLoopCount();
     }
 }
