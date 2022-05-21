@@ -29,7 +29,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        return true;
+        return HangarPanel.getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) {
