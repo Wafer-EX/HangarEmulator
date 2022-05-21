@@ -2,17 +2,22 @@ package javax.microedition.lcdui;
 
 import things.HangarPanel;
 
+import javax.swing.*;
+
 public abstract class Displayable {
-    private String title;
     private Ticker ticker;
     private CommandListener commandListener;
 
     public String getTitle() {
-        return title;
+        var panel = HangarPanel.getInstance();
+        var frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        return frame.getTitle();
     }
 
     public void setTitle(String s) {
-        title = s;
+        var panel = HangarPanel.getInstance();
+        var frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
+        frame.setTitle(s);
     }
 
     public Ticker getTicker() {
@@ -24,7 +29,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        return true;
+        return HangarPanel.getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) {

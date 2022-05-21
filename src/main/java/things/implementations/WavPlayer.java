@@ -1,5 +1,6 @@
 package things.implementations;
 
+import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
@@ -21,6 +22,15 @@ public class WavPlayer extends ExtendedPlayer {
         catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    @Override
+    public long setMediaTime(long now) throws MediaException {
+        if (getState() == UNREALIZED || getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
+        clip.setMicrosecondPosition(now);
+        return now;
     }
 
     @Override
