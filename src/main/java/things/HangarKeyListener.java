@@ -6,9 +6,10 @@ import things.utils.KeyCodeConverter;
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.HashMap;
 
 public class HangarKeyListener implements KeyListener {
-    private boolean keyIsRepeated = false;
+    private HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
 
     @Override
     public void keyTyped(KeyEvent e) { }
@@ -23,12 +24,22 @@ public class HangarKeyListener implements KeyListener {
             }
             var canvas = (Canvas)displayable;
 
-            if (!keyIsRepeated) {
-                canvas.keyPressed(convertedKeyCode);
-                keyIsRepeated = true;
+            if (pressedKeys.containsKey(convertedKeyCode)) {
+                if (!pressedKeys.get(convertedKeyCode)) {
+                    pressedKeys.put(convertedKeyCode, true);
+                }
             }
             else {
-                canvas.keyRepeated(convertedKeyCode);
+                pressedKeys.put(convertedKeyCode, false);
+            }
+
+            for (int key : pressedKeys.keySet()) {
+                if (pressedKeys.get(key)) {
+                    canvas.keyRepeated(convertedKeyCode);
+                }
+                else {
+                    canvas.keyPressed(convertedKeyCode);
+                }
             }
         }
     }
@@ -41,10 +52,9 @@ public class HangarKeyListener implements KeyListener {
             if (HangarSettings.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
-
             var canvas = (Canvas)displayable;
+            pressedKeys.remove(convertedKeyCode);
             canvas.keyReleased(convertedKeyCode);
-            keyIsRepeated = false;
         }
     }
 }
