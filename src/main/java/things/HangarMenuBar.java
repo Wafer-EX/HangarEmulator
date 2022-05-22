@@ -23,14 +23,17 @@ public class HangarMenuBar extends JMenuBar {
         loadMenuItem.addActionListener(event -> {
             var fileChooser = new JFileChooser();
             fileChooser.showDialog(null, "Select MIDlet");
+            var selectedFile = fileChooser.getSelectedFile();
 
             SwingUtilities.invokeLater(() -> {
-                if (MIDletLoader.getLastLoaded() == null) {
-                    MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
-                    MIDletLoader.startLoadedMIDlet();
-                }
-                else {
-                    HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
+                if (selectedFile != null) {
+                    if (MIDletLoader.getLastLoaded() == null) {
+                        MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
+                        MIDletLoader.startLoadedMIDlet();
+                    }
+                    else {
+                        HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
+                    }
                 }
             });
         });
