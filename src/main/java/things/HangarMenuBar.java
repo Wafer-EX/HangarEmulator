@@ -1,5 +1,7 @@
 package things;
 
+import things.enums.Keyboards;
+
 import javax.microedition.midlet.MIDletStateChangeException;
 import javax.swing.*;
 import java.awt.*;
@@ -8,6 +10,7 @@ import java.net.URL;
 public class HangarMenuBar extends JMenuBar {
     public HangarMenuBar() {
         addMIDletMenu();
+        addOptionsMenu();
         addHelpMenu();
     }
 
@@ -15,8 +18,7 @@ public class HangarMenuBar extends JMenuBar {
         var midletMenu = new JMenu("MIDlet");
         var loadMenuItem = new JMenuItem("Load MIDlet");
         var restartMenuItem = new JMenuItem("Restart");
-        var pauseMenuItem = new JMenuItem("Pause");
-        var settingsMenuItem = new JMenuItem("Settings");
+        var pauseMenuItem = new JMenuItem("Call pauseApp()");
         var exitMenuItem = new JMenuItem("Exit");
 
         loadMenuItem.addActionListener(event -> {
@@ -66,11 +68,6 @@ public class HangarMenuBar extends JMenuBar {
             MIDletLoader.getLastLoaded().pauseApp();
         });
 
-        settingsMenuItem.addActionListener(event -> {
-            var settingsWindow = new HangarSettings();
-            settingsWindow.setVisible(true);
-        });
-
         exitMenuItem.addActionListener(event -> System.exit(0));
 
         midletMenu.add(loadMenuItem);
@@ -78,9 +75,37 @@ public class HangarMenuBar extends JMenuBar {
         midletMenu.add(pauseMenuItem);
         midletMenu.add(restartMenuItem);
         midletMenu.add(new JSeparator());
-        midletMenu.add(settingsMenuItem);
         midletMenu.add(exitMenuItem);
         this.add(midletMenu);
+    }
+
+    private void addOptionsMenu() {
+        var optionsMenu = new JMenu("Options");
+
+        var keyboardPopupMenu = new JMenu("Keyboard");
+        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", true);
+        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia");
+
+        var keyboardRadioGroup = new ButtonGroup();
+        keyboardRadioGroup.add(radioDefaultKeyboard);
+        keyboardRadioGroup.add(radioNokiaKeyboard);
+
+        radioDefaultKeyboard.addItemListener(e -> {
+            if (radioDefaultKeyboard.isSelected()) {
+                HangarState.setKeyboard(Keyboards.Default);
+            }
+        });
+
+        radioNokiaKeyboard.addItemListener(e -> {
+            if (radioNokiaKeyboard.isSelected()) {
+                HangarState.setKeyboard(Keyboards.Nokia);
+            }
+        });
+
+        keyboardPopupMenu.add(radioDefaultKeyboard);
+        keyboardPopupMenu.add(radioNokiaKeyboard);
+        optionsMenu.add(keyboardPopupMenu);
+        this.add(optionsMenu);
     }
 
     private void addHelpMenu() {
