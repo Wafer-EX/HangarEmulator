@@ -7,6 +7,7 @@ import java.net.URLClassLoader;
 
 public class MIDletLoader {
     private static MIDlet midlet;
+    private static String midletPath;
 
     public static MIDlet loadMIDlet(String absolutePath) {
         try {
@@ -20,6 +21,7 @@ public class MIDletLoader {
             Constructor<?> constructor = cls.getConstructor();
 
             midlet = (MIDlet)constructor.newInstance();
+            midletPath = absolutePath;
             return midlet;
         }
         catch (Exception ex) {
@@ -30,5 +32,9 @@ public class MIDletLoader {
 
     public static MIDlet getLastLoaded() {
         return midlet;
+    }
+
+    public static String getLastLoadedPath() {
+        return midletPath;
     }
 }

@@ -7,7 +7,7 @@ import java.io.*;
 
 public class RecordStoreUtils {
     public static String getRecordsPath() {
-        return String.format("data/records/%s/", MIDletResources.getMIDletName());
+        return String.format("hangar-data/records/%s/", MIDletResources.getMIDletName());
     }
 
     public static void writeRecordEnumerator(RecordEnumerator recordEnumerator, File file) {
@@ -19,8 +19,8 @@ public class RecordStoreUtils {
             var objectOutputStream = new ObjectOutputStream(fileOutputStream);
             objectOutputStream.writeObject(recordEnumerator);
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -31,8 +31,8 @@ public class RecordStoreUtils {
             var records = (RecordEnumerator) objectInputStream.readObject();
             return records;
         }
-        catch (Exception e) {
-            e.printStackTrace();
+        catch (Exception ex) {
+            ex.printStackTrace();
             return null;
         }
     }

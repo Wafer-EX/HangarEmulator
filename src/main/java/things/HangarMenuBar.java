@@ -38,30 +38,11 @@ public class HangarMenuBar extends JMenuBar {
             }
 
             SwingUtilities.invokeLater(() -> {
-                try {
-                    if (fileChooser.getSelectedFile() != null) {
-                        var midlet = MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
-                        mainWindow.setTitle(System.getProperty("MIDlet-Name"));
-                        mainWindow.setIconImage(MIDletResources.getMIDletIcon());
-                        midlet.startApp();
-                    }
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    mainWindow.dispose();
-                }
+                HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
             });
         });
         restartMenuItem.addActionListener(event -> {
-            try {
-                var currentMidlet = MIDletLoader.getLastLoaded();
-                currentMidlet.setExitBlock(true);
-                currentMidlet.destroyApp(true);
-                currentMidlet.startApp();
-                currentMidlet.setExitBlock(false);
-            }
-            catch (MIDletStateChangeException e) {
-                e.printStackTrace();
-            }
+            HangarState.restartApp(MIDletLoader.getLastLoadedPath());
         });
 
         pauseMenuItem.addActionListener(event -> {
