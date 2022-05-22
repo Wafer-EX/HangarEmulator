@@ -28,9 +28,10 @@ public class HangarEmulator {
             }
         }
         else {
-            var label = new Label("Please select a file ");
+            var label = new JLabel("Please select a file.");
             label.setPreferredSize(new Dimension(240, 320));
-            label.setAlignment(Label.CENTER);
+            label.setHorizontalAlignment(JLabel.CENTER);
+            label.setVerticalAlignment(JLabel.CENTER);
             mainWindow.add(label);
         }
 
