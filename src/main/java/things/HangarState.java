@@ -2,8 +2,13 @@ package things;
 
 import things.enums.Keyboards;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class HangarState {
     private static Keyboards selectedKeyboard = Keyboards.Default;
+    private static File programFile;
 
     public static Keyboards getKeyboard() {
         return selectedKeyboard;
@@ -19,6 +24,30 @@ public class HangarState {
                     hangarKeyListener.getPressedKeys().clear();
                 }
             }
+        }
+    }
+
+    public static void setProgramFile(File file) {
+        programFile = file;
+    }
+
+    public static void restartApp(String midletPath) {
+        try {
+            var javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
+            var command = new ArrayList<String>();
+
+            if (System.getProperty("os.name").contains("nix")) {
+                command.add("bash -c");
+            }
+            command.addAll(Arrays.asList(javaBin, "-jar", programFile.toString()));
+            if (midletPath != null) {
+                command.add(midletPath);
+            }
+            new ProcessBuilder(command).start();
+            System.exit(0);
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
         }
     }
 }
