@@ -1,6 +1,7 @@
 import things.*;
 
 import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.net.URISyntaxException;
 
@@ -14,8 +15,6 @@ public class HangarEmulator {
         mainWindow.setJMenuBar(new HangarMenuBar());
         mainWindow.add(HangarPanel.getInstance());
         mainWindow.addKeyListener(new HangarKeyListener());
-        mainWindow.pack();
-        mainWindow.setVisible(true);
 
         if (args.length > 0 && new File(args[0]).isFile()) {
             try {
@@ -28,8 +27,17 @@ public class HangarEmulator {
                 ex.printStackTrace();
             }
         }
+        else {
+            var label = new Label("Please select a file ");
+            label.setPreferredSize(new Dimension(240, 320));
+            label.setAlignment(Label.CENTER);
+            mainWindow.add(label);
+        }
 
         var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
         HangarState.setProgramFile(programFile);
+
+        mainWindow.pack();
+        mainWindow.setVisible(true);
     }
 }
