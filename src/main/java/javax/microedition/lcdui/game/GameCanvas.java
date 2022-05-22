@@ -1,6 +1,7 @@
 package javax.microedition.lcdui.game;
 
 import things.HangarPanel;
+import things.HangarState;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
@@ -22,8 +23,8 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        int width = HangarPanel.getInstance().getWidth();
-        int height = HangarPanel.getInstance().getWidth();
+        int width = HangarState.getResolution().width;
+        int height = HangarState.getResolution().height;
         image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 

@@ -8,20 +8,17 @@ import java.net.URISyntaxException;
 public class HangarEmulator {
     public static void main(String[] args) throws URISyntaxException {
         JFrame mainWindow = new JFrame();
+        HangarState.setWindow(mainWindow);
+
         mainWindow.setTitle("Hangar Emulator");
         mainWindow.setLocationRelativeTo(null);
         mainWindow.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
         mainWindow.setJMenuBar(new HangarMenuBar());
-        mainWindow.add(HangarPanel.getInstance());
-        mainWindow.addKeyListener(new HangarKeyListener());
 
         if (args.length > 0 && new File(args[0]).isFile()) {
             try {
-                var midlet = MIDletLoader.loadMIDlet(args[0]);
-                mainWindow.setTitle(System.getProperty("MIDlet-Name"));
-                mainWindow.setIconImage(MIDletResources.getMIDletIcon());
-                midlet.startApp();
+                MIDletLoader.loadMIDlet(args[0]);
+                MIDletLoader.startLastLoadedMIDlet();
             }
             catch (Exception ex) {
                 ex.printStackTrace();
@@ -29,6 +26,8 @@ public class HangarEmulator {
         }
         else {
             var label = new JLabel("Please select a file.");
+            HangarState.setLabel(label);
+
             label.setPreferredSize(new Dimension(240, 320));
             label.setHorizontalAlignment(JLabel.CENTER);
             label.setVerticalAlignment(JLabel.CENTER);

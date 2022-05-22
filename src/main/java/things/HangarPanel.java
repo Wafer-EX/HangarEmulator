@@ -9,7 +9,7 @@ public class HangarPanel extends JPanel {
     private static Displayable displayable;
 
     private HangarPanel() {
-        setPreferredSize(new Dimension(240, 320));
+        setPreferredSize(HangarState.getResolution());
     }
 
     public static HangarPanel getInstance() {
@@ -36,8 +36,9 @@ public class HangarPanel extends JPanel {
         if (displayable != null) {
             if (displayable instanceof javax.microedition.lcdui.Canvas) {
                 var canvas = (javax.microedition.lcdui.Canvas) displayable;
-                if (canvas.getWidth() != getPreferredSize().width || canvas.getHeight() != getPreferredSize().height) {
-                    canvas.sizeChanged(getPreferredSize().width, getPreferredSize().height);
+                if (canvas.getWidth() != getSize().width || canvas.getHeight() != getSize().height) {
+                    HangarState.setResolution(new Dimension(getSize().width, getSize().height));
+                    canvas.sizeChanged(getSize().width, getSize().height);
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
