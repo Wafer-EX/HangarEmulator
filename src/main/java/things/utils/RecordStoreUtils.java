@@ -5,7 +5,7 @@ import things.implementations.RecordEnumerator;
 
 import java.io.*;
 
-public class RecordStoreUtils {
+public final class RecordStoreUtils {
     public static String getRecordsPath() {
         return String.format("hangar-data/records/%s/", MIDletResources.getMIDletName());
     }
