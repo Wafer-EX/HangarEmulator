@@ -2,7 +2,6 @@ package things;
 
 import things.enums.Keyboards;
 
-import javax.microedition.midlet.MIDletStateChangeException;
 import javax.swing.*;
 import java.awt.*;
 import java.net.URL;
@@ -22,20 +21,8 @@ public class HangarMenuBar extends JMenuBar {
         var exitMenuItem = new JMenuItem("Exit");
 
         loadMenuItem.addActionListener(event -> {
-            var mainWindow = (JFrame) SwingUtilities.getWindowAncestor(this);
             var fileChooser = new JFileChooser();
             fileChooser.showDialog(null, "Select MIDlet");
-
-            try {
-                var currentMidlet = MIDletLoader.getLastLoaded();
-                if (currentMidlet != null) {
-                    currentMidlet.setExitBlock(true);
-                    currentMidlet.destroyApp(true);
-                }
-            }
-            catch (MIDletStateChangeException e) {
-                e.printStackTrace();
-            }
 
             SwingUtilities.invokeLater(() -> {
                 HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
