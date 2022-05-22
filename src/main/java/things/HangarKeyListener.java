@@ -23,7 +23,7 @@ public class HangarKeyListener implements KeyListener {
         var displayable = HangarPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (HangarSettings.getKeyboard() == Keyboards.Nokia) {
+            if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;
@@ -53,7 +53,7 @@ public class HangarKeyListener implements KeyListener {
         var displayable = HangarPanel.getDisplayable();
         if (displayable instanceof Canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            if (HangarSettings.getKeyboard() == Keyboards.Nokia) {
+            if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
             }
             var canvas = (Canvas)displayable;

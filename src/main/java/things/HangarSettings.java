@@ -14,10 +14,6 @@ public class HangarSettings extends JFrame {
         AddKeyboardPanel();
     }
 
-    public static Keyboards getKeyboard() {
-        return selectedKeyboard;
-    }
-
     private void AddKeyboardPanel() {
         var keyboardPanel = new JPanel();
         keyboardPanel.setBorder(BorderFactory.createTitledBorder("Keyboard"));
@@ -27,13 +23,7 @@ public class HangarSettings extends JFrame {
 
         keyboardCombobox.addActionListener(event -> {
             var source = (JComboBox) event.getSource();
-            selectedKeyboard = (Keyboards) source.getSelectedItem();
-
-            var keyListeners = HangarPanel.getInstance().getKeyListeners();
-            if (keyListeners.length > 0) {
-                var hangarKeyListeners = (HangarKeyListener) keyListeners[0];
-                hangarKeyListeners.getPressedKeys().clear();
-            }
+            HangarState.setKeyboard((Keyboards) source.getSelectedItem());
         });
 
         keyboardPanel.add(keyboardCombobox);
