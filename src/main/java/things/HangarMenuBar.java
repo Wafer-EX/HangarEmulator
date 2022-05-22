@@ -25,7 +25,13 @@ public class HangarMenuBar extends JMenuBar {
             fileChooser.showDialog(null, "Select MIDlet");
 
             SwingUtilities.invokeLater(() -> {
-                HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
+                if (MIDletLoader.getLastLoaded() == null) {
+                    MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
+                    MIDletLoader.startLoadedMIDlet();
+                }
+                else {
+                    HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
+                }
             });
         });
         restartMenuItem.addActionListener(event -> {
@@ -51,8 +57,8 @@ public class HangarMenuBar extends JMenuBar {
         var optionsMenu = new JMenu("Options");
 
         var keyboardPopupMenu = new JMenu("Keyboard");
-        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", true);
-        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia");
+        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
+        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
 
         var keyboardRadioGroup = new ButtonGroup();
         keyboardRadioGroup.add(radioDefaultKeyboard);

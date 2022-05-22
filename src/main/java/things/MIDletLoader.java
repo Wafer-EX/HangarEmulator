@@ -30,6 +30,19 @@ public class MIDletLoader {
         }
     }
 
+    public static void startLoadedMIDlet() {
+        try {
+            var hangarFrame = HangarFrame.getInstance();
+            hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
+            hangarFrame.setIconImage(MIDletResources.getMIDletIcon());
+            hangarFrame.setHangarPanel();
+            midlet.startApp();
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
     public static MIDlet getLastLoaded() {
         return midlet;
     }
