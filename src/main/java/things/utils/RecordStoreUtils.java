@@ -7,7 +7,7 @@ import java.io.*;
 
 public class RecordStoreUtils {
     public static String getRecordsPath() {
-        return String.format("records/%s/", MIDletResources.getMIDletName());
+        return String.format("data/records/%s/", MIDletResources.getMIDletName());
     }
 
     public static void writeRecordEnumerator(RecordEnumerator recordEnumerator, File file) {

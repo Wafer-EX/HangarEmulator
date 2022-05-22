@@ -13,9 +13,9 @@ public class RecordStore implements Serializable {
     public static final int AUTHMODE_ANY = 1;
 
     private static final Hashtable<String, RecordStore> openedRecords = new Hashtable();
-    private RecordEnumerator recordEnumerator;
-    private File recordEnumeratorPath;
-    private String name;
+    private final RecordEnumerator recordEnumerator;
+    private final File recordEnumeratorPath;
+    private final String name;
     private boolean isOpened = true;
 
     private RecordStore(String name, File recordEnumeratorPath, RecordEnumerator recordEnumerator) {
@@ -25,8 +25,9 @@ public class RecordStore implements Serializable {
     }
 
     public static void deleteRecordStore(String recordStoreName) throws RecordStoreException, RecordStoreNotFoundException {
+        recordStoreName = recordStoreName.replaceAll(" ", "%20");
         if (openedRecords.containsKey(recordStoreName)) {
-            openedRecords.remove("recordStoreName");
+            openedRecords.remove(recordStoreName);
         }
         else {
             throw new RecordStoreNotFoundException();
@@ -37,6 +38,8 @@ public class RecordStore implements Serializable {
         if (recordStoreName == null) {
             throw new IllegalArgumentException();
         }
+        recordStoreName = recordStoreName.replaceAll(" ", "%20");
+
         if (openedRecords.containsKey(recordStoreName)) {
             return openedRecords.get(recordStoreName);
         }
