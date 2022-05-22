@@ -1,6 +1,5 @@
 import things.*;
 
-import javax.swing.*;
 import java.io.File;
 import java.net.URISyntaxException;
 
@@ -18,7 +17,7 @@ public class HangarEmulator {
             }
         }
         else {
-            hangarFrame.setLabel(new JLabel("Please select a file."));
+            hangarFrame.setLabel(new HangarLabel("Please select a file."));
         }
 
         var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
