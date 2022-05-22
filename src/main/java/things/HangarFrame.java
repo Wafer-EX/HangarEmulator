@@ -37,7 +37,9 @@ public class HangarFrame extends JFrame {
     }
 
     public void setHangarPanel() {
-        this.remove(getLabel());
+        if (getLabel() != null) {
+            this.remove(getLabel());
+        }
         this.setJMenuBar(new HangarMenuBar());
         this.add(HangarPanel.getInstance());
         this.addKeyListener(new HangarKeyListener());
