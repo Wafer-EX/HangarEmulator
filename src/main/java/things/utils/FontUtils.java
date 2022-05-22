@@ -60,7 +60,7 @@ public final class FontUtils {
             alignedX -= stringWidth;
         }
         else if ((anchor & Graphics.HCENTER) != 0) {
-            alignedX -= stringWidth / 2;
+            alignedX -= stringWidth >> 1;
         }
         return alignedX;
     }
@@ -75,7 +75,7 @@ public final class FontUtils {
             alignedY -= stringSize.getMaxY();
         }
         else if (anchor == 0 || (anchor & Graphics.TOP) != 0) {
-            alignedY += stringSize.getMaxY() + font.getHeight() / 2;
+            alignedY += stringSize.getMaxY() + (font.getHeight() >> 1);
         }
         return alignedY;
     }

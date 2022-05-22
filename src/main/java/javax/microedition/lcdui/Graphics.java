@@ -6,7 +6,6 @@ import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
-import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 
 public class Graphics {
@@ -169,8 +168,8 @@ public class Graphics {
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
         if (width > 0 && height > 0) {
-            BufferedImage bufferedImage = (BufferedImage) src.image;
-            BufferedImage subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
+            var bufferedImage = (BufferedImage) src.image;
+            var subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
 
             x_dest = ImageUtils.alignX(subImage.getWidth(), x_dest, anchor);
             y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
