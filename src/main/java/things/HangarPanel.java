@@ -34,11 +34,10 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         if (displayable != null) {
-            if (displayable instanceof javax.microedition.lcdui.Canvas) {
-                var canvas = (javax.microedition.lcdui.Canvas) displayable;
-                if (canvas.getWidth() != getSize().width || canvas.getHeight() != getSize().height) {
-                    HangarState.setResolution(new Dimension(getSize().width, getSize().height));
-                    canvas.sizeChanged(getSize().width, getSize().height);
+            if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
+                if (canvas.getWidth() != this.getWidth() || canvas.getHeight() != this.getHeight()) {
+                    HangarState.setResolution(getSize());
+                    canvas.sizeChanged(this.getWidth(), this.getHeight());
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
