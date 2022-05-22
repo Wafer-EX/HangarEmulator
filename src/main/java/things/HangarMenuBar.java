@@ -27,7 +27,7 @@ public class HangarMenuBar extends JMenuBar {
             SwingUtilities.invokeLater(() -> {
                 if (MIDletLoader.getLastLoaded() == null) {
                     MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
-                    MIDletLoader.startLastLoadedMIDlet();
+                    MIDletLoader.startLoadedMIDlet();
                 }
                 else {
                     HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());

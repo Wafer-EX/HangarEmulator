@@ -30,20 +30,12 @@ public class MIDletLoader {
         }
     }
 
-    public static void startLastLoadedMIDlet() {
+    public static void startLoadedMIDlet() {
         try {
-            var mainWindow = HangarState.getWindow();
-            mainWindow.remove(HangarState.getLabel());
-
-            mainWindow.setTitle(System.getProperty("MIDlet-Name"));
-            mainWindow.setIconImage(MIDletResources.getMIDletIcon());
-
-            mainWindow.setJMenuBar(new HangarMenuBar());
-            mainWindow.add(HangarPanel.getInstance());
-            mainWindow.addKeyListener(new HangarKeyListener());
-
-            mainWindow.pack();
-            mainWindow.revalidate();
+            var hangarFrame = HangarFrame.getInstance();
+            hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
+            hangarFrame.setIconImage(MIDletResources.getMIDletIcon());
+            hangarFrame.setHangarPanel();
             midlet.startApp();
         }
         catch (Exception ex) {

@@ -2,7 +2,6 @@ package things;
 
 import things.enums.Keyboards;
 
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
@@ -11,9 +10,7 @@ import java.util.Arrays;
 public class HangarState {
     private static Keyboards selectedKeyboard = Keyboards.Default;
     private static File programFile;
-    private static JFrame currentWindow;
     private static Dimension currentResolution = new Dimension(240, 320);
-    private static JLabel currentLabel;
 
     public static Keyboards getKeyboard() {
         return selectedKeyboard;
@@ -25,22 +22,6 @@ public class HangarState {
 
     public static void setResolution(Dimension resolution) {
         currentResolution = resolution;
-    }
-
-    public static JFrame getWindow() {
-        return currentWindow;
-    }
-
-    public static void setWindow(JFrame window) {
-        currentWindow = window;
-    }
-
-    public static JLabel getLabel() {
-        return currentLabel;
-    }
-
-    public static void setLabel(JLabel label) {
-        currentLabel = label;
     }
 
     public static void setKeyboard(Keyboards keyboard) {
