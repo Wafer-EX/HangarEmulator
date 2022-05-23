@@ -29,8 +29,7 @@ public class HangarState {
         var keyListeners = HangarPanel.getInstance().getKeyListeners();
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
-                if (keyListener instanceof HangarKeyListener) {
-                    var hangarKeyListener = (HangarKeyListener) keyListener;
+                if (keyListener instanceof HangarKeyListener hangarKeyListener) {
                     hangarKeyListener.getPressedKeys().clear();
                 }
             }

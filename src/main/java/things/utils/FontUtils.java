@@ -24,9 +24,9 @@ public final class FontUtils {
             else if (from == STANDART_EDITION) {
                 fontSize = fitSizeToStandartEdition(fontSize);
                 switch (fontSize) {
-                    case SE_SIZE_SMALL: fontSize = Font.SIZE_SMALL;
-                    case SE_SIZE_MEDIUM: fontSize = Font.SIZE_MEDIUM;
-                    case SE_SIZE_LARGE: fontSize = Font.SIZE_LARGE;
+                    case SE_SIZE_SMALL: fontSize = Font.SIZE_SMALL; break;
+                    case SE_SIZE_MEDIUM: fontSize = Font.SIZE_MEDIUM; break;
+                    case SE_SIZE_LARGE: fontSize = Font.SIZE_LARGE; break;
                 }
             }
         }
