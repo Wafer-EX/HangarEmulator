@@ -25,15 +25,15 @@ public class HangarFrame extends JFrame {
         return currentLabel;
     }
 
-    public void setLabel(JLabel label) {
-        currentLabel = label;
-        currentLabel.setPreferredSize(new Dimension(240, 320));
-        currentLabel.setHorizontalAlignment(JLabel.CENTER);
-        currentLabel.setVerticalAlignment(JLabel.CENTER);
+    public void setLabel(HangarLabel label) {
+        label.setPreferredSize(new Dimension(240, 320));
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
 
-        this.add(currentLabel);
+        this.add(label);
         this.pack();
         this.revalidate();
+        currentLabel = label;
     }
 
     public void setHangarPanel() {

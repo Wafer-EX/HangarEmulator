@@ -14,5 +14,6 @@ public class HangarLabel extends JLabel {
         if (resolution.width != getWidth() || resolution.height != getHeight()) {
             HangarState.setResolution(getSize());
         }
+        super.paintComponent(graphics);
     }
 }

@@ -37,14 +37,8 @@ public class HangarMenuBar extends JMenuBar {
                 }
             });
         });
-        restartMenuItem.addActionListener(event -> {
-            HangarState.restartApp(MIDletLoader.getLastLoadedPath());
-        });
-
-        pauseMenuItem.addActionListener(event -> {
-            MIDletLoader.getLastLoaded().pauseApp();
-        });
-
+        restartMenuItem.addActionListener(event -> HangarState.restartApp(MIDletLoader.getLastLoadedPath()));
+        pauseMenuItem.addActionListener(event -> MIDletLoader.getLastLoaded().pauseApp());
         exitMenuItem.addActionListener(event -> System.exit(0));
 
         midletMenu.add(loadMenuItem);

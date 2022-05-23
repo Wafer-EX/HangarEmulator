@@ -7,7 +7,7 @@ import javax.sound.midi.MetaEventListener;
 import javax.sound.midi.MetaMessage;
 
 public class PlayerMetaEventListener implements MetaEventListener {
-    private ExtendedPlayer player;
+    private final ExtendedPlayer player;
 
     public PlayerMetaEventListener(ExtendedPlayer player) {
         this.player = player;

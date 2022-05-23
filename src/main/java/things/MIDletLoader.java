@@ -14,11 +14,12 @@ public class MIDletLoader {
             MIDletResources.setJar(absolutePath);
             MIDletResources.initializeProperties();
 
-            URL[] urls = {new URL("jar:file:" + absolutePath + "!/")};
+            URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             URLClassLoader loader = new URLClassLoader(urls);
 
             Class<?> cls = Class.forName(MIDletResources.getMIDletName(), true, loader);
             Constructor<?> constructor = cls.getConstructor();
+            constructor.setAccessible(true);
 
             midlet = (MIDlet)constructor.newInstance();
             midletPath = absolutePath;
