@@ -48,11 +48,11 @@ public class HangarPanel extends JPanel {
         }
     }
 
-    public void setScreenClearing(boolean clear) {
+    public void setCanvasClearing(boolean clear) {
         clearScreen = clear;
     }
 
-    public boolean getScreenClearing() {
+    public boolean getCanvasClearing() {
         return clearScreen;
     }
 
