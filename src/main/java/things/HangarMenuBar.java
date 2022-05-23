@@ -68,14 +68,20 @@ public class HangarMenuBar extends JMenuBar {
 
     private void addOptionsMenu() {
         var optionsMenu = new JMenu("Options");
-
         var keyboardPopupMenu = new JMenu("Keyboard");
+        var screenClearingCheckBox = new JCheckBoxMenuItem("Screen clearing", HangarPanel.getInstance().getScreenClearing());
+
         var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
         var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
 
         var keyboardRadioGroup = new ButtonGroup();
         keyboardRadioGroup.add(radioDefaultKeyboard);
         keyboardRadioGroup.add(radioNokiaKeyboard);
+
+        screenClearingCheckBox.addItemListener(e -> {
+            var clearScreen = !HangarPanel.getInstance().getScreenClearing();
+            HangarPanel.getInstance().setScreenClearing(clearScreen);
+        });
 
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
@@ -91,6 +97,7 @@ public class HangarMenuBar extends JMenuBar {
 
         keyboardPopupMenu.add(radioDefaultKeyboard);
         keyboardPopupMenu.add(radioNokiaKeyboard);
+        optionsMenu.add(screenClearingCheckBox);
         optionsMenu.add(keyboardPopupMenu);
         this.add(optionsMenu);
     }
