@@ -40,16 +40,17 @@ public class MIDletResources {
     }
 
     public static InputStream getResourceFromJar(String resourcePath) {
+        if (resourcePath == null) {
+            throw new IllegalArgumentException();
+        }
+        else if (jarFile == null) {
+            throw new IllegalStateException();
+        }
         try {
-            if (resourcePath == null) {
-                throw new IllegalArgumentException();
+            if (resourcePath.charAt(0) == '/') {
+                resourcePath = resourcePath.substring(1);
             }
-            else {
-                if (resourcePath.charAt(0) == '/') {
-                    resourcePath = resourcePath.substring(1);
-                }
-                return classLoader.getResourceAsStream(resourcePath);
-            }
+            return classLoader.getResourceAsStream(resourcePath);
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -58,6 +59,9 @@ public class MIDletResources {
     }
 
     public static String getMIDletName() {
+        if (jarFile == null) {
+            throw new IllegalStateException();
+        }
         try {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes();
@@ -71,6 +75,9 @@ public class MIDletResources {
     }
 
     public static Image getMIDletIcon() {
+        if (jarFile == null) {
+            throw new IllegalStateException();
+        }
         try {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes();
@@ -85,6 +92,9 @@ public class MIDletResources {
     }
 
     public static void initializeProperties() {
+        if (jarFile == null) {
+            throw new IllegalStateException();
+        }
         try {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes().entrySet();
