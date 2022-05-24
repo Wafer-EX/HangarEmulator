@@ -27,10 +27,7 @@ public class HangarState {
     private static Keyboards selectedKeyboard = Keyboards.Default;
     private static File programFile;
     private static Dimension currentResolution = new Dimension(240, 320);
-
-    public static Keyboards getKeyboard() {
-        return selectedKeyboard;
-    }
+    private static boolean clearScreen;
 
     public static Dimension getResolution() {
         return currentResolution;
@@ -38,6 +35,10 @@ public class HangarState {
 
     public static void setResolution(Dimension resolution) {
         currentResolution = resolution;
+    }
+
+    public static Keyboards getKeyboard() {
+        return selectedKeyboard;
     }
 
     public static void setKeyboard(Keyboards keyboard) {
@@ -50,6 +51,14 @@ public class HangarState {
                 }
             }
         }
+    }
+
+    public static boolean getCanvasClearing() {
+        return clearScreen;
+    }
+
+    public static void setCanvasClearing(boolean clear) {
+        clearScreen = clear;
     }
 
     public static void setProgramFile(File file) {

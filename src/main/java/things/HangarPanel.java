@@ -23,7 +23,6 @@ import java.awt.*;
 public class HangarPanel extends JPanel {
     private static HangarPanel instance;
     private static Displayable displayable;
-    private static boolean clearScreen;
 
     private HangarPanel() {
         setPreferredSize(HangarState.getResolution());
@@ -48,18 +47,10 @@ public class HangarPanel extends JPanel {
         }
     }
 
-    public void setCanvasClearing(boolean clear) {
-        clearScreen = clear;
-    }
-
-    public boolean getCanvasClearing() {
-        return clearScreen;
-    }
-
     @Override
     public void paintComponent(Graphics graphics) {
         if (displayable != null) {
-            if (clearScreen) {
+            if (HangarState.getCanvasClearing()) {
                 super.paintComponent(graphics);
             }
             if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
