@@ -26,5 +26,7 @@ public class Command {
     public static final int EXIT = 7;
     public static final int ITEM = 8;
 
-    public Command(String name, int type, int priority) { }
+    public Command(String name, int type, int priority) {
+        // TODO: write constructor logic
+    }
 }

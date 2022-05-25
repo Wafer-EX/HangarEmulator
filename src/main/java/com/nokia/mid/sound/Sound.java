@@ -25,47 +25,54 @@ public class Sound {
     public static final int SOUND_STOPPED = 1;
     public static final int SOUND_UNINITIALIZED = 3;
 
-    public Sound(byte[] data, int type) { }
+    public Sound(byte[] data, int type) {
+        // TODO: write constructor logic
+    }
 
-    public Sound(int freq, long duration) { }
+    public Sound(int freq, long duration) {
+        // TODO: write constructor logic
+    }
 
     public void init(int freq, long duration) throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public void init(byte[] data, int type) throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public int getState() {
+        // TODO: write method logic
         return SOUND_UNINITIALIZED;
     }
 
     public void play(int loop) throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public void stop() throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public void resume() throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public void release() throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public void setGain(int gain) throws NotImplementedException {
-        throw new NotImplementedException("setGain");
+        // TODO: write method logic
     }
 
     public int getGain() {
+        // TODO: write method logic
         return 255;
     }
 
     public static int getConcurrentSoundCount(int type) {
+        // TODO: write method logic
         return 1;
     }
 
@@ -73,5 +80,7 @@ public class Sound {
         return new int[] { FORMAT_TONE, FORMAT_WAV };
     }
 
-    public void setSoundListener(SoundListener listener) { }
+    public void setSoundListener(SoundListener listener) {
+        // TODO: write method logic
+    }
 }

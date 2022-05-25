@@ -20,6 +20,7 @@ import com.nokia.mid.ui.DirectGraphics;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.*;
 
 public class DirectGraphicsImplementation implements DirectGraphics {
     private Graphics meGraphics;
@@ -30,7 +31,7 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void setARGBColor(int argbColor) {
-
+        meGraphics.seGraphics.setColor(new Color(argbColor, true));
     }
 
     @Override
@@ -54,51 +55,53 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) {
-
+        // TODO: write method logic
     }
 
     @Override
     public int getNativePixelFormat() {
+        // TODO: write method logic
         return 0;
     }
 
     @Override
     public int getAlphaComponent() {
+        // TODO: write method logic
         return 0;
     }
 }

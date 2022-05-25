@@ -18,10 +18,10 @@ package javax.microedition.lcdui;
 
 public class Form extends Screen {
     public Form(String title) {
-
+        // TODO: write constructor logic
     }
 
     public Form(String title, Item[] items) {
-
+        // TODO: write constructor logic
     }
 }

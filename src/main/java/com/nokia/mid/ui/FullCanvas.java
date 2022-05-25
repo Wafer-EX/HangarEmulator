@@ -17,6 +17,8 @@
 package com.nokia.mid.ui;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Command;
+import javax.microedition.lcdui.CommandListener;
 
 public abstract class FullCanvas extends Canvas {
     public static final int KEY_SOFTKEY1 = -6;
@@ -31,5 +33,13 @@ public abstract class FullCanvas extends Canvas {
 
     protected FullCanvas() {
         super();
+    }
+
+    public void addCommand(Command cmd) {
+        // TODO: write method logic
+    }
+
+    public void setCommandListener(CommandListener l) {
+        // TODO: write method logic
     }
 }
