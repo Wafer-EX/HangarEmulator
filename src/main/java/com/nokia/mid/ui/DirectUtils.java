@@ -19,9 +19,11 @@ package com.nokia.mid.ui;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.implementations.nokia.DirectGraphicsImplementation;
 
+import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 
 public class DirectUtils {
     public static DirectGraphics getDirectGraphics(Graphics g) {
@@ -29,7 +31,15 @@ public class DirectUtils {
     }
 
     public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NotImplementedException {
-        throw new NotImplementedException("createImage");
+        try {
+            var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
+            var image = ImageIO.read(byteArrayInputStream);
+            return new Image(image, true);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
     }
 
     public static Image createImage(int width, int height, int ARGBcolor) {

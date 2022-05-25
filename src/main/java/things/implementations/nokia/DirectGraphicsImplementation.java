@@ -35,17 +35,21 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
-
+        meGraphics.drawImage(img, x, y, anchor);
     }
 
     @Override
     public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-
+        var xPoints = new int[] { x1, x2, x3 };
+        var yPoints = new int[] { y1, y2, y3 };
+        meGraphics.seGraphics.drawPolygon(xPoints, yPoints, argbColor);
     }
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-
+        var xPoints = new int[] { x1, x2, x3 };
+        var yPoints = new int[] { y1, y2, y3 };
+        meGraphics.seGraphics.fillPolygon(xPoints, yPoints, argbColor);
     }
 
     @Override
