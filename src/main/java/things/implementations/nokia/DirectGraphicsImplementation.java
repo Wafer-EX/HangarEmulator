@@ -31,7 +31,7 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void setARGBColor(int argbColor) {
-        meGraphics.seGraphics.setColor(new Color(argbColor, true));
+        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
     }
 
     @Override
@@ -43,24 +43,28 @@ public class DirectGraphicsImplementation implements DirectGraphics {
     public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
         var xPoints = new int[] { x1, x2, x3 };
         var yPoints = new int[] { y1, y2, y3 };
-        meGraphics.seGraphics.drawPolygon(xPoints, yPoints, argbColor);
+        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
+        meGraphics.getSEGraphics().drawPolygon(xPoints, yPoints, 3);
     }
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
         var xPoints = new int[] { x1, x2, x3 };
         var yPoints = new int[] { y1, y2, y3 };
-        meGraphics.seGraphics.fillPolygon(xPoints, yPoints, argbColor);
+        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
+        meGraphics.getSEGraphics().fillPolygon(xPoints, yPoints, 3);
     }
 
     @Override
     public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
-        // TODO: write method logic
+        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
+        meGraphics.getSEGraphics().drawPolygon(xPoints, yPoints, argbColor);
     }
 
     @Override
     public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
-        // TODO: write method logic
+        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
+        meGraphics.getSEGraphics().fillPolygon(xPoints, yPoints, nPoints);
     }
 
     @Override

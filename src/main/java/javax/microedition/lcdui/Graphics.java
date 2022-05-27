@@ -35,13 +35,17 @@ public class Graphics {
     public static final int SOLID = 0;
     public static final int DOTTED = 1;
 
-    public final Graphics2D seGraphics;
+    private final Graphics2D seGraphics;
     private java.awt.Font se_font;
     private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
 
     public Graphics(java.awt.Graphics seGraphics) {
         this.seGraphics = (Graphics2D) seGraphics;
+    }
+
+    public java.awt.Graphics getSEGraphics() {
+        return seGraphics;
     }
 
     public void translate(int x, int y) {
@@ -128,19 +132,27 @@ public class Graphics {
     }
 
     public void fillRect(int x, int y, int width, int height) {
-        seGraphics.fillRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            seGraphics.fillRect(x, y, width, height);
+        }
     }
 
     public void drawRect(int x, int y, int width, int height) {
-        seGraphics.drawRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            seGraphics.drawRect(x, y, width, height);
+        }
     }
 
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
     }
 
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
     }
 
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {

@@ -35,13 +35,21 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    public Image buffer;
+    private Image buffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+    }
+
+    public Image getBuffer() {
+        return buffer;
+    }
+
+    public void setBuffer(Image image) {
+        buffer = image;
     }
 
     protected Graphics getGraphics() {

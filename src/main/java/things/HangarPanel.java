@@ -60,7 +60,7 @@ public class HangarPanel extends JPanel {
                     HangarState.setResolution(getSize());
                     canvas.sizeChanged(this.getWidth(), this.getHeight());
                     if (canvas instanceof GameCanvas gameCanvas) {
-                        gameCanvas.buffer = new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB);
+                        gameCanvas.setBuffer(new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB));
                     }
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
