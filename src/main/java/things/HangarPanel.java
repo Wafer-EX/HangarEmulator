@@ -17,8 +17,10 @@
 package things;
 
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.game.GameCanvas;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class HangarPanel extends JPanel {
     private static HangarPanel instance;
@@ -50,15 +52,27 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         if (displayable != null) {
+            boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
             if (HangarState.getCanvasClearing()) {
                 super.paintComponent(graphics);
             }
+
             if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
-                if (canvas.getWidth() != this.getWidth() || canvas.getHeight() != this.getHeight()) {
+                if (!sizeMatches) {
                     HangarState.setResolution(getSize());
                     canvas.sizeChanged(this.getWidth(), this.getHeight());
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+            }
+
+            if (displayable instanceof GameCanvas gameCanvas) {
+                if (!sizeMatches) {
+                    gameCanvas.setBuffer(new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB));
+                }
+                if (gameCanvas.getNeedsToFlush()) {
+                    graphics.drawImage(gameCanvas.getBuffer(), 0, 0, null);
+                    gameCanvas.setNeedsToFlush(false);
+                }
             }
         }
     }

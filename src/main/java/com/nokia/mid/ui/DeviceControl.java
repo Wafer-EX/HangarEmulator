@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-package javax.microedition.lcdui;
 
-public class Command {
-    public static final int SCREEN = 1;
-    public static final int BACK = 2;
-    public static final int CANCEL = 3;
-    public static final int OK = 4;
-    public static final int HELP = 5;
-    public static final int STOP = 6;
-    public static final int EXIT = 7;
-    public static final int ITEM = 8;
+package com.nokia.mid.ui;
 
-    public Command(String name, int type, int priority) {
-        // TODO: write constructor logic
+public class DeviceControl {
+    public static void setLights(int num, int level) {
+        // TODO: write method logic
+    }
+
+    public static void flashLights(long duration) {
+        // TODO: write method logic
+    }
+
+    public static void startVibra(int freq, long duration) {
+        // TODO: write method logic
+    }
+
+    public static void stopVibra() {
+        // TODO: write method logic
     }
 }

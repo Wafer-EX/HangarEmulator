@@ -67,8 +67,8 @@ public class Image {
             throw new NullPointerException();
         }
         try {
-            ByteArrayInputStream imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            Image image = createImage(imageInputStream);
+            var imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
+            var image = createImage(imageInputStream);
             return image;
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
@@ -109,14 +109,16 @@ public class Image {
             BufferedImage bufferedImage = ImageIO.read(stream);
             Image image = new Image(bufferedImage, false);
             return image;
-        } catch (IOException e) {
+        }
+        catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createRGBImage");
+        var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+        image.getRaster().setPixels(0, 0, width, height, rgb);
+        return new Image(image, false);
     }
 
     public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws NotImplementedException {

@@ -23,6 +23,7 @@ import things.utils.ImageUtils;
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class Graphics {
     public static final int HCENTER = 1;
@@ -44,6 +45,10 @@ public class Graphics {
         this.seGraphics = (Graphics2D) seGraphics;
     }
 
+    public java.awt.Graphics getSEGraphics() {
+        return seGraphics;
+    }
+
     public void translate(int x, int y) {
         seGraphics.translate(x, y);
         translateX += x;
@@ -63,7 +68,7 @@ public class Graphics {
     }
 
     public void setColor(int RGB) {
-        seGraphics.setColor(new Color(RGB));
+        seGraphics.setColor(new Color(RGB, false));
     }
 
     public Font getFont() {
@@ -128,19 +133,27 @@ public class Graphics {
     }
 
     public void fillRect(int x, int y, int width, int height) {
-        seGraphics.fillRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            seGraphics.fillRect(x, y, width, height);
+        }
     }
 
     public void drawRect(int x, int y, int width, int height) {
-        seGraphics.drawRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            seGraphics.drawRect(x, y, width, height);
+        }
     }
 
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
     }
 
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
     }
 
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
@@ -229,13 +242,14 @@ public class Graphics {
         seGraphics.fillPolygon(xPoints, yPoints, 3);
     }
 
-    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("drawRGB");
+    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
+        rgbData = Arrays.copyOfRange(rgbData, offset, offset + scanlength);
+        var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+        image.getRaster().setPixels(x, y, width, height, rgbData);
+        seGraphics.drawImage(image, x, y, null);
     }
 
     public int getDisplayColor(int color) {
-        // TODO: it is correct?
-        return color;
+        return Color.white.getRGB();
     }
 }

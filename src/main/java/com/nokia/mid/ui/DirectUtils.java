@@ -16,9 +16,34 @@
 
 package com.nokia.mid.ui;
 
+import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import things.implementations.nokia.DirectGraphicsImplementation;
+
+import javax.imageio.ImageIO;
+import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+
 public class DirectUtils {
-    public static DirectGraphics getDirectGraphics(javax.microedition.lcdui.Graphics g) {
-        // TODO: write method logic
-        return null;
+    public static DirectGraphics getDirectGraphics(Graphics g) {
+        return new DirectGraphicsImplementation(g);
+    }
+
+    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NotImplementedException {
+        try {
+            var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
+            var image = ImageIO.read(byteArrayInputStream);
+            return new Image(image, true);
+        }
+        catch (Exception ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    public static Image createImage(int width, int height, int ARGBcolor) {
+        var awtImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        return new Image(awtImage, true);
     }
 }

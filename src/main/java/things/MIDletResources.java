@@ -40,12 +40,6 @@ public class MIDletResources {
     }
 
     public static InputStream getResourceFromJar(String resourcePath) {
-        if (resourcePath == null) {
-            throw new IllegalArgumentException();
-        }
-        else if (jarFile == null) {
-            throw new IllegalStateException();
-        }
         try {
             if (resourcePath.charAt(0) == '/') {
                 resourcePath = resourcePath.substring(1);
