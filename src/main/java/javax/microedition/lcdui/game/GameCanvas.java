@@ -53,6 +53,14 @@ public abstract class GameCanvas extends Canvas {
         if (g == null) {
             throw new NullPointerException();
         }
+        g.drawImage(new javax.microedition.lcdui.Image(image, true), 0, 0, 0);
+    }
+
+    public void flushGraphics(int x, int y, int width, int height) {
+        HangarPanel.getInstance().getGraphics().drawImage(image, 0, 0, width, height, null);
+    }
+
+    public void flushGraphics() {
         HangarPanel.getInstance().getGraphics().drawImage(image, 0, 0, null);
     }
 }
