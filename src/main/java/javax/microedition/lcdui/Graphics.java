@@ -23,6 +23,7 @@ import things.utils.ImageUtils;
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 
 public class Graphics {
     public static final int HCENTER = 1;
@@ -67,7 +68,7 @@ public class Graphics {
     }
 
     public void setColor(int RGB) {
-        seGraphics.setColor(new Color(RGB));
+        seGraphics.setColor(new Color(RGB, false));
     }
 
     public Font getFont() {
@@ -241,13 +242,14 @@ public class Graphics {
         seGraphics.fillPolygon(xPoints, yPoints, 3);
     }
 
-    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("drawRGB");
+    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
+        rgbData = Arrays.copyOfRange(rgbData, offset, offset + scanlength);
+        var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+        image.getRaster().setPixels(x, y, width, height, rgbData);
+        seGraphics.drawImage(image, x, y, null);
     }
 
     public int getDisplayColor(int color) {
-        // TODO: it is correct?
-        return color;
+        return Color.white.getRGB();
     }
 }
