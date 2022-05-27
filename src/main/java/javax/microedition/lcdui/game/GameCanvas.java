@@ -35,17 +35,17 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private Image image;
+    public Image buffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 
     protected Graphics getGraphics() {
-        return new Graphics(image.getGraphics());
+        return new Graphics(buffer.getGraphics());
     }
 
     @Override
@@ -53,14 +53,14 @@ public abstract class GameCanvas extends Canvas {
         if (g == null) {
             throw new NullPointerException();
         }
-        g.drawImage(new javax.microedition.lcdui.Image(image, true), 0, 0, 0);
+        g.drawImage(new javax.microedition.lcdui.Image(buffer, true), 0, 0, 0);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarPanel.getInstance().getGraphics().drawImage(image, 0, 0, width, height, null);
+        HangarPanel.getInstance().getGraphics().drawImage(buffer, 0, 0, width, height, null);
     }
 
     public void flushGraphics() {
-        HangarPanel.getInstance().getGraphics().drawImage(image, 0, 0, null);
+        HangarPanel.getInstance().getGraphics().drawImage(buffer, 0, 0, null);
     }
 }
