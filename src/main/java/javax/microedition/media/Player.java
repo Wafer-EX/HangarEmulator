@@ -25,6 +25,8 @@ public interface Player extends Controllable {
     public static final int CLOSED = 0;
     public static final long TIME_UNKNOWN = -1;
 
+    public void realize() throws MediaException;
+
     public long setMediaTime(long now) throws MediaException;
 
     public long getMediaTime();

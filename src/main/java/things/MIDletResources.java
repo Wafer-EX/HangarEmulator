@@ -52,7 +52,11 @@ public class MIDletResources {
         }
     }
 
-    public static String getMIDletName() {
+    public static InputStream getResourceFromJar(Class inputClass, String resourcePath) {
+        return getResourceFromJar(resourcePath);
+    }
+
+    public static String getMainClassName() {
         if (jarFile == null) {
             throw new IllegalStateException();
         }
@@ -68,7 +72,7 @@ public class MIDletResources {
         }
     }
 
-    public static Image getMIDletIcon() {
+    public static Image getIconFromJar() {
         if (jarFile == null) {
             throw new IllegalStateException();
         }
