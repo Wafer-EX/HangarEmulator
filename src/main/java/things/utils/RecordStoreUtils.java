@@ -23,7 +23,7 @@ import java.io.*;
 
 public final class RecordStoreUtils {
     public static String getRecordsPath() {
-        return String.format("hangar-data/records/%s/", MIDletResources.getMIDletName());
+        return String.format("hangar-data/records/%s/", MIDletResources.getMainClassName());
     }
 
     public static void writeRecordEnumerator(RecordEnumerator recordEnumerator, File file) {
