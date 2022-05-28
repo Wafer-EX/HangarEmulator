@@ -32,7 +32,7 @@ public class MIDletClassLoader extends URLClassLoader {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        if (!name.contains("java")) {
+        if (!name.contains("java") && !name.contains("nokia") && !name.contains("things")) {
             try {
                 var classStream = MIDletResources.getResourceFromJar(name + ".class");
                 assert classStream != null;

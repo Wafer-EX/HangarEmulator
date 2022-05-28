@@ -17,6 +17,7 @@
 package things.implementations;
 
 import javax.microedition.media.Control;
+import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
 import java.util.ArrayList;
@@ -30,6 +31,14 @@ public abstract class ExtendedPlayer implements Player {
 
     public void setState(int state) {
         this.currentState = state;
+    }
+
+    @Override
+    public void realize() throws MediaException {
+        if (getState() == CLOSED) {
+            throw new MediaException();
+        }
+        setState(REALIZED);
     }
 
     @Override

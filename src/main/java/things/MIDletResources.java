@@ -52,7 +52,7 @@ public class MIDletResources {
         }
     }
 
-    public static InputStream getResourceFromJar(Object object, String resourcePath) {
+    public static InputStream getResourceFromJar(Class inputClass, String resourcePath) {
         return getResourceFromJar(resourcePath);
     }
 
