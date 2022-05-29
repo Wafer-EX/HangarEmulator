@@ -16,6 +16,7 @@
 
 package javax.microedition.lcdui;
 
+import things.HangarFrame;
 import things.HangarPanel;
 import things.HangarState;
 
@@ -26,15 +27,11 @@ public abstract class Displayable {
     private CommandListener commandListener;
 
     public String getTitle() {
-        var panel = HangarPanel.getInstance();
-        var frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-        return frame.getTitle();
+        return HangarFrame.getInstance().getTitle();
     }
 
     public void setTitle(String s) {
-        var panel = HangarPanel.getInstance();
-        var frame = (JFrame) SwingUtilities.getWindowAncestor(panel);
-        frame.setTitle(s);
+        HangarFrame.getInstance().setTitle(s);
     }
 
     public Ticker getTicker() {
