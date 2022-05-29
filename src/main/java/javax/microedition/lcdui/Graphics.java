@@ -63,6 +63,22 @@ public class Graphics {
         return translateY;
     }
 
+    public int getColor() {
+        return seGraphics.getColor().getRGB();
+    }
+
+    public int getRedComponent() {
+        return seGraphics.getColor().getRed();
+    }
+
+    public int getGreenComponent() {
+        return seGraphics.getColor().getGreen();
+    }
+
+    public int getBlueComponent() {
+        return seGraphics.getColor().getBlue();
+    }
+
     public void setColor(int red, int green, int blue) {
         seGraphics.setColor(new Color(red, green, blue));
     }
