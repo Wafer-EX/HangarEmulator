@@ -33,6 +33,8 @@ public interface Player extends Controllable {
 
     public int getState();
 
+    public long getDuration() throws IllegalStateException;
+
     public void prefetch();
 
     public void start();

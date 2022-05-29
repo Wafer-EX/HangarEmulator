@@ -61,6 +61,11 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public long getDuration() throws IllegalStateException {
+        return sequencer.getMicrosecondLength();
+    }
+
+    @Override
     public void prefetch() {
         // TODO: write method logic
         if (getState() == CLOSED) {

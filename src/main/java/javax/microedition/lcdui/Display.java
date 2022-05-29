@@ -52,12 +52,11 @@ public class Display {
 
     public int numColors() {
         // 8 bit display
-        return 256;
+        return 255;
     }
 
-    public int numAlphaLevels() throws NotImplementedException {
-        // TODO: how to do it?
-        throw new NotImplementedException("numAlphaLevels");
+    public int numAlphaLevels() {
+        return 255;
     }
 
     public Displayable getCurrent() {
@@ -78,9 +77,9 @@ public class Display {
         throw new NotImplementedException("setCurrentItem");
     }
 
-    public void callSerially(Runnable r) throws NotImplementedException {
-        // TODO: write method logic
-        //throw new NotImplementedException("callSerially");
+    public void callSerially(Runnable r) {
+        // TODO: rewrite method logic
+        r.run();
     }
 
     public boolean flashBacklight(int duration) {

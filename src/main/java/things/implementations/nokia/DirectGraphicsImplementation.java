@@ -105,7 +105,6 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public int getAlphaComponent() {
-        // TODO: write method logic
-        return 0;
+        return meGraphics.getSEGraphics().getColor().getAlpha();
     }
 }
