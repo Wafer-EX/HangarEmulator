@@ -55,6 +55,11 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public long getDuration() throws IllegalStateException {
+        return clip.getMicrosecondLength();
+    }
+
+    @Override
     public void prefetch() {
         setState(PREFETCHED);
     }
