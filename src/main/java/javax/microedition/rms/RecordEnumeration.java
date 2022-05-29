@@ -21,9 +21,13 @@ public interface RecordEnumeration {
 
     public byte[] nextRecord() throws InvalidRecordIDException, RecordStoreNotOpenException, RecordStoreException;
 
-    public void reset();
-
     public int nextRecordId() throws RecordStoreException;
+
+    public boolean hasNextElement();
+
+    public boolean hasPreviousElement();
+
+    public void reset();
 
     public void destroy();
 }

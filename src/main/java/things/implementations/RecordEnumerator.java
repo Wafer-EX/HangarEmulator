@@ -68,6 +68,16 @@ public class RecordEnumerator implements RecordEnumeration, Serializable {
     }
 
     @Override
+    public boolean hasNextElement() {
+        return records.get(currentRecord + 1) != null;
+    }
+
+    @Override
+    public boolean hasPreviousElement() {
+        return records.get(currentRecord - 1) != null;
+    }
+
+    @Override
     public void reset() {
         if (isDestroyed) {
             throw new IllegalStateException();
