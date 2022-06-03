@@ -45,6 +45,15 @@ public abstract class MIDlet {
         return System.getProperty(key);
     }
 
+    public final void resumeRequest() {
+        // TODO: write method logic
+    }
+
+    public final int checkPermission(String permission) {
+        // TODO: check it
+        return 1;
+    }
+
     public void setExitBlock(boolean blockExit) {
         this.blockExit = blockExit;
     }

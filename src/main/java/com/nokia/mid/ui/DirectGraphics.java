@@ -38,27 +38,27 @@ public interface DirectGraphics {
 
     public void setARGBColor(int argbColor);
 
-    public void drawImage(javax.microedition.lcdui.Image img, int x, int y, int anchor, int manipulation);
+    public void drawImage(javax.microedition.lcdui.Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException;
 
     public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor);
 
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor);
 
-    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor);
+    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException;
 
-    public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor);
+    public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException;
 
-    public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format);
+    public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
-    public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format);
+    public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
-    public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength,int x, int y, int width, int height, int manipulation, int format);
+    public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength,int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
-    public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format);
+    public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
-    public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format);
+    public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
-    public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format);
+    public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException;
 
     public int getNativePixelFormat();
 

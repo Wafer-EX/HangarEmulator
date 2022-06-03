@@ -35,11 +35,13 @@ public abstract class FullCanvas extends Canvas {
         super();
     }
 
-    public void addCommand(Command cmd) {
-        // TODO: write method logic
+    @Override
+    public void addCommand(Command cmd) throws IllegalStateException {
+        throw new IllegalStateException();
     }
 
-    public void setCommandListener(CommandListener l) {
-        // TODO: write method logic
+    @Override
+    public void setCommandListener(CommandListener l) throws IllegalStateException {
+        throw new IllegalStateException();
     }
 }

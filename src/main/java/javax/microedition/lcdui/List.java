@@ -17,18 +17,14 @@
 package javax.microedition.lcdui;
 
 public class List extends Screen implements Choice {
-    public static final Command SELECT_COMMAND = null;
+    public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-    public List(String title, int listType) { }
-
-    public List(String title, int listType, String[] stringElements, Image[] imageElements) { }
-
-    public void setTicker(Ticker ticker) {
-        // TODO: write method logic
+    public List(String title, int listType) {
+        setTitle(title);
     }
 
-    public void setTitle(String s) {
-        // TODO: write method logic
+    public List(String title, int listType, String[] stringElements, Image[] imageElements) {
+        setTitle(title);
     }
 
     @Override
@@ -103,6 +99,7 @@ public class List extends Screen implements Choice {
         // TODO: write method logic
     }
 
+    @Override
     public void removeCommand(Command cmd) {
         // TODO: write method logic
     }
