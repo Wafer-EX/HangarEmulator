@@ -26,18 +26,28 @@ public class Command {
     public static final int EXIT = 7;
     public static final int ITEM = 8;
 
-    private String label;
+    private String shortLabel;
+    private String longLabel;
     private int commandType;
     private int priority;
 
     public Command(String label, int commandType, int priority) {
-        this.label = label;
+        this.shortLabel = label;
         this.commandType = commandType;
         this.priority = priority;
     }
 
+    public Command(String shortLabel, String longLabel, int commandType, int priority) {
+        this(shortLabel, commandType, priority);
+        this.longLabel = longLabel;
+    }
+
     public String getLabel() {
-        return label;
+        return shortLabel;
+    }
+
+    public String getLongLabel() {
+        return longLabel;
     }
 
     public int getCommandType() {

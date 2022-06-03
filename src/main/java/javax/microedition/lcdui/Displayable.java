@@ -20,11 +20,12 @@ import things.HangarFrame;
 import things.HangarPanel;
 import things.HangarState;
 
-import javax.swing.*;
+import java.util.ArrayList;
 
 public abstract class Displayable {
     private Ticker ticker;
     private CommandListener commandListener;
+    private ArrayList<Command> commandList = new ArrayList<>();
 
     public String getTitle() {
         return HangarFrame.getInstance().getTitle();
@@ -46,13 +47,20 @@ public abstract class Displayable {
         return HangarPanel.getDisplayable() == this;
     }
 
-    public void addCommand(Command cmd) {
+    public void addCommand(Command cmd) throws NullPointerException {
         if (cmd == null) {
             throw new NullPointerException();
         }
+        if (!commandList.contains(cmd)) {
+            commandList.add(cmd);
+        }
     }
 
-    public void removeCommand(Command cmd) { }
+    public void removeCommand(Command cmd) {
+        if (cmd != null && commandList.contains(cmd)) {
+            commandList.remove(cmd);
+        }
+    }
 
     public void setCommandListener(CommandListener l) {
         commandListener = l;
