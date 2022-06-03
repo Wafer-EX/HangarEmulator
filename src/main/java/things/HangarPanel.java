@@ -17,10 +17,8 @@
 package things;
 
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.game.GameCanvas;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class HangarPanel extends JPanel {
     private static HangarPanel instance;

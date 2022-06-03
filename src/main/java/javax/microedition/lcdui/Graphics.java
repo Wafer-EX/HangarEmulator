@@ -23,7 +23,6 @@ import things.utils.ImageUtils;
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 
 public class Graphics {
     public static final int HCENTER = 1;
