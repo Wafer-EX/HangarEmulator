@@ -117,6 +117,11 @@ public class RecordStore implements Serializable {
         writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
     }
 
+    public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+        // TODO: write method logic
+        return 0;
+    }
+
     public byte[] getRecord(int recordId) {
         return recordEnumerator.records.get(recordId - 1);
     }
