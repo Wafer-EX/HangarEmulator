@@ -97,5 +97,6 @@ public abstract class Canvas extends Displayable {
 
     public abstract void paint(Graphics graphics);
 
+    @Override
     public void sizeChanged(int w, int h) { }
 }

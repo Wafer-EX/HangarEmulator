@@ -37,12 +37,12 @@ public class Display {
     }
 
     public int getColor(int colorSpecifier) {
-        // TODO: take it from config?
+        // TODO: rewrite method logic
         return 0x00858585;
     }
 
     public int getBorderStyle(boolean highlighted) {
-        // TODO: take it from config?
+        // TODO: check it
         return Graphics.SOLID;
     }
 
@@ -67,7 +67,13 @@ public class Display {
         HangarPanel.setDisplayable(displayable);
     }
 
-    public void setCurrent(Alert alert, Displayable nextDisplayable) {
+    public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
+        if (alert == null) {
+            throw new NullPointerException();
+        }
+        if (nextDisplayable instanceof Alert) {
+            throw new IllegalArgumentException();
+        }
         // TODO: use Alert
         setCurrent(nextDisplayable);
     }
@@ -97,12 +103,12 @@ public class Display {
     }
 
     public int getBestImageWidth(int imageType) {
-        // TODO: how to do it?
+        // TODO: write method logic
         return 0;
     }
 
     public int getBestImageHeight(int imageType) {
-        // TODO: how to do it?
+        // TODO: write method logic
         return 0;
     }
 }

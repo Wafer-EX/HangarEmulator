@@ -30,19 +30,24 @@ public class DirectUtils {
         return new DirectGraphicsImplementation(g);
     }
 
-    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NotImplementedException {
+    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws ArrayIndexOutOfBoundsException, NullPointerException, IllegalArgumentException {
+        if (imageData == null) {
+            throw new NullPointerException();
+        }
         try {
             var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
             var image = ImageIO.read(byteArrayInputStream);
             return new Image(image, true);
         }
         catch (Exception ex) {
-            ex.printStackTrace();
-            return null;
+            throw new IllegalArgumentException();
         }
     }
 
-    public static Image createImage(int width, int height, int ARGBcolor) {
+    public static Image createImage(int width, int height, int ARGBcolor) throws IllegalArgumentException {
+        if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException();
+        }
         var awtImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         return new Image(awtImage, true);
     }
