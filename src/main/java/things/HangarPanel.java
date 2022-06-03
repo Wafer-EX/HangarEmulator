@@ -51,6 +51,7 @@ public class HangarPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
+        HangarState.syncWithFrameRate();
         if (displayable != null) {
             boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
             if (HangarState.getCanvasClearing()) {
@@ -63,16 +64,6 @@ public class HangarPanel extends JPanel {
                     canvas.sizeChanged(this.getWidth(), this.getHeight());
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
-            }
-
-            if (displayable instanceof GameCanvas gameCanvas) {
-                if (!sizeMatches) {
-                    gameCanvas.setBuffer(new BufferedImage(this.getWidth(), this.getHeight(), BufferedImage.TYPE_INT_RGB));
-                }
-                if (gameCanvas.getNeedsToFlush()) {
-                    graphics.drawImage(gameCanvas.getBuffer(), 0, 0, null);
-                    gameCanvas.setNeedsToFlush(false);
-                }
             }
         }
     }

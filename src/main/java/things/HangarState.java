@@ -28,6 +28,7 @@ public class HangarState {
     private static File programFile;
     private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
+    private static int frameRate = 60;
 
     public static Dimension getResolution() {
         return currentResolution;
@@ -35,6 +36,25 @@ public class HangarState {
 
     public static void setResolution(Dimension resolution) {
         currentResolution = resolution;
+    }
+
+    public static int getFrameRate() {
+        return frameRate;
+    }
+
+    public static void setFrameRate(int frameRate) {
+        HangarState.frameRate = frameRate;
+    }
+
+    public static void syncWithFrameRate() {
+        if (HangarState.getFrameRate() != -1) {
+            try {
+                Thread.sleep(1000 / HangarState.getFrameRate());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
     }
 
     public static Keyboards getKeyboard() {
