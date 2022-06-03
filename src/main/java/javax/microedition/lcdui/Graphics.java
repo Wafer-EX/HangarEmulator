@@ -259,10 +259,8 @@ public class Graphics {
     }
 
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
-        // TODO: replace offset + scanlength
-        rgbData = Arrays.copyOfRange(rgbData, offset, offset + scanlength);
         var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
-        image.getRaster().setPixels(x, y, width, height, rgbData);
+        image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
         seGraphics.drawImage(image, x, y, null);
     }
 

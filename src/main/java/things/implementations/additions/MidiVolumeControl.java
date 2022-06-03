@@ -14,6 +14,7 @@ public class MidiVolumeControl implements VolumeControl {
         this.player = player;
     }
 
+    @Override
     public void setMute(boolean mute) {
         var sequencer = player.getSequencer();
         var tracksCount = sequencer.getSequence().getTracks().length;
@@ -23,10 +24,12 @@ public class MidiVolumeControl implements VolumeControl {
         this.mute = mute;
     }
 
+    @Override
     public boolean isMuted() {
         return mute;
     }
 
+    @Override
     public int setLevel(int level) {
         if (level < 0) {
             level = 0;
@@ -38,17 +41,20 @@ public class MidiVolumeControl implements VolumeControl {
         return this.level = level;
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
 
     @Override
     public Control[] getControls() {
+        // TODO: write method logic
         return new Control[0];
     }
 
     @Override
     public Control getControl(String controlType) {
+        // TODO: write method logic
         return null;
     }
 }
