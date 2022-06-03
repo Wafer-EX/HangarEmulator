@@ -80,6 +80,10 @@ public class MIDletResources {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes();
             var iconPath = attributes.getValue("MIDlet-Icon");
+            if (iconPath == null) {
+                var info = attributes.getValue("MIDlet-1").split(",");
+                iconPath = info[1].trim();
+            }
             var inputStream = getResourceFromJar(iconPath);
             return ImageIO.read(inputStream);
         }
