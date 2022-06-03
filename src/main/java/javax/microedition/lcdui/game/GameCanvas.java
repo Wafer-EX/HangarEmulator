@@ -36,21 +36,12 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     private Image buffer;
-    private boolean needsToFlush;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-    }
-
-    public boolean getNeedsToFlush() {
-        return needsToFlush;
-    }
-
-    public void setNeedsToFlush(boolean needsToFlush) {
-        this.needsToFlush = needsToFlush;
     }
 
     public Image getBuffer() {
@@ -74,12 +65,12 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        // TODO: rewrite method logic
-        HangarPanel.getInstance().getGraphics().drawImage(buffer, 0, 0, width, height, null);
+        HangarState.syncWithFrameRate();
+        HangarPanel.getInstance().getGraphics().drawImage(buffer, x, y, width, height, null);
     }
 
     public void flushGraphics() {
-        needsToFlush = true;
-        HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
+        HangarPanel.getInstance().getGraphics().drawImage(buffer, 0, 0, null);
     }
 }

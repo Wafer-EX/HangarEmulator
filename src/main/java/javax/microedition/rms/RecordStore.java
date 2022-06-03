@@ -99,6 +99,10 @@ public class RecordStore implements Serializable {
         return recordEnumerator;
     }
 
+    public int getNextRecordID() throws RecordStoreNotOpenException, RecordStoreException {
+        return recordEnumerator.nextRecordId();
+    }
+
     public int addRecord(byte[] arr, int offset, int numBytes) throws RecordStoreException {
         if (arr == null) {
             arr = new byte[0];
@@ -115,6 +119,11 @@ public class RecordStore implements Serializable {
             throw new RecordStoreNotOpenException();
         }
         writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
+    }
+
+    public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+        // TODO: write method logic
+        return 0;
     }
 
     public byte[] getRecord(int recordId) {

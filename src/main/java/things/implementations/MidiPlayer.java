@@ -16,11 +16,10 @@
 
 package things.implementations;
 
+import things.implementations.additions.MidiVolumeControl;
 import things.implementations.additions.PlayerMetaEventListener;
 
-import javax.microedition.media.MediaException;
-import javax.microedition.media.Player;
-import javax.microedition.media.PlayerListener;
+import javax.microedition.media.*;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import java.io.InputStream;
@@ -41,6 +40,10 @@ public class MidiPlayer extends ExtendedPlayer {
         catch (Exception exception) {
             exception.printStackTrace();
         }
+    }
+
+    public Sequencer getSequencer() {
+        return sequencer;
     }
 
     @Override
@@ -132,5 +135,15 @@ public class MidiPlayer extends ExtendedPlayer {
             throw new IllegalStateException();
         }
         return sequencer.getLoopCount();
+    }
+
+    @Override
+    public Control getControl(String controlType) {
+        switch (controlType) {
+            case "VolumeControl":
+                return new MidiVolumeControl(this);
+            default:
+                return null;
+        }
     }
 }

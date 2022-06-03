@@ -69,14 +69,24 @@ public class HangarMenuBar extends JMenuBar {
     private void addOptionsMenu() {
         var optionsMenu = new JMenu("Options");
         var keyboardPopupMenu = new JMenu("Keyboard");
+        var frameRatePopupMenu = new JMenu("Frame rate");
         var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing", HangarState.getCanvasClearing());
 
         var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
         var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
-
         var keyboardRadioGroup = new ButtonGroup();
         keyboardRadioGroup.add(radioDefaultKeyboard);
         keyboardRadioGroup.add(radioNokiaKeyboard);
+
+        var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getFrameRate() == 15);
+        var radio30FPS = new JRadioButtonMenuItem("30 FPS", HangarState.getFrameRate() == 30);
+        var radio60FPS = new JRadioButtonMenuItem("60 FPS", HangarState.getFrameRate() == 60);
+        var radioUnlimitedFPS = new JRadioButtonMenuItem("Unlimited FPS", HangarState.getFrameRate() == -1);
+        var frameRateRadioGroup = new ButtonGroup();
+        frameRateRadioGroup.add(radio15FPS);
+        frameRateRadioGroup.add(radio30FPS);
+        frameRateRadioGroup.add(radio60FPS);
+        frameRateRadioGroup.add(radioUnlimitedFPS);
 
         canvasClearingCheckBox.addItemListener(e -> {
             var clearCanvas = !HangarState.getCanvasClearing();
@@ -95,9 +105,20 @@ public class HangarMenuBar extends JMenuBar {
             }
         });
 
+        radio15FPS.addItemListener(e -> HangarState.setFrameRate(15));
+        radio30FPS.addItemListener(e -> HangarState.setFrameRate(30));
+        radio60FPS.addItemListener(e -> HangarState.setFrameRate(60));
+        radioUnlimitedFPS.addItemListener(e -> HangarState.setFrameRate(-1));
+
         keyboardPopupMenu.add(radioDefaultKeyboard);
         keyboardPopupMenu.add(radioNokiaKeyboard);
+        frameRatePopupMenu.add(radio15FPS);
+        frameRatePopupMenu.add(radio30FPS);
+        frameRatePopupMenu.add(radio60FPS);
+        frameRatePopupMenu.add(radioUnlimitedFPS);
+
         optionsMenu.add(canvasClearingCheckBox);
+        optionsMenu.add(frameRatePopupMenu);
         optionsMenu.add(keyboardPopupMenu);
         this.add(optionsMenu);
     }
