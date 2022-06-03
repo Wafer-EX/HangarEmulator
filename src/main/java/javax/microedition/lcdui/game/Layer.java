@@ -16,4 +16,46 @@
 
 package javax.microedition.lcdui.game;
 
-public abstract class Layer { }
+import javax.microedition.lcdui.Graphics;
+import java.awt.*;
+
+public abstract class Layer {
+    private Dimension position = new Dimension(0, 0);
+    private boolean isVisible = false;
+
+    public void setPosition(int x, int y) {
+        position = new Dimension(x, y);
+    }
+
+    public void move(int dx, int dy) {
+        position = new Dimension(position.width + dx, position.height + dy);
+    }
+
+    public final int getX() {
+        return position.width;
+    }
+
+    public final int getY() {
+        return position.height;
+    }
+
+    public final int getWidth() {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public final int getHeight() {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public void setVisible(boolean visible) {
+        isVisible = visible;
+    }
+
+    public final boolean isVisible() {
+        return isVisible;
+    }
+
+    public abstract void paint(Graphics g);
+}

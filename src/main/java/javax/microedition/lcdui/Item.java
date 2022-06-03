@@ -34,4 +34,6 @@ public class Item {
     public static final int PLAIN = 0;
     public static final int HYPERLINK = 1;
     public static final int BUTTON = 2;
+
+    // TODO: write methods
 }
