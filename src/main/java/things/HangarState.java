@@ -29,7 +29,6 @@ public class HangarState {
     private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
     private static boolean enableAntiAliasing;
-    private static boolean enableInterpolation;
     private static int frameRate = 60;
 
     public static Dimension getResolution() {
@@ -54,14 +53,6 @@ public class HangarState {
 
     public static void setAntiAliasing(boolean antiAliasing) {
         enableAntiAliasing = antiAliasing;
-    }
-
-    public static boolean getInterpolation() {
-        return enableInterpolation;
-    }
-
-    public static void setInterpolation(boolean interpolation) {
-        enableInterpolation = interpolation;
     }
 
     public static Keyboards getKeyboard() {
@@ -126,6 +117,5 @@ public class HangarState {
     public static void applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
-        graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, enableInterpolation ? RenderingHints.VALUE_INTERPOLATION_BILINEAR : RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
     }
 }
