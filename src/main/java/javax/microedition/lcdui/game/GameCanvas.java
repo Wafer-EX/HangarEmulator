@@ -40,7 +40,7 @@ public abstract class GameCanvas extends Canvas {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
     public BufferedImage getBuffer() {
@@ -52,7 +52,9 @@ public abstract class GameCanvas extends Canvas {
     }
 
     protected Graphics getGraphics() {
-        return new Graphics(buffer.getGraphics());
+        var graphics = buffer.getGraphics();
+        HangarState.applyRenderingHints(graphics);
+        return new Graphics(graphics);
     }
 
     @Override
@@ -77,5 +79,10 @@ public abstract class GameCanvas extends Canvas {
         if (graphics != null) {
             graphics.drawImage(buffer, 0, 0, null);
         }
+    }
+
+    @Override
+    public void sizeChanged(int w, int h) {
+        buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
     }
 }

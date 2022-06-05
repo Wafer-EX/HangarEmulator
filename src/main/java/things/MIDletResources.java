@@ -103,6 +103,7 @@ public class MIDletResources {
             for (var attribute : attributes) {
                 System.setProperty(attribute.getKey().toString(), attribute.getValue().toString());
             }
+            System.setProperty("microedition.platform", "Hangar");
         }
         catch (Exception ex) {
             ex.printStackTrace();

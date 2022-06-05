@@ -28,6 +28,7 @@ public class HangarState {
     private static File programFile;
     private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
+    private static boolean enableAntiAliasing;
     private static int frameRate = 60;
 
     public static Dimension getResolution() {
@@ -46,15 +47,12 @@ public class HangarState {
         HangarState.frameRate = frameRate;
     }
 
-    public static void syncWithFrameRate() {
-        if (HangarState.getFrameRate() != -1) {
-            try {
-                Thread.sleep(1000 / HangarState.getFrameRate());
-            }
-            catch (Exception ex) {
-                ex.printStackTrace();
-            }
-        }
+    public static boolean getAntiAliasing() {
+        return enableAntiAliasing;
+    }
+
+    public static void setAntiAliasing(boolean antiAliasing) {
+        enableAntiAliasing = antiAliasing;
     }
 
     public static Keyboards getKeyboard() {
@@ -103,5 +101,21 @@ public class HangarState {
         catch (Exception ex) {
             throw new RuntimeException(ex);
         }
+    }
+
+    public static void syncWithFrameRate() {
+        if (HangarState.getFrameRate() != -1) {
+            try {
+                Thread.sleep(1000 / HangarState.getFrameRate());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public static void applyRenderingHints(Graphics graphics) {
+        var graphics2d = (Graphics2D) graphics;
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
     }
 }

@@ -50,6 +50,7 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         HangarState.syncWithFrameRate();
+        HangarState.applyRenderingHints(graphics);
         if (displayable != null) {
             boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
             if (HangarState.getCanvasClearing()) {

@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import things.HangarState;
 import things.MIDletResources;
 
 import javax.imageio.ImageIO;
@@ -83,7 +84,9 @@ public class Image {
 
     public Graphics getGraphics() throws IllegalStateException {
         if (isMutable()) {
-            return new Graphics(image.getGraphics());
+            var graphics = image.getGraphics();
+            HangarState.applyRenderingHints(graphics);
+            return new Graphics(graphics);
         }
         else {
             throw new IllegalStateException();
