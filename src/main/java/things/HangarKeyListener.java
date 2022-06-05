@@ -36,7 +36,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        var displayable = HangarPanel.getDisplayable();
+        var displayable = HangarPanel.getInstance().getDisplayable();
         if (displayable instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
@@ -65,7 +65,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        var displayable = HangarPanel.getDisplayable();
+        var displayable = HangarPanel.getInstance().getDisplayable();
         if (displayable instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {

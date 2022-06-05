@@ -19,10 +19,12 @@ package things;
 import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class HangarPanel extends JPanel {
     private static HangarPanel instance;
     private static Displayable displayable;
+    private BufferedImage flushedBuffer;
 
     private HangarPanel() {
         setPreferredSize(HangarState.getResolution());
@@ -35,11 +37,11 @@ public class HangarPanel extends JPanel {
         return instance;
     }
 
-    public static Displayable getDisplayable() {
+    public Displayable getDisplayable() {
         return displayable;
     }
 
-    public static void setDisplayable(Displayable displayable) {
+    public void setDisplayable(Displayable displayable) {
         HangarPanel.displayable = displayable;
         if (getDisplayable() instanceof javax.microedition.lcdui.Canvas) {
             var canvas = (javax.microedition.lcdui.Canvas) displayable;
@@ -47,11 +49,19 @@ public class HangarPanel extends JPanel {
         }
     }
 
+    public void setFlushedBuffer(BufferedImage buffer) {
+        this.flushedBuffer = buffer;
+    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         HangarState.syncWithFrameRate();
         HangarState.applyRenderingHints(graphics);
-        if (displayable != null) {
+        if (flushedBuffer != null) {
+            graphics.drawImage(flushedBuffer, 0, 0, null);
+            flushedBuffer = null;
+        }
+        else if (displayable != null) {
             boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
             if (HangarState.getCanvasClearing()) {
                 super.paintComponent(graphics);

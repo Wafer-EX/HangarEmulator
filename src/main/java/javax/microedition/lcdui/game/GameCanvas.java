@@ -35,12 +35,14 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     private BufferedImage buffer;
+    private BufferedImage flushBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        flushBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
     public BufferedImage getBuffer() {
@@ -67,22 +69,21 @@ public abstract class GameCanvas extends Canvas {
 
     public void flushGraphics(int x, int y, int width, int height) {
         HangarState.syncWithFrameRate();
-        var graphics = HangarPanel.getInstance().getGraphics();
-        if (graphics != null) {
-            graphics.drawImage(buffer, x, y, width, height, null);
-        }
+        flushBuffer.getGraphics().drawImage(buffer, x, y, width, height, null);
+        HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
+        HangarPanel.getInstance().repaint();
     }
 
     public void flushGraphics() {
         HangarState.syncWithFrameRate();
-        var graphics = HangarPanel.getInstance().getGraphics();
-        if (graphics != null) {
-            graphics.drawImage(buffer, 0, 0, null);
-        }
+        flushBuffer.getGraphics().drawImage(buffer, 0, 0, null);
+        HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
+        HangarPanel.getInstance().repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
         buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        flushBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
     }
 }
