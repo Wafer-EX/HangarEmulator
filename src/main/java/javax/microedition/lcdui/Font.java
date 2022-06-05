@@ -19,6 +19,8 @@ package javax.microedition.lcdui;
 import things.HangarPanel;
 import things.utils.FontUtils;
 
+import java.util.Arrays;
+
 public class Font {
     public static final int STYLE_PLAIN = 0;
     public static final int STYLE_BOLD = 1;
@@ -47,18 +49,21 @@ public class Font {
         return getFont(FACE_SYSTEM, STYLE_PLAIN, SIZE_MEDIUM);
     }
 
-    public static Font getFont(int face, int style, int size) {
+    public static Font getFont(int face, int style, int size) throws IllegalArgumentException {
+        // TODO; use face parameter
         int convertedStyle = FontUtils.discardMismatchedStyle(style);
         int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
         return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize));
     }
 
     public int getSize() {
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
+        int convertedSize = FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
+        return convertedSize;
     }
 
     public int getStyle() {
-        return FontUtils.discardMismatchedStyle(seFont.getStyle());
+        int style = FontUtils.discardMismatchedStyle(seFont.getStyle());
+        return style;
     }
 
     public int getFace() {
@@ -100,18 +105,26 @@ public class Font {
         return metrics.charWidth(ch);
     }
 
-    public int charsWidth(char[] ch, int offset, int length) {
-        // TODO: write method logic
-        return 0;
+    public int charsWidth(char[] ch, int offset, int length) throws ArrayIndexOutOfBoundsException, NullPointerException {
+        if (ch == null) {
+            throw new NullPointerException();
+        }
+        return substringWidth(Arrays.toString(ch), offset, length);
     }
 
-    public int stringWidth(String str) {
+    public int stringWidth(String str) throws NullPointerException {
+        if (str == null) {
+            throw new NullPointerException();
+        }
         var graphics = HangarPanel.getInstance().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }
 
-    public int substringWidth(String str, int offset, int len) {
+    public int substringWidth(String str, int offset, int len) throws StringIndexOutOfBoundsException, NullPointerException {
+        if (str == null) {
+            throw new NullPointerException();
+        }
         var substring = str.substring(offset, len + offset);
         return stringWidth(substring);
     }

@@ -32,17 +32,16 @@ public final class FontUtils {
         if (from != to) {
             if (from == MICRO_EDITION) {
                 switch (fontSize) {
-                    case Font.SIZE_SMALL: fontSize = SE_SIZE_SMALL; break;
-                    case Font.SIZE_MEDIUM: fontSize = SE_SIZE_MEDIUM; break;
-                    case Font.SIZE_LARGE: fontSize = SE_SIZE_LARGE; break;
+                    case Font.SIZE_SMALL: return SE_SIZE_SMALL;
+                    case Font.SIZE_MEDIUM: return SE_SIZE_MEDIUM;
+                    case Font.SIZE_LARGE: return SE_SIZE_LARGE;
                 }
             }
             else if (from == STANDART_EDITION) {
-                fontSize = fitSizeToStandartEdition(fontSize);
-                switch (fontSize) {
-                    case SE_SIZE_SMALL: fontSize = Font.SIZE_SMALL; break;
-                    case SE_SIZE_MEDIUM: fontSize = Font.SIZE_MEDIUM; break;
-                    case SE_SIZE_LARGE: fontSize = Font.SIZE_LARGE; break;
+                switch (fitSizeToSE(fontSize)) {
+                    case SE_SIZE_SMALL: return Font.SIZE_SMALL;
+                    case SE_SIZE_MEDIUM: return Font.SIZE_MEDIUM;
+                    case SE_SIZE_LARGE: return Font.SIZE_LARGE;
                 }
             }
         }
@@ -56,7 +55,7 @@ public final class FontUtils {
         return fontStyle;
     }
 
-    public static int fitSizeToStandartEdition(int fontSize) {
+    public static int fitSizeToSE(int fontSize) {
         if (fontSize < SE_SIZE_SMALL) {
             fontSize = SE_SIZE_SMALL;
         }
