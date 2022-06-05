@@ -16,39 +16,50 @@
 
 package javax.microedition.lcdui;
 
+import things.implementations.additions.ListElement;
+
+import java.util.ArrayList;
+
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
+    private final ArrayList<ListElement> elements = new ArrayList();
+    private int listType;
+    private Ticker ticker;
+
     public List(String title, int listType) {
         setTitle(title);
+        this.listType = listType;
     }
 
     public List(String title, int listType, String[] stringElements, Image[] imageElements) {
-        setTitle(title);
+        this(title, listType);
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        this.ticker = ticker;
     }
 
     @Override
     public int size() {
-        // TODO: write method logic
-        return 0;
+        return elements.size();
     }
 
     @Override
     public String getString(int elementNum) {
-        // TODO: write method logic
-        return null;
+        return elements.get(elementNum).getString();
     }
 
     @Override
     public Image getImage(int elementNum) {
-        // TODO: write method logic
-        return null;
+        return elements.get(elementNum).getImage();
     }
 
     @Override
     public int append(String stringPart, Image imagePart) {
-        // TODO: write method logic
-        return 0;
+        elements.add(new ListElement(stringPart, imagePart, false, Font.getDefaultFont()));
+        return elements.size();
     }
 
     @Override
@@ -58,23 +69,24 @@ public class List extends Screen implements Choice {
 
     @Override
     public void delete(int elementNum) {
-        // TODO: write method logic
+        elements.remove(elementNum);
     }
 
     @Override
     public void deleteAll() {
-        // TODO: write method logic
+        elements.clear();
     }
 
     @Override
     public void set(int elementNum, String stringPart, Image imagePart) {
-        // TODO: write method logic
+        var element = elements.get(elementNum);
+        element.setString(stringPart);
+        element.setImage(imagePart);
     }
 
     @Override
     public boolean isSelected(int elementNum) {
-        // TODO: write method logic
-        return false;
+        return elements.get(elementNum).getSelected();
     }
 
     @Override
@@ -121,12 +133,11 @@ public class List extends Screen implements Choice {
 
     @Override
     public void setFont(int elementNum, Font font) {
-        // TODO: write method logic
+        elements.get(elementNum).setFont(font);
     }
 
     @Override
     public Font getFont(int elementNum) {
-        // TODO: write method logic
-        return null;
+        return elements.get(elementNum).getFont();
     }
 }

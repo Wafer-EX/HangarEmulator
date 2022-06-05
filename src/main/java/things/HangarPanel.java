@@ -57,11 +57,8 @@ public class HangarPanel extends JPanel {
     public void paintComponent(Graphics graphics) {
         HangarState.syncWithFrameRate();
         HangarState.applyRenderingHints(graphics);
-        if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer, 0, 0, null);
-            flushedBuffer = null;
-        }
-        else if (displayable != null) {
+
+        if (displayable != null) {
             boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
             if (HangarState.getCanvasClearing()) {
                 super.paintComponent(graphics);
@@ -74,6 +71,11 @@ public class HangarPanel extends JPanel {
                 }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
             }
+        }
+
+        if (flushedBuffer != null) {
+            graphics.drawImage(flushedBuffer, 0, 0, null);
+            flushedBuffer = null;
         }
     }
 }
