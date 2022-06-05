@@ -57,13 +57,11 @@ public class Font {
     }
 
     public int getSize() {
-        int convertedSize = FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
-        return convertedSize;
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
     }
 
     public int getStyle() {
-        int style = FontUtils.discardMismatchedStyle(seFont.getStyle());
-        return style;
+        return FontUtils.discardMismatchedStyle(seFont.getStyle());
     }
 
     public int getFace() {
@@ -95,8 +93,7 @@ public class Font {
     }
 
     public int getBaselinePosition() {
-        // TODO: it is correct?
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
+        return seFont.getSize();
     }
 
     public int charWidth(char ch) {
