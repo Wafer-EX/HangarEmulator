@@ -83,7 +83,7 @@ public final class FontUtils {
 
     public static int alignY(Font font, String str, int y, int anchor) {
         var graphics = HangarPanel.getInstance().getGraphics();
-        var metrics = graphics.getFontMetrics(font.se_font);
+        var metrics = graphics.getFontMetrics(font.getSEFont());
         var stringSize = metrics.getStringBounds(str, graphics);
 
         int alignedY = y;

@@ -33,10 +33,14 @@ public class Font {
     public static final int FONT_STATIC_TEXT = 0;
     public static final int FONT_INPUT_TEXT = 1;
 
-    public java.awt.Font se_font;
+    private java.awt.Font seFont;
 
     public Font(java.awt.Font font) {
-        this.se_font = font;
+        this.seFont = font;
+    }
+
+    public java.awt.Font getSEFont() {
+        return seFont;
     }
 
     public static Font getDefaultFont() {
@@ -50,11 +54,11 @@ public class Font {
     }
 
     public int getSize() {
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
     }
 
     public int getStyle() {
-        return FontUtils.discardMismatchedStyle(se_font.getStyle());
+        return FontUtils.discardMismatchedStyle(seFont.getStyle());
     }
 
     public int getFace() {
@@ -63,15 +67,15 @@ public class Font {
     }
 
     public boolean isPlain() {
-        return se_font.isPlain();
+        return seFont.isPlain();
     }
 
     public boolean isBold() {
-        return se_font.isBold();
+        return seFont.isBold();
     }
 
     public boolean isItalic() {
-        return se_font.isItalic();
+        return seFont.isItalic();
     }
 
     public boolean isUnderlined() {
@@ -81,18 +85,18 @@ public class Font {
 
     public int getHeight() {
         var graphics = HangarPanel.getInstance().getGraphics();
-        var metrics = graphics.getFontMetrics(se_font);
+        var metrics = graphics.getFontMetrics(seFont);
         return metrics.getHeight();
     }
 
     public int getBaselinePosition() {
         // TODO: it is correct?
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, se_font.getSize());
+        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
     }
 
     public int charWidth(char ch) {
         var graphics = HangarPanel.getInstance().getGraphics();
-        var metrics = graphics.getFontMetrics(se_font);
+        var metrics = graphics.getFontMetrics(seFont);
         return metrics.charWidth(ch);
     }
 
@@ -103,7 +107,7 @@ public class Font {
 
     public int stringWidth(String str) {
         var graphics = HangarPanel.getInstance().getGraphics();
-        var metrics = graphics.getFontMetrics(se_font);
+        var metrics = graphics.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }
 

@@ -36,7 +36,7 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final Graphics2D seGraphics;
-    private java.awt.Font se_font;
+    private java.awt.Font seFont;
     private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
 
@@ -87,12 +87,10 @@ public class Graphics {
     }
 
     public Font getFont() {
-        if (se_font == null) {
+        if (seFont == null) {
             return Font.getDefaultFont();
         }
-        else {
-            return new Font(se_font);
-        }
+        return new Font(seFont);
     }
 
     public void setStrokeStyle(int style) {
@@ -116,7 +114,7 @@ public class Graphics {
 
     public void setFont(Font font) {
         int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
-        this.se_font = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
+        this.seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
     }
 
     public int getClipX() {
@@ -180,9 +178,10 @@ public class Graphics {
     }
 
     public void drawString(String str, int x, int y, int anchor) {
-        var font = getFont();
-        x = FontUtils.alignX(font, str, x, anchor);
-        y = FontUtils.alignY(font, str, y, anchor);
+        var meFont = getFont();
+        x = FontUtils.alignX(meFont, str, x, anchor);
+        y = FontUtils.alignY(meFont, str, y, anchor);
+        seGraphics.setFont(seFont);
         seGraphics.drawString(str, x, y);
     }
 
