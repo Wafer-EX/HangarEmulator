@@ -16,6 +16,9 @@
 
 package things.implementations;
 
+import things.implementations.additions.WavVolumeControl;
+
+import javax.microedition.media.Control;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
 import javax.sound.sampled.AudioSystem;
@@ -38,6 +41,10 @@ public class WavPlayer extends ExtendedPlayer {
         catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    public Clip getClip() {
+        return clip;
     }
 
     @Override
@@ -109,5 +116,15 @@ public class WavPlayer extends ExtendedPlayer {
     @Override
     public int getLoopCount() {
         return 1;
+    }
+
+    @Override
+    public Control getControl(String controlType) {
+        switch (controlType) {
+            case "VolumeControl":
+                return new WavVolumeControl(this);
+            default:
+                return null;
+        }
     }
 }
