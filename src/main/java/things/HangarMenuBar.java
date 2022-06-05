@@ -68,15 +68,10 @@ public class HangarMenuBar extends JMenuBar {
 
     private void addOptionsMenu() {
         var optionsMenu = new JMenu("Options");
-        var keyboardPopupMenu = new JMenu("Keyboard");
-        var frameRatePopupMenu = new JMenu("Frame rate");
         var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing", HangarState.getCanvasClearing());
-
-        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
-        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
-        var keyboardRadioGroup = new ButtonGroup();
-        keyboardRadioGroup.add(radioDefaultKeyboard);
-        keyboardRadioGroup.add(radioNokiaKeyboard);
+        var antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing", HangarState.getAntiAliasing());
+        var frameRatePopupMenu = new JMenu("Frame rate");
+        var keyboardPopupMenu = new JMenu("Keyboard");
 
         var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getFrameRate() == 15);
         var radio30FPS = new JRadioButtonMenuItem("30 FPS", HangarState.getFrameRate() == 30);
@@ -88,10 +83,19 @@ public class HangarMenuBar extends JMenuBar {
         frameRateRadioGroup.add(radio60FPS);
         frameRateRadioGroup.add(radioUnlimitedFPS);
 
-        canvasClearingCheckBox.addItemListener(e -> {
-            var clearCanvas = !HangarState.getCanvasClearing();
-            HangarState.setCanvasClearing(clearCanvas);
-        });
+        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
+        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
+        var keyboardRadioGroup = new ButtonGroup();
+        keyboardRadioGroup.add(radioDefaultKeyboard);
+        keyboardRadioGroup.add(radioNokiaKeyboard);
+
+        canvasClearingCheckBox.addItemListener(e -> HangarState.setCanvasClearing(!HangarState.getCanvasClearing()));
+        antiAliasingCheckBox.addItemListener(e -> HangarState.setAntiAliasing(!HangarState.getAntiAliasing()));
+
+        radio15FPS.addItemListener(e -> HangarState.setFrameRate(15));
+        radio30FPS.addItemListener(e -> HangarState.setFrameRate(30));
+        radio60FPS.addItemListener(e -> HangarState.setFrameRate(60));
+        radioUnlimitedFPS.addItemListener(e -> HangarState.setFrameRate(-1));
 
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
@@ -105,11 +109,6 @@ public class HangarMenuBar extends JMenuBar {
             }
         });
 
-        radio15FPS.addItemListener(e -> HangarState.setFrameRate(15));
-        radio30FPS.addItemListener(e -> HangarState.setFrameRate(30));
-        radio60FPS.addItemListener(e -> HangarState.setFrameRate(60));
-        radioUnlimitedFPS.addItemListener(e -> HangarState.setFrameRate(-1));
-
         keyboardPopupMenu.add(radioDefaultKeyboard);
         keyboardPopupMenu.add(radioNokiaKeyboard);
         frameRatePopupMenu.add(radio15FPS);
@@ -118,6 +117,7 @@ public class HangarMenuBar extends JMenuBar {
         frameRatePopupMenu.add(radioUnlimitedFPS);
 
         optionsMenu.add(canvasClearingCheckBox);
+        optionsMenu.add(antiAliasingCheckBox);
         optionsMenu.add(frameRatePopupMenu);
         optionsMenu.add(keyboardPopupMenu);
         this.add(optionsMenu);

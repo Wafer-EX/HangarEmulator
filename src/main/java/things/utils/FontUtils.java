@@ -24,9 +24,9 @@ import javax.microedition.lcdui.Graphics;
 public final class FontUtils {
     public static final int MICRO_EDITION = 0;
     public static final int STANDART_EDITION = 1;
-    public static final int SE_SIZE_SMALL = 10;
-    public static final int SE_SIZE_MEDIUM = 12;
-    public static final int SE_SIZE_LARGE = 14;
+    public static final int SE_SIZE_SMALL = 12;
+    public static final int SE_SIZE_MEDIUM = 14;
+    public static final int SE_SIZE_LARGE = 16;
 
     public static int convertSize(int from, int to, int fontSize) {
         if (from != to) {
