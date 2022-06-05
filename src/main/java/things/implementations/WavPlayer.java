@@ -28,6 +28,7 @@ import java.io.InputStream;
 
 public class WavPlayer extends ExtendedPlayer {
     private Clip clip;
+    private int loopCount;
 
     public WavPlayer(InputStream stream) {
         try {
@@ -110,12 +111,25 @@ public class WavPlayer extends ExtendedPlayer {
 
     @Override
     public void setLoopCount(int count) {
-        // TODO: write method logic
+        if (getState() == STARTED || getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
+        else {
+            if (count > 0) {
+                clip.loop(count - 1);
+                loopCount = count - 1;
+            }
+            else {
+                clip.loop(count);
+                loopCount = count;
+            }
+        }
     }
 
     @Override
     public int getLoopCount() {
-        return 1;
+        // TODO: check it
+        return loopCount;
     }
 
     @Override

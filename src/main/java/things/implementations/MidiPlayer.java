@@ -121,11 +121,13 @@ public class MidiPlayer extends ExtendedPlayer {
         if (getState() == STARTED || getState() == CLOSED) {
             throw new IllegalStateException();
         }
-        if (count > 0) {
-            sequencer.setLoopCount(count - 1);
-        }
         else {
-            sequencer.setLoopCount(count);
+            if (count > 0) {
+                sequencer.setLoopCount(count - 1);
+            }
+            else {
+                sequencer.setLoopCount(count);
+            }
         }
     }
 
