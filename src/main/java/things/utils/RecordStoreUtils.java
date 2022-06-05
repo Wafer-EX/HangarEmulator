@@ -17,8 +17,8 @@
 package things.utils;
 
 import things.MIDletResources;
-import things.implementations.RecordEnumerator;
 
+import javax.microedition.rms.RecordStore;
 import java.io.*;
 
 public final class RecordStoreUtils {
@@ -26,26 +26,26 @@ public final class RecordStoreUtils {
         return String.format("hangar-data/records/%s/", MIDletResources.getMainClassName());
     }
 
-    public static void writeRecordEnumerator(RecordEnumerator recordEnumerator, File file) {
+    public static void writeRecordStore(RecordStore recordStore, File file) {
         try {
             if (file.exists()) {
                 file.delete();
             }
             var fileOutputStream = new FileOutputStream(file, false);
             var objectOutputStream = new ObjectOutputStream(fileOutputStream);
-            objectOutputStream.writeObject(recordEnumerator);
+            objectOutputStream.writeObject(recordStore);
         }
         catch (Exception ex) {
             ex.printStackTrace();
         }
     }
 
-    public static RecordEnumerator readRecordEnumerator(File file) {
+    public static RecordStore readRecordStore(File file) {
         try {
             var fileInputStream = new FileInputStream(file);
             var objectInputStream = new ObjectInputStream(fileInputStream);
-            var records = (RecordEnumerator) objectInputStream.readObject();
-            return records;
+            var recordStore = (RecordStore) objectInputStream.readObject();
+            return recordStore;
         }
         catch (Exception ex) {
             ex.printStackTrace();

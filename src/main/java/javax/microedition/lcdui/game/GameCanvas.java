@@ -21,7 +21,6 @@ import things.HangarState;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -35,7 +34,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private Image buffer;
+    private BufferedImage buffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -44,11 +43,11 @@ public abstract class GameCanvas extends Canvas {
         buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
     }
 
-    public Image getBuffer() {
+    public BufferedImage getBuffer() {
         return buffer;
     }
 
-    public void setBuffer(Image image) {
+    public void setBuffer(BufferedImage image) {
         buffer = image;
     }
 

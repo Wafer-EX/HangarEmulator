@@ -18,9 +18,12 @@ package javax.microedition.rms;
 
 import things.implementations.RecordEnumerator;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Hashtable;
+import java.util.List;
 
 import static things.utils.RecordStoreUtils.*;
 
@@ -29,14 +32,18 @@ public class RecordStore implements Serializable {
     public static final int AUTHMODE_ANY = 1;
 
     private static final Hashtable<String, RecordStore> openedRecords = new Hashtable();
+    private List<RecordListener> recordListeners = new ArrayList<>();
     private final RecordEnumerator recordEnumerator;
-    private final File recordEnumeratorPath;
+    private final File recordStorePath;
     private final String name;
     private boolean isOpened = true;
+    private int authmode = AUTHMODE_PRIVATE;
+    private boolean writable = false;
+    private int version = 0;
 
-    private RecordStore(String name, File recordEnumeratorPath, RecordEnumerator recordEnumerator) {
+    private RecordStore(String name, File recordStorePath, RecordEnumerator recordEnumerator) {
         this.name = name;
-        this.recordEnumeratorPath = recordEnumeratorPath;
+        this.recordStorePath = recordStorePath;
         this.recordEnumerator = recordEnumerator;
     }
 
@@ -50,53 +57,111 @@ public class RecordStore implements Serializable {
         }
     }
 
-    public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, IllegalArgumentException {
+    public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary) throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
         if (recordStoreName == null) {
             throw new IllegalArgumentException();
         }
         recordStoreName = recordStoreName.replaceAll(" ", "%20");
-
         if (openedRecords.containsKey(recordStoreName)) {
             return openedRecords.get(recordStoreName);
         }
+        else {
+            RecordStore recordStore = null;
+            var file = new File(getRecordsPath() + recordStoreName);
 
-        RecordStore recordStore;
-        var file = new File(getRecordsPath() + recordStoreName);
-
-        if (file.exists()) {
-            var recordEnumerator = readRecordEnumerator(file);
-            recordStore = new RecordStore(recordStoreName, file, recordEnumerator);
+            if (file.exists()) {
+                return readRecordStore(file);
+            }
+            else if (createIfNecessary) {
+                try {
+                    file.getParentFile().mkdirs();
+                    file.createNewFile();
+                    recordStore = new RecordStore(recordStoreName, file, new RecordEnumerator());
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                    throw new RecordStoreException();
+                }
+            }
+            else {
+                throw new RecordStoreNotFoundException();
+            }
+            openedRecords.put(recordStoreName, recordStore);
+            writeRecordStore(recordStore, file);
+            return recordStore;
         }
-        else if (createIfNecessary) {
-            try {
-                file.getParentFile().mkdirs();
-                file.createNewFile();
-                recordStore = new RecordStore(recordStoreName, file, new RecordEnumerator());
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
+    }
+
+    public static RecordStore openRecordStore(String recordStoreName, boolean createIfNecessary, int authmode, boolean writable) throws RecordStoreException, RecordStoreFullException, RecordStoreNotFoundException {
+        var recordStore = openRecordStore(recordStoreName, createIfNecessary);
+        recordStore.setMode(authmode, writable);
+        return recordStore;
+    }
+
+    public void setMode(int authmode, boolean writable) throws RecordStoreException {
+        this.authmode = authmode;
+        this.writable = writable;
+        writeRecordStore(this, recordStorePath);
+    }
+
+    public void closeRecordStore() throws RecordStoreNotOpenException, RecordStoreException {
+        // TODO: write method logic?
+        if (!isOpened) {
+            throw new RecordStoreNotOpenException();
+        }
+    }
+
+    public static String[] listRecordStores() {
+        var appFiles = new File(getRecordsPath()).listFiles();
+        if (appFiles.length == 0) {
+            return null;
         }
         else {
-            throw new RecordStoreNotFoundException();
+            String[] appFileNames = new String[appFiles.length];
+            for (int i = 0; i < appFiles.length; i++) {
+                appFileNames[i] = appFiles[i].getName();
+            }
+            return appFileNames;
         }
-        openedRecords.put(recordStoreName, recordStore);
-        writeRecordEnumerator(recordStore.recordEnumerator, file);
-        return recordStore;
     }
 
     public String getName() throws RecordStoreNotOpenException {
         return name;
     }
 
+    public int getVersion() throws RecordStoreNotOpenException {
+        return version;
+    }
+
     public int getNumRecords() throws RecordStoreNotOpenException {
         return recordEnumerator.numRecords();
     }
 
-    public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {
-        // TODO: write logic for filter and comparator
-        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
-        return recordEnumerator;
+    public int getSize() throws RecordStoreNotOpenException {
+        return recordEnumerator.records.size();
+    }
+
+    public int getSizeAvailable() throws RecordStoreNotOpenException {
+        var homeDir = FileSystemView.getFileSystemView().getHomeDirectory();
+        long freeSpace = homeDir.getFreeSpace();
+        return (int) freeSpace;
+    }
+
+    public long getLastModified() throws RecordStoreNotOpenException {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public void addRecordListener(RecordListener listener) {
+        recordListeners.add(listener);
+        version++;
+        writeRecordStore(this, recordStorePath);
+    }
+
+    public void removeRecordListener(RecordListener listener) {
+        recordListeners.remove(listener);
+        version++;
+        writeRecordStore(this, recordStorePath);
     }
 
     public int getNextRecordID() throws RecordStoreNotOpenException, RecordStoreException {
@@ -109,21 +174,39 @@ public class RecordStore implements Serializable {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.add(subArray);
-        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
+        for (var recordListener : recordListeners) {
+            recordListener.recordAdded(this, getNumRecords());
+        }
+        version++;
+        writeRecordStore(this, recordStorePath);
         return recordEnumerator.numRecords();
     }
 
-    public void closeRecordStore() throws RecordStoreNotOpenException, RecordStoreException {
-        // TODO: write method logic?
-        if (!isOpened) {
-            throw new RecordStoreNotOpenException();
+    public void deleteRecord(int recordId) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+        // TODO: write method logic
+        for (var recordListener : recordListeners) {
+            recordListener.recordDeleted(this, recordId);
         }
-        writeRecordEnumerator(recordEnumerator, recordEnumeratorPath);
+        version++;
+        writeRecordStore(this, recordStorePath);
     }
 
-    public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
-        // TODO: write method logic
-        return 0;
+    public int getRecordSize(int recordId) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+        var record = getRecord(recordId);
+        return record.length;
+    }
+
+    public int getRecord(int recordId, byte[] buffer, int offset) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException, ArrayIndexOutOfBoundsException {
+        var record = getRecord(recordId);
+        if (record.length > buffer.length) {
+            throw new ArrayIndexOutOfBoundsException();
+        }
+        int bytesCopied = 0;
+        for (int i = offset, j = 0; i < buffer.length + offset && j < record.length; i++, j++) {
+            buffer[i] = record[j];
+            bytesCopied++;
+        }
+        return bytesCopied;
     }
 
     public byte[] getRecord(int recordId) {
@@ -136,19 +219,15 @@ public class RecordStore implements Serializable {
         }
         byte[] subArray = Arrays.copyOfRange(arr, offset, offset + numBytes);
         recordEnumerator.records.set(recordId - 1, subArray);
+        for (var recordListener : recordListeners) {
+            recordListener.recordChanged(this, getNumRecords());
+        }
+        version++;
+        writeRecordStore(this, recordStorePath);
     }
 
-    public static String[] listRecordStores() {
-        File[] appFiles = new File(getRecordsPath()).listFiles();
-        if (appFiles.length == 0) {
-            return null;
-        }
-        else {
-            String[] appFileNames = new String[appFiles.length];
-            for (int i = 0; i < appFiles.length; i++) {
-                appFileNames[i] = appFiles[i].getName();
-            }
-            return appFileNames;
-        }
+    public RecordEnumeration enumerateRecords(RecordFilter filter, RecordComparator comparator, boolean keepUpdated) throws RecordStoreNotOpenException {
+        // TODO: write logic for filter and comparator
+        return recordEnumerator;
     }
 }
