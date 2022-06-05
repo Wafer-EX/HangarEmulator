@@ -18,6 +18,7 @@ package javax.microedition.rms;
 
 import things.implementations.RecordEnumerator;
 
+import javax.swing.filechooser.FileSystemView;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -137,13 +138,13 @@ public class RecordStore implements Serializable {
     }
 
     public int getSize() throws RecordStoreNotOpenException {
-        // TODO: write method logic
-        return 0;
+        return recordEnumerator.records.size();
     }
 
     public int getSizeAvailable() throws RecordStoreNotOpenException {
-        // TODO: write method logic
-        return 0;
+        var homeDir = FileSystemView.getFileSystemView().getHomeDirectory();
+        long freeSpace = homeDir.getFreeSpace();
+        return (int) freeSpace;
     }
 
     public long getLastModified() throws RecordStoreNotOpenException {
