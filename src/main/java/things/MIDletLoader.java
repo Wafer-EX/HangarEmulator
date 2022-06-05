@@ -26,7 +26,7 @@ public class MIDletLoader {
     public static MIDlet loadMIDlet(String absolutePath) {
         try {
             MIDletResources.setJar(absolutePath);
-            MIDletResources.initializeProperties();
+            MIDletResources.initializeMIDletProperties();
 
             URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             var classLoader = new MIDletClassLoader(urls);

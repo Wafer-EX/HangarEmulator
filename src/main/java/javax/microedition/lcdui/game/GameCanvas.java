@@ -21,6 +21,7 @@ import things.HangarState;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -41,8 +42,9 @@ public abstract class GameCanvas extends Canvas {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        flushBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        var configuration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        buffer = configuration.createCompatibleImage(width, height);
+        flushBuffer = configuration.createCompatibleImage(width, height);
     }
 
     public BufferedImage getBuffer() {
@@ -83,7 +85,8 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void sizeChanged(int w, int h) {
-        buffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
-        flushBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        var configuration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        buffer = configuration.createCompatibleImage(w, h);
+        flushBuffer = configuration.createCompatibleImage(w, h);
     }
 }
