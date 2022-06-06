@@ -13,6 +13,7 @@ public class ListElement {
         this.string = string;
         this.image = image;
         this.isSelected = isSelected;
+        this.font = font;
     }
 
     public String getString() {
