@@ -26,6 +26,7 @@ public class HangarMenuBar extends JMenuBar {
     public HangarMenuBar() {
         addMIDletMenu();
         addOptionsMenu();
+        addWindowMenu();
         addHelpMenu();
     }
 
@@ -123,10 +124,20 @@ public class HangarMenuBar extends JMenuBar {
         this.add(optionsMenu);
     }
 
+    private void addWindowMenu() {
+        var windowMenu = new JMenu("Window");
+        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow resizing", false);
+
+        allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
+
+        windowMenu.add(allowResizingCheckBox);
+        this.add(windowMenu);
+    }
+
     private void addHelpMenu() {
         var helpMenu = new JMenu("Help");
-
         var githubLinkMenuItem = new JMenuItem("GitHub page");
+
         githubLinkMenuItem.addActionListener(event -> {
             try {
                 Desktop.getDesktop().browse(new URL("https://github.com/Lisowolf/HangarEmulator").toURI());

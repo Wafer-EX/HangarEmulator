@@ -16,8 +16,6 @@
 
 package com.nokia.mid.sound;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-
 public class Sound {
     public static final int FORMAT_TONE = 1;
     public static final int FORMAT_WAV = 5;
@@ -25,19 +23,19 @@ public class Sound {
     public static final int SOUND_STOPPED = 1;
     public static final int SOUND_UNINITIALIZED = 3;
 
-    public Sound(byte[] data, int type) {
+    public Sound(byte[] data, int type) throws IllegalArgumentException, NullPointerException {
         // TODO: write constructor logic
     }
 
-    public Sound(int freq, long duration) {
+    public Sound(int freq, long duration) throws IllegalArgumentException {
         // TODO: write constructor logic
     }
 
-    public void init(int freq, long duration) throws NotImplementedException {
+    public void init(int freq, long duration) throws IllegalArgumentException  {
         // TODO: write method logic
     }
 
-    public void init(byte[] data, int type) throws NotImplementedException {
+    public void init(byte[] data, int type) throws IllegalArgumentException, NullPointerException {
         // TODO: write method logic
     }
 
@@ -46,23 +44,23 @@ public class Sound {
         return SOUND_UNINITIALIZED;
     }
 
-    public void play(int loop) throws NotImplementedException {
+    public void play(int loop) throws IllegalArgumentException {
         // TODO: write method logic
     }
 
-    public void stop() throws NotImplementedException {
+    public void stop() {
         // TODO: write method logic
     }
 
-    public void resume() throws NotImplementedException {
+    public void resume() {
         // TODO: write method logic
     }
 
-    public void release() throws NotImplementedException {
+    public void release() {
         // TODO: write method logic
     }
 
-    public void setGain(int gain) throws NotImplementedException {
+    public void setGain(int gain) {
         // TODO: write method logic
     }
 
@@ -71,7 +69,7 @@ public class Sound {
         return 255;
     }
 
-    public static int getConcurrentSoundCount(int type) {
+    public static int getConcurrentSoundCount(int type) throws IllegalArgumentException  {
         // TODO: write method logic
         return 1;
     }
