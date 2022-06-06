@@ -74,5 +74,5 @@ public abstract class Displayable {
         return HangarState.getResolution().height;
     }
 
-    protected void sizeChanged(int w, int h) { }
+    public void sizeChanged(int w, int h) { }
 }

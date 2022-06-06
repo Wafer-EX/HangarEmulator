@@ -49,9 +49,6 @@ public class HangarPanel extends JPanel {
             HangarFrame.getInstance().setHangarPanel();
             canvas.showNotify();
         }
-        else if (getDisplayable() instanceof javax.microedition.lcdui.List list) {
-            add(list.getList());
-        }
     }
 
     public void setFlushedBuffer(BufferedImage buffer) {
@@ -68,17 +65,20 @@ public class HangarPanel extends JPanel {
             flushedBuffer = null;
         }
         else if (displayable != null) {
-            boolean sizeMatches = displayable.getWidth() == this.getWidth() && displayable.getHeight() == this.getHeight();
+            if (displayable.getWidth() != this.getWidth() || displayable.getHeight() != this.getHeight()) {
+                HangarState.setResolution(getSize());
+                displayable.sizeChanged(this.getWidth(), this.getHeight());
+            }
+
             if (HangarState.getCanvasClearing()) {
                 super.paintComponent(graphics);
             }
 
             if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
-                if (!sizeMatches) {
-                    HangarState.setResolution(getSize());
-                    canvas.sizeChanged(this.getWidth(), this.getHeight());
-                }
                 canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
+            }
+            else if (displayable instanceof javax.microedition.lcdui.List list) {
+                list.paint(graphics);
             }
         }
     }
