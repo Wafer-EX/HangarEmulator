@@ -60,11 +60,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return HangarPanel.getDisplayable();
+        return HangarPanel.getInstance().getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarPanel.setDisplayable(displayable);
+        HangarPanel.getInstance().setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {

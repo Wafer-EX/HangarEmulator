@@ -23,9 +23,9 @@ import things.HangarState;
 import java.util.ArrayList;
 
 public abstract class Displayable {
-    private Ticker ticker;
-    private CommandListener commandListener;
-    private ArrayList<Command> commandList = new ArrayList<>();
+    protected Ticker ticker;
+    protected CommandListener commandListener;
+    protected ArrayList<Command> commandList = new ArrayList<>();
 
     public String getTitle() {
         return HangarFrame.getInstance().getTitle();
@@ -44,7 +44,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        return HangarPanel.getDisplayable() == this;
+        return HangarPanel.getInstance().getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) throws NullPointerException {

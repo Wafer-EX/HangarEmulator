@@ -16,39 +16,67 @@
 
 package javax.microedition.lcdui;
 
+import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.event.MouseEvent;
+
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
+    private final DefaultListModel listModel = new DefaultListModel();
+    private final JList<DefaultListModel> list = new JList(listModel);
+    private int listType;
+    private Ticker ticker;
+    private Command selectCommand = SELECT_COMMAND;
+    private int fitPolicy = TEXT_WRAP_DEFAULT;
+
     public List(String title, int listType) {
         setTitle(title);
+        this.listType = listType;
+        var displayable = this;
+        list.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                commandListener.commandAction(selectCommand, displayable);
+            }
+        });
     }
 
     public List(String title, int listType, String[] stringElements, Image[] imageElements) {
-        setTitle(title);
+        this(title, listType);
+        for (int i = 0; i < stringElements.length; i++) {
+            listModel.add(i, stringElements[i]);
+        }
+    }
+
+    public JList getList() {
+        return list;
+    }
+
+    @Override
+    public void setTicker(Ticker ticker) {
+        this.ticker = ticker;
     }
 
     @Override
     public int size() {
-        // TODO: write method logic
-        return 0;
+        return listModel.getSize();
     }
 
     @Override
     public String getString(int elementNum) {
-        // TODO: write method logic
-        return null;
+        return listModel.getElementAt(elementNum).toString();
     }
 
     @Override
     public Image getImage(int elementNum) {
-        // TODO: write method logic
         return null;
     }
 
     @Override
     public int append(String stringPart, Image imagePart) {
-        // TODO: write method logic
-        return 0;
+        listModel.addElement(stringPart);
+        return listModel.size();
     }
 
     @Override
@@ -58,12 +86,12 @@ public class List extends Screen implements Choice {
 
     @Override
     public void delete(int elementNum) {
-        // TODO: write method logic
+        listModel.remove(elementNum);
     }
 
     @Override
     public void deleteAll() {
-        // TODO: write method logic
+        listModel.clear();
     }
 
     @Override
@@ -73,14 +101,12 @@ public class List extends Screen implements Choice {
 
     @Override
     public boolean isSelected(int elementNum) {
-        // TODO: write method logic
-        return false;
+        return list.getSelectedIndex() == elementNum;
     }
 
     @Override
     public int getSelectedIndex() {
-        // TODO: write method logic
-        return 0;
+        return list.getSelectedIndex();
     }
 
     @Override
@@ -91,7 +117,7 @@ public class List extends Screen implements Choice {
 
     @Override
     public void setSelectedIndex(int elementNum, boolean selected) {
-        // TODO: write method logic
+        list.setSelectedIndex(elementNum);
     }
 
     @Override
@@ -101,22 +127,26 @@ public class List extends Screen implements Choice {
 
     @Override
     public void removeCommand(Command cmd) {
-        // TODO: write method logic
+        super.removeCommand(cmd);
     }
 
     public void setSelectCommand(Command command) {
-        // TODO: write method logic
+        if (command == null) {
+            selectCommand = SELECT_COMMAND;
+        }
+        else {
+            selectCommand = command;
+        }
     }
 
     @Override
     public void setFitPolicy(int fitPolicy) {
-        // TODO: write method logic
+        this.fitPolicy = fitPolicy;
     }
 
     @Override
     public int getFitPolicy() {
-        // TODO: write method logic
-        return 0;
+        return fitPolicy;
     }
 
     @Override
@@ -127,6 +157,6 @@ public class List extends Screen implements Choice {
     @Override
     public Font getFont(int elementNum) {
         // TODO: write method logic
-        return null;
+        return Font.getDefaultFont();
     }
 }

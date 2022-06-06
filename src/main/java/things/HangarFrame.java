@@ -28,6 +28,7 @@ public class HangarFrame extends JFrame {
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
+        this.addKeyListener(new HangarKeyListener());
     }
 
     public static HangarFrame getInstance() {
@@ -58,7 +59,6 @@ public class HangarFrame extends JFrame {
         }
         this.setJMenuBar(new HangarMenuBar());
         this.add(HangarPanel.getInstance());
-        this.addKeyListener(new HangarKeyListener());
         this.pack();
         this.revalidate();
     }

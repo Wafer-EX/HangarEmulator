@@ -26,7 +26,7 @@ public class MIDletLoader {
     public static MIDlet loadMIDlet(String absolutePath) {
         try {
             MIDletResources.setJar(absolutePath);
-            MIDletResources.initializeProperties();
+            MIDletResources.initializeMIDletProperties();
 
             URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             var classLoader = new MIDletClassLoader(urls);
@@ -47,10 +47,8 @@ public class MIDletLoader {
 
     public static void startLoadedMIDlet() {
         try {
-            var hangarFrame = HangarFrame.getInstance();
-            hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
-            hangarFrame.setIconImage(MIDletResources.getIconFromJar());
-            hangarFrame.setHangarPanel();
+            HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
+            HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
             midlet.startApp();
         }
         catch (Exception ex) {

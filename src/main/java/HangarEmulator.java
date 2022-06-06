@@ -21,6 +21,9 @@ import java.net.URISyntaxException;
 
 public class HangarEmulator {
     public static void main(String[] args) throws URISyntaxException {
+        System.setProperty("sun.java2d.opengl", "true");
+        System.setProperty("microedition.platform", "Hangar");
+
         if (args.length > 0 && new File(args[0]).isFile()) {
             try {
                 MIDletLoader.loadMIDlet(args[0]);
