@@ -22,6 +22,7 @@ public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
     private final DefaultListModel listModel = new DefaultListModel();
+    private final JList<DefaultListModel> list = new JList(listModel);
     private int listType;
     private Ticker ticker;
     private int fitPolicy = TEXT_WRAP_DEFAULT;
@@ -38,8 +39,8 @@ public class List extends Screen implements Choice {
         }
     }
 
-    public DefaultListModel getListModel() {
-        return listModel;
+    public JList getList() {
+        return list;
     }
 
     @Override
@@ -90,13 +91,12 @@ public class List extends Screen implements Choice {
 
     @Override
     public boolean isSelected(int elementNum) {
-        return false;
+        return list.getSelectedIndex() == elementNum;
     }
 
     @Override
     public int getSelectedIndex() {
-        // TODO: write method logic
-        return 0;
+        return list.getSelectedIndex();
     }
 
     @Override
@@ -107,7 +107,7 @@ public class List extends Screen implements Choice {
 
     @Override
     public void setSelectedIndex(int elementNum, boolean selected) {
-        // TODO: write method logic
+        list.setSelectedIndex(elementNum);
     }
 
     @Override
@@ -142,6 +142,6 @@ public class List extends Screen implements Choice {
     @Override
     public Font getFont(int elementNum) {
         // TODO: write method logic
-        return null;
+        return Font.getDefaultFont();
     }
 }

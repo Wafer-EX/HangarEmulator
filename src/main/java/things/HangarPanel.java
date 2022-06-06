@@ -47,8 +47,7 @@ public class HangarPanel extends JPanel {
             canvas.showNotify();
         }
         if (getDisplayable() instanceof javax.microedition.lcdui.List meList) {
-            var list = new JList(meList.getListModel());
-            HangarFrame.getInstance().add(list);
+            HangarFrame.getInstance().add(meList.getList());
         }
     }
 
