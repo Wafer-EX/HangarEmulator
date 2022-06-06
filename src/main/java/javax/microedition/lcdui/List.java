@@ -25,6 +25,7 @@ public class List extends Screen implements Choice {
     private final JList<DefaultListModel> list = new JList(listModel);
     private int listType;
     private Ticker ticker;
+    private Command selectCommand = SELECT_COMMAND;
     private int fitPolicy = TEXT_WRAP_DEFAULT;
 
     public List(String title, int listType) {
@@ -117,11 +118,16 @@ public class List extends Screen implements Choice {
 
     @Override
     public void removeCommand(Command cmd) {
-        // TODO: write method logic
+        super.removeCommand(cmd);
     }
 
     public void setSelectCommand(Command command) {
-        // TODO: write method logic
+        if (command == null) {
+            selectCommand = SELECT_COMMAND;
+        }
+        else {
+            selectCommand = command;
+        }
     }
 
     @Override
