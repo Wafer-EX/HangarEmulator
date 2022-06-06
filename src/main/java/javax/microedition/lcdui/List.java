@@ -17,6 +17,8 @@
 package javax.microedition.lcdui;
 
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
+import java.awt.event.MouseEvent;
 
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
@@ -31,6 +33,13 @@ public class List extends Screen implements Choice {
     public List(String title, int listType) {
         setTitle(title);
         this.listType = listType;
+        var displayable = this;
+        list.addMouseListener(new MouseInputAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                commandListener.commandAction(selectCommand, displayable);
+            }
+        });
     }
 
     public List(String title, int listType, String[] stringElements, Image[] imageElements) {

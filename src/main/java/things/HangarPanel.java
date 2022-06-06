@@ -47,8 +47,8 @@ public class HangarPanel extends JPanel {
             HangarFrame.getInstance().setHangarPanel();
             canvas.showNotify();
         }
-        if (getDisplayable() instanceof javax.microedition.lcdui.List meList) {
-            HangarFrame.getInstance().add(meList.getList());
+        if (getDisplayable() instanceof javax.microedition.lcdui.List list) {
+            HangarFrame.getInstance().add(list.getList());
         }
     }
 
