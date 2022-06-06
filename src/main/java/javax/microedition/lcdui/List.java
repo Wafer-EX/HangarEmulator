@@ -16,16 +16,15 @@
 
 package javax.microedition.lcdui;
 
-import things.implementations.additions.ListElement;
-
-import java.util.ArrayList;
+import javax.swing.*;
 
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-    private final ArrayList<ListElement> elements = new ArrayList();
+    private final DefaultListModel listModel = new DefaultListModel();
     private int listType;
     private Ticker ticker;
+    private int fitPolicy = TEXT_WRAP_DEFAULT;
 
     public List(String title, int listType) {
         setTitle(title);
@@ -34,6 +33,13 @@ public class List extends Screen implements Choice {
 
     public List(String title, int listType, String[] stringElements, Image[] imageElements) {
         this(title, listType);
+        for (int i = 0; i < stringElements.length; i++) {
+            listModel.add(i, stringElements[i]);
+        }
+    }
+
+    public DefaultListModel getListModel() {
+        return listModel;
     }
 
     @Override
@@ -43,23 +49,23 @@ public class List extends Screen implements Choice {
 
     @Override
     public int size() {
-        return elements.size();
+        return listModel.getSize();
     }
 
     @Override
     public String getString(int elementNum) {
-        return elements.get(elementNum).getString();
+        return listModel.getElementAt(elementNum).toString();
     }
 
     @Override
     public Image getImage(int elementNum) {
-        return elements.get(elementNum).getImage();
+        return null;
     }
 
     @Override
     public int append(String stringPart, Image imagePart) {
-        elements.add(new ListElement(stringPart, imagePart, false, Font.getDefaultFont()));
-        return elements.size();
+        listModel.addElement(stringPart);
+        return listModel.size();
     }
 
     @Override
@@ -69,24 +75,22 @@ public class List extends Screen implements Choice {
 
     @Override
     public void delete(int elementNum) {
-        elements.remove(elementNum);
+        listModel.remove(elementNum);
     }
 
     @Override
     public void deleteAll() {
-        elements.clear();
+        listModel.clear();
     }
 
     @Override
     public void set(int elementNum, String stringPart, Image imagePart) {
-        var element = elements.get(elementNum);
-        element.setString(stringPart);
-        element.setImage(imagePart);
+        // TODO: write method logic
     }
 
     @Override
     public boolean isSelected(int elementNum) {
-        return elements.get(elementNum).getSelected();
+        return false;
     }
 
     @Override
@@ -122,22 +126,22 @@ public class List extends Screen implements Choice {
 
     @Override
     public void setFitPolicy(int fitPolicy) {
-        // TODO: write method logic
+        this.fitPolicy = fitPolicy;
     }
 
     @Override
     public int getFitPolicy() {
-        // TODO: write method logic
-        return 0;
+        return fitPolicy;
     }
 
     @Override
     public void setFont(int elementNum, Font font) {
-        elements.get(elementNum).setFont(font);
+        // TODO: write method logic
     }
 
     @Override
     public Font getFont(int elementNum) {
-        return elements.get(elementNum).getFont();
+        // TODO: write method logic
+        return null;
     }
 }
