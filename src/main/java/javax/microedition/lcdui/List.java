@@ -16,41 +16,59 @@
 
 package javax.microedition.lcdui;
 
-import javax.swing.*;
-import javax.swing.event.MouseInputAdapter;
-import java.awt.event.MouseEvent;
+import things.HangarPanel;
+import things.HangarState;
+
+import java.awt.Graphics;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-    private final DefaultListModel listModel = new DefaultListModel();
-    private final JList<DefaultListModel> list = new JList(listModel);
+    private final ArrayList<String> strings = new ArrayList();
     private int listType;
     private Ticker ticker;
     private Command selectCommand = SELECT_COMMAND;
     private int fitPolicy = TEXT_WRAP_DEFAULT;
+    private int selectedElement = 0;
 
     public List(String title, int listType) {
         setTitle(title);
         this.listType = listType;
-        var displayable = this;
-        list.addMouseListener(new MouseInputAdapter() {
-            @Override
-            public void mouseClicked(MouseEvent e) {
-                commandListener.commandAction(selectCommand, displayable);
-            }
-        });
     }
 
     public List(String title, int listType, String[] stringElements, Image[] imageElements) {
         this(title, listType);
-        for (int i = 0; i < stringElements.length; i++) {
-            listModel.add(i, stringElements[i]);
+        strings.addAll(Arrays.asList(stringElements));
+    }
+
+    public void paint(Graphics graphics) {
+        graphics.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 14));
+
+        graphics.setColor(HangarState.COLOR_DARK);
+        graphics.fillRect(0, 0, getWidth(), getHeight());
+
+        var metrics = graphics.getFontMetrics(graphics.getFont());
+        var fontHeight = metrics.getHeight();
+
+        for (int i = 0; i < strings.size(); i++) {
+            if (i == selectedElement) {
+                graphics.setColor(HangarState.COLOR_NORMAL);
+                graphics.fillRect(0, fontHeight * i + 16, getWidth(), fontHeight);
+                graphics.setColor(HangarState.COLOR_ELEMENT_LIGHT);
+                graphics.drawString(strings.get(i), 4, fontHeight * (i + 1) + 12);
+            }
+            else {
+                graphics.setColor(HangarState.COLOR_ELEMENT);
+                graphics.drawString(strings.get(i), 4, fontHeight * (i + 1) + 12);
+            }
         }
     }
 
-    public JList getList() {
-        return list;
+    public void runSelectCommand() {
+        commandListener.commandAction(selectCommand, this);
+        HangarPanel.getInstance().repaint();
     }
 
     @Override
@@ -60,23 +78,24 @@ public class List extends Screen implements Choice {
 
     @Override
     public int size() {
-        return listModel.getSize();
+        return strings.size();
     }
 
     @Override
     public String getString(int elementNum) {
-        return listModel.getElementAt(elementNum).toString();
+        return strings.get(elementNum);
     }
 
     @Override
     public Image getImage(int elementNum) {
+        // TODO: write method logic
         return null;
     }
 
     @Override
     public int append(String stringPart, Image imagePart) {
-        listModel.addElement(stringPart);
-        return listModel.size();
+        strings.add(stringPart);
+        return strings.size();
     }
 
     @Override
@@ -86,27 +105,27 @@ public class List extends Screen implements Choice {
 
     @Override
     public void delete(int elementNum) {
-        listModel.remove(elementNum);
+        strings.remove(elementNum);
     }
 
     @Override
     public void deleteAll() {
-        listModel.clear();
+        strings.clear();
     }
 
     @Override
     public void set(int elementNum, String stringPart, Image imagePart) {
-        // TODO: write method logic
+        strings.set(elementNum, stringPart);
     }
 
     @Override
     public boolean isSelected(int elementNum) {
-        return list.getSelectedIndex() == elementNum;
+        return selectedElement == elementNum;
     }
 
     @Override
     public int getSelectedIndex() {
-        return list.getSelectedIndex();
+        return selectedElement;
     }
 
     @Override
@@ -117,7 +136,16 @@ public class List extends Screen implements Choice {
 
     @Override
     public void setSelectedIndex(int elementNum, boolean selected) {
-        list.setSelectedIndex(elementNum);
+        if (elementNum > strings.size() - 1) {
+            selectedElement = 0;
+        }
+        else if (elementNum < 0) {
+            selectedElement = strings.size() - 1;
+        }
+        else {
+            selectedElement = elementNum;
+        }
+        HangarPanel.getInstance().repaint();
     }
 
     @Override
