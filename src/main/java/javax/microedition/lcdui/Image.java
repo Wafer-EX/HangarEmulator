@@ -27,19 +27,19 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Image {
-    public final java.awt.Image image;
-    private boolean isMutable;
+    public final BufferedImage image;
+    private final boolean isMutable;
 
-    public Image(java.awt.Image image, boolean isMutable) {
+    public Image(BufferedImage image, boolean isMutable) {
         this.image = image;
         this.isMutable = isMutable;
     }
 
-    public static Image createImage(int width, int height) {
+    public static Image createImage(int width, int height) throws IllegalArgumentException {
         return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), true);
     }
 
-    public static Image createImage(Image source) {
+    public static Image createImage(Image source) throws NullPointerException {
         if (source == null) {
             throw new NullPointerException();
         }
@@ -58,12 +58,12 @@ public class Image {
         }
     }
 
-    public static Image createImage(String name) throws IOException {
+    public static Image createImage(String name) throws NullPointerException, IOException {
         var stream = MIDletResources.getResourceFromJar(name);
         return new Image(ImageIO.read(stream), false);
     }
 
-    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws NullPointerException {
+    public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws ArrayIndexOutOfBoundsException, NullPointerException, IllegalArgumentException {
         if (imageData == null) {
             throw new NullPointerException();
         }
@@ -105,7 +105,7 @@ public class Image {
         return isMutable;
     }
 
-    public static Image createImage(InputStream stream) throws IOException {
+    public static Image createImage(InputStream stream) throws NullPointerException, IOException {
         if (stream == null) {
             throw new NullPointerException();
         }
@@ -119,14 +119,13 @@ public class Image {
         }
     }
 
-    public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) {
+    public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {
         var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
         image.setRGB(0, 0, width, height, rgb, 0, width);
         return new Image(image, false);
     }
 
-    public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createRGBImage");
+    public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        image.getRGB(x, y, width, height, rgbData, offset, scanlength);
     }
 }

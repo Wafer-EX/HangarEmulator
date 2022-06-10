@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.HangarPanel;
+import things.HangarState;
 import things.utils.CanvasUtils;
 
 public abstract class Canvas extends Displayable {
@@ -84,6 +85,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public void repaint() {
+        HangarState.syncWithFrameRate();
         HangarPanel.getInstance().repaint();
     }
 
