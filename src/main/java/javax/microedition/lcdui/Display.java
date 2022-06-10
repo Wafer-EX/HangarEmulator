@@ -84,8 +84,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        // TODO: rewrite method logic
-        r.run();
+        HangarPanel.getInstance().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) {

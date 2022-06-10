@@ -25,6 +25,7 @@ public class HangarPanel extends JPanel {
     private static HangarPanel instance;
     private static Displayable displayable;
     private BufferedImage flushedBuffer;
+    private Runnable callSerially;
 
     private HangarPanel() {
         setPreferredSize(HangarState.getResolution());
@@ -55,6 +56,10 @@ public class HangarPanel extends JPanel {
         this.flushedBuffer = buffer;
     }
 
+    public void setCallSerially(Runnable runnable) {
+        this.callSerially = runnable;
+    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         HangarState.syncWithFrameRate();
@@ -80,6 +85,10 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(graphics);
             }
+        }
+
+        if (callSerially != null) {
+            callSerially.run();
         }
     }
 }
