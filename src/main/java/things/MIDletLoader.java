@@ -45,9 +45,11 @@ public class MIDletLoader {
 
     public static void startLoadedMIDlet() {
         try {
-            HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
-            HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
-            midlet.startApp();
+            if (midlet != null) {
+                HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
+                HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
+                midlet.startApp();
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
