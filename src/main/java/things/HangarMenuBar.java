@@ -19,14 +19,16 @@ package things;
 import things.enums.Keyboards;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.io.File;
 import java.net.URL;
 
 public class HangarMenuBar extends JMenuBar {
     public HangarMenuBar() {
         addMIDletMenu();
         addOptionsMenu();
-        addWindowMenu();
         addHelpMenu();
     }
 
@@ -37,12 +39,23 @@ public class HangarMenuBar extends JMenuBar {
         var pauseMenuItem = new JMenuItem("Call pauseApp()");
         var exitMenuItem = new JMenuItem("Exit");
 
-        loadMenuItem.addActionListener(event -> {
+        loadMenuItem.addActionListener(e -> {
             var fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().endsWith("jar");
+                }
+
+                @Override
+                public String getDescription() {
+                    return ".jar";
+                }
+            });
             fileChooser.showDialog(null, "Select MIDlet");
-            var selectedFile = fileChooser.getSelectedFile();
 
             SwingUtilities.invokeLater(() -> {
+                var selectedFile = fileChooser.getSelectedFile();
                 if (selectedFile != null) {
                     if (MIDletLoader.getLastLoaded() == null) {
                         MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
@@ -72,6 +85,9 @@ public class HangarMenuBar extends JMenuBar {
         var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing", HangarState.getCanvasClearing());
         var antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing", HangarState.getAntiAliasing());
         var frameRatePopupMenu = new JMenu("Frame rate");
+        var loadSoundbankItem = new JMenuItem("Load soundbank");
+        var clearSoundBankItem = new JMenuItem("Clear soundbank");
+        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow resizing", false);
         var keyboardPopupMenu = new JMenu("Keyboard");
 
         var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getFrameRate() == 15);
@@ -98,6 +114,32 @@ public class HangarMenuBar extends JMenuBar {
         radio60FPS.addItemListener(e -> HangarState.setFrameRate(60));
         radioUnlimitedFPS.addItemListener(e -> HangarState.setFrameRate(-1));
 
+        allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
+
+        loadSoundbankItem.addActionListener(e -> {
+            var fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().endsWith("sf2");
+                }
+
+                @Override
+                public String getDescription() {
+                    return ".sf2";
+                }
+            });
+            fileChooser.showDialog(null, "Select soundbank");
+
+            SwingUtilities.invokeLater(() -> {
+                var selectedFile = fileChooser.getSelectedFile();
+                if (selectedFile != null) {
+                    HangarAudio.loadSoundbank(selectedFile);
+                }
+            });
+        });
+        clearSoundBankItem.addActionListener(e -> HangarAudio.setSoundbank(null));
+
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
                 HangarState.setKeyboard(Keyboards.Default);
@@ -120,18 +162,14 @@ public class HangarMenuBar extends JMenuBar {
         optionsMenu.add(canvasClearingCheckBox);
         optionsMenu.add(antiAliasingCheckBox);
         optionsMenu.add(frameRatePopupMenu);
+        optionsMenu.add(new JSeparator());
+        optionsMenu.add(loadSoundbankItem);
+        optionsMenu.add(clearSoundBankItem);
+        optionsMenu.add(new JSeparator());
+        optionsMenu.add(allowResizingCheckBox);
+        optionsMenu.add(new JSeparator());
         optionsMenu.add(keyboardPopupMenu);
         this.add(optionsMenu);
-    }
-
-    private void addWindowMenu() {
-        var windowMenu = new JMenu("Window");
-        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow resizing", false);
-
-        allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
-
-        windowMenu.add(allowResizingCheckBox);
-        this.add(windowMenu);
     }
 
     private void addHelpMenu() {

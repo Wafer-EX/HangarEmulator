@@ -16,11 +16,11 @@
 
 package things.implementations;
 
+import things.HangarAudio;
 import things.implementations.additions.MidiVolumeControl;
 import things.implementations.additions.PlayerMetaEventListener;
 
 import javax.microedition.media.*;
-import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import java.io.InputStream;
 
@@ -29,7 +29,7 @@ public class MidiPlayer extends ExtendedPlayer {
 
     public MidiPlayer(InputStream stream) {
         try {
-            sequencer = MidiSystem.getSequencer();
+            sequencer = HangarAudio.getSequencer();
             sequencer.open();
             sequencer.setSequence(stream);
             sequencer.setLoopCount(1);

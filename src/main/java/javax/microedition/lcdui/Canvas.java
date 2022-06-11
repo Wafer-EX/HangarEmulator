@@ -56,7 +56,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public boolean hasRepeatEvents() {
-        return false;
+        return true;
     }
 
     public int getKeyCode(int gameAction) {
