@@ -39,7 +39,7 @@ public class HangarMenuBar extends JMenuBar {
         var pauseMenuItem = new JMenuItem("Call pauseApp()");
         var exitMenuItem = new JMenuItem("Exit");
 
-        loadMenuItem.addActionListener(event -> {
+        loadMenuItem.addActionListener(e -> {
             var fileChooser = new JFileChooser();
             fileChooser.setFileFilter(new FileFilter() {
                 @Override
@@ -85,7 +85,8 @@ public class HangarMenuBar extends JMenuBar {
         var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing", HangarState.getCanvasClearing());
         var antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing", HangarState.getAntiAliasing());
         var frameRatePopupMenu = new JMenu("Frame rate");
-        var loadSoundbankMenu = new JMenuItem("Load soundbank");
+        var loadSoundbankItem = new JMenuItem("Load soundbank");
+        var clearSoundBankItem = new JMenuItem("Clear soundbank");
         var allowResizingCheckBox = new JCheckBoxMenuItem("Allow resizing", false);
         var keyboardPopupMenu = new JMenu("Keyboard");
 
@@ -115,31 +116,29 @@ public class HangarMenuBar extends JMenuBar {
 
         allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
 
-        loadSoundbankMenu.addActionListener(new AbstractAction() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                var fileChooser = new JFileChooser();
-                fileChooser.setFileFilter(new FileFilter() {
-                    @Override
-                    public boolean accept(File f) {
-                        return f.isDirectory() || f.getName().endsWith("sf2");
-                    }
+        loadSoundbankItem.addActionListener(e -> {
+            var fileChooser = new JFileChooser();
+            fileChooser.setFileFilter(new FileFilter() {
+                @Override
+                public boolean accept(File f) {
+                    return f.isDirectory() || f.getName().endsWith("sf2");
+                }
 
-                    @Override
-                    public String getDescription() {
-                        return ".sf2";
-                    }
-                });
-                fileChooser.showDialog(null, "Select soundbank");
+                @Override
+                public String getDescription() {
+                    return ".sf2";
+                }
+            });
+            fileChooser.showDialog(null, "Select soundbank");
 
-                SwingUtilities.invokeLater(() -> {
-                    var selectedFile = fileChooser.getSelectedFile();
-                    if (selectedFile != null) {
-                        HangarAudio.loadSoundbank(selectedFile);
-                    }
-                });
-            }
+            SwingUtilities.invokeLater(() -> {
+                var selectedFile = fileChooser.getSelectedFile();
+                if (selectedFile != null) {
+                    HangarAudio.loadSoundbank(selectedFile);
+                }
+            });
         });
+        clearSoundBankItem.addActionListener(e -> HangarAudio.setSoundbank(null));
 
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
@@ -164,7 +163,8 @@ public class HangarMenuBar extends JMenuBar {
         optionsMenu.add(antiAliasingCheckBox);
         optionsMenu.add(frameRatePopupMenu);
         optionsMenu.add(new JSeparator());
-        optionsMenu.add(loadSoundbankMenu);
+        optionsMenu.add(loadSoundbankItem);
+        optionsMenu.add(clearSoundBankItem);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(allowResizingCheckBox);
         optionsMenu.add(new JSeparator());

@@ -20,6 +20,10 @@ public final class HangarAudio {
         return soundbank;
     }
 
+    public static void setSoundbank(Soundbank soundbank) {
+        HangarAudio.soundbank = soundbank;
+    }
+
     public static Sequencer getSequencer() {
         try {
             if (soundbank != null) {
