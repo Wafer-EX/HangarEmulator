@@ -23,7 +23,7 @@ public class MIDletLoader {
     private static MIDlet midlet;
     private static String midletPath;
 
-    public static MIDlet loadMIDlet(String absolutePath) {
+    public static void loadMIDlet(String absolutePath) {
         try {
             MIDletResources.setJar(absolutePath);
             MIDletResources.initializeMIDletProperties();
@@ -37,19 +37,19 @@ public class MIDletLoader {
 
             midlet = (MIDlet) constructor.newInstance();
             midletPath = absolutePath;
-            return midlet;
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            return null;
         }
     }
 
     public static void startLoadedMIDlet() {
         try {
-            HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
-            HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
-            midlet.startApp();
+            if (midlet != null) {
+                HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
+                HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
+                midlet.startApp();
+            }
         }
         catch (Exception ex) {
             ex.printStackTrace();
