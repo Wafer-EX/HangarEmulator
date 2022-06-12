@@ -32,6 +32,7 @@ public class HangarPanel extends JPanel {
     private BufferedImage buffer;
     private BufferedImage flushedBuffer;
     private Runnable callSerially;
+    private double newScale = 1.0;
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
@@ -41,7 +42,12 @@ public class HangarPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+                if (HangarState.getScalingMode() == ScalingModes.Contain) {
+                    var horizontalRescale = (double) getWidth() / buffer.getWidth();
+                    var verticalRescale = (double) getHeight() / buffer.getHeight();
+                    newScale = Math.min(horizontalRescale, verticalRescale);
+                }
+                else if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
                     var size = e.getComponent().getSize();
                     if (size.width > 0 && size.height > 0) {
                         buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
@@ -90,15 +96,17 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        HangarState.applyRenderingHints(buffer.getGraphics());
         if (HangarState.getCanvasClearing()) {
             buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
         }
-        HangarState.applyRenderingHints(buffer.getGraphics());
 
-        int posX = 0, posY = 0;
-        if (HangarState.getScalingMode() == ScalingModes.None) {
-            posX = getWidth() / 2 - buffer.getWidth() / 2;
-            posY = getHeight() / 2 - buffer.getHeight() / 2;
+        int posX = 0, posY = 0, width = buffer.getWidth(), height = buffer.getHeight();
+        if (HangarState.getScalingMode() != ScalingModes.ChangeResolution) {
+            posX = (int) (getWidth() / 2 - buffer.getWidth() * newScale / 2);
+            posY = (int) (getHeight() / 2 - buffer.getHeight() * newScale / 2);
+            width *= newScale;
+            height *= newScale;
         }
 
         if (displayable != null) {
@@ -108,11 +116,11 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(buffer.getGraphics());
             }
-            graphics.drawImage(buffer, posX, posY, null);
+            graphics.drawImage(buffer.getScaledInstance(width, height, Image.SCALE_FAST), posX, posY, null);
         }
 
         if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer, posX, posY, null);
+            graphics.drawImage(flushedBuffer.getScaledInstance(width, height, Image.SCALE_FAST), posX, posY, null);
             flushedBuffer = null;
         }
 

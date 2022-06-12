@@ -18,5 +18,6 @@ package things.enums;
 
 public enum ScalingModes {
     None,
+    Contain,
     ChangeResolution
 }
