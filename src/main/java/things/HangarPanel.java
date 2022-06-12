@@ -90,12 +90,15 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        HangarState.applyRenderingHints(buffer.getGraphics());
-        int posX = getWidth() / 2 - buffer.getWidth() / 2;
-        int posY = getHeight() / 2 - buffer.getHeight() / 2;
-
         if (HangarState.getCanvasClearing()) {
             buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
+        }
+        HangarState.applyRenderingHints(buffer.getGraphics());
+
+        int posX = 0, posY = 0;
+        if (HangarState.getScalingMode() == ScalingModes.None) {
+            posX = getWidth() / 2 - buffer.getWidth() / 2;
+            posY = getHeight() / 2 - buffer.getHeight() / 2;
         }
 
         if (displayable != null) {
