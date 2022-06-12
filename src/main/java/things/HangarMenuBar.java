@@ -155,8 +155,16 @@ public class HangarMenuBar extends JMenuBar {
         });
         clearSoundBankItem.addActionListener(e -> HangarAudio.setSoundbank(null));
 
-        radioDefaultKeyboard.addItemListener(e -> HangarState.setKeyboard(Keyboards.Default));
-        radioNokiaKeyboard.addItemListener(e -> HangarState.setKeyboard(Keyboards.Nokia));
+        radioDefaultKeyboard.addItemListener(e -> {
+            if (radioDefaultKeyboard.isSelected()) {
+                HangarState.setKeyboard(Keyboards.Default);
+            }
+        });
+        radioNokiaKeyboard.addItemListener(e -> {
+            if (radioNokiaKeyboard.isSelected()) {
+                HangarState.setKeyboard(Keyboards.Nokia);
+            }
+        });
 
         keyboardPopupMenu.add(radioDefaultKeyboard);
         keyboardPopupMenu.add(radioNokiaKeyboard);
