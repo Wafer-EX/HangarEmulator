@@ -62,7 +62,6 @@ public class HangarPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        HangarState.syncWithFrameRate();
         HangarState.applyRenderingHints(graphics);
 
         if (flushedBuffer != null) {

@@ -70,17 +70,17 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarState.syncWithFrameRate();
         flushBuffer.getGraphics().drawImage(buffer, x, y, width, height, null);
         HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
         HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     public void flushGraphics() {
-        HangarState.syncWithFrameRate();
         flushBuffer.getGraphics().drawImage(buffer, 0, 0, null);
         HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
         HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     @Override
