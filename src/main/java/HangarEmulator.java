@@ -14,12 +14,14 @@
  * limitations under the License.
 */
 
+import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
 
 import java.io.File;
 
 public class HangarEmulator {
     public static void main(String[] args) {
+        FlatDarkLaf.setup();
         System.setProperty("sun.java2d.opengl", "true");
         System.setProperty("microedition.profiles", "MIDP-2.0");
         System.setProperty("microedition.platform", "HangarEmulator");

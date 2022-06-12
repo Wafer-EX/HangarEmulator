@@ -1,9 +1,16 @@
 plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'java'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'com.lisowolf'
+version '1.0'
+
+jar {
+    manifest {
+        attributes.put("Main-Class", "HangarEmulator")
+    }
+}
 
 repositories {
     mavenCentral()
@@ -11,4 +18,10 @@ repositories {
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.3'
+    implementation 'com.formdev:flatlaf:2.3'
+}
+
+shadowJar {
+    mergeServiceFiles()
+    archiveBaseName.set('HangarEmulator')
 }
