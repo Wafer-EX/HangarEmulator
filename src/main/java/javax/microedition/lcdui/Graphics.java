@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import things.HangarState;
 import things.utils.FontUtils;
 import things.utils.ImageUtils;
 
@@ -118,19 +119,23 @@ public class Graphics {
     }
 
     public int getClipX() {
-        return seGraphics.getClipBounds().x;
+        var clipBounds = seGraphics.getClipBounds();
+        return clipBounds == null ? 0 : clipBounds.x;
     }
 
     public int getClipY() {
-        return seGraphics.getClipBounds().y;
+        var clipBounds = seGraphics.getClipBounds();
+        return clipBounds == null ? 0 : clipBounds.y;
     }
 
     public int getClipWidth() {
-        return seGraphics.getClipBounds().width;
+        var clipBounds = seGraphics.getClipBounds();
+        return clipBounds == null ? HangarState.getResolution().width : clipBounds.width;
     }
 
     public int getClipHeight() {
-        return seGraphics.getClipBounds().height;
+        var clipBounds = seGraphics.getClipBounds();
+        return clipBounds == null ? HangarState.getResolution().height : clipBounds.height;
     }
 
     public void clipRect(int x, int y, int width, int height) {

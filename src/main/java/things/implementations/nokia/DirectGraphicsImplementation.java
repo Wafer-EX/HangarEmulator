@@ -23,7 +23,7 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 public class DirectGraphicsImplementation implements DirectGraphics {
-    private Graphics meGraphics;
+    private final Graphics meGraphics;
 
     public DirectGraphicsImplementation(Graphics graphics) {
         this.meGraphics = graphics;
