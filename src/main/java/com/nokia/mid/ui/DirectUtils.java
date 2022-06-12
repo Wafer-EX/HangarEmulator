@@ -16,7 +16,6 @@
 
 package com.nokia.mid.ui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.implementations.nokia.DirectGraphicsImplementation;
 
 import javax.imageio.ImageIO;

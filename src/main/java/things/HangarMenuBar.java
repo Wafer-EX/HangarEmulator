@@ -19,10 +19,7 @@ package things;
 import things.enums.Keyboards;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.io.File;
 import java.net.URL;
 
 public class HangarMenuBar extends JMenuBar {
@@ -41,17 +38,6 @@ public class HangarMenuBar extends JMenuBar {
 
         loadMenuItem.addActionListener(e -> {
             var fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    return f.isDirectory() || f.getName().endsWith("jar");
-                }
-
-                @Override
-                public String getDescription() {
-                    return ".jar";
-                }
-            });
             fileChooser.showDialog(null, "Select MIDlet");
 
             SwingUtilities.invokeLater(() -> {
@@ -118,17 +104,6 @@ public class HangarMenuBar extends JMenuBar {
 
         loadSoundbankItem.addActionListener(e -> {
             var fileChooser = new JFileChooser();
-            fileChooser.setFileFilter(new FileFilter() {
-                @Override
-                public boolean accept(File f) {
-                    return f.isDirectory() || f.getName().endsWith("sf2");
-                }
-
-                @Override
-                public String getDescription() {
-                    return ".sf2";
-                }
-            });
             fileChooser.showDialog(null, "Select soundbank");
 
             SwingUtilities.invokeLater(() -> {

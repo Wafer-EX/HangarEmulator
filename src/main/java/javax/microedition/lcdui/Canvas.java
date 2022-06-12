@@ -81,13 +81,13 @@ public abstract class Canvas extends Displayable {
     public void keyReleased(int keyCode) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        HangarState.syncWithFrameRate();
         HangarPanel.getInstance().repaint(x, y, width, height);
+        HangarState.syncWithFrameRate();
     }
 
     public void repaint() {
-        HangarState.syncWithFrameRate();
         HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     public void serviceRepaints() {

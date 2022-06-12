@@ -35,58 +35,46 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private BufferedImage buffer;
+    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+    private BufferedImage additionalBuffer;
     private BufferedImage flushBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        var configuration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-        buffer = configuration.createCompatibleImage(width, height);
-        flushBuffer = configuration.createCompatibleImage(width, height);
-    }
-
-    public BufferedImage getBuffer() {
-        return buffer;
-    }
-
-    public void setBuffer(BufferedImage image) {
-        buffer = image;
+        additionalBuffer = graphicsConfiguration.createCompatibleImage(width, height);
+        flushBuffer = graphicsConfiguration.createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
-        var graphics = buffer.getGraphics();
+        var graphics = additionalBuffer.getGraphics();
         HangarState.applyRenderingHints(graphics);
         return new Graphics(graphics);
     }
 
     @Override
     public void paint(Graphics g) {
-        if (g == null) {
-            throw new NullPointerException();
-        }
-        g.drawImage(new javax.microedition.lcdui.Image(buffer, true), 0, 0, 0);
+        // TODO: write method logic?
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarState.syncWithFrameRate();
-        flushBuffer.getGraphics().drawImage(buffer, x, y, width, height, null);
+        flushBuffer.getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
         HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     public void flushGraphics() {
-        HangarState.syncWithFrameRate();
-        flushBuffer.getGraphics().drawImage(buffer, 0, 0, null);
+        flushBuffer.getGraphics().drawImage(additionalBuffer, 0, 0, null);
         HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
         HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
-        var configuration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-        buffer = configuration.createCompatibleImage(w, h);
-        flushBuffer = configuration.createCompatibleImage(w, h);
+        additionalBuffer = graphicsConfiguration.createCompatibleImage(w, h);
+        flushBuffer = graphicsConfiguration.createCompatibleImage(w, h);
     }
 }

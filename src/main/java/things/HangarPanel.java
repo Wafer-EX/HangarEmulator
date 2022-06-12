@@ -19,16 +19,37 @@ package things;
 import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 
 public class HangarPanel extends JPanel {
+    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private static HangarPanel instance;
     private static Displayable displayable;
+    private BufferedImage buffer;
     private BufferedImage flushedBuffer;
     private Runnable callSerially;
 
     private HangarPanel() {
-        setPreferredSize(HangarState.getResolution());
+        var resolution = HangarState.getResolution();
+        buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        setPreferredSize(resolution);
+
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                var size = e.getComponent().getSize();
+                if (size.width > 0 && size.height > 0) {
+                    HangarState.setResolution(size);
+
+                    buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
+                    if (displayable != null) {
+                        displayable.sizeChanged(size.width, size.height);
+                    }
+                }
+            }
+        });
     }
 
     public static HangarPanel getInstance() {
@@ -52,6 +73,10 @@ public class HangarPanel extends JPanel {
         }
     }
 
+    public BufferedImage getBuffer() {
+        return buffer;
+    }
+
     public void setFlushedBuffer(BufferedImage buffer) {
         this.flushedBuffer = buffer;
     }
@@ -62,29 +87,24 @@ public class HangarPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
-        HangarState.syncWithFrameRate();
-        HangarState.applyRenderingHints(graphics);
+        HangarState.applyRenderingHints(buffer.getGraphics());
+        if (HangarState.getCanvasClearing()) {
+            buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
+        }
+
+        if (displayable != null) {
+            if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
+                canvas.paint(new javax.microedition.lcdui.Graphics(buffer.getGraphics()));
+            }
+            else if (displayable instanceof javax.microedition.lcdui.List list) {
+                list.paint(buffer.getGraphics());
+            }
+            graphics.drawImage(buffer, 0, 0, null);
+        }
 
         if (flushedBuffer != null) {
             graphics.drawImage(flushedBuffer, 0, 0, null);
             flushedBuffer = null;
-        }
-        else if (displayable != null) {
-            if (displayable.getWidth() != this.getWidth() || displayable.getHeight() != this.getHeight()) {
-                HangarState.setResolution(getSize());
-                displayable.sizeChanged(this.getWidth(), this.getHeight());
-            }
-
-            if (HangarState.getCanvasClearing()) {
-                super.paintComponent(graphics);
-            }
-
-            if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
-                canvas.paint(new javax.microedition.lcdui.Graphics(graphics));
-            }
-            else if (displayable instanceof javax.microedition.lcdui.List list) {
-                list.paint(graphics);
-            }
         }
 
         if (callSerially != null) {
