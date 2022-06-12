@@ -17,29 +17,26 @@
 import things.*;
 
 import java.io.File;
-import java.net.URISyntaxException;
 
 public class HangarEmulator {
-    public static void main(String[] args) throws URISyntaxException {
+    public static void main(String[] args) {
         System.setProperty("sun.java2d.opengl", "true");
         System.setProperty("microedition.profiles", "MIDP-2.0");
         System.setProperty("microedition.platform", "HangarEmulator");
 
-        if (args.length > 0 && new File(args[0]).isFile()) {
-            try {
+        try {
+            if (args.length > 0 && new File(args[0]).isFile()) {
                 MIDletLoader.loadMIDlet(args[0]);
                 MIDletLoader.startLoadedMIDlet();
             }
-            catch (Exception ex) {
-                ex.printStackTrace();
+            else {
+                HangarFrame.getInstance().setLabel(new HangarLabel("Please select a file."));
             }
+            HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+            HangarFrame.getInstance().setVisible(true);
         }
-        else {
-            HangarFrame.getInstance().setLabel(new HangarLabel("Please select a file."));
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
-
-        var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-        HangarState.setProgramFile(programFile);
-        HangarFrame.getInstance().setVisible(true);
     }
 }
