@@ -59,6 +59,7 @@ public class HangarPanel extends JPanel {
                         }
                     }
                 }
+                repaint();
             }
         });
     }
@@ -86,6 +87,10 @@ public class HangarPanel extends JPanel {
 
     public BufferedImage getBuffer() {
         return buffer;
+    }
+
+    public void setBuffer(BufferedImage buffer) {
+        this.buffer = buffer;
     }
 
     public void setFlushedBuffer(BufferedImage buffer) {

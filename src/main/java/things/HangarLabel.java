@@ -16,6 +16,8 @@
 
 package things;
 
+import things.enums.ScalingModes;
+
 import javax.swing.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -26,7 +28,9 @@ public class HangarLabel extends JLabel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                HangarState.setResolution(e.getComponent().getSize());
+                if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+                    HangarState.setResolution(e.getComponent().getSize());
+                }
             }
         });
     }
