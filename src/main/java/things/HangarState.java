@@ -17,6 +17,7 @@
 package things;
 
 import things.enums.Keyboards;
+import things.enums.ScalingModes;
 
 import java.awt.*;
 import java.io.File;
@@ -31,6 +32,7 @@ public class HangarState {
     public static final Color COLOR_ELEMENT_LIGHT = new Color(255, 251, 237);
 
     private static Keyboards selectedKeyboard = Keyboards.Default;
+    private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
     private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
@@ -75,6 +77,14 @@ public class HangarState {
                 }
             }
         }
+    }
+
+    public static ScalingModes getScalingMode() {
+        return scalingMode;
+    }
+
+    public static void setScalingMode(ScalingModes mode) {
+        scalingMode = mode;
     }
 
     public static boolean getCanvasClearing() {

@@ -17,6 +17,7 @@
 package things;
 
 import things.enums.Keyboards;
+import things.enums.ScalingModes;
 
 import javax.swing.*;
 import java.awt.*;
@@ -71,9 +72,10 @@ public class HangarMenuBar extends JMenuBar {
         var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing", HangarState.getCanvasClearing());
         var antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing", HangarState.getAntiAliasing());
         var frameRatePopupMenu = new JMenu("Frame rate");
+        var scalingModePopupMenu = new JMenu("Scaling mode");
         var loadSoundbankItem = new JMenuItem("Load soundbank");
         var clearSoundBankItem = new JMenuItem("Clear soundbank");
-        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow resizing", false);
+        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing", false);
         var keyboardPopupMenu = new JMenu("Keyboard");
 
         var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getFrameRate() == 15);
@@ -85,6 +87,14 @@ public class HangarMenuBar extends JMenuBar {
         frameRateRadioGroup.add(radio30FPS);
         frameRateRadioGroup.add(radio60FPS);
         frameRateRadioGroup.add(radioUnlimitedFPS);
+
+        var radioScalingModeNone = new JRadioButtonMenuItem("None", HangarState.getScalingMode() == ScalingModes.None);
+        var radioScalingModeContain = new JRadioButtonMenuItem("Contain", HangarState.getScalingMode() == ScalingModes.Contain);
+        var radioScalingModeChangeResolution = new JRadioButtonMenuItem("Change resolution", HangarState.getScalingMode() == ScalingModes.ChangeResolution);
+        var scalingModeRadioGroup = new ButtonGroup();
+        scalingModeRadioGroup.add(radioScalingModeNone);
+        scalingModeRadioGroup.add(radioScalingModeContain);
+        scalingModeRadioGroup.add(radioScalingModeChangeResolution);
 
         var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
         var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
@@ -99,6 +109,10 @@ public class HangarMenuBar extends JMenuBar {
         radio30FPS.addItemListener(e -> HangarState.setFrameRate(30));
         radio60FPS.addItemListener(e -> HangarState.setFrameRate(60));
         radioUnlimitedFPS.addItemListener(e -> HangarState.setFrameRate(-1));
+
+        radioScalingModeNone.addItemListener(e -> HangarState.setScalingMode(ScalingModes.None));
+        radioScalingModeContain.addItemListener(e -> HangarState.setScalingMode(ScalingModes.Contain));
+        radioScalingModeChangeResolution.addItemListener(e -> HangarState.setScalingMode(ScalingModes.ChangeResolution));
 
         allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
 
@@ -133,10 +147,14 @@ public class HangarMenuBar extends JMenuBar {
         frameRatePopupMenu.add(radio30FPS);
         frameRatePopupMenu.add(radio60FPS);
         frameRatePopupMenu.add(radioUnlimitedFPS);
+        scalingModePopupMenu.add(radioScalingModeNone);
+        scalingModePopupMenu.add(radioScalingModeContain);
+        scalingModePopupMenu.add(radioScalingModeChangeResolution);
 
         optionsMenu.add(canvasClearingCheckBox);
         optionsMenu.add(antiAliasingCheckBox);
         optionsMenu.add(frameRatePopupMenu);
+        optionsMenu.add(scalingModePopupMenu);
         optionsMenu.add(new JSeparator());
         optionsMenu.add(loadSoundbankItem);
         optionsMenu.add(clearSoundBankItem);
