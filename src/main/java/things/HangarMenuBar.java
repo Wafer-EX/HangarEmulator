@@ -82,7 +82,7 @@ public class HangarMenuBar extends JMenuBar {
         var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getFrameRate() == 15);
         var radio30FPS = new JRadioButtonMenuItem("30 FPS", HangarState.getFrameRate() == 30);
         var radio60FPS = new JRadioButtonMenuItem("60 FPS", HangarState.getFrameRate() == 60);
-        var radioUnlimitedFPS = new JRadioButtonMenuItem("Unlimited FPS", HangarState.getFrameRate() == -1);
+        var radioUnlimitedFPS = new JRadioButtonMenuItem("Unlimited", HangarState.getFrameRate() == -1);
         var frameRateRadioGroup = new ButtonGroup();
         frameRateRadioGroup.add(radio15FPS);
         frameRateRadioGroup.add(radio30FPS);
