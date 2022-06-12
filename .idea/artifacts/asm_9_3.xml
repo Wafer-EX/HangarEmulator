@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact name="asm_9.3">
-    <output-path>$PROJECT_DIR$/out/artifacts/asm_9_3</output-path>
-    <root id="root">
-      <element id="library" level="project" name="Gradle: org.ow2.asm:asm:9.3" />
-    </root>
-  </artifact>
-</component>

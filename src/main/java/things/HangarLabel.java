@@ -17,19 +17,17 @@
 package things;
 
 import javax.swing.*;
-import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class HangarLabel extends JLabel {
     public HangarLabel(String text) {
         super(text);
-    }
-
-    @Override
-    public void paintComponent(Graphics graphics) {
-        var resolution = HangarState.getResolution();
-        if (resolution.width != getWidth() || resolution.height != getHeight()) {
-            HangarState.setResolution(getSize());
-        }
-        super.paintComponent(graphics);
+        addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                HangarState.setResolution(e.getComponent().getSize());
+            }
+        });
     }
 }
