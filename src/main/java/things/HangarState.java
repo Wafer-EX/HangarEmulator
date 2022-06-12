@@ -20,9 +20,12 @@ import things.enums.Keyboards;
 import things.enums.ScalingModes;
 
 import java.awt.*;
+import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+
+import static java.awt.event.ComponentEvent.COMPONENT_RESIZED;
 
 public class HangarState {
     public static final Color COLOR_DARK = new Color(16, 55, 72);
@@ -85,6 +88,10 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
+        var hangarPanel = HangarPanel.getInstance();
+        for (var componentListener : hangarPanel.getComponentListeners()) {
+            componentListener.componentResized(new ComponentEvent(hangarPanel, COMPONENT_RESIZED));
+        }
     }
 
     public static boolean getCanvasClearing() {
