@@ -88,6 +88,10 @@ public class HangarPanel extends JPanel {
         return buffer;
     }
 
+    public void setBuffer(BufferedImage buffer) {
+        this.buffer = buffer;
+    }
+
     public void setFlushedBuffer(BufferedImage buffer) {
         this.flushedBuffer = buffer;
     }

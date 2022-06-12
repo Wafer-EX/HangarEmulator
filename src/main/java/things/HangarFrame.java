@@ -44,7 +44,7 @@ public class HangarFrame extends JFrame {
     }
 
     public void setLabel(HangarLabel label) {
-        label.setPreferredSize(new Dimension(240, 320));
+        label.setPreferredSize(new Dimension(360, 360));
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
 
@@ -55,7 +55,9 @@ public class HangarFrame extends JFrame {
     }
 
     public void setHangarPanel() {
+        HangarPanel.getInstance().setSize(HangarState.getResolution());
         if (getLabel() != null) {
+            HangarPanel.getInstance().setPreferredSize(getLabel().getSize());
             this.remove(getLabel());
         }
         this.setJMenuBar(new HangarMenuBar());
