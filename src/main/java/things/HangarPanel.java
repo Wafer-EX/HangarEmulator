@@ -42,7 +42,10 @@ public class HangarPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (HangarState.getScalingMode() == ScalingModes.Contain) {
+                if (HangarState.getScalingMode() == ScalingModes.None) {
+                    newScale = 1.0;
+                }
+                else if (HangarState.getScalingMode() == ScalingModes.Contain) {
                     var horizontalRescale = (double) getWidth() / buffer.getWidth();
                     var verticalRescale = (double) getHeight() / buffer.getHeight();
                     newScale = Math.min(horizontalRescale, verticalRescale);
@@ -116,11 +119,11 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(buffer.getGraphics());
             }
-            graphics.drawImage(buffer.getScaledInstance(width, height, Image.SCALE_FAST), posX, posY, null);
+            graphics.drawImage(buffer.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), posX, posY, null);
         }
 
         if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer.getScaledInstance(width, height, Image.SCALE_FAST), posX, posY, null);
+            graphics.drawImage(flushedBuffer.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), posX, posY, null);
             flushedBuffer = null;
         }
 
