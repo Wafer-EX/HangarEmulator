@@ -16,6 +16,8 @@
 
 package things;
 
+import things.enums.ScalingModes;
+
 import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
@@ -39,13 +41,13 @@ public class HangarPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var size = e.getComponent().getSize();
-                if (size.width > 0 && size.height > 0) {
-                    HangarState.setResolution(size);
-
-                    buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
-                    if (displayable != null) {
-                        displayable.sizeChanged(size.width, size.height);
+                if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+                    var size = e.getComponent().getSize();
+                    if (size.width > 0 && size.height > 0) {
+                        buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
+                        if (displayable != null) {
+                            displayable.sizeChanged(size.width, size.height);
+                        }
                     }
                 }
             }
@@ -87,7 +89,11 @@ public class HangarPanel extends JPanel {
 
     @Override
     public void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
         HangarState.applyRenderingHints(buffer.getGraphics());
+        int posX = getWidth() / 2 - buffer.getWidth() / 2;
+        int posY = getHeight() / 2 - buffer.getHeight() / 2;
+
         if (HangarState.getCanvasClearing()) {
             buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
         }
@@ -99,11 +105,11 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(buffer.getGraphics());
             }
-            graphics.drawImage(buffer, 0, 0, null);
+            graphics.drawImage(buffer, posX, posY, null);
         }
 
         if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer, 0, 0, null);
+            graphics.drawImage(flushedBuffer, posX, posY, null);
             flushedBuffer = null;
         }
 
