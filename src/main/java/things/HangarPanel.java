@@ -59,6 +59,7 @@ public class HangarPanel extends JPanel {
                         }
                     }
                 }
+                repaint();
             }
         });
     }
