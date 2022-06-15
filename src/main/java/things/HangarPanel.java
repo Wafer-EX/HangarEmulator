@@ -16,6 +16,7 @@
 
 package things;
 
+import things.enums.ScalingModes;
 import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Displayable;
@@ -41,9 +42,11 @@ public class HangarPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var hangarPanel = (HangarPanel) e.getComponent();
-                var resolution = e.getComponent().getSize();
-                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+                if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+                    var hangarPanel = (HangarPanel) e.getComponent();
+                    var resolution = e.getComponent().getSize();
+                    HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+                }
             }
         });
     }
