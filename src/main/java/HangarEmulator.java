@@ -36,6 +36,7 @@ public class HangarEmulator {
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);
+            HangarFrame.getInstance().setLocationRelativeTo(null);
         }
         catch (Exception ex) {
             ex.printStackTrace();

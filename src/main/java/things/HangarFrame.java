@@ -25,7 +25,6 @@ public class HangarFrame extends JFrame {
 
     private HangarFrame() {
         this.setTitle("Hangar Emulator");
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
