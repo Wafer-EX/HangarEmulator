@@ -131,8 +131,6 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.setEnabled(true);
         });
         radioScalingModeChangeResolution.addItemListener(e -> {
-            var resolution = MIDletLoader.isLoaded() ? HangarPanel.getInstance().getSize() : HangarLabel.getInstance().getSize();
-            HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), resolution);
             HangarState.setScalingMode(ScalingModes.ChangeResolution);
             resolutionRadioGroup.clearSelection();
             resolutionPopupMenu.setEnabled(false);

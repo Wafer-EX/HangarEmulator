@@ -18,6 +18,7 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.utils.HangarPanelUtils;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -48,9 +49,7 @@ public class HangarState {
     }
 
     public static void setResolution(Dimension resolution) {
-        if (resolution.width > 0 && resolution.height > 0) {
-            currentResolution = resolution;
-        }
+        currentResolution = resolution;
     }
 
     public static int getFrameRate() {
@@ -92,9 +91,10 @@ public class HangarState {
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
         var hangarPanel = HangarPanel.getInstance();
-        for (var componentListener : hangarPanel.getComponentListeners()) {
-            componentListener.componentResized(new ComponentEvent(hangarPanel, COMPONENT_RESIZED));
+        if (mode == ScalingModes.ChangeResolution) {
+            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, hangarPanel.getSize());
         }
+        hangarPanel.repaint();
     }
 
     public static boolean getCanvasClearing() {
