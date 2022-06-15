@@ -62,17 +62,17 @@ public final class HangarPanelUtils {
     }
 
     public static void fitBufferToResolution(HangarPanel hangarPanel) {
-        var resolution = HangarState.getResolution();
-        var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
-        hangarPanel.setBuffer(changedBuffer);
-
-        if (hangarPanel.getDisplayable() != null) {
-            hangarPanel.getDisplayable().sizeChanged(resolution.width, resolution.height);
-        }
+        fitBufferToNewResolution(hangarPanel, HangarState.getResolution());
     }
 
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
+        var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        var displayable = HangarPanel.getInstance().getDisplayable();
+
+        hangarPanel.setBuffer(changedBuffer);
         HangarState.setResolution(resolution);
-        fitBufferToResolution(hangarPanel);
+        if (displayable != null) {
+            displayable.sizeChanged(resolution.width, resolution.height);
+        }
     }
 }
