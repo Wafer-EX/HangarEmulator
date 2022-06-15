@@ -21,11 +21,10 @@ import java.awt.*;
 
 public class HangarFrame extends JFrame {
     private static HangarFrame instance;
-    private JLabel currentLabel;
+    private boolean hangarLabelAdded;
 
     private HangarFrame() {
         this.setTitle("Hangar Emulator");
-        this.setLocationRelativeTo(null);
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
@@ -39,27 +38,25 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public JLabel getLabel() {
-        return currentLabel;
-    }
-
-    public void setLabel(HangarLabel label) {
-        label.setPreferredSize(new Dimension(360, 360));
-        label.setHorizontalAlignment(JLabel.CENTER);
-        label.setVerticalAlignment(JLabel.CENTER);
-
-        this.add(label);
+    public void setHangarLabel() {
+        hangarLabelAdded = true;
+        this.add(HangarLabel.getInstance());
         this.pack();
         this.revalidate();
-        currentLabel = label;
     }
 
     public void setHangarPanel() {
-        HangarPanel.getInstance().setSize(HangarState.getResolution());
-        if (getLabel() != null) {
-            HangarPanel.getInstance().setPreferredSize(getLabel().getSize());
-            this.remove(getLabel());
+        var hangarPanel = HangarPanel.getInstance();
+        var hangarLabel = HangarLabel.getInstance();
+
+        if (hangarLabelAdded) {
+            hangarPanel.setPreferredSize(hangarLabel.getSize());
+            this.remove(hangarLabel);
         }
+        else {
+            hangarPanel.setPreferredSize(new Dimension(360, 360));
+        }
+
         this.setJMenuBar(new HangarMenuBar());
         this.add(HangarPanel.getInstance());
         this.pack();

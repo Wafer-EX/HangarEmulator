@@ -17,6 +17,7 @@
 package things;
 
 import things.enums.ScalingModes;
+import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
@@ -32,34 +33,20 @@ public class HangarPanel extends JPanel {
     private BufferedImage buffer;
     private BufferedImage flushedBuffer;
     private Runnable callSerially;
-    private double newScale = 1.0;
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
-        buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
         setPreferredSize(resolution);
+        buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
 
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (HangarState.getScalingMode() == ScalingModes.None) {
-                    newScale = 1.0;
+                if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+                    var hangarPanel = (HangarPanel) e.getComponent();
+                    var resolution = e.getComponent().getSize();
+                    HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
                 }
-                else if (HangarState.getScalingMode() == ScalingModes.Contain) {
-                    var horizontalRescale = (double) getWidth() / buffer.getWidth();
-                    var verticalRescale = (double) getHeight() / buffer.getHeight();
-                    newScale = Math.min(horizontalRescale, verticalRescale);
-                }
-                else if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
-                    var size = e.getComponent().getSize();
-                    if (size.width > 0 && size.height > 0) {
-                        buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
-                        if (displayable != null) {
-                            displayable.sizeChanged(size.width, size.height);
-                        }
-                    }
-                }
-                repaint();
             }
         });
     }
@@ -109,13 +96,8 @@ public class HangarPanel extends JPanel {
             buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
         }
 
-        int posX = 0, posY = 0, width = buffer.getWidth(), height = buffer.getHeight();
-        if (HangarState.getScalingMode() != ScalingModes.ChangeResolution) {
-            posX = (int) (getWidth() / 2 - buffer.getWidth() * newScale / 2);
-            posY = (int) (getHeight() / 2 - buffer.getHeight() * newScale / 2);
-            width *= newScale;
-            height *= newScale;
-        }
+        var position = HangarPanelUtils.getBufferPosition(this, buffer);
+        var scale = HangarPanelUtils.getBufferScale(this, buffer);
 
         if (displayable != null) {
             if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
@@ -124,11 +106,11 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(buffer.getGraphics());
             }
-            graphics.drawImage(buffer.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), posX, posY, null);
+            graphics.drawImage(buffer.getScaledInstance(scale.width, scale.height, Image.SCALE_AREA_AVERAGING), position.x, position.y, null);
         }
 
         if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer.getScaledInstance(width, height, Image.SCALE_AREA_AVERAGING), posX, posY, null);
+            graphics.drawImage(flushedBuffer.getScaledInstance(scale.width, scale.height, Image.SCALE_AREA_AVERAGING), position.x, position.y, null);
             flushedBuffer = null;
         }
 

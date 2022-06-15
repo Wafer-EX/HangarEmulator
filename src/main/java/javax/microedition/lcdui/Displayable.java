@@ -18,6 +18,7 @@ package javax.microedition.lcdui;
 
 import things.HangarFrame;
 import things.HangarPanel;
+import things.HangarState;
 
 import java.util.ArrayList;
 
@@ -66,11 +67,11 @@ public abstract class Displayable {
     }
 
     public int getWidth() {
-        return HangarPanel.getInstance().getBuffer().getWidth();
+        return HangarState.getResolution().width;
     }
 
     public int getHeight() {
-        return HangarPanel.getInstance().getBuffer().getHeight();
+        return HangarState.getResolution().height;
     }
 
     public void sizeChanged(int w, int h) { }

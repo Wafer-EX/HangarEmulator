@@ -19,12 +19,20 @@ package things;
 import things.enums.ScalingModes;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class HangarLabel extends JLabel {
-    public HangarLabel(String text) {
-        super(text);
+    private static HangarLabel instance;
+
+    private HangarLabel() {
+        super();
+        setPreferredSize(new Dimension(360, 360));
+        setHorizontalAlignment(JLabel.CENTER);
+        setVerticalAlignment(JLabel.CENTER);
+        setText("Please select a file.");
+
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -33,5 +41,12 @@ public class HangarLabel extends JLabel {
                 }
             }
         });
+    }
+
+    public static HangarLabel getInstance() {
+        if (instance == null) {
+            instance = new HangarLabel();
+        }
+        return instance;
     }
 }

@@ -32,10 +32,11 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                HangarFrame.getInstance().setLabel(new HangarLabel("Please select a file."));
+                HangarFrame.getInstance().setHangarLabel();
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);
+            HangarFrame.getInstance().setLocationRelativeTo(null);
         }
         catch (Exception ex) {
             ex.printStackTrace();

@@ -18,6 +18,7 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.utils.HangarPanelUtils;
 
 import java.awt.*;
 import java.awt.event.ComponentEvent;
@@ -34,11 +35,10 @@ public class HangarState {
     public static final Color COLOR_ELEMENT = new Color(255, 239, 141);
     public static final Color COLOR_ELEMENT_LIGHT = new Color(255, 251, 237);
 
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private static Keyboards selectedKeyboard = Keyboards.Default;
     private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
-    private static Dimension currentResolution = new Dimension(360, 360);
+    private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
     private static boolean enableAntiAliasing;
     private static int frameRate = 60;
@@ -49,15 +49,6 @@ public class HangarState {
 
     public static void setResolution(Dimension resolution) {
         currentResolution = resolution;
-        var hangarPanel = HangarPanel.getInstance();
-
-        hangarPanel.setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
-        if (hangarPanel.getDisplayable() != null) {
-            hangarPanel.getDisplayable().sizeChanged(resolution.width, resolution.height);
-        }
-        for (var componentListener : hangarPanel.getComponentListeners()) {
-            componentListener.componentResized(new ComponentEvent(hangarPanel, COMPONENT_RESIZED));
-        }
     }
 
     public static int getFrameRate() {
@@ -98,9 +89,11 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var hangarPanel = HangarPanel.getInstance();
-        for (var componentListener : hangarPanel.getComponentListeners()) {
-            componentListener.componentResized(new ComponentEvent(hangarPanel, COMPONENT_RESIZED));
+        if (scalingMode == ScalingModes.ChangeResolution) {
+            var hangarPanel = HangarPanel.getInstance();
+            var hangarLabel = HangarLabel.getInstance();
+            var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
+            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
         }
     }
 

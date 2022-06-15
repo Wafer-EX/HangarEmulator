@@ -63,4 +63,8 @@ public class MIDletLoader {
     public static String getLastLoadedPath() {
         return midletPath;
     }
+
+    public static boolean isLoaded() {
+        return midlet != null;
+    }
 }
