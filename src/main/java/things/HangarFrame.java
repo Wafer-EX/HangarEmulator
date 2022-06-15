@@ -55,10 +55,10 @@ public class HangarFrame extends JFrame {
     }
 
     public void setHangarPanel() {
-        HangarPanel.getInstance().setSize(HangarState.getResolution());
-        if (getLabel() != null) {
-            HangarPanel.getInstance().setPreferredSize(getLabel().getSize());
-            this.remove(getLabel());
+        HangarPanel.getInstance().setSize(new Dimension(360, 360));
+        if (currentLabel != null) {
+            HangarPanel.getInstance().setPreferredSize(currentLabel.getSize());
+            this.remove(currentLabel);
         }
         this.setJMenuBar(new HangarMenuBar());
         this.add(HangarPanel.getInstance());
