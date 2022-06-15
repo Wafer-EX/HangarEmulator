@@ -35,7 +35,6 @@ public class HangarState {
     public static final Color COLOR_ELEMENT = new Color(255, 239, 141);
     public static final Color COLOR_ELEMENT_LIGHT = new Color(255, 251, 237);
 
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private static Keyboards selectedKeyboard = Keyboards.Default;
     private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
@@ -90,11 +89,12 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var hangarPanel = HangarPanel.getInstance();
-        if (mode == ScalingModes.ChangeResolution) {
-            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, hangarPanel.getSize());
+        if (scalingMode == ScalingModes.ChangeResolution) {
+            var hangarPanel = HangarPanel.getInstance();
+            var hangarLabel = HangarLabel.getInstance();
+            var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
+            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
         }
-        hangarPanel.repaint();
     }
 
     public static boolean getCanvasClearing() {
