@@ -38,7 +38,7 @@ public class HangarState {
     private static Keyboards selectedKeyboard = Keyboards.Default;
     private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
-    private static Dimension currentResolution = new Dimension(360, 360);
+    private static Dimension currentResolution = new Dimension(240, 320);
     private static boolean clearScreen;
     private static boolean enableAntiAliasing;
     private static int frameRate = 60;
@@ -48,15 +48,8 @@ public class HangarState {
     }
 
     public static void setResolution(Dimension resolution) {
-        currentResolution = resolution;
-        var hangarPanel = HangarPanel.getInstance();
-
-        hangarPanel.setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
-        if (hangarPanel.getDisplayable() != null) {
-            hangarPanel.getDisplayable().sizeChanged(resolution.width, resolution.height);
-        }
-        for (var componentListener : hangarPanel.getComponentListeners()) {
-            componentListener.componentResized(new ComponentEvent(hangarPanel, COMPONENT_RESIZED));
+        if (resolution.width > 0 && resolution.height > 0) {
+            currentResolution = resolution;
         }
     }
 

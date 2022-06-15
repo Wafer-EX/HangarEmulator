@@ -16,6 +16,7 @@
 
 package things.utils;
 
+import things.HangarPanel;
 import things.HangarState;
 import things.enums.ScalingModes;
 
@@ -24,6 +25,8 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public final class HangarPanelUtils {
+    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         if (HangarState.getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
@@ -56,5 +59,20 @@ public final class HangarPanelUtils {
             }
         }
         return position;
+    }
+
+    public static void fitBufferToResolution(HangarPanel hangarPanel) {
+        var resolution = HangarState.getResolution();
+        var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        hangarPanel.setBuffer(changedBuffer);
+
+        if (hangarPanel.getDisplayable() != null) {
+            hangarPanel.getDisplayable().sizeChanged(resolution.width, resolution.height);
+        }
+    }
+
+    public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
+        HangarState.setResolution(resolution);
+        fitBufferToResolution(hangarPanel);
     }
 }

@@ -32,7 +32,9 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                HangarFrame.getInstance().setLabel(new HangarLabel("Please select a file."));
+                var hangarLabel = HangarLabel.getInstance();
+                hangarLabel.setText("Please select a file.");
+                HangarFrame.getInstance().setLabel(hangarLabel);
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);

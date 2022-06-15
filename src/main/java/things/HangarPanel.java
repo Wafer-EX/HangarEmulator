@@ -43,13 +43,8 @@ public class HangarPanel extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
-                    var size = e.getComponent().getSize();
-                    if (size.width > 0 && size.height > 0) {
-                        buffer = graphicsConfiguration.createCompatibleImage(size.width, size.height);
-                        if (displayable != null) {
-                            displayable.sizeChanged(size.width, size.height);
-                        }
-                    }
+                    HangarState.setResolution(e.getComponent().getSize());
+                    HangarPanelUtils.fitBufferToResolution((HangarPanel) e.getComponent());
                 }
                 repaint();
             }

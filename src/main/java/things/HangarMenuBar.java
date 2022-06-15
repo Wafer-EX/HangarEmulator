@@ -18,6 +18,7 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.utils.HangarPanelUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -130,15 +131,17 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.setEnabled(true);
         });
         radioScalingModeChangeResolution.addItemListener(e -> {
+            var resolution = MIDletLoader.isLoaded() ? HangarPanel.getInstance().getSize() : HangarLabel.getInstance().getSize();
+            HangarState.setResolution(resolution);
             HangarState.setScalingMode(ScalingModes.ChangeResolution);
             resolutionRadioGroup.clearSelection();
             resolutionPopupMenu.setEnabled(false);
         });
 
-        radioResolution128x128.addItemListener(e -> HangarState.setResolution(new Dimension(128, 128)));
-        radioResolution128x160.addItemListener(e -> HangarState.setResolution(new Dimension(128, 160)));
-        radioResolution176x220.addItemListener(e -> HangarState.setResolution(new Dimension(176, 220)));
-        radioResolution240x320.addItemListener(e -> HangarState.setResolution(new Dimension(240, 320)));
+        radioResolution128x128.addItemListener(e -> HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(128, 128)));
+        radioResolution128x160.addItemListener(e -> HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(128, 160)));
+        radioResolution176x220.addItemListener(e -> HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(176, 220)));
+        radioResolution240x320.addItemListener(e -> HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(240, 320)));
 
         allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
 
