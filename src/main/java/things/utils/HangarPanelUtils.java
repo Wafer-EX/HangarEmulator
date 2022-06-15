@@ -66,12 +66,12 @@ public final class HangarPanelUtils {
             var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
             HangarState.setResolution(resolution);
             hangarPanel.setBuffer(changedBuffer);
+            hangarPanel.updateBufferTransformations();
 
             var displayable = hangarPanel.getDisplayable();
             if (displayable != null) {
                 displayable.sizeChanged(resolution.width, resolution.height);
             }
-            hangarPanel.repaint();
         }
     }
 }

@@ -32,21 +32,25 @@ public class HangarPanel extends JPanel {
     private static Displayable displayable;
     private BufferedImage buffer;
     private BufferedImage flushedBuffer;
+    private Point bufferPosition = new Point(0, 0);
+    private Dimension bufferScale = HangarState.getResolution();
     private Runnable callSerially;
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
         setPreferredSize(resolution);
         buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        SwingUtilities.invokeLater(this::updateBufferTransformations);
 
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                var hangarPanel = (HangarPanel) e.getComponent();
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
-                    var hangarPanel = (HangarPanel) e.getComponent();
                     var resolution = e.getComponent().getSize();
                     HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
                 }
+                hangarPanel.updateBufferTransformations();
             }
         });
     }
@@ -88,6 +92,12 @@ public class HangarPanel extends JPanel {
         this.callSerially = runnable;
     }
 
+    public void updateBufferTransformations() {
+        bufferPosition = HangarPanelUtils.getBufferPosition(this, buffer);
+        bufferScale = HangarPanelUtils.getBufferScale(this, buffer);
+        repaint();
+    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -96,9 +106,6 @@ public class HangarPanel extends JPanel {
             buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
         }
 
-        var position = HangarPanelUtils.getBufferPosition(this, buffer);
-        var scale = HangarPanelUtils.getBufferScale(this, buffer);
-
         if (displayable != null) {
             if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
                 canvas.paint(new javax.microedition.lcdui.Graphics(buffer.getGraphics()));
@@ -106,11 +113,13 @@ public class HangarPanel extends JPanel {
             else if (displayable instanceof javax.microedition.lcdui.List list) {
                 list.paint(buffer.getGraphics());
             }
-            graphics.drawImage(buffer.getScaledInstance(scale.width, scale.height, Image.SCALE_AREA_AVERAGING), position.x, position.y, null);
+            var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
+            graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
         }
 
         if (flushedBuffer != null) {
-            graphics.drawImage(flushedBuffer.getScaledInstance(scale.width, scale.height, Image.SCALE_AREA_AVERAGING), position.x, position.y, null);
+            var scaledFlushedBuffer = flushedBuffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
+            graphics.drawImage(scaledFlushedBuffer, bufferPosition.x, bufferPosition.y, null);
             flushedBuffer = null;
         }
 

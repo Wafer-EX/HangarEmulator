@@ -21,12 +21,9 @@ import things.enums.ScalingModes;
 import things.utils.HangarPanelUtils;
 
 import java.awt.*;
-import java.awt.event.ComponentEvent;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-
-import static java.awt.event.ComponentEvent.COMPONENT_RESIZED;
 
 public class HangarState {
     public static final Color COLOR_DARK = new Color(16, 55, 72);
@@ -89,12 +86,13 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
+        var hangarPanel = HangarPanel.getInstance();
         if (scalingMode == ScalingModes.ChangeResolution) {
-            var hangarPanel = HangarPanel.getInstance();
             var hangarLabel = HangarLabel.getInstance();
             var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
             HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
         }
+        hangarPanel.updateBufferTransformations();
     }
 
     public static boolean getCanvasClearing() {
