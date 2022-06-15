@@ -101,7 +101,7 @@ public class HangarMenuBar extends JMenuBar {
         var radioResolution128x128 = new JRadioButtonMenuItem("128x128", false);
         var radioResolution128x160 = new JRadioButtonMenuItem("128x160", false);
         var radioResolution176x220 = new JRadioButtonMenuItem("176x220", false);
-        var radioResolution240x320 = new JRadioButtonMenuItem("240x320", false);
+        var radioResolution240x320 = new JRadioButtonMenuItem("240x320", true);
         var resolutionRadioGroup = new ButtonGroup();
         resolutionRadioGroup.add(radioResolution128x128);
         resolutionRadioGroup.add(radioResolution128x160);
