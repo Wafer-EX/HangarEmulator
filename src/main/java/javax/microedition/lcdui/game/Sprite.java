@@ -17,6 +17,7 @@
 package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 
 public class Sprite extends Layer {
     public static final int TRANS_NONE = 0;
@@ -28,8 +29,21 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT180 = 1;
     public static final int TRANS_MIRROR_ROT270 = 4;
 
+    public Sprite(Image image) {
+        // TODO: write constructor logic
+    }
+
+    public Sprite(Image image, int frameWidth, int frameHeight) {
+        // TODO: write constructor logic
+    }
+
+    public Sprite(Sprite s) {
+        // TODO: write constructor logic
+    }
+
     @Override
     public void paint(Graphics g) {
+        System.out.println("paint");
         // TODO: write method logic
     }
 }

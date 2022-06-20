@@ -98,6 +98,10 @@ public class RecordStore implements Serializable {
         return recordStore;
     }
 
+    public static RecordStore openRecordStore(String recordStoreName, String vendorName, String suiteName) throws RecordStoreException, RecordStoreNotFoundException {
+        return openRecordStore(recordStoreName, true);
+    }
+
     public void setMode(int authmode, boolean writable) throws RecordStoreException {
         this.authmode = authmode;
         this.writable = writable;
