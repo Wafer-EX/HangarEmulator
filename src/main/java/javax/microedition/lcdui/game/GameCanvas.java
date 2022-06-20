@@ -53,7 +53,8 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        // TODO: write method logic?
+        // TODO: rewrite method logic?
+        g.getSEGraphics().drawImage(additionalBuffer, 0, 0, null);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {

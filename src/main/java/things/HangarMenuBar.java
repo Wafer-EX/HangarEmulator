@@ -107,6 +107,10 @@ public class HangarMenuBar extends JMenuBar {
         resolutionRadioGroup.add(radioResolution128x160);
         resolutionRadioGroup.add(radioResolution176x220);
         resolutionRadioGroup.add(radioResolution240x320);
+        if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
+            resolutionRadioGroup.clearSelection();
+            resolutionPopupMenu.setEnabled(false);
+        }
 
         var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getKeyboard() == Keyboards.Default);
         var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getKeyboard() == Keyboards.Nokia);
