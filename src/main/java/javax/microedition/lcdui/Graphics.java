@@ -16,12 +16,10 @@
 
 package javax.microedition.lcdui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.HangarState;
 import things.utils.FontUtils;
 import things.utils.ImageUtils;
 
-import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -200,11 +198,11 @@ public class Graphics {
         }
     }
 
-    public void drawChar(char character, int x, int y, int anchor) throws NotImplementedException {
+    public void drawChar(char character, int x, int y, int anchor) {
         drawString(String.valueOf(character), x, y, anchor);
     }
 
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws NotImplementedException {
+    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) {
         drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 

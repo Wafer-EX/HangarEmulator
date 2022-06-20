@@ -43,7 +43,6 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) {
-        System.out.println("paint");
         // TODO: write method logic
     }
 }
