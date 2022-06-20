@@ -16,6 +16,8 @@
 
 package com.nokia.mid.ui;
 
+import javax.microedition.lcdui.Image;
+
 public interface DirectGraphics {
     public static final int FLIP_HORIZONTAL = 0x2000;
     public static final int FLIP_VERTICAL = 0x4000;
@@ -38,7 +40,7 @@ public interface DirectGraphics {
 
     public void setARGBColor(int argbColor);
 
-    public void drawImage(javax.microedition.lcdui.Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException;
+    public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException;
 
     public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor);
 
