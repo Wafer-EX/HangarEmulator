@@ -17,9 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.HangarPanel;
-import things.HangarState;
 
-import java.awt.Graphics;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -43,32 +41,8 @@ public class List extends Screen implements Choice {
         strings.addAll(Arrays.asList(stringElements));
     }
 
-    public void paint(Graphics graphics) {
-        graphics.setFont(new java.awt.Font(java.awt.Font.SANS_SERIF, java.awt.Font.BOLD, 14));
-
-        graphics.setColor(HangarState.COLOR_DARK);
-        graphics.fillRect(0, 0, getWidth(), getHeight());
-
-        var metrics = graphics.getFontMetrics(graphics.getFont());
-        var fontHeight = metrics.getHeight();
-
-        for (int i = 0; i < strings.size(); i++) {
-            if (i == selectedElement) {
-                graphics.setColor(HangarState.COLOR_NORMAL);
-                graphics.fillRect(0, fontHeight * i + 16, getWidth(), fontHeight);
-                graphics.setColor(HangarState.COLOR_ELEMENT_LIGHT);
-                graphics.drawString(strings.get(i), 4, fontHeight * (i + 1) + 12);
-            }
-            else {
-                graphics.setColor(HangarState.COLOR_ELEMENT);
-                graphics.drawString(strings.get(i), 4, fontHeight * (i + 1) + 12);
-            }
-        }
-    }
-
     public void runSelectCommand() {
         commandListener.commandAction(selectCommand, this);
-        HangarPanel.getInstance().repaint();
     }
 
     @Override
