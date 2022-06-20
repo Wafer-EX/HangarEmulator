@@ -20,7 +20,6 @@ import things.enums.Keyboards;
 import things.utils.KeyCodeConverter;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.List;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashMap;
@@ -60,20 +59,6 @@ public class HangarKeyListener implements KeyListener {
                 else {
                     canvas.keyPressed(convertedKeyCode);
                 }
-            }
-        }
-        else if (displayable instanceof List list) {
-            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
-            switch (convertedKeyCode) {
-                case Canvas.UP:
-                    list.setSelectedIndex(list.getSelectedIndex() - 1, true);
-                    break;
-                case Canvas.DOWN:
-                    list.setSelectedIndex(list.getSelectedIndex() + 1, true);
-                    break;
-                case Canvas.FIRE:
-                    list.runSelectCommand();
-                    break;
             }
         }
     }

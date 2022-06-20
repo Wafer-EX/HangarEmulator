@@ -58,7 +58,7 @@ public class HangarFrame extends JFrame {
         }
 
         this.setJMenuBar(new HangarMenuBar());
-        this.add(HangarPanel.getInstance());
+        this.add(hangarPanel);
         this.pack();
         this.revalidate();
     }
