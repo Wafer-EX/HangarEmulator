@@ -37,14 +37,12 @@ public abstract class GameCanvas extends Canvas {
 
     private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private BufferedImage additionalBuffer;
-    private BufferedImage flushBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
         additionalBuffer = graphicsConfiguration.createCompatibleImage(width, height);
-        flushBuffer = graphicsConfiguration.createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
@@ -55,26 +53,26 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        // TODO: write method logic?
+        // TODO: rewrite method logic?
+        g.getSEGraphics().drawImage(additionalBuffer, 0, 0, null);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        flushBuffer.getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
-        HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
-        HangarPanel.getInstance().repaint();
+        var hangarPanel = HangarPanel.getInstance();
+        hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+        hangarPanel.repaint();
         HangarState.syncWithFrameRate();
     }
 
     public void flushGraphics() {
-        flushBuffer.getGraphics().drawImage(additionalBuffer, 0, 0, null);
-        HangarPanel.getInstance().setFlushedBuffer(flushBuffer);
-        HangarPanel.getInstance().repaint();
+        var hangarPanel = HangarPanel.getInstance();
+        hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+        hangarPanel.repaint();
         HangarState.syncWithFrameRate();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
         additionalBuffer = graphicsConfiguration.createCompatibleImage(w, h);
-        flushBuffer = graphicsConfiguration.createCompatibleImage(w, h);
     }
 }

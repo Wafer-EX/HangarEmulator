@@ -31,7 +31,6 @@ public class HangarPanel extends JPanel {
     private static HangarPanel instance;
     private static Displayable displayable;
     private BufferedImage buffer;
-    private BufferedImage flushedBuffer;
     private Point bufferPosition = new Point(0, 0);
     private Dimension bufferScale = HangarState.getResolution();
     private Runnable callSerially;
@@ -84,10 +83,6 @@ public class HangarPanel extends JPanel {
         this.buffer = buffer;
     }
 
-    public void setFlushedBuffer(BufferedImage buffer) {
-        this.flushedBuffer = buffer;
-    }
-
     public void setCallSerially(Runnable runnable) {
         this.callSerially = runnable;
     }
@@ -115,12 +110,6 @@ public class HangarPanel extends JPanel {
             }
             var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
             graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
-        }
-
-        if (flushedBuffer != null) {
-            var scaledFlushedBuffer = flushedBuffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
-            graphics.drawImage(scaledFlushedBuffer, bufferPosition.x, bufferPosition.y, null);
-            flushedBuffer = null;
         }
 
         if (callSerially != null) {

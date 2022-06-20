@@ -42,7 +42,10 @@ public final class ImageUtils {
         return alignedY;
     }
 
-    public static BufferedImage rotateImage(BufferedImage originalImage, int width, int height, double theta) {
+    public static BufferedImage rotateImage(BufferedImage originalImage, double theta) {
+        int width = originalImage.getWidth();
+        int height = originalImage.getHeight();
+
         var rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
         var graphics2D = rotatedImage.createGraphics();
 
@@ -51,5 +54,15 @@ public final class ImageUtils {
         graphics2D.drawRenderedImage(originalImage, null);
 
         return rotatedImage;
+    }
+
+    public static BufferedImage mirrorImageHorizontal(BufferedImage originalImage) {
+        var mirroredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        var graphics2D = mirroredImage.createGraphics();
+
+        graphics2D.translate(originalImage.getWidth(), 0);
+        graphics2D.drawImage(originalImage, 0, 0, -originalImage.getWidth(), originalImage.getHeight(), null);
+
+        return mirroredImage;
     }
 }

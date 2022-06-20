@@ -211,41 +211,30 @@ public class Graphics {
     public void drawImage(Image img, int x, int y, int anchor) {
         x = ImageUtils.alignX(img.getWidth(), x, anchor);
         y = ImageUtils.alignY(img.getHeight(), y, anchor);
-        seGraphics.drawImage(img.image, x, y, null);
+        seGraphics.drawImage(img.getSEImage(), x, y, null);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
         if (width > 0 && height > 0) {
-            var bufferedImage = (BufferedImage) src.image;
-            var subImage = bufferedImage.getSubimage(x_src, y_src, width, height);
-
-            x_dest = ImageUtils.alignX(subImage.getWidth(), x_dest, anchor);
-            y_dest = ImageUtils.alignY(subImage.getHeight(), y_dest, anchor);
+            var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
+            x_dest = ImageUtils.alignX(imageRegion.getWidth(), x_dest, anchor);
+            y_dest = ImageUtils.alignY(imageRegion.getHeight(), y_dest, anchor);
 
             switch (transform) {
-                // TODO: write rotation logic for TRANS_MIRROR_ROT90 and TRANS_MIRROR_ROT270
-                case Sprite.TRANS_ROT180:
-                    x_dest += width;
-                    width = -width;
-                    y_dest += height;
-                    height = -height;
-                    break;
-                case Sprite.TRANS_MIRROR:
-                    x_dest += width;
-                    width = -width;
-                    break;
-                case Sprite.TRANS_MIRROR_ROT180:
-                    y_dest += height;
-                    height = -height;
-                    break;
-                case Sprite.TRANS_ROT90:
-                    subImage = ImageUtils.rotateImage(bufferedImage, width, height, Math.PI / 2);
-                    break;
-                case Sprite.TRANS_ROT270:
-                    subImage = ImageUtils.rotateImage(bufferedImage, width, height, Math.PI / 2 * 3);
-                    break;
+                case Sprite.TRANS_NONE -> { }
+                case Sprite.TRANS_ROT90 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2);
+                case Sprite.TRANS_ROT180 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI);
+                case Sprite.TRANS_ROT270 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2 * 3);
+                default -> {
+                    imageRegion = ImageUtils.mirrorImageHorizontal(imageRegion);
+                    switch (transform) {
+                        case Sprite.TRANS_MIRROR_ROT90 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2);
+                        case Sprite.TRANS_MIRROR_ROT180 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI);
+                        case Sprite.TRANS_MIRROR_ROT270 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2 * 3);
+                    }
+                }
             }
-            seGraphics.drawImage(subImage, x_dest, y_dest, width, height, null);
+            seGraphics.drawImage(imageRegion, x_dest, y_dest, width, height, null);
         }
     }
 
