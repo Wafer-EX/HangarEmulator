@@ -17,6 +17,7 @@
 package things.utils;
 
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.game.Sprite;
 import java.awt.image.BufferedImage;
 
 public final class ImageUtils {
@@ -56,13 +57,39 @@ public final class ImageUtils {
         return rotatedImage;
     }
 
+    public static BufferedImage mirrorImageVertical(BufferedImage originalImage) {
+        var mirroredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        var graphics2D = mirroredImage.createGraphics();
+
+        graphics2D.translate(0, originalImage.getHeight());
+        graphics2D.drawImage(originalImage, 0, 0, originalImage.getWidth(), -originalImage.getHeight(), null);
+        return mirroredImage;
+    }
+
     public static BufferedImage mirrorImageHorizontal(BufferedImage originalImage) {
         var mirroredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         var graphics2D = mirroredImage.createGraphics();
 
         graphics2D.translate(originalImage.getWidth(), 0);
         graphics2D.drawImage(originalImage, 0, 0, -originalImage.getWidth(), originalImage.getHeight(), null);
-
         return mirroredImage;
+    }
+
+    public static BufferedImage transformImage(BufferedImage image, int spriteTransformConst) {
+        switch (spriteTransformConst) {
+            case Sprite.TRANS_NONE -> { }
+            case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2);
+            case Sprite.TRANS_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI);
+            case Sprite.TRANS_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3);
+            default -> {
+                image = ImageUtils.mirrorImageHorizontal(image);
+                switch (spriteTransformConst) {
+                    case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2);
+                    case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI);
+                    case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3);
+                }
+            }
+        }
+        return image;
     }
 }

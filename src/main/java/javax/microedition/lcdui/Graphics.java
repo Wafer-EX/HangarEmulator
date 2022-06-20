@@ -16,12 +16,10 @@
 
 package javax.microedition.lcdui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.HangarState;
 import things.utils.FontUtils;
 import things.utils.ImageUtils;
 
-import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -200,11 +198,11 @@ public class Graphics {
         }
     }
 
-    public void drawChar(char character, int x, int y, int anchor) throws NotImplementedException {
+    public void drawChar(char character, int x, int y, int anchor) {
         drawString(String.valueOf(character), x, y, anchor);
     }
 
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws NotImplementedException {
+    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) {
         drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 
@@ -217,24 +215,12 @@ public class Graphics {
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
         if (width > 0 && height > 0) {
             var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
-            x_dest = ImageUtils.alignX(imageRegion.getWidth(), x_dest, anchor);
-            y_dest = ImageUtils.alignY(imageRegion.getHeight(), y_dest, anchor);
+            var transformedImage = ImageUtils.transformImage(imageRegion, transform);
 
-            switch (transform) {
-                case Sprite.TRANS_NONE -> { }
-                case Sprite.TRANS_ROT90 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2);
-                case Sprite.TRANS_ROT180 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI);
-                case Sprite.TRANS_ROT270 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2 * 3);
-                default -> {
-                    imageRegion = ImageUtils.mirrorImageHorizontal(imageRegion);
-                    switch (transform) {
-                        case Sprite.TRANS_MIRROR_ROT90 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2);
-                        case Sprite.TRANS_MIRROR_ROT180 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI);
-                        case Sprite.TRANS_MIRROR_ROT270 -> imageRegion = ImageUtils.rotateImage(imageRegion, Math.PI / 2 * 3);
-                    }
-                }
-            }
-            seGraphics.drawImage(imageRegion, x_dest, y_dest, width, height, null);
+            x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
+            y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
+
+            seGraphics.drawImage(transformedImage, x_dest, y_dest, width, height, null);
         }
     }
 

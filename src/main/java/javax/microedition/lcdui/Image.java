@@ -16,9 +16,9 @@
 
 package javax.microedition.lcdui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.HangarState;
 import things.MIDletResources;
+import things.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -80,9 +80,13 @@ public class Image {
         }
     }
 
-    public static Image createImage(Image image, int x, int y, int width, int height, int transform) throws NotImplementedException {
-        // TODO: write method logic
-        throw new NotImplementedException("createImage");
+    public static Image createImage(Image image, int x, int y, int width, int height, int transform) throws NullPointerException, IllegalArgumentException {
+        if (image == null) {
+            throw new NullPointerException();
+        }
+        var imageRegion = image.getSEImage().getSubimage(x, y, width, height);
+        var transformedImage = ImageUtils.transformImage(imageRegion, transform);
+        return new Image(transformedImage, false);
     }
 
     public Graphics getGraphics() throws IllegalStateException {
@@ -97,11 +101,11 @@ public class Image {
     }
 
     public int getWidth() {
-        return seImage.getWidth(null);
+        return seImage.getWidth();
     }
 
     public int getHeight() {
-        return seImage.getHeight(null);
+        return seImage.getHeight();
     }
 
     public boolean isMutable() {

@@ -17,6 +17,7 @@
 package things.implementations.nokia;
 
 import com.nokia.mid.ui.DirectGraphics;
+import things.utils.nokiautils.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -36,7 +37,8 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
-        meGraphics.drawImage(img, x, y, anchor);
+        var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
+        meGraphics.drawImage(image, x, y, anchor);
     }
 
     @Override
