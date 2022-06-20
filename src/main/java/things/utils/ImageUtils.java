@@ -57,13 +57,21 @@ public final class ImageUtils {
         return rotatedImage;
     }
 
+    public static BufferedImage mirrorImageVertical(BufferedImage originalImage) {
+        var mirroredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
+        var graphics2D = mirroredImage.createGraphics();
+
+        graphics2D.translate(0, originalImage.getHeight());
+        graphics2D.drawImage(originalImage, 0, 0, originalImage.getWidth(), -originalImage.getHeight(), null);
+        return mirroredImage;
+    }
+
     public static BufferedImage mirrorImageHorizontal(BufferedImage originalImage) {
         var mirroredImage = new BufferedImage(originalImage.getWidth(), originalImage.getHeight(), BufferedImage.TYPE_INT_ARGB);
         var graphics2D = mirroredImage.createGraphics();
 
         graphics2D.translate(originalImage.getWidth(), 0);
         graphics2D.drawImage(originalImage, 0, 0, -originalImage.getWidth(), originalImage.getHeight(), null);
-
         return mirroredImage;
     }
 
