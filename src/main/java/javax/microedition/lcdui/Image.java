@@ -27,12 +27,16 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Image {
-    public final BufferedImage image;
+    private final BufferedImage seImage;
     private final boolean isMutable;
 
     public Image(BufferedImage image, boolean isMutable) {
-        this.image = image;
+        this.seImage = image;
         this.isMutable = isMutable;
+    }
+
+    public BufferedImage getSEImage() {
+        return seImage;
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {
@@ -45,7 +49,7 @@ public class Image {
         }
         else {
             if (source.isMutable()) {
-                var bufferedImage = (BufferedImage) source.image;
+                var bufferedImage = (BufferedImage) source.seImage;
                 var colorModel = bufferedImage.getColorModel();
                 var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
                 var writableRaster = bufferedImage.copyData(null);
@@ -69,8 +73,7 @@ public class Image {
         }
         try {
             var imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            var image = createImage(imageInputStream);
-            return image;
+            return createImage(imageInputStream);
         }
         catch (IOException ex) {
             throw new IllegalArgumentException(ex);
@@ -84,7 +87,7 @@ public class Image {
 
     public Graphics getGraphics() throws IllegalStateException {
         if (isMutable()) {
-            var graphics = image.getGraphics();
+            var graphics = seImage.getGraphics();
             HangarState.applyRenderingHints(graphics);
             return new Graphics(graphics);
         }
@@ -94,11 +97,11 @@ public class Image {
     }
 
     public int getWidth() {
-        return image.getWidth(null);
+        return seImage.getWidth(null);
     }
 
     public int getHeight() {
-        return image.getHeight(null);
+        return seImage.getHeight(null);
     }
 
     public boolean isMutable() {
@@ -111,8 +114,7 @@ public class Image {
         }
         try {
             var bufferedImage = ImageIO.read(stream);
-            var image = new Image(bufferedImage, false);
-            return image;
+            return new Image(bufferedImage, false);
         }
         catch (IOException e) {
             throw new IllegalArgumentException(e);
@@ -126,6 +128,6 @@ public class Image {
     }
 
     public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        image.getRGB(x, y, width, height, rgbData, offset, scanlength);
+        seImage.getRGB(x, y, width, height, rgbData, offset, scanlength);
     }
 }
