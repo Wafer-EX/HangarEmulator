@@ -16,7 +16,6 @@
 
 package javax.microedition.media;
 
-// TODO: write interface methods
 public interface Player extends Controllable {
     public static final int UNREALIZED = 100;
     public static final int REALIZED = 200;
@@ -25,29 +24,31 @@ public interface Player extends Controllable {
     public static final int CLOSED = 0;
     public static final long TIME_UNKNOWN = -1;
 
-    public void realize() throws MediaException;
+    public void realize() throws IllegalStateException, MediaException, SecurityException;
 
-    public long setMediaTime(long now) throws MediaException;
+    public void prefetch() throws IllegalStateException, MediaException, SecurityException;
 
-    public long getMediaTime();
+    public void start() throws IllegalStateException, MediaException, SecurityException;
+
+    public void stop() throws IllegalStateException, MediaException;
+
+    public void deallocate() throws IllegalStateException;
+
+    public void close();
+
+    public long setMediaTime(long now) throws IllegalStateException, MediaException;
+
+    public long getMediaTime() throws IllegalStateException;
 
     public int getState();
 
     public long getDuration() throws IllegalStateException;
 
-    public void prefetch();
+    public String getContentType() throws IllegalStateException;
 
-    public void start();
+    public void setLoopCount(int count) throws IllegalArgumentException, IllegalStateException;
 
-    public void stop();
+    public void addPlayerListener(PlayerListener playerListener) throws IllegalStateException;
 
-    public void deallocate();
-
-    public void close();
-
-    public void setLoopCount(int count);
-
-    public void addPlayerListener(PlayerListener playerListener);
-
-    public void removePlayerListener(PlayerListener playerListener);
+    public void removePlayerListener(PlayerListener playerListener) throws IllegalStateException;
 }

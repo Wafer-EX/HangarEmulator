@@ -18,7 +18,6 @@ package things.implementations;
 
 import things.HangarAudio;
 import things.implementations.additions.MidiVolumeControl;
-import things.implementations.additions.PlayerMetaEventListener;
 
 import javax.microedition.media.*;
 import javax.sound.midi.Sequencer;
@@ -34,7 +33,18 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.setSequence(stream);
             sequencer.setLoopCount(1);
             sequencer.setMicrosecondPosition(0);
-            sequencer.addMetaEventListener(new PlayerMetaEventListener(this));
+            sequencer.addMetaEventListener(meta -> {
+                if (meta.getType() == 47) {
+                    for (var playerListener : getPlayerListeners()) {
+                        playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
+                    }
+                    if (getLoopCount() > 0 || getLoopCount() == -1) {
+                        for (var playerListener : getPlayerListeners()) {
+                            playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                        }
+                    }
+                }
+            });
             setState(PREFETCHED);
         }
         catch (Exception exception) {
@@ -69,6 +79,11 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public String getContentType() throws IllegalStateException {
+        return "audio/midi";
+    }
+
+    @Override
     public void prefetch() {
         // TODO: write method logic
         if (getState() == CLOSED) {
@@ -88,7 +103,7 @@ public class MidiPlayer extends ExtendedPlayer {
             }
             sequencer.start();
             setState(STARTED);
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
             }
         }
@@ -99,7 +114,7 @@ public class MidiPlayer extends ExtendedPlayer {
         if (sequencer.isRunning()) {
             sequencer.stop();
             setState(PREFETCHED);
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
             }
         }
@@ -110,7 +125,7 @@ public class MidiPlayer extends ExtendedPlayer {
         if (getState() != CLOSED) {
             setState(CLOSED);
             sequencer.close();
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
             }
         }
