@@ -138,8 +138,9 @@ public class HangarState {
         }
     }
 
-    public static void applyRenderingHints(Graphics graphics) {
+    public static Graphics2D applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        return graphics2d;
     }
 }
