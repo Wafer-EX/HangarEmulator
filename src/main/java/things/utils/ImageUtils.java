@@ -51,9 +51,10 @@ public final class ImageUtils {
         var graphics2D = rotatedImage.createGraphics();
 
         if (flipDimensions) {
-            graphics2D.translate((width - height) / 2, (width - height) / 2);
+            int translate = (width - height) >> 1;
+            graphics2D.translate(translate, translate);
         }
-        graphics2D.rotate(theta, width >> 1, height >> 1);
+        graphics2D.rotate(theta, width / 2.0, height / 2.0);
         graphics2D.drawRenderedImage(originalImage, null);
 
         return rotatedImage;
