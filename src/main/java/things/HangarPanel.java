@@ -31,6 +31,7 @@ import java.awt.image.BufferedImage;
 
 public class HangarPanel extends JPanel {
     private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+    private javax.microedition.lcdui.Graphics meGraphics;
     private static HangarPanel instance;
     private static Displayable displayable;
     private BufferedImage buffer;
@@ -40,7 +41,7 @@ public class HangarPanel extends JPanel {
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
-        buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
@@ -91,6 +92,7 @@ public class HangarPanel extends JPanel {
     }
 
     public void setBuffer(BufferedImage buffer) {
+        this.meGraphics = new javax.microedition.lcdui.Graphics(buffer.getGraphics());
         this.buffer = buffer;
     }
 
@@ -114,7 +116,7 @@ public class HangarPanel extends JPanel {
 
         if (displayable != null) {
             if (displayable instanceof Canvas canvas) {
-                canvas.paint(new javax.microedition.lcdui.Graphics(buffer.getGraphics()));
+                canvas.paint(meGraphics);
                 var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
                 graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
             }
