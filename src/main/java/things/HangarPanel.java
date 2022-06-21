@@ -41,10 +41,8 @@ public class HangarPanel extends JPanel {
     private HangarPanel() {
         var resolution = HangarState.getResolution();
         buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
-
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
-        SwingUtilities.invokeLater(this::updateBufferTransformations);
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -79,6 +77,7 @@ public class HangarPanel extends JPanel {
             hangarFrame.setHangarPanel();
             hangarFrame.requestFocus();
             canvas.showNotify();
+            updateBufferTransformations();
         }
         else if (displayable instanceof List list) {
             HangarPanelUtils.displayMEList(this, list);
