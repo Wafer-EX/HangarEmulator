@@ -44,10 +44,6 @@ public class WavPlayer extends ExtendedPlayer {
         }
     }
 
-    public Clip getClip() {
-        return clip;
-    }
-
     @Override
     public long setMediaTime(long now) throws MediaException {
         if (getState() == UNREALIZED || getState() == CLOSED) {
@@ -68,6 +64,11 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public String getContentType() throws IllegalStateException {
+        return "audio/x-wav";
+    }
+
+    @Override
     public void prefetch() {
         setState(PREFETCHED);
     }
@@ -81,7 +82,7 @@ public class WavPlayer extends ExtendedPlayer {
             clip.setMicrosecondPosition(0);
             clip.start();
             setState(STARTED);
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
             }
         }
@@ -92,7 +93,7 @@ public class WavPlayer extends ExtendedPlayer {
         if (getState() != PREFETCHED) {
             clip.stop();
             setState(PREFETCHED);
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
             }
         }
@@ -103,7 +104,7 @@ public class WavPlayer extends ExtendedPlayer {
         if (getState() != CLOSED) {
             clip.close();
             setState(CLOSED);
-            for (var playerListener : playerListeners) {
+            for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
             }
         }

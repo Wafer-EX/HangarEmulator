@@ -20,6 +20,7 @@ import things.HangarPanel;
 import things.HangarState;
 import things.enums.ScalingModes;
 
+import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -71,6 +72,31 @@ public final class HangarPanelUtils {
             var displayable = hangarPanel.getDisplayable();
             if (displayable != null) {
                 displayable.sizeChanged(resolution.width, resolution.height);
+            }
+        }
+    }
+
+    public static void displayMEList(HangarPanel panel, List meList) {
+        var layout = new GridLayout(6, 1, 4, 4);
+        panel.setLayout(layout);
+
+        for (int i = 0; i < meList.size(); i++) {
+            var button = new JButton(meList.getString(i));
+            int selectedIndex = i;
+
+            button.addActionListener(e -> {
+                meList.setSelectedIndex(selectedIndex, true);
+                meList.runSelectCommand();
+            });
+            panel.add(button);
+        }
+
+        if (meList.getCommands().size() > 0) {
+            panel.add(new JLabel("Options:", SwingConstants.CENTER));
+            for (var command : meList.getCommands()) {
+                var button = new JButton(command.getLabel());
+                button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
+                panel.add(button);
             }
         }
     }
