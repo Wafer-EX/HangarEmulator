@@ -23,6 +23,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -39,10 +40,12 @@ public class HangarPanel extends JPanel {
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
+        var layout = new GridLayout(6, 1, 4, 4);
         buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
 
+        setLayout(layout);
+        setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
-        setLayout(new GridLayout(5, 1));
         SwingUtilities.invokeLater(this::updateBufferTransformations);
 
         addComponentListener(new ComponentAdapter() {
@@ -83,6 +86,7 @@ public class HangarPanel extends JPanel {
             HangarPanelUtils.displayMEList(this, list);
         }
         revalidate();
+        repaint();
     }
 
     public BufferedImage getBuffer() {
