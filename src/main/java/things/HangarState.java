@@ -32,7 +32,7 @@ public class HangarState {
     public static final Color COLOR_ELEMENT = new Color(255, 239, 141);
     public static final Color COLOR_ELEMENT_LIGHT = new Color(255, 251, 237);
 
-    private static Keyboards selectedKeyboard = Keyboards.Default;
+    private static Keyboards selectedKeyboard = Keyboards.Nokia;
     private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
     private static Dimension currentResolution = new Dimension(240, 320);
