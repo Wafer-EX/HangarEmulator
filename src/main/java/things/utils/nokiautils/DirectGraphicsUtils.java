@@ -24,13 +24,13 @@ import java.awt.image.BufferedImage;
 public class DirectGraphicsUtils {
     public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
         if ((manipulation & DirectGraphics.ROTATE_90) == DirectGraphics.ROTATE_90) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2);
+            image = ImageUtils.rotateImage(image, -Math.PI / 2, true);
         }
         if ((manipulation & DirectGraphics.ROTATE_180) == DirectGraphics.ROTATE_180) {
-            image = ImageUtils.rotateImage(image, -Math.PI);
+            image = ImageUtils.rotateImage(image, -Math.PI, false);
         }
         if ((manipulation & DirectGraphics.ROTATE_270) == DirectGraphics.ROTATE_270) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2 * 3);
+            image = ImageUtils.rotateImage(image, -Math.PI / 2 * 3, true);
         }
         if ((manipulation & DirectGraphics.FLIP_VERTICAL) == DirectGraphics.FLIP_VERTICAL) {
             image = ImageUtils.mirrorImageVertical(image);

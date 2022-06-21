@@ -26,12 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HangarState {
-    public static final Color COLOR_DARK = new Color(16, 55, 72);
-    public static final Color COLOR_NORMAL = new Color(33, 112, 145);
-    public static final Color COLOR_LIGHT = new Color(77, 194, 204);
-    public static final Color COLOR_ELEMENT = new Color(255, 239, 141);
-    public static final Color COLOR_ELEMENT_LIGHT = new Color(255, 251, 237);
-
     private static Keyboards selectedKeyboard = Keyboards.Nokia;
     private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;

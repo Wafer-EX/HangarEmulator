@@ -43,15 +43,18 @@ public final class ImageUtils {
         return alignedY;
     }
 
-    public static BufferedImage rotateImage(BufferedImage originalImage, double theta) {
-        int width = originalImage.getWidth();
-        int height = originalImage.getHeight();
+    public static BufferedImage rotateImage(BufferedImage originalImage, double theta, boolean flipDimensions) {
+        int width = flipDimensions ? originalImage.getHeight() : originalImage.getWidth();
+        int height = flipDimensions ? originalImage.getWidth() : originalImage.getHeight();
 
-        var rotatedImage = new BufferedImage(height, width, BufferedImage.TYPE_INT_ARGB);
+        var rotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         var graphics2D = rotatedImage.createGraphics();
 
-        graphics2D.translate((height - width) >> 1, (height - width) >> 1);
-        graphics2D.rotate(theta, height >> 1, width >> 1);
+        if (flipDimensions) {
+            int translate = (width - height) >> 1;
+            graphics2D.translate(translate, translate);
+        }
+        graphics2D.rotate(theta, width / 2.0, height / 2.0);
         graphics2D.drawRenderedImage(originalImage, null);
 
         return rotatedImage;
@@ -78,15 +81,15 @@ public final class ImageUtils {
     public static BufferedImage transformImage(BufferedImage image, int spriteTransformConst) {
         switch (spriteTransformConst) {
             case Sprite.TRANS_NONE -> { }
-            case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2);
-            case Sprite.TRANS_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI);
-            case Sprite.TRANS_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3);
+            case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
+            case Sprite.TRANS_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI, false);
+            case Sprite.TRANS_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3, true);
             default -> {
                 image = ImageUtils.mirrorImageHorizontal(image);
                 switch (spriteTransformConst) {
-                    case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2);
-                    case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI);
-                    case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3);
+                    case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
+                    case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI, false);
+                    case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3, true);
                 }
             }
         }
