@@ -16,8 +16,6 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarPanel;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -25,7 +23,7 @@ public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
     private final ArrayList<String> strings = new ArrayList();
-    private int listType;
+    private final int listType;
     private Ticker ticker;
     private Command selectCommand = SELECT_COMMAND;
     private int fitPolicy = TEXT_WRAP_DEFAULT;
@@ -119,7 +117,6 @@ public class List extends Screen implements Choice {
         else {
             selectedElement = elementNum;
         }
-        HangarPanel.getInstance().repaint();
     }
 
     @Override
@@ -133,12 +130,7 @@ public class List extends Screen implements Choice {
     }
 
     public void setSelectCommand(Command command) {
-        if (command == null) {
-            selectCommand = SELECT_COMMAND;
-        }
-        else {
-            selectCommand = command;
-        }
+        selectCommand = command == null ? SELECT_COMMAND : command;
     }
 
     @Override

@@ -19,7 +19,9 @@ package things;
 import things.enums.ScalingModes;
 import things.utils.HangarPanelUtils;
 
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -71,23 +73,14 @@ public class HangarPanel extends JPanel {
         removeAll();
         HangarPanel.displayable = displayable;
 
-        if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
+        if (displayable instanceof Canvas canvas) {
             var hangarFrame = HangarFrame.getInstance();
             hangarFrame.setHangarPanel();
             hangarFrame.requestFocus();
             canvas.showNotify();
         }
-        else if (displayable instanceof javax.microedition.lcdui.List list) {
-            for (int i = 0; i < list.size(); i++) {
-                var button = new JButton(list.getString(i));
-                this.add(button);
-
-                int selectedIndex = i;
-                button.addActionListener(e -> {
-                    list.setSelectedIndex(selectedIndex, true);
-                    list.runSelectCommand();
-                });
-            }
+        else if (displayable instanceof List list) {
+            HangarPanelUtils.displayMEList(this, list);
         }
         revalidate();
     }
@@ -119,7 +112,7 @@ public class HangarPanel extends JPanel {
         }
 
         if (displayable != null) {
-            if (displayable instanceof javax.microedition.lcdui.Canvas canvas) {
+            if (displayable instanceof Canvas canvas) {
                 canvas.paint(new javax.microedition.lcdui.Graphics(buffer.getGraphics()));
                 var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
                 graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
