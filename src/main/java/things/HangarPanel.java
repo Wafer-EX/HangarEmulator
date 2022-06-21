@@ -40,10 +40,8 @@ public class HangarPanel extends JPanel {
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
-        var layout = new GridLayout(6, 1, 4, 4);
         buffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
 
-        setLayout(layout);
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
         SwingUtilities.invokeLater(this::updateBufferTransformations);

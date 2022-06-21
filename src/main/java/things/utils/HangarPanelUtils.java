@@ -77,6 +77,9 @@ public final class HangarPanelUtils {
     }
 
     public static void displayMEList(HangarPanel panel, List meList) {
+        var layout = new GridLayout(6, 1, 4, 4);
+        panel.setLayout(layout);
+
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));
             int selectedIndex = i;
