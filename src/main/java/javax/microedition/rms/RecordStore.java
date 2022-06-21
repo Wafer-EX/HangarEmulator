@@ -117,11 +117,11 @@ public class RecordStore implements Serializable {
 
     public static String[] listRecordStores() {
         var appFiles = new File(getRecordsPath()).listFiles();
-        if (appFiles.length == 0) {
+        if (appFiles == null || appFiles.length == 0) {
             return null;
         }
         else {
-            String[] appFileNames = new String[appFiles.length];
+            var appFileNames = new String[appFiles.length];
             for (int i = 0; i < appFiles.length; i++) {
                 appFileNames[i] = appFiles[i].getName();
             }

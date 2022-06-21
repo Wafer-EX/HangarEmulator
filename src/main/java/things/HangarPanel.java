@@ -76,8 +76,8 @@ public class HangarPanel extends JPanel {
             var hangarFrame = HangarFrame.getInstance();
             hangarFrame.setHangarPanel();
             hangarFrame.requestFocus();
-            canvas.showNotify();
             updateBufferTransformations();
+            canvas.showNotify();
         }
         else if (displayable instanceof List list) {
             HangarPanelUtils.displayMEList(this, list);
