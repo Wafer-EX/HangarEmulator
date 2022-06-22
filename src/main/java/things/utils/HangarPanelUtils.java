@@ -56,9 +56,13 @@ public final class HangarPanelUtils {
     public static void repaintBufferRegion(HangarPanel hangarPanel, int x, int y, int width, int height) {
         var scaleFactor = hangarPanel.getBufferScaleFactor();
         var position = hangarPanel.getBufferPosition();
-        int newWidth = (int) (width * scaleFactor);
-        int newHeight = (int) (height * scaleFactor);
-        hangarPanel.repaint(x + position.x, y + position.y, newWidth, newHeight);
+
+        x += position.x;
+        y += position.y;
+        width *= scaleFactor;
+        height *= scaleFactor;
+
+        hangarPanel.repaint(x, y, width, height);
     }
 
     public static void displayMEList(HangarPanel hangarPanel, List meList) {
