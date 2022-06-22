@@ -57,7 +57,7 @@ public abstract class Displayable {
     }
 
     public void removeCommand(Command cmd) {
-        if (cmd != null && commandList.contains(cmd)) {
+        if (cmd != null) {
             commandList.remove(cmd);
         }
     }
