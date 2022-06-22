@@ -21,8 +21,6 @@ import things.HangarState;
 import things.utils.CanvasUtils;
 import things.utils.HangarPanelUtils;
 
-import java.awt.*;
-
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
     public static final int DOWN = 6;
@@ -85,7 +83,6 @@ public abstract class Canvas extends Displayable {
 
     public final void repaint(int x, int y, int width, int height) {
         var panel = HangarPanel.getInstance();
-        var buffer = panel.getBuffer();
         HangarPanelUtils.repaintBufferRegion(panel, x, y, width, height);
         HangarState.syncWithFrameRate();
     }
