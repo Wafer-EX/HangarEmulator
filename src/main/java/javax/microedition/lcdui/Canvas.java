@@ -46,7 +46,7 @@ public abstract class Canvas extends Displayable {
 
     protected Canvas() { }
 
-    public boolean hasPointerEvents(){
+    public boolean hasPointerEvents() {
         return false;
     }
 
