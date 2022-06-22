@@ -237,9 +237,11 @@ public class Graphics {
     }
 
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
-        var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
-        image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
-        seGraphics.drawImage(image, x, y, null);
+        if (width > 0 && height > 0) {
+            var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+            image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
+            seGraphics.drawImage(image, x, y, null);
+        }
     }
 
     public int getDisplayColor(int color) {
