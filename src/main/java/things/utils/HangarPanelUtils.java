@@ -39,26 +39,16 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static Dimension getBufferScale(JPanel panel, BufferedImage buffer) {
-        var scaleFactor = getBufferScaleFactor(panel, buffer);
+    public static Dimension getBufferScale(BufferedImage buffer, double scaleFactor) {
         int width = (int) (buffer.getWidth() * scaleFactor);
         int height = (int) (buffer.getHeight() * scaleFactor);
         return new Dimension(width, height);
     }
 
-    public static Point getBufferPosition(JPanel panel, BufferedImage buffer) {
-        var position = new Point(0, 0);
-        switch (HangarState.getScalingMode()) {
-            case None -> {
-                position.x = panel.getWidth() / 2 - buffer.getWidth() / 2;
-                position.y = panel.getHeight() / 2 - buffer.getHeight() / 2;
-            }
-            case Contain -> {
-                var scaleFactor = getBufferScaleFactor(panel, buffer);
-                position.x = (int) (panel.getWidth() / 2 - buffer.getWidth() * scaleFactor / 2);
-                position.y = (int) (panel.getHeight() / 2 - buffer.getHeight() * scaleFactor / 2);
-            }
-        }
+    public static Point getBufferPosition(JPanel panel, BufferedImage buffer, double scaleFactor) {
+        var position = new Point();
+        position.x = (int) (panel.getWidth() / 2 - buffer.getWidth() * scaleFactor / 2);
+        position.y = (int) (panel.getHeight() / 2 - buffer.getHeight() * scaleFactor / 2);
         return position;
     }
 
@@ -76,12 +66,12 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static void repaintBufferRegion(HangarPanel hangarPanel, BufferedImage buffer, int x, int y, int width, int height) {
-        var scaleFactor = getBufferScaleFactor(hangarPanel, buffer);
-        var position = HangarPanel.getInstance().getBufferPosition();
+    public static void repaintBufferRegion(HangarPanel hangarPanel, int x, int y, int width, int height) {
+        var scaleFactor = hangarPanel.getBufferScaleFactor();
+        var position = hangarPanel.getBufferPosition();
         int newWidth = (int) (width * scaleFactor);
         int newHeight = (int) (height * scaleFactor);
-        HangarPanel.getInstance().repaint(x + position.x, y + position.y, newWidth, newHeight);
+        hangarPanel.repaint(x + position.x, y + position.y, newWidth, newHeight);
     }
 
     public static void displayMEList(HangarPanel hangarPanel, List meList) {

@@ -86,7 +86,7 @@ public abstract class Canvas extends Displayable {
     public final void repaint(int x, int y, int width, int height) {
         var panel = HangarPanel.getInstance();
         var buffer = panel.getBuffer();
-        HangarPanelUtils.repaintBufferRegion(panel, buffer, x, y, width, height);
+        HangarPanelUtils.repaintBufferRegion(panel, x, y, width, height);
         HangarState.syncWithFrameRate();
     }
 

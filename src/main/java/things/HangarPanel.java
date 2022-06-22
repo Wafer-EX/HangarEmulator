@@ -35,6 +35,7 @@ public class HangarPanel extends JPanel {
     private static Displayable displayable;
     private BufferedImage buffer;
     private Point bufferPosition = new Point(0, 0);
+    private double bufferScaleFactor = 1.0;
     private Dimension bufferScale = HangarState.getResolution();
     private Runnable callSerially;
 
@@ -98,13 +99,18 @@ public class HangarPanel extends JPanel {
         return bufferPosition;
     }
 
+    public double getBufferScaleFactor() {
+        return bufferScaleFactor;
+    }
+
     public void setCallSerially(Runnable runnable) {
         this.callSerially = runnable;
     }
 
     public void updateBufferTransformations() {
-        bufferPosition = HangarPanelUtils.getBufferPosition(this, buffer);
-        bufferScale = HangarPanelUtils.getBufferScale(this, buffer);
+        bufferScaleFactor = HangarPanelUtils.getBufferScaleFactor(this, buffer);
+        bufferPosition = HangarPanelUtils.getBufferPosition(this, buffer, bufferScaleFactor);
+        bufferScale = HangarPanelUtils.getBufferScale(buffer, bufferScaleFactor);
         repaint();
     }
 
