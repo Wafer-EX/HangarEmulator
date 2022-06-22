@@ -20,6 +20,8 @@ import things.HangarPanel;
 import things.HangarState;
 import things.utils.CanvasUtils;
 
+import java.awt.*;
+
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
     public static final int DOWN = 6;
@@ -81,13 +83,17 @@ public abstract class Canvas extends Displayable {
     public void keyReleased(int keyCode) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        HangarPanel.getInstance().repaint(x, y, width, height);
+        var panel = HangarPanel.getInstance();
+        var graphics2d = (Graphics2D) panel.getBuffer().getGraphics();
+
+        graphics2d.drawRect(x, y, width, height);
+        panel.repaint();
         HangarState.syncWithFrameRate();
     }
 
     public final void repaint() {
-        HangarPanel.getInstance().repaint();
-        HangarState.syncWithFrameRate();
+        var resolution = HangarState.getResolution();
+        repaint(0, 0, resolution.width, resolution.height);
     }
 
     public final void serviceRepaints() {
