@@ -39,29 +39,6 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static Dimension getBufferScale(JPanel panel, BufferedImage buffer) {
-        var scaleFactor = getBufferScaleFactor(panel, buffer);
-        int width = (int) (buffer.getWidth() * scaleFactor);
-        int height = (int) (buffer.getHeight() * scaleFactor);
-        return new Dimension(width, height);
-    }
-
-    public static Point getBufferPosition(JPanel panel, BufferedImage buffer) {
-        var position = new Point(0, 0);
-        switch (HangarState.getScalingMode()) {
-            case None -> {
-                position.x = panel.getWidth() / 2 - buffer.getWidth() / 2;
-                position.y = panel.getHeight() / 2 - buffer.getHeight() / 2;
-            }
-            case Contain -> {
-                var scaleFactor = getBufferScaleFactor(panel, buffer);
-                position.x = (int) (panel.getWidth() / 2 - buffer.getWidth() * scaleFactor / 2);
-                position.y = (int) (panel.getHeight() / 2 - buffer.getHeight() * scaleFactor / 2);
-            }
-        }
-        return position;
-    }
-
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
@@ -76,9 +53,21 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static void displayMEList(HangarPanel panel, List meList) {
+    public static void repaintBufferRegion(HangarPanel hangarPanel, int x, int y, int width, int height) {
+        var scaleFactor = hangarPanel.getBufferScaleFactor();
+        var position = hangarPanel.getBufferPosition();
+
+        x += position.x;
+        y += position.y;
+        width *= scaleFactor;
+        height *= scaleFactor;
+
+        hangarPanel.repaint(x, y, width, height);
+    }
+
+    public static void displayMEList(HangarPanel hangarPanel, List meList) {
         var layout = new GridLayout(6, 1, 4, 4);
-        panel.setLayout(layout);
+        hangarPanel.setLayout(layout);
 
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));
@@ -88,15 +77,15 @@ public final class HangarPanelUtils {
                 meList.setSelectedIndex(selectedIndex, true);
                 meList.runSelectCommand();
             });
-            panel.add(button);
+            hangarPanel.add(button);
         }
 
         if (meList.getCommands().size() > 0) {
-            panel.add(new JLabel("Options:", SwingConstants.CENTER));
+            hangarPanel.add(new JLabel("Options:", SwingConstants.CENTER));
             for (var command : meList.getCommands()) {
                 var button = new JButton(command.getLabel());
                 button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
-                panel.add(button);
+                hangarPanel.add(button);
             }
         }
     }

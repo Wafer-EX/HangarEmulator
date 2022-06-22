@@ -56,7 +56,12 @@ public class HangarMenuBar extends JMenuBar {
             });
         });
         restartMenuItem.addActionListener(event -> HangarState.restartApp(MIDletLoader.getLastLoadedPath()));
-        pauseMenuItem.addActionListener(event -> MIDletLoader.getLastLoaded().pauseApp());
+        pauseMenuItem.addActionListener(event -> {
+            var lastLoaded = MIDletLoader.getLastLoaded();
+            if (lastLoaded != null) {
+                lastLoaded.pauseApp();
+            }
+        });
         exitMenuItem.addActionListener(event -> System.exit(0));
 
         midletMenu.add(loadMenuItem);
