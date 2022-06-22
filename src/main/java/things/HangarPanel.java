@@ -124,10 +124,10 @@ public class HangarPanel extends JPanel {
         super.paintComponent(graphics);
 
         if (buffer != null && displayable instanceof Canvas canvas) {
-            if (HangarState.getCanvasClearing()) {
-                buffer.getGraphics().clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
-            }
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
+            if (HangarState.getCanvasClearing()) {
+                graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
+            }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
 
             var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
