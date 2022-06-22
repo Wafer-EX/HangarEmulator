@@ -39,12 +39,6 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static Dimension getBufferScale(BufferedImage buffer, double scaleFactor) {
-        int width = (int) (buffer.getWidth() * scaleFactor);
-        int height = (int) (buffer.getHeight() * scaleFactor);
-        return new Dimension(width, height);
-    }
-
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
