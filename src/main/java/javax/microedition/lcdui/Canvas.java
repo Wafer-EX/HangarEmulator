@@ -82,8 +82,14 @@ public abstract class Canvas extends Displayable {
     public void keyReleased(int keyCode) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        var panel = HangarPanel.getInstance();
-        HangarPanelUtils.repaintBufferRegion(panel, x, y, width, height);
+        var hangarPanel = HangarPanel.getInstance();
+        var position = HangarPanelUtils.getPointFromCanvas(hangarPanel, x, y);
+        var scaleFactor = hangarPanel.getBufferScaleFactor();
+
+        int newWidth = (int) (width * scaleFactor);
+        int newHeight = (int) (height * scaleFactor);
+
+        hangarPanel.repaint(position.x, position.y, newWidth, newHeight);
         HangarState.syncWithFrameRate();
     }
 
