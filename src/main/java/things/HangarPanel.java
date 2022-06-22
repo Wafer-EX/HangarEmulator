@@ -135,7 +135,7 @@ public class HangarPanel extends JPanel {
         }
 
         if (callSerially != null) {
-            callSerially.run();
+            SwingUtilities.invokeLater(callSerially);
         }
     }
 }
