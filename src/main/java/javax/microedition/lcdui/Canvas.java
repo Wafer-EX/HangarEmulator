@@ -85,12 +85,12 @@ public abstract class Canvas extends Displayable {
         HangarState.syncWithFrameRate();
     }
 
-    public void repaint() {
+    public final void repaint() {
         HangarPanel.getInstance().repaint();
         HangarState.syncWithFrameRate();
     }
 
-    public void serviceRepaints() {
+    public final void serviceRepaints() {
         // TODO: write method logic
     }
 
