@@ -45,13 +45,6 @@ public final class HangarPanelUtils {
         return new Dimension(width, height);
     }
 
-    public static Point getBufferPosition(JPanel panel, BufferedImage buffer, double scaleFactor) {
-        var position = new Point();
-        position.x = (int) (panel.getWidth() / 2 - buffer.getWidth() * scaleFactor / 2);
-        position.y = (int) (panel.getHeight() / 2 - buffer.getHeight() * scaleFactor / 2);
-        return position;
-    }
-
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);

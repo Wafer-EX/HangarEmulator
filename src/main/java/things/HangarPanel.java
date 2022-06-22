@@ -109,8 +109,9 @@ public class HangarPanel extends JPanel {
 
     public void updateBufferTransformations() {
         bufferScaleFactor = HangarPanelUtils.getBufferScaleFactor(this, buffer);
-        bufferPosition = HangarPanelUtils.getBufferPosition(this, buffer, bufferScaleFactor);
         bufferScale = HangarPanelUtils.getBufferScale(buffer, bufferScaleFactor);
+        bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
+        bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
         repaint();
     }
 
