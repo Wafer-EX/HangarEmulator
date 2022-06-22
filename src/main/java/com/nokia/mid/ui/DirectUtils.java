@@ -21,6 +21,7 @@ import things.implementations.nokia.DirectGraphicsImplementation;
 import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 
@@ -47,7 +48,10 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        var awtImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        return new Image(awtImage, true);
+        var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        var graphics2d = (Graphics2D) image.getGraphics();
+        graphics2d.setColor(new Color(ARGBcolor, true));
+        graphics2d.fillRect(0, 0, image.getWidth(), image.getHeight());
+        return new Image(image, true);
     }
 }

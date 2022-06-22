@@ -44,11 +44,13 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
 
-    protected Canvas() {
-        HangarPanel.getInstance().setDisplayable(this);
+    protected Canvas() { }
+
+    public boolean isDoubleBuffered() {
+        return true;
     }
 
-    public boolean hasPointerEvents(){
+    public boolean hasPointerEvents() {
         return false;
     }
 
@@ -80,6 +82,12 @@ public abstract class Canvas extends Displayable {
     public void keyRepeated(int keyCode) { }
 
     public void keyReleased(int keyCode) { }
+
+    protected void pointerPressed(int x, int y) { }
+
+    protected void pointerReleased(int x, int y) { }
+
+    protected void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
         var hangarPanel = HangarPanel.getInstance();
