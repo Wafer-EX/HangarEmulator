@@ -44,9 +44,7 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
 
-    protected Canvas() {
-        HangarPanel.getInstance().setDisplayable(this);
-    }
+    protected Canvas() { }
 
     public boolean hasPointerEvents(){
         return false;
