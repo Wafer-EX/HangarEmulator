@@ -18,6 +18,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
 
 import java.io.File;
+import java.util.Locale;
 
 public class HangarEmulator {
     public static void main(String[] args) {
@@ -25,6 +26,7 @@ public class HangarEmulator {
         System.setProperty("sun.java2d.opengl", "true");
         System.setProperty("microedition.profiles", "MIDP-2.0");
         System.setProperty("microedition.platform", "HangarEmulator");
+        System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());
 
         try {
             if (args.length > 0 && new File(args[0]).isFile()) {
