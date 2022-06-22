@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 import things.HangarPanel;
 import things.HangarState;
 import things.utils.CanvasUtils;
+import things.utils.HangarPanelUtils;
 
 import java.awt.*;
 
@@ -84,16 +85,14 @@ public abstract class Canvas extends Displayable {
 
     public final void repaint(int x, int y, int width, int height) {
         var panel = HangarPanel.getInstance();
-        var graphics2d = (Graphics2D) panel.getBuffer().getGraphics();
-
-        graphics2d.drawRect(x, y, width, height);
-        panel.repaint();
+        var buffer = panel.getBuffer();
+        HangarPanelUtils.repaintBufferRegion(panel, buffer, x, y, width, height);
         HangarState.syncWithFrameRate();
     }
 
     public final void repaint() {
-        var resolution = HangarState.getResolution();
-        repaint(0, 0, resolution.width, resolution.height);
+        HangarPanel.getInstance().repaint();
+        HangarState.syncWithFrameRate();
     }
 
     public final void serviceRepaints() {

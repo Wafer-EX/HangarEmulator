@@ -76,9 +76,17 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static void displayMEList(HangarPanel panel, List meList) {
+    public static void repaintBufferRegion(HangarPanel hangarPanel, BufferedImage buffer, int x, int y, int width, int height) {
+        var scaleFactor = getBufferScaleFactor(hangarPanel, buffer);
+        var position = HangarPanel.getInstance().getBufferPosition();
+        int newWidth = (int) (width * scaleFactor);
+        int newHeight = (int) (height * scaleFactor);
+        HangarPanel.getInstance().repaint(x + position.x, y + position.y, newWidth, newHeight);
+    }
+
+    public static void displayMEList(HangarPanel hangarPanel, List meList) {
         var layout = new GridLayout(6, 1, 4, 4);
-        panel.setLayout(layout);
+        hangarPanel.setLayout(layout);
 
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));
@@ -88,15 +96,15 @@ public final class HangarPanelUtils {
                 meList.setSelectedIndex(selectedIndex, true);
                 meList.runSelectCommand();
             });
-            panel.add(button);
+            hangarPanel.add(button);
         }
 
         if (meList.getCommands().size() > 0) {
-            panel.add(new JLabel("Options:", SwingConstants.CENTER));
+            hangarPanel.add(new JLabel("Options:", SwingConstants.CENTER));
             for (var command : meList.getCommands()) {
                 var button = new JButton(command.getLabel());
                 button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
-                panel.add(button);
+                hangarPanel.add(button);
             }
         }
     }

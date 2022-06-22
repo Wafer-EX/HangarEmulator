@@ -94,6 +94,10 @@ public class HangarPanel extends JPanel {
         this.buffer = buffer;
     }
 
+    public Point getBufferPosition() {
+        return bufferPosition;
+    }
+
     public void setCallSerially(Runnable runnable) {
         this.callSerially = runnable;
     }
