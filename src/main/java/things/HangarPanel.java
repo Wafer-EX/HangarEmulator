@@ -32,7 +32,7 @@ import java.awt.image.BufferedImage;
 public class HangarPanel extends JPanel {
     private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private static HangarPanel instance;
-    private static Displayable displayable;
+    private Displayable displayable;
     private BufferedImage buffer;
     private Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
@@ -71,7 +71,7 @@ public class HangarPanel extends JPanel {
 
     public void setDisplayable(Displayable displayable) {
         removeAll();
-        HangarPanel.displayable = displayable;
+        this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
             var hangarFrame = HangarFrame.getInstance();
