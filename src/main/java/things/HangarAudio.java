@@ -16,6 +16,8 @@
 
 package things;
 
+import things.ui.HangarFrame;
+
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Soundbank;

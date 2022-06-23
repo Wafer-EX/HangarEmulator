@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.components;
 
+import things.HangarState;
 import things.enums.ScalingModes;
+import things.ui.HangarFrame;
+import things.ui.input.HangarMouseListener;
 import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -28,11 +31,13 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HangarPanel extends JPanel {
     private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private static HangarPanel instance;
-    private static Displayable displayable;
+    private Displayable displayable;
     private BufferedImage buffer;
     private Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
@@ -41,9 +46,22 @@ public class HangarPanel extends JPanel {
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
+        var timer = new Timer();
+
         setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
+        addMouseListener(new HangarMouseListener(this));
+
+        // TODO: change period dynamically (or when changing framerate)
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (callSerially != null) {
+                    callSerially.run();
+                }
+            }
+        }, 0, HangarState.frameRateInMilliseconds());
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -71,7 +89,7 @@ public class HangarPanel extends JPanel {
 
     public void setDisplayable(Displayable displayable) {
         removeAll();
-        HangarPanel.displayable = displayable;
+        this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
             var hangarFrame = HangarFrame.getInstance();
@@ -122,7 +140,6 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-
         if (buffer != null && displayable instanceof Canvas canvas) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
             if (HangarState.getCanvasClearing()) {
@@ -132,10 +149,6 @@ public class HangarPanel extends JPanel {
 
             var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
             graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
-        }
-
-        if (callSerially != null) {
-            SwingUtilities.invokeLater(callSerially);
         }
     }
 }

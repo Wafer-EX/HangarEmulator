@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 import things.utils.FontUtils;
 
 import java.util.Arrays;

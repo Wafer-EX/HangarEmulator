@@ -18,6 +18,9 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.ui.components.HangarLabel;
+import things.ui.components.HangarPanel;
+import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
 import java.awt.*;
@@ -124,12 +127,16 @@ public class HangarState {
     public static void syncWithFrameRate() {
         if (HangarState.getFrameRate() != -1) {
             try {
-                Thread.sleep(1000 / HangarState.getFrameRate());
+                Thread.sleep(frameRateInMilliseconds());
             }
             catch (Exception ex) {
                 ex.printStackTrace();
             }
         }
+    }
+
+    public static int frameRateInMilliseconds() {
+        return 1000 / HangarState.getFrameRate();
     }
 
     public static Graphics2D applyRenderingHints(Graphics graphics) {

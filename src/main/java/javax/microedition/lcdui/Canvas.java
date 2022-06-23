@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 import things.HangarState;
 import things.utils.CanvasUtils;
 import things.utils.HangarPanelUtils;
@@ -47,15 +47,16 @@ public abstract class Canvas extends Displayable {
     protected Canvas() { }
 
     public boolean isDoubleBuffered() {
+        // TODO: it is correct?
         return true;
     }
 
     public boolean hasPointerEvents() {
-        return false;
+        return true;
     }
 
     public boolean hasPointerMotionEvents() {
-        return false;
+        return true;
     }
 
     public boolean hasRepeatEvents() {
@@ -83,15 +84,15 @@ public abstract class Canvas extends Displayable {
 
     public void keyReleased(int keyCode) { }
 
-    protected void pointerPressed(int x, int y) { }
+    public void pointerPressed(int x, int y) { }
 
-    protected void pointerReleased(int x, int y) { }
+    public void pointerReleased(int x, int y) { }
 
-    protected void pointerDragged(int x, int y) { }
+    public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
         var hangarPanel = HangarPanel.getInstance();
-        var position = HangarPanelUtils.getPointFromCanvas(hangarPanel, x, y);
+        var position = HangarPanelUtils.canvasPointToPanel(hangarPanel, x, y);
         var scaleFactor = hangarPanel.getBufferScaleFactor();
 
         int newWidth = (int) (width * scaleFactor);
@@ -107,7 +108,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public final void serviceRepaints() {
-        // TODO: write method logic
+        // TODO: write method logic?
     }
 
     public void showNotify() { }

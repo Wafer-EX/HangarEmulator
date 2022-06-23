@@ -16,6 +16,8 @@
 
 package things;
 
+import things.ui.HangarFrame;
+
 import javax.microedition.midlet.MIDlet;
 import java.net.URL;
 

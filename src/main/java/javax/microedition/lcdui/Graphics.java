@@ -77,12 +77,21 @@ public class Graphics {
         return seGraphics.getColor().getBlue();
     }
 
+    public int getGrayScale() {
+        // TODO: write method logic
+        return 0;
+    }
+
     public void setColor(int red, int green, int blue) {
         seGraphics.setColor(new Color(red, green, blue));
     }
 
     public void setColor(int RGB) {
         seGraphics.setColor(new Color(RGB, false));
+    }
+
+    public void setGrayScale(int value) {
+        // TODO: write method logic
     }
 
     public Font getFont() {

@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.components;
 
+import things.HangarState;
 import things.enums.ScalingModes;
 
 import javax.swing.*;

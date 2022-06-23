@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui;
+
+import things.ui.input.HangarKeyListener;
+import things.ui.components.HangarLabel;
+import things.ui.components.HangarMenuBar;
+import things.ui.components.HangarPanel;
 
 import javax.swing.*;
 import java.awt.*;
@@ -28,7 +33,6 @@ public class HangarFrame extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
-        this.addKeyListener(new HangarKeyListener());
     }
 
     public static HangarFrame getInstance() {
@@ -57,6 +61,7 @@ public class HangarFrame extends JFrame {
             hangarPanel.setPreferredSize(new Dimension(360, 360));
         }
 
+        this.addKeyListener(new HangarKeyListener(hangarPanel));
         this.setJMenuBar(new HangarMenuBar());
         this.add(hangarPanel);
         this.pack();

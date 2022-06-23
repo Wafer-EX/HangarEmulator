@@ -16,7 +16,7 @@
 
 package javax.microedition.midlet;
 
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 
 public abstract class MIDlet {
     private boolean blockExit;
