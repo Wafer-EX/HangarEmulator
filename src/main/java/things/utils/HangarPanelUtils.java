@@ -54,6 +54,7 @@ public final class HangarPanelUtils {
     }
 
     public static Point canvasPointToPanel(HangarPanel hangarPanel, int x, int y) {
+        // TODO: check this method
         var scaleFactor = hangarPanel.getBufferScaleFactor();
         var position = hangarPanel.getBufferPosition();
 

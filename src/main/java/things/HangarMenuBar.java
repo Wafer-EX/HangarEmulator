@@ -25,6 +25,7 @@ import java.awt.*;
 import java.net.URL;
 
 public class HangarMenuBar extends JMenuBar {
+    // TODO: refactor this class
     public HangarMenuBar() {
         addMIDletMenu();
         addOptionsMenu();

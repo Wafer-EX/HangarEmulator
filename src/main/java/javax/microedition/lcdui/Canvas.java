@@ -47,6 +47,7 @@ public abstract class Canvas extends Displayable {
     protected Canvas() { }
 
     public boolean isDoubleBuffered() {
+        // TODO: it is correct?
         return true;
     }
 
@@ -107,7 +108,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public final void serviceRepaints() {
-        // TODO: write method logic
+        // TODO: write method logic?
     }
 
     public void showNotify() { }

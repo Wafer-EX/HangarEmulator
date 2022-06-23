@@ -22,6 +22,8 @@ import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 
 public final class KeyCodeConverter {
+    // TODO: check conversion
+
     public static int awtToDefault(int keyCode) {
         switch (keyCode) {
             case KeyEvent.VK_UP: return Canvas.UP;
