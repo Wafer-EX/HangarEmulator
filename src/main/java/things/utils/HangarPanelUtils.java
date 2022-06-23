@@ -53,13 +53,23 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static Point getPointFromCanvas(HangarPanel hangarPanel, int x, int y) {
+    public static Point canvasPointToPanel(HangarPanel hangarPanel, int x, int y) {
         var scaleFactor = hangarPanel.getBufferScaleFactor();
         var position = hangarPanel.getBufferPosition();
 
         var point = new Point();
         point.x = position.x + (int) (x * scaleFactor);
         point.y = position.y + (int) (y * scaleFactor);
+        return point;
+    }
+
+    public static Point panelPointToCanvas(HangarPanel hangarPanel, int x, int y) {
+        var scaleFactor = hangarPanel.getBufferScaleFactor();
+        var position = hangarPanel.getBufferPosition();
+
+        var point = new Point();
+        point.x = (int) ((x - position.x) / scaleFactor);
+        point.y = (int) ((y - position.y) / scaleFactor);
         return point;
     }
 
