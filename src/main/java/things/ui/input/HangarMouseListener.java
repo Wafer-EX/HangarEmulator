@@ -27,7 +27,6 @@ public class HangarMouseListener extends MouseInputAdapter {
     private final HangarPanel hangarPanel;
 
     public HangarMouseListener(HangarPanel hangarPanel) {
-        super();
         this.hangarPanel = hangarPanel;
     }
 
