@@ -51,11 +51,11 @@ public abstract class Canvas extends Displayable {
     }
 
     public boolean hasPointerEvents() {
-        return false;
+        return true;
     }
 
     public boolean hasPointerMotionEvents() {
-        return false;
+        return true;
     }
 
     public boolean hasRepeatEvents() {
@@ -83,11 +83,11 @@ public abstract class Canvas extends Displayable {
 
     public void keyReleased(int keyCode) { }
 
-    protected void pointerPressed(int x, int y) { }
+    public void pointerPressed(int x, int y) { }
 
-    protected void pointerReleased(int x, int y) { }
+    public void pointerReleased(int x, int y) { }
 
-    protected void pointerDragged(int x, int y) { }
+    public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
         var hangarPanel = HangarPanel.getInstance();

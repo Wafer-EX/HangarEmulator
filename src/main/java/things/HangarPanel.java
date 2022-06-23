@@ -48,6 +48,7 @@ public class HangarPanel extends JPanel {
         setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
+        addMouseListener(new HangarMouseListener(this));
 
         timer.schedule(new TimerTask() {
             @Override
