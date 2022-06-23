@@ -28,6 +28,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class HangarPanel extends JPanel {
     private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
@@ -41,9 +43,20 @@ public class HangarPanel extends JPanel {
 
     private HangarPanel() {
         var resolution = HangarState.getResolution();
+        var timer = new Timer();
+
         setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
+
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                if (callSerially != null) {
+                    callSerially.run();
+                }
+            }
+        }, 0, HangarState.frameRateInMilliseconds());
 
         addComponentListener(new ComponentAdapter() {
             @Override
@@ -122,7 +135,6 @@ public class HangarPanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-
         if (buffer != null && displayable instanceof Canvas canvas) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
             if (HangarState.getCanvasClearing()) {
@@ -132,10 +144,6 @@ public class HangarPanel extends JPanel {
 
             var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
             graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
-        }
-
-        if (callSerially != null) {
-            SwingUtilities.invokeLater(callSerially);
         }
     }
 }
