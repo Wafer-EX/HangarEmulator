@@ -16,6 +16,8 @@
 
 package things;
 
+import things.ui.HangarFrame;
+
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;

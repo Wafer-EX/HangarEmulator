@@ -16,8 +16,8 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarFrame;
-import things.HangarPanel;
+import things.ui.HangarFrame;
+import things.ui.components.HangarPanel;
 import things.HangarState;
 
 import java.util.ArrayList;

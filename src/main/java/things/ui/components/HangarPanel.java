@@ -14,9 +14,12 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.components;
 
+import things.HangarState;
 import things.enums.ScalingModes;
+import things.ui.HangarFrame;
+import things.ui.input.HangarMouseListener;
 import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Canvas;

@@ -18,6 +18,9 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.ui.components.HangarLabel;
+import things.ui.components.HangarPanel;
+import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
 import java.awt.*;

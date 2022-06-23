@@ -14,10 +14,14 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.components;
 
+import things.HangarAudio;
+import things.HangarState;
+import things.MIDletLoader;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.ui.HangarFrame;
 import things.utils.HangarPanelUtils;
 
 import javax.swing.*;

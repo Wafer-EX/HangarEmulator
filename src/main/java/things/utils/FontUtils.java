@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;

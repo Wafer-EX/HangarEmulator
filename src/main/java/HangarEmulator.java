@@ -16,6 +16,7 @@
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
+import things.ui.HangarFrame;
 
 import java.io.File;
 import java.util.Locale;

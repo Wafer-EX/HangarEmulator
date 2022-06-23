@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui;
+
+import things.ui.input.HangarKeyListener;
+import things.ui.components.HangarLabel;
+import things.ui.components.HangarMenuBar;
+import things.ui.components.HangarPanel;
 
 import javax.swing.*;
 import java.awt.*;

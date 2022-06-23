@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 import things.HangarState;
 import things.enums.ScalingModes;
 

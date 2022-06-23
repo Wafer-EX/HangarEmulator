@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-import things.HangarPanel;
+import things.ui.components.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
 

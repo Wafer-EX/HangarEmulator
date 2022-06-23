@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.input;
 
+import things.ui.components.HangarPanel;
 import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Canvas;
