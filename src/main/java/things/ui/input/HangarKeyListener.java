@@ -31,7 +31,6 @@ public class HangarKeyListener implements KeyListener {
     private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
 
     public HangarKeyListener(HangarPanel hangarPanel) {
-        super();
         this.hangarPanel = hangarPanel;
     }
 

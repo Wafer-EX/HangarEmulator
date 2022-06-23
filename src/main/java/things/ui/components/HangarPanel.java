@@ -45,13 +45,16 @@ public class HangarPanel extends JPanel {
     private Runnable callSerially;
 
     private HangarPanel() {
+        var hangarMouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
         var timer = new Timer();
 
         setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
-        addMouseListener(new HangarMouseListener(this));
+
+        addMouseListener(hangarMouseListener);
+        addMouseMotionListener(hangarMouseListener);
 
         // TODO: change period dynamically (or when changing framerate)
         timer.schedule(new TimerTask() {
