@@ -50,6 +50,7 @@ public class HangarPanel extends JPanel {
         setPreferredSize(resolution);
         addMouseListener(new HangarMouseListener(this));
 
+        // TODO: change period dynamically (or when changing framerate)
         timer.schedule(new TimerTask() {
             @Override
             public void run() {

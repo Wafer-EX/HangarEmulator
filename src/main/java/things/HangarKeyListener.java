@@ -25,7 +25,13 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class HangarKeyListener implements KeyListener {
+    private final HangarPanel hangarPanel;
     private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
+
+    public HangarKeyListener(HangarPanel hangarPanel) {
+        super();
+        this.hangarPanel = hangarPanel;
+    }
 
     public HashMap<Integer, Boolean> getPressedKeys() {
         return pressedKeys;
@@ -36,8 +42,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        var displayable = HangarPanel.getInstance().getDisplayable();
-        if (displayable instanceof Canvas canvas) {
+        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
@@ -65,8 +70,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        var displayable = HangarPanel.getInstance().getDisplayable();
-        if (displayable instanceof Canvas canvas) {
+        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
