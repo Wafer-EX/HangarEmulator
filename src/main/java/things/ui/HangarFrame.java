@@ -26,6 +26,7 @@ import java.awt.*;
 
 public class HangarFrame extends JFrame {
     private static HangarFrame instance;
+    private HangarPanel hangarPanel;
     private boolean hangarLabelAdded;
 
     private HangarFrame() {
@@ -49,8 +50,12 @@ public class HangarFrame extends JFrame {
         this.revalidate();
     }
 
-    public void setHangarPanel() {
-        var hangarPanel = HangarPanel.getInstance();
+    public HangarPanel getHangarPanel() {
+        return hangarPanel;
+    }
+
+    public void setHangarPanel(HangarPanel hangarPanel) {
+        this.hangarPanel = hangarPanel;
         var hangarLabel = HangarLabel.getInstance();
 
         if (hangarLabelAdded) {

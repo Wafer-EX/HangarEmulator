@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.ui.components.HangarPanel;
+import things.ui.HangarFrame;
 import things.utils.FontUtils;
 
 import java.util.Arrays;
@@ -87,7 +87,8 @@ public class Font {
     }
 
     public int getHeight() {
-        var graphics = HangarPanel.getInstance().getBuffer().getGraphics();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var graphics = hangarPanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.getHeight();
     }
@@ -97,7 +98,8 @@ public class Font {
     }
 
     public int charWidth(char ch) {
-        var graphics = HangarPanel.getInstance().getBuffer().getGraphics();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var graphics = hangarPanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.charWidth(ch);
     }
@@ -113,7 +115,8 @@ public class Font {
         if (str == null) {
             throw new NullPointerException();
         }
-        var graphics = HangarPanel.getInstance().getBuffer().getGraphics();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var graphics = hangarPanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }

@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
-import things.ui.components.HangarPanel;
+import things.ui.HangarFrame;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -60,11 +60,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return HangarPanel.getInstance().getDisplayable();
+        return HangarFrame.getInstance().getHangarPanel().getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarPanel.getInstance().setDisplayable(displayable);
+        HangarFrame.getInstance().getHangarPanel().setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -84,7 +84,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarPanel.getInstance().setCallSerially(r);
+        HangarFrame.getInstance().getHangarPanel().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) {

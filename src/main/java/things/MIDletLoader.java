@@ -17,6 +17,7 @@
 package things;
 
 import things.ui.HangarFrame;
+import things.ui.components.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
 import java.net.URL;
@@ -48,8 +49,10 @@ public class MIDletLoader {
     public static void startLoadedMIDlet() {
         try {
             if (midlet != null) {
-                HangarFrame.getInstance().setTitle(System.getProperty("MIDlet-Name"));
-                HangarFrame.getInstance().setIconImage(MIDletResources.getIconFromJar());
+                var hangarFrame = HangarFrame.getInstance();
+                hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
+                hangarFrame.setIconImage(MIDletResources.getIconFromJar());
+                hangarFrame.setHangarPanel(new HangarPanel());
                 midlet.startApp();
             }
         }
