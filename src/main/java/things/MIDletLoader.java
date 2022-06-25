@@ -52,7 +52,6 @@ public class MIDletLoader {
                 var hangarFrame = HangarFrame.getInstance();
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
                 hangarFrame.setIconImage(MIDletResources.getIconFromJar());
-                hangarFrame.setHangarPanel(new HangarPanel());
                 midlet.startApp();
             }
         }

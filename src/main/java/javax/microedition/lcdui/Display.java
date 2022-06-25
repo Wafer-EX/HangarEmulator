@@ -16,10 +16,12 @@
 
 package javax.microedition.lcdui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import things.ui.HangarFrame;
+import things.ui.components.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
 public class Display {
     public static final int LIST_ELEMENT = 1;
@@ -32,8 +34,22 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
+    private static final Dictionary<MIDlet, Display> displays = new Hashtable<>();
+    private final HangarPanel hangarPanel;
+
+    private Display(HangarPanel hangarPanel) {
+        this.hangarPanel = hangarPanel;
+    }
+
     public static Display getDisplay(MIDlet m) {
-        return new Display();
+        var display = displays.get(m);
+        if (display == null) {
+            var hangarPanel = new HangarPanel();
+            HangarFrame.getInstance().setHangarPanel(hangarPanel);
+            display = new Display(hangarPanel);
+            displays.put(m, display);
+        }
+        return display;
     }
 
     public int getColor(int colorSpecifier) {
@@ -51,16 +67,17 @@ public class Display {
     }
 
     public int numColors() {
-        // 8 bit display
+        // TODO: check it
         return 255;
     }
 
     public int numAlphaLevels() {
+        // TODO: check it
         return 255;
     }
 
     public Displayable getCurrent() {
-        return HangarFrame.getInstance().getHangarPanel().getDisplayable();
+        return hangarPanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
@@ -78,13 +95,12 @@ public class Display {
         setCurrent(nextDisplayable);
     }
 
-    public void setCurrentItem(Item item) throws NotImplementedException {
+    public void setCurrentItem(Item item) {
         // TODO: write method logic
-        throw new NotImplementedException("setCurrentItem");
     }
 
     public void callSerially(Runnable r) {
-        HangarFrame.getInstance().getHangarPanel().setCallSerially(r);
+        hangarPanel.setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) {
