@@ -147,4 +147,8 @@ public class HangarState {
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         return graphics2d;
     }
+
+    public static GraphicsConfiguration getGraphicsConfiguration() {
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+    }
 }

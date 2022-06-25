@@ -69,6 +69,6 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void sizeChanged(int w, int h) {
-        additionalBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
+        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(w, h);
     }
 }

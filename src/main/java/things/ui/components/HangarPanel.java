@@ -47,7 +47,7 @@ public class HangarPanel extends JPanel {
         var resolution = HangarState.getResolution();
         var timer = new Timer();
 
-        setBuffer(new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_INT_RGB));
+        setBuffer(HangarState.getGraphicsConfiguration().createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
