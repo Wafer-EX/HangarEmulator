@@ -40,7 +40,7 @@ public abstract class GameCanvas extends Canvas {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        additionalBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
