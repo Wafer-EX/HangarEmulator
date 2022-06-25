@@ -20,8 +20,6 @@ import things.ui.HangarFrame;
 import things.ui.components.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
-import java.util.Dictionary;
-import java.util.Hashtable;
 
 public class Display {
     public static final int LIST_ELEMENT = 1;
@@ -34,27 +32,29 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
-    private static final Dictionary<MIDlet, Display> displays = new Hashtable<>();
+    private static final Display display = new Display(new HangarPanel());
     private final HangarPanel hangarPanel;
 
     private Display(HangarPanel hangarPanel) {
         this.hangarPanel = hangarPanel;
+        HangarFrame.getInstance().setHangarPanel(hangarPanel);
     }
 
     public static Display getDisplay(MIDlet m) {
-        var display = displays.get(m);
-        if (display == null) {
-            var hangarPanel = new HangarPanel();
-            HangarFrame.getInstance().setHangarPanel(hangarPanel);
-            display = new Display(hangarPanel);
-            displays.put(m, display);
-        }
         return display;
     }
 
-    public int getColor(int colorSpecifier) {
-        // TODO: rewrite method logic
-        return 0x00858585;
+    public int getColor(int colorSpecifier) throws IllegalArgumentException {
+        // TODO: choose colors
+        return switch (colorSpecifier) {
+            case COLOR_BACKGROUND -> 0;
+            case COLOR_FOREGROUND -> 0;
+            case COLOR_HIGHLIGHTED_BACKGROUND -> 0;
+            case COLOR_HIGHLIGHTED_FOREGROUND -> 0;
+            case COLOR_BORDER -> 0;
+            case COLOR_HIGHLIGHTED_BORDER -> 0;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public int getBorderStyle(boolean highlighted) {
