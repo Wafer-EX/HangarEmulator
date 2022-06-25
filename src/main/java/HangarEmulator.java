@@ -17,6 +17,7 @@
 import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
 import things.ui.HangarFrame;
+import things.ui.components.HangarLabel;
 
 import java.io.File;
 import java.util.Locale;
@@ -35,7 +36,7 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                HangarFrame.getInstance().setHangarLabel();
+                HangarFrame.getInstance().setHangarLabel(new HangarLabel());
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);

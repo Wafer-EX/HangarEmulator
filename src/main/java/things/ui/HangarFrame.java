@@ -27,7 +27,7 @@ import java.awt.*;
 public class HangarFrame extends JFrame {
     private static HangarFrame instance;
     private HangarPanel hangarPanel;
-    private boolean hangarLabelAdded;
+    private HangarLabel hangarLabel;
 
     private HangarFrame() {
         this.setTitle("Hangar Emulator");
@@ -43,9 +43,13 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public void setHangarLabel() {
-        hangarLabelAdded = true;
-        this.add(HangarLabel.getInstance());
+    public HangarLabel getHangarLabel() {
+        return hangarLabel;
+    }
+
+    public void setHangarLabel(HangarLabel hangarLabel) {
+        this.hangarLabel = hangarLabel;
+        this.add(hangarLabel);
         this.pack();
         this.revalidate();
     }
@@ -56,9 +60,7 @@ public class HangarFrame extends JFrame {
 
     public void setHangarPanel(HangarPanel hangarPanel) {
         this.hangarPanel = hangarPanel;
-        var hangarLabel = HangarLabel.getInstance();
-
-        if (hangarLabelAdded) {
+        if (hangarLabel != null) {
             hangarPanel.setPreferredSize(hangarLabel.getSize());
             this.remove(hangarLabel);
         }

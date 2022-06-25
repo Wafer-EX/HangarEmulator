@@ -19,7 +19,6 @@ package things;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
 import things.ui.HangarFrame;
-import things.ui.components.HangarLabel;
 import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
@@ -86,11 +85,15 @@ public class HangarState {
         scalingMode = mode;
         var hangarPanel = HangarFrame.getInstance().getHangarPanel();
         if (scalingMode == ScalingModes.ChangeResolution) {
-            var hangarLabel = HangarLabel.getInstance();
+            var hangarLabel = HangarFrame.getInstance().getHangarLabel();
             var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
-            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+            if (hangarPanel != null) {
+                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+            }
         }
-        hangarPanel.updateBufferTransformations();
+        if (hangarPanel != null) {
+            hangarPanel.updateBufferTransformations();
+        }
     }
 
     public static boolean getCanvasClearing() {
