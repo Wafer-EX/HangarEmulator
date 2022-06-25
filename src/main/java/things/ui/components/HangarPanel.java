@@ -35,7 +35,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarPanel extends JPanel {
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private Displayable displayable;
     private BufferedImage buffer;
     private Point bufferPosition = new Point(0, 0);
@@ -48,7 +47,7 @@ public class HangarPanel extends JPanel {
         var resolution = HangarState.getResolution();
         var timer = new Timer();
 
-        setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
+        setBuffer(new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_INT_RGB));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 

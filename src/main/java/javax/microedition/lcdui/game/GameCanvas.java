@@ -35,14 +35,13 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private BufferedImage additionalBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        additionalBuffer = graphicsConfiguration.createCompatibleImage(width, height);
+        additionalBuffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
     }
 
     protected Graphics getGraphics() {
@@ -71,6 +70,6 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void sizeChanged(int w, int h) {
-        additionalBuffer = graphicsConfiguration.createCompatibleImage(w, h);
+        additionalBuffer = new BufferedImage(w, h, BufferedImage.TYPE_INT_RGB);
     }
 }
