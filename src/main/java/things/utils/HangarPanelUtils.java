@@ -40,15 +40,19 @@ public final class HangarPanelUtils {
     }
 
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
-        if (resolution.width > 0 && resolution.height > 0) {
-            var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+        if (resolution != HangarState.getResolution() && resolution.width > 0 && resolution.height > 0) {
             HangarState.setResolution(resolution);
-            hangarPanel.setBuffer(changedBuffer);
-            hangarPanel.updateBufferTransformations();
 
-            var displayable = hangarPanel.getDisplayable();
-            if (displayable != null) {
-                displayable.sizeChanged(resolution.width, resolution.height);
+            if (hangarPanel != null) {
+                var changedBuffer = graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height);
+                var displayable = hangarPanel.getDisplayable();
+
+                hangarPanel.setBuffer(changedBuffer);
+                hangarPanel.updateBufferTransformations();
+
+                if (displayable != null) {
+                    displayable.sizeChanged(resolution.width, resolution.height);
+                }
             }
         }
     }

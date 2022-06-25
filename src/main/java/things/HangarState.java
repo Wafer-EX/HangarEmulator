@@ -83,15 +83,14 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
+        var hangarLabel = HangarFrame.getInstance().getHangarLabel();
         var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+
         if (scalingMode == ScalingModes.ChangeResolution) {
-            var hangarLabel = HangarFrame.getInstance().getHangarLabel();
-            var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
-            if (hangarPanel != null) {
-                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
-            }
+            currentResolution = hangarLabel != null ? hangarLabel.getSize() : hangarPanel != null ? hangarPanel.getSize() : currentResolution;
         }
         if (hangarPanel != null) {
+            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
             hangarPanel.updateBufferTransformations();
         }
     }
