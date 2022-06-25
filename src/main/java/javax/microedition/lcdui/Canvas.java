@@ -92,18 +92,23 @@ public abstract class Canvas extends Displayable {
 
     public final void repaint(int x, int y, int width, int height) {
         var hangarPanel = HangarFrame.getInstance().getHangarPanel();
-        var position = HangarPanelUtils.canvasPointToPanel(hangarPanel, x, y);
-        var scaleFactor = hangarPanel.getBufferScaleFactor();
+        if (hangarPanel != null) {
+            var position = HangarPanelUtils.canvasPointToPanel(hangarPanel, x, y);
+            var scaleFactor = hangarPanel.getBufferScaleFactor();
 
-        int newWidth = (int) (width * scaleFactor);
-        int newHeight = (int) (height * scaleFactor);
+            int newWidth = (int) (width * scaleFactor);
+            int newHeight = (int) (height * scaleFactor);
 
-        hangarPanel.repaint(position.x, position.y, newWidth, newHeight);
+            hangarPanel.repaint(position.x, position.y, newWidth, newHeight);
+        }
         HangarState.syncWithFrameRate();
     }
 
     public final void repaint() {
-        HangarFrame.getInstance().getHangarPanel().repaint();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        if (hangarPanel != null) {
+            hangarPanel.repaint();
+        }
         HangarState.syncWithFrameRate();
     }
 
