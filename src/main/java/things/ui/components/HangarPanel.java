@@ -35,8 +35,6 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarPanel extends JPanel {
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
-    private static HangarPanel instance;
     private Displayable displayable;
     private BufferedImage buffer;
     private Point bufferPosition = new Point(0, 0);
@@ -44,12 +42,12 @@ public class HangarPanel extends JPanel {
     private Dimension bufferScale = HangarState.getResolution();
     private Runnable callSerially;
 
-    private HangarPanel() {
+    public HangarPanel() {
         var hangarMouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
         var timer = new Timer();
 
-        setBuffer(graphicsConfiguration.createCompatibleImage(resolution.width, resolution.height));
+        setBuffer(HangarState.getGraphicsConfiguration().createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
@@ -79,13 +77,6 @@ public class HangarPanel extends JPanel {
         });
     }
 
-    public static HangarPanel getInstance() {
-        if (instance == null) {
-            instance = new HangarPanel();
-        }
-        return instance;
-    }
-
     public Displayable getDisplayable() {
         return displayable;
     }
@@ -96,7 +87,6 @@ public class HangarPanel extends JPanel {
 
         if (displayable instanceof Canvas canvas) {
             var hangarFrame = HangarFrame.getInstance();
-            hangarFrame.setHangarPanel();
             hangarFrame.requestFocus();
             updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);

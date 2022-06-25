@@ -25,9 +25,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class HangarLabel extends JLabel {
-    private static HangarLabel instance;
-
-    private HangarLabel() {
+    public HangarLabel() {
         super();
         setPreferredSize(new Dimension(360, 360));
         setHorizontalAlignment(JLabel.CENTER);
@@ -42,12 +40,5 @@ public class HangarLabel extends JLabel {
                 }
             }
         });
-    }
-
-    public static HangarLabel getInstance() {
-        if (instance == null) {
-            instance = new HangarLabel();
-        }
-        return instance;
     }
 }

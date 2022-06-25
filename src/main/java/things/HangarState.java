@@ -18,8 +18,7 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
-import things.ui.components.HangarLabel;
-import things.ui.components.HangarPanel;
+import things.ui.HangarFrame;
 import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
@@ -67,7 +66,8 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var keyListeners = HangarPanel.getInstance().getKeyListeners();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var keyListeners = hangarPanel.getKeyListeners();
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
                 if (keyListener instanceof HangarKeyListener hangarKeyListener) {
@@ -83,13 +83,15 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var hangarPanel = HangarPanel.getInstance();
+        var hangarLabel = HangarFrame.getInstance().getHangarLabel();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+
         if (scalingMode == ScalingModes.ChangeResolution) {
-            var hangarLabel = HangarLabel.getInstance();
-            var resolution = MIDletLoader.isLoaded() ? hangarPanel.getSize() : hangarLabel.getSize();
-            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+            currentResolution = hangarLabel != null ? hangarLabel.getSize() : hangarPanel != null ? hangarPanel.getSize() : currentResolution;
         }
-        hangarPanel.updateBufferTransformations();
+        if (hangarPanel != null) {
+            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
+        }
     }
 
     public static boolean getCanvasClearing() {
@@ -143,5 +145,9 @@ public class HangarState {
         var graphics2d = (Graphics2D) graphics;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         return graphics2d;
+    }
+
+    public static GraphicsConfiguration getGraphicsConfiguration() {
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     }
 }

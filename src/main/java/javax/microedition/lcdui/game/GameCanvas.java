@@ -16,12 +16,11 @@
 
 package javax.microedition.lcdui.game;
 
-import things.ui.components.HangarPanel;
+import things.ui.HangarFrame;
 import things.HangarState;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -35,14 +34,13 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private static final GraphicsConfiguration graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     private BufferedImage additionalBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        additionalBuffer = graphicsConfiguration.createCompatibleImage(width, height);
+        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
@@ -58,19 +56,19 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var hangarPanel = HangarPanel.getInstance();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
         hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        var hangarPanel = HangarPanel.getInstance();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
         hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
         super.repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
-        additionalBuffer = graphicsConfiguration.createCompatibleImage(w, h);
+        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(w, h);
     }
 }

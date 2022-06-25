@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import things.ui.HangarFrame;
 import things.ui.components.HangarPanel;
 
 import javax.microedition.midlet.MIDlet;
@@ -32,13 +32,29 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
-    public static Display getDisplay(MIDlet m) {
-        return new Display();
+    private static final Display display = new Display(new HangarPanel());
+    private final HangarPanel hangarPanel;
+
+    private Display(HangarPanel hangarPanel) {
+        this.hangarPanel = hangarPanel;
+        HangarFrame.getInstance().setHangarPanel(hangarPanel);
     }
 
-    public int getColor(int colorSpecifier) {
-        // TODO: rewrite method logic
-        return 0x00858585;
+    public static Display getDisplay(MIDlet m) {
+        return display;
+    }
+
+    public int getColor(int colorSpecifier) throws IllegalArgumentException {
+        // TODO: choose colors
+        return switch (colorSpecifier) {
+            case COLOR_BACKGROUND -> 0;
+            case COLOR_FOREGROUND -> 0;
+            case COLOR_HIGHLIGHTED_BACKGROUND -> 0;
+            case COLOR_HIGHLIGHTED_FOREGROUND -> 0;
+            case COLOR_BORDER -> 0;
+            case COLOR_HIGHLIGHTED_BORDER -> 0;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
     public int getBorderStyle(boolean highlighted) {
@@ -51,20 +67,21 @@ public class Display {
     }
 
     public int numColors() {
-        // 8 bit display
-        return 255;
+        // TODO: check it
+        return 256;
     }
 
     public int numAlphaLevels() {
-        return 255;
+        // TODO: check it
+        return 256;
     }
 
     public Displayable getCurrent() {
-        return HangarPanel.getInstance().getDisplayable();
+        return hangarPanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarPanel.getInstance().setDisplayable(displayable);
+        hangarPanel.setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -78,36 +95,45 @@ public class Display {
         setCurrent(nextDisplayable);
     }
 
-    public void setCurrentItem(Item item) throws NotImplementedException {
+    public void setCurrentItem(Item item) throws IllegalStateException, NullPointerException {
         // TODO: write method logic
-        throw new NotImplementedException("setCurrentItem");
     }
 
     public void callSerially(Runnable r) {
-        HangarPanel.getInstance().setCallSerially(r);
+        hangarPanel.setCallSerially(r);
     }
 
-    public boolean flashBacklight(int duration) {
+    public boolean flashBacklight(int duration) throws IllegalArgumentException {
         if (duration < 0) {
             throw new IllegalArgumentException();
         }
         return false;
     }
 
-    public boolean vibrate(int duration) {
+    public boolean vibrate(int duration) throws IllegalArgumentException {
         if (duration < 0) {
             throw new IllegalArgumentException();
         }
         return false;
     }
 
-    public int getBestImageWidth(int imageType) {
-        // TODO: write method logic
-        return 0;
+    public int getBestImageWidth(int imageType) throws IllegalArgumentException {
+        // TODO: choose resolutions
+        return switch (imageType) {
+            case LIST_ELEMENT -> 0;
+            case CHOICE_GROUP_ELEMENT -> 0;
+            case ALERT -> 0;
+            default -> throw new IllegalArgumentException();
+        };
     }
 
-    public int getBestImageHeight(int imageType) {
-        // TODO: write method logic
-        return 0;
+    public int getBestImageHeight(int imageType) throws IllegalArgumentException {
+        // TODO: choose resolutions
+        return switch (imageType) {
+            case LIST_ELEMENT -> 0;
+            case CHOICE_GROUP_ELEMENT -> 0;
+            case ALERT -> 0;
+            default -> throw new IllegalArgumentException();
+        };
     }
 }

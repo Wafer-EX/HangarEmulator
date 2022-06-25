@@ -152,22 +152,26 @@ public class HangarMenuBar extends JMenuBar {
 
         radioResolution128x128.addItemListener(e -> {
             if (radioResolution128x128.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(128, 128));
+                var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, new Dimension(128, 128));
             }
         });
         radioResolution128x160.addItemListener(e -> {
             if (radioResolution128x160.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(128, 160));
+                var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, new Dimension(128, 160));
             }
         });
         radioResolution176x220.addItemListener(e -> {
             if (radioResolution176x220.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(176, 220));
+                var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, new Dimension(176, 220));
             }
         });
         radioResolution240x320.addItemListener(e -> {
             if (radioResolution240x320.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarPanel.getInstance(), new Dimension(240, 320));
+                var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+                HangarPanelUtils.fitBufferToNewResolution(hangarPanel, new Dimension(240, 320));
             }
         });
 

@@ -64,6 +64,9 @@ public class Image {
 
     public static Image createImage(String name) throws NullPointerException, IOException {
         var stream = MIDletResources.getResourceFromJar(name);
+        if (stream == null) {
+            throw new NullPointerException();
+        }
         return new Image(ImageIO.read(stream), false);
     }
 
