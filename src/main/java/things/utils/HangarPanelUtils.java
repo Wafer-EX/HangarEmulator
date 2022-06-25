@@ -38,7 +38,7 @@ public final class HangarPanelUtils {
     }
 
     public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
-        if (resolution != HangarState.getResolution() && resolution.width > 0 && resolution.height > 0) {
+        if (resolution.width > 0 && resolution.height > 0) {
             HangarState.setResolution(resolution);
 
             if (hangarPanel != null) {

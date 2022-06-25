@@ -91,7 +91,6 @@ public class HangarState {
         }
         if (hangarPanel != null) {
             HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
-            hangarPanel.updateBufferTransformations();
         }
     }
 
