@@ -68,12 +68,12 @@ public class Display {
 
     public int numColors() {
         // TODO: check it
-        return 255;
+        return 256;
     }
 
     public int numAlphaLevels() {
         // TODO: check it
-        return 255;
+        return 256;
     }
 
     public Displayable getCurrent() {
