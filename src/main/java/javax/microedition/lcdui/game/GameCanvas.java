@@ -21,7 +21,6 @@ import things.HangarState;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
