@@ -27,7 +27,6 @@ import java.awt.event.ComponentEvent;
 public class HangarLabel extends JLabel {
     public HangarLabel() {
         super();
-        setPreferredSize(new Dimension(360, 360));
         setHorizontalAlignment(JLabel.CENTER);
         setVerticalAlignment(JLabel.CENTER);
         setText("Please select a file.");
