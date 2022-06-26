@@ -25,7 +25,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarFrame extends JFrame {
-    private static HangarFrame instance;
+    private static final HangarFrame instance = new HangarFrame();
+    private static final Dimension defaultHangarSize = new Dimension(360, 360);
     private HangarPanel hangarPanel;
     private HangarLabel hangarLabel;
 
@@ -37,41 +38,39 @@ public class HangarFrame extends JFrame {
     }
 
     public static HangarFrame getInstance() {
-        if (instance == null) {
-            instance = new HangarFrame();
-        }
         return instance;
+    }
+
+    public HangarLabel add(HangarLabel hangarLabel) {
+        hangarLabel.setPreferredSize(hangarPanel != null ? hangarPanel.getSize() : defaultHangarSize);
+        super.add(hangarLabel);
+        for (var keyListener : getKeyListeners()) {
+            removeKeyListener(keyListener);
+        }
+
+        pack();
+        revalidate();
+        return this.hangarLabel = hangarLabel;
+    }
+
+    public HangarPanel add(HangarPanel hangarPanel) {
+        hangarPanel.setPreferredSize(hangarLabel != null ? hangarLabel.getSize() : defaultHangarSize);
+        super.add(hangarPanel);
+        if (hangarLabel != null) {
+            remove(hangarLabel);
+        }
+
+        addKeyListener(new HangarKeyListener(hangarPanel));
+        pack();
+        revalidate();
+        return this.hangarPanel = hangarPanel;
     }
 
     public HangarLabel getHangarLabel() {
         return hangarLabel;
     }
 
-    public void setHangarLabel(HangarLabel hangarLabel) {
-        this.hangarLabel = hangarLabel;
-        this.add(hangarLabel);
-        this.pack();
-        this.revalidate();
-    }
-
     public HangarPanel getHangarPanel() {
         return hangarPanel;
-    }
-
-    public void setHangarPanel(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
-        if (hangarLabel != null) {
-            hangarPanel.setPreferredSize(hangarLabel.getSize());
-            this.remove(hangarLabel);
-        }
-        else {
-            hangarPanel.setPreferredSize(new Dimension(360, 360));
-        }
-
-        this.addKeyListener(new HangarKeyListener(hangarPanel));
-        this.setJMenuBar(new HangarMenuBar());
-        this.add(hangarPanel);
-        this.pack();
-        this.revalidate();
     }
 }
