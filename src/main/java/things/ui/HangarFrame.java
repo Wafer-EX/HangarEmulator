@@ -41,7 +41,7 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public Component add(HangarLabel hangarLabel) {
+    public HangarLabel add(HangarLabel hangarLabel) {
         hangarLabel.setPreferredSize(hangarPanel != null ? hangarPanel.getSize() : defaultHangarSize);
         super.add(hangarLabel);
         for (var keyListener : getKeyListeners()) {
@@ -53,7 +53,7 @@ public class HangarFrame extends JFrame {
         return this.hangarLabel = hangarLabel;
     }
 
-    public Component add(HangarPanel hangarPanel) {
+    public HangarPanel add(HangarPanel hangarPanel) {
         hangarPanel.setPreferredSize(hangarLabel != null ? hangarLabel.getSize() : defaultHangarSize);
         super.add(hangarPanel);
         if (hangarLabel != null) {
