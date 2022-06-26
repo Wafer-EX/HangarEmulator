@@ -18,6 +18,7 @@ package things.utils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.game.Sprite;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public final class ImageUtils {
@@ -94,5 +95,10 @@ public final class ImageUtils {
             }
         }
         return image;
+    }
+
+    public static BufferedImage createCompatibleImage(int width, int height) {
+        var graphicsConfiguration = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
+        return graphicsConfiguration.createCompatibleImage(width, height);
     }
 }

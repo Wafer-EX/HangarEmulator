@@ -21,6 +21,7 @@ import things.enums.ScalingModes;
 import things.ui.HangarFrame;
 import things.ui.input.HangarMouseListener;
 import things.utils.HangarPanelUtils;
+import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
@@ -47,7 +48,7 @@ public class HangarPanel extends JPanel {
         var resolution = HangarState.getResolution();
         var timer = new Timer();
 
-        setBuffer(HangarState.getGraphicsConfiguration().createCompatibleImage(resolution.width, resolution.height));
+        setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
