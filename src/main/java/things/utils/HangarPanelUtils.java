@@ -42,7 +42,7 @@ public final class HangarPanelUtils {
             HangarState.setResolution(resolution);
 
             if (hangarPanel != null) {
-                var changedBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(resolution.width, resolution.height);
+                var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
                 var displayable = hangarPanel.getDisplayable();
 
                 hangarPanel.setBuffer(changedBuffer);

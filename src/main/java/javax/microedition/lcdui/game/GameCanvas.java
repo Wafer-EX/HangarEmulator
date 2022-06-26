@@ -18,6 +18,7 @@ package javax.microedition.lcdui.game;
 
 import things.ui.HangarFrame;
 import things.HangarState;
+import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
@@ -40,7 +41,7 @@ public abstract class GameCanvas extends Canvas {
         super();
         int width = HangarState.getResolution().width;
         int height = HangarState.getResolution().height;
-        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(width, height);
+        additionalBuffer = ImageUtils.createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
@@ -69,6 +70,6 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void sizeChanged(int w, int h) {
-        additionalBuffer = HangarState.getGraphicsConfiguration().createCompatibleImage(w, h);
+        additionalBuffer = ImageUtils.createCompatibleImage(w, h);
     }
 }

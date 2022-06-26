@@ -50,6 +50,10 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        if (hangarPanel != null) {
+            hangarPanel.refreshSerialCallTimer();
+        }
     }
 
     public static boolean getAntiAliasing() {
@@ -145,9 +149,5 @@ public class HangarState {
         var graphics2d = (Graphics2D) graphics;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         return graphics2d;
-    }
-
-    public static GraphicsConfiguration getGraphicsConfiguration() {
-        return GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice().getDefaultConfiguration();
     }
 }
