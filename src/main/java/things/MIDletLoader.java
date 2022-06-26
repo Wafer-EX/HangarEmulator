@@ -19,9 +19,11 @@ package things;
 import things.ui.HangarFrame;
 
 import javax.microedition.midlet.MIDlet;
+import javax.microedition.midlet.MIDletStateChangeException;
 import java.net.URL;
 
 public class MIDletLoader {
+    private static Thread midletThread;
     private static MIDlet midlet;
     private static String midletPath;
 
@@ -51,7 +53,16 @@ public class MIDletLoader {
                 var hangarFrame = HangarFrame.getInstance();
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
                 hangarFrame.setIconImage(MIDletResources.getIconFromJar());
-                midlet.startApp();
+
+                midletThread = new Thread(() -> {
+                    try {
+                        midlet.startApp();
+                    }
+                    catch (MIDletStateChangeException ex) {
+                        ex.printStackTrace();
+                    }
+                });
+                midletThread.start();
             }
         }
         catch (Exception ex) {
