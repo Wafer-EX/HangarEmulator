@@ -70,8 +70,8 @@ public class MIDletLoader {
         }
     }
 
-    public static boolean isRunning() {
-        return midletThread != null && midletThread.isAlive();
+    public static boolean isLoaded() {
+        return midlet != null;
     }
 
     public static MIDlet getLastLoaded() {
