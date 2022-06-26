@@ -43,33 +43,35 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public HangarLabel getHangarLabel() {
-        return hangarLabel;
+    public Component add(HangarLabel hangarLabel) {
+        super.add(hangarLabel);
+        for (var keyListener : getKeyListeners()) {
+            removeKeyListener(keyListener);
+        }
+
+        pack();
+        revalidate();
+        return this.hangarLabel = hangarLabel;
     }
 
-    public void setHangarLabel(HangarLabel hangarLabel) {
-        this.hangarLabel = hangarLabel;
-        this.add(hangarLabel);
-        this.pack();
-        this.revalidate();
-    }
-
-    public HangarPanel getHangarPanel() {
-        return hangarPanel;
-    }
-
-    public void setHangarPanel(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
-
+    public Component add(HangarPanel hangarPanel) {
+        super.add(hangarPanel);
         hangarPanel.setPreferredSize(hangarLabel == null ? new Dimension(360, 360) : hangarLabel.getSize());
         if (hangarLabel != null) {
             remove(hangarLabel);
         }
 
-        this.addKeyListener(new HangarKeyListener(hangarPanel));
-        this.setJMenuBar(new HangarMenuBar());
-        this.add(hangarPanel);
-        this.pack();
-        this.revalidate();
+        addKeyListener(new HangarKeyListener(hangarPanel));
+        pack();
+        revalidate();
+        return this.hangarPanel = hangarPanel;
+    }
+
+    public HangarLabel getHangarLabel() {
+        return hangarLabel;
+    }
+
+    public HangarPanel getHangarPanel() {
+        return hangarPanel;
     }
 }

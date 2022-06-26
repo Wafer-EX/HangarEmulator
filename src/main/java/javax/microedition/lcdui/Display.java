@@ -37,7 +37,7 @@ public class Display {
 
     private Display(HangarPanel hangarPanel) {
         this.hangarPanel = hangarPanel;
-        HangarFrame.getInstance().setHangarPanel(hangarPanel);
+        HangarFrame.getInstance().add(hangarPanel);
     }
 
     public static Display getDisplay(MIDlet m) {

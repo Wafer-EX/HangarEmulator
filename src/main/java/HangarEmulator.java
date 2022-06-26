@@ -36,7 +36,7 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                HangarFrame.getInstance().setHangarLabel(new HangarLabel());
+                HangarFrame.getInstance().add(new HangarLabel());
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);
