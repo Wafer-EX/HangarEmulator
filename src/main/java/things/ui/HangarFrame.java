@@ -26,6 +26,7 @@ import java.awt.*;
 
 public class HangarFrame extends JFrame {
     private static HangarFrame instance;
+    private final Dimension defaultHangarSize = new Dimension(360, 360);
     private HangarPanel hangarPanel;
     private HangarLabel hangarLabel;
 
@@ -44,6 +45,7 @@ public class HangarFrame extends JFrame {
     }
 
     public Component add(HangarLabel hangarLabel) {
+        hangarLabel.setPreferredSize(hangarPanel != null ? hangarPanel.getSize() : defaultHangarSize);
         super.add(hangarLabel);
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
@@ -55,8 +57,8 @@ public class HangarFrame extends JFrame {
     }
 
     public Component add(HangarPanel hangarPanel) {
+        hangarPanel.setPreferredSize(hangarLabel != null ? hangarLabel.getSize() : defaultHangarSize);
         super.add(hangarPanel);
-        hangarPanel.setPreferredSize(hangarLabel == null ? new Dimension(360, 360) : hangarLabel.getSize());
         if (hangarLabel != null) {
             remove(hangarLabel);
         }
