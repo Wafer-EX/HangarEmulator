@@ -38,15 +38,15 @@ import java.util.TimerTask;
 public class HangarPanel extends JPanel {
     private Displayable displayable;
     private BufferedImage buffer;
-    private Point bufferPosition = new Point(0, 0);
+    private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
     private Dimension bufferScale = HangarState.getResolution();
     private Runnable callSerially;
+    private Timer serialCallTimer = new Timer();
 
     public HangarPanel() {
         var hangarMouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
-        var timer = new Timer();
 
         setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
@@ -54,17 +54,6 @@ public class HangarPanel extends JPanel {
 
         addMouseListener(hangarMouseListener);
         addMouseMotionListener(hangarMouseListener);
-
-        // TODO: change period dynamically (or when changing framerate)
-        timer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                if (callSerially != null) {
-                    callSerially.run();
-                }
-            }
-        }, 0, HangarState.frameRateInMilliseconds());
-
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -76,8 +65,8 @@ public class HangarPanel extends JPanel {
                 hangarPanel.updateBufferTransformations();
             }
         });
+        refreshSerialCallTimer();
     }
-
     public Displayable getDisplayable() {
         return displayable;
     }
@@ -129,6 +118,24 @@ public class HangarPanel extends JPanel {
         bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
         bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
         repaint();
+    }
+
+    public void refreshSerialCallTimer() {
+        serialCallTimer.cancel();
+        serialCallTimer.purge();
+        serialCallTimer = new Timer();
+
+        var frameRateInMilliseconds = HangarState.frameRateInMilliseconds();
+        if (frameRateInMilliseconds >= 0) {
+            serialCallTimer.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    if (callSerially != null) {
+                        callSerially.run();
+                    }
+                }
+            }, 0, frameRateInMilliseconds);
+        }
     }
 
     @Override

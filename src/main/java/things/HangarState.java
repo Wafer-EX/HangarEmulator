@@ -50,6 +50,10 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        if (hangarPanel != null) {
+            hangarPanel.refreshSerialCallTimer();
+        }
     }
 
     public static boolean getAntiAliasing() {
