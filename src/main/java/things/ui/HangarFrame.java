@@ -25,8 +25,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarFrame extends JFrame {
-    private static HangarFrame instance;
-    private final Dimension defaultHangarSize = new Dimension(360, 360);
+    private static final HangarFrame instance = new HangarFrame();
+    private static final Dimension defaultHangarSize = new Dimension(360, 360);
     private HangarPanel hangarPanel;
     private HangarLabel hangarLabel;
 
@@ -38,9 +38,6 @@ public class HangarFrame extends JFrame {
     }
 
     public static HangarFrame getInstance() {
-        if (instance == null) {
-            instance = new HangarFrame();
-        }
         return instance;
     }
 
