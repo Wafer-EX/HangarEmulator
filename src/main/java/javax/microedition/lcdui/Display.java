@@ -32,15 +32,17 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
-    private static final Display display = new Display(new HangarPanel());
+    private static Display display;
     private final HangarPanel hangarPanel;
 
     private Display(HangarPanel hangarPanel) {
         this.hangarPanel = hangarPanel;
-        HangarFrame.getInstance().add(hangarPanel);
     }
 
     public static Display getDisplay(MIDlet m) {
+        if (display == null) {
+            display = new Display(HangarFrame.getInstance().getHangarPanel());
+        }
         return display;
     }
 
