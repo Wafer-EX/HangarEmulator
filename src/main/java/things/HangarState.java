@@ -91,7 +91,7 @@ public class HangarState {
         var hangarPanel = HangarFrame.getInstance().getHangarPanel();
 
         if (scalingMode == ScalingModes.ChangeResolution) {
-            currentResolution = hangarLabel != null ? hangarLabel.getSize() : hangarPanel != null ? hangarPanel.getSize() : currentResolution;
+            currentResolution = hangarPanel != null ? hangarPanel.getSize() : hangarLabel != null ? hangarLabel.getSize() : currentResolution;
         }
         if (hangarPanel != null) {
             HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
