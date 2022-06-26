@@ -23,7 +23,6 @@ import javax.microedition.midlet.MIDletStateChangeException;
 import java.net.URL;
 
 public class MIDletLoader {
-    private static Thread midletThread;
     private static MIDlet midlet;
     private static String midletPath;
 
@@ -54,15 +53,14 @@ public class MIDletLoader {
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
                 hangarFrame.setIconImage(MIDletResources.getIconFromJar());
 
-                midletThread = new Thread(() -> {
+                new Thread(() -> {
                     try {
                         midlet.startApp();
                     }
                     catch (MIDletStateChangeException ex) {
                         ex.printStackTrace();
                     }
-                });
-                midletThread.start();
+                }).start();
             }
         }
         catch (Exception ex) {
@@ -70,8 +68,8 @@ public class MIDletLoader {
         }
     }
 
-    public static boolean isRunning() {
-        return midletThread != null && midletThread.isAlive();
+    public static boolean isLoaded() {
+        return midlet != null;
     }
 
     public static MIDlet getLastLoaded() {
