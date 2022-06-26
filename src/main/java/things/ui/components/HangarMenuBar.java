@@ -50,7 +50,7 @@ public class HangarMenuBar extends JMenuBar {
             SwingUtilities.invokeLater(() -> {
                 var selectedFile = fileChooser.getSelectedFile();
                 if (selectedFile != null) {
-                    if (!MIDletLoader.isLoaded()) {
+                    if (!MIDletLoader.isRunning()) {
                         MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
                         MIDletLoader.startLoadedMIDlet();
                     }

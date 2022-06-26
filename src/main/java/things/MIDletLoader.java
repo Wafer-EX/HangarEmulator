@@ -70,15 +70,15 @@ public class MIDletLoader {
         }
     }
 
+    public static boolean isRunning() {
+        return midletThread != null && midletThread.isAlive();
+    }
+
     public static MIDlet getLastLoaded() {
         return midlet;
     }
 
     public static String getLastLoadedPath() {
         return midletPath;
-    }
-
-    public static boolean isLoaded() {
-        return midlet != null;
     }
 }
