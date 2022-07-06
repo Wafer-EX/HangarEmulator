@@ -130,13 +130,8 @@ public class Image {
         if (stream == null) {
             throw new NullPointerException();
         }
-        try {
-            var bufferedImage = ImageIO.read(stream);
-            return new Image(bufferedImage, false);
-        }
-        catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
+        var bufferedImage = ImageIO.read(stream);
+        return new Image(bufferedImage, false);
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {

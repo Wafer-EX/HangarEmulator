@@ -121,8 +121,13 @@ public class Graphics {
     }
 
     public void setFont(Font font) {
-        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
-        this.seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
+        if (font != null) {
+            int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
+            this.seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
+        }
+        else {
+            this.seFont = Font.getDefaultFont().getSEFont();
+        }
     }
 
     public int getClipX() {
@@ -225,10 +230,8 @@ public class Graphics {
         if (width > 0 && height > 0) {
             var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
             var transformedImage = ImageUtils.transformImage(imageRegion, transform);
-
             x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
             y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
-
             seGraphics.drawImage(transformedImage, x_dest, y_dest, width, height, null);
         }
     }
@@ -254,6 +257,6 @@ public class Graphics {
     }
 
     public int getDisplayColor(int color) {
-        return Color.white.getRGB();
+        return Color.WHITE.getRGB();
     }
 }
