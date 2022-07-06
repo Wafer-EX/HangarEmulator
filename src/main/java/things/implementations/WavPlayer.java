@@ -28,7 +28,6 @@ import java.io.InputStream;
 
 public class WavPlayer extends ExtendedPlayer {
     private Clip clip;
-    private int loopCount;
 
     public WavPlayer(InputStream stream) {
         try {
@@ -45,7 +44,68 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public long setMediaTime(long now) throws MediaException {
+    public void start() throws IllegalStateException, MediaException, SecurityException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
+        else if (getState() != STARTED) {
+            if (getState() == UNREALIZED || getState() == REALIZED) {
+                prefetch();
+            }
+            clip.setMicrosecondPosition(0);
+            clip.start();
+            setState(STARTED);
+            for (var playerListener : getPlayerListeners()) {
+                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+            }
+        }
+    }
+
+    @Override
+    public void stop() throws IllegalStateException, MediaException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
+        if (clip.isRunning()) {
+            clip.stop();
+            setState(PREFETCHED);
+            for (var playerListener : getPlayerListeners()) {
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
+            }
+        }
+    }
+
+    @Override
+    public void deallocate() throws IllegalStateException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case UNREALIZED, REALIZED -> { }
+            case STARTED -> {
+                try {
+                    stop();
+                    setState(REALIZED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            default -> setState(REALIZED);
+        }
+    }
+
+    @Override
+    public void close() {
+        if (getState() != CLOSED) {
+            setState(CLOSED);
+            clip.close();
+            for (var playerListener : getPlayerListeners()) {
+                playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
+            }
+        }
+    }
+
+    @Override
+    public long setMediaTime(long now) throws IllegalStateException, MediaException {
         if (getState() == UNREALIZED || getState() == CLOSED) {
             throw new IllegalStateException();
         }
@@ -54,7 +114,7 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public long getMediaTime() {
+    public long getMediaTime() throws IllegalStateException  {
         return clip.getMicrosecondLength();
     }
 
@@ -69,80 +129,36 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public void prefetch() {
-        setState(PREFETCHED);
-    }
-
-    @Override
-    public void start() {
-        if (getState() != STARTED) {
-            if (getState() == UNREALIZED || getState() == REALIZED) {
-                prefetch();
-            }
-            clip.setMicrosecondPosition(0);
-            clip.start();
-            setState(STARTED);
-            for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
-            }
-        }
-    }
-
-    @Override
-    public void stop() {
-        if (getState() != PREFETCHED) {
-            clip.stop();
-            setState(PREFETCHED);
-            for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
-            }
-        }
-    }
-
-    @Override
-    public void deallocate() {
-        // TODO: rewrite method logic
-        setState(REALIZED);
-    }
-
-    @Override
-    public void close() {
-        if (getState() != CLOSED) {
-            clip.close();
-            setState(CLOSED);
-            for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
-            }
-        }
-    }
-
-    @Override
-    public void setLoopCount(int count) {
+    public void setLoopCount(int count) throws IllegalArgumentException, IllegalStateException {
         if (getState() == STARTED || getState() == CLOSED) {
             throw new IllegalStateException();
         }
-        else {
-            if (count > 0) {
-                clip.loop(count - 1);
-                loopCount = count - 1;
-            }
-            else {
-                clip.loop(count);
-                loopCount = count;
-            }
+        switch (count) {
+            case -1 -> clip.loop(Clip.LOOP_CONTINUOUSLY);
+            case 0 -> throw new IllegalArgumentException();
+            default -> clip.loop(count - 1);
         }
     }
 
     @Override
-    public Control[] getControls() {
+    public Control[] getControls() throws IllegalStateException {
+        // TODO: add controls to array
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
         return new Control[0];
     }
 
     @Override
-    public Control getControl(String controlType) {
+    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
         return switch (controlType) {
+            // TODO: add ToneControl
+            case "ToneControl" -> null;
             case "VolumeControl" -> new WavVolumeControl(this);
-            default -> null;
+            default -> throw new IllegalArgumentException();
         };
     }
 }
