@@ -28,7 +28,7 @@ public class MidiPlayer extends ExtendedPlayer {
 
     public MidiPlayer(InputStream stream) {
         try {
-            sequencer = HangarAudio.getSequencer();
+            sequencer = HangarAudio.getSequencerWithSoundbank();
             sequencer.open();
             sequencer.setSequence(stream);
             sequencer.setLoopCount(1);
@@ -121,6 +121,20 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public void deallocate() throws IllegalStateException {
+        var state = getState();
+        if (state == CLOSED) {
+            throw new IllegalStateException();
+        }
+        if (state != UNREALIZED && state != REALIZED) {
+            if (state == STARTED) {
+                stop();
+            }
+            setState(REALIZED);
+        }
+    }
+
+    @Override
     public void close() {
         if (getState() != CLOSED) {
             setState(CLOSED);
@@ -156,11 +170,9 @@ public class MidiPlayer extends ExtendedPlayer {
 
     @Override
     public Control getControl(String controlType) {
-        switch (controlType) {
-            case "VolumeControl":
-                return new MidiVolumeControl(this);
-            default:
-                return null;
-        }
+        return switch (controlType) {
+            case "VolumeControl" -> new MidiVolumeControl(this);
+            default -> null;
+        };
     }
 }

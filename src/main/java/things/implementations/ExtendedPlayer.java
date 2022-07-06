@@ -56,7 +56,7 @@ public abstract class ExtendedPlayer implements Player {
 
     @Override
     public void deallocate() {
-        // TODO: write method logic
+        // TODO: check method logic
         setState(REALIZED);
     }
 
