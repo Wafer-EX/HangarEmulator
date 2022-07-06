@@ -100,6 +100,12 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public void deallocate() {
+        // TODO: rewrite method logic
+        setState(REALIZED);
+    }
+
+    @Override
     public void close() {
         if (getState() != CLOSED) {
             clip.close();
@@ -125,12 +131,6 @@ public class WavPlayer extends ExtendedPlayer {
                 loopCount = count;
             }
         }
-    }
-
-    @Override
-    public int getLoopCount() {
-        // TODO: check it
-        return loopCount;
     }
 
     @Override

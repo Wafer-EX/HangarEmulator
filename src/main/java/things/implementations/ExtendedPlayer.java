@@ -16,7 +16,6 @@
 
 package things.implementations;
 
-import javax.microedition.media.Control;
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;
 import javax.microedition.media.PlayerListener;
@@ -35,50 +34,19 @@ public abstract class ExtendedPlayer implements Player {
         this.currentState = state;
     }
 
-    public abstract int getLoopCount();
-
     @Override
-    public void realize() throws MediaException {
-        if (getState() == CLOSED) {
-            throw new MediaException();
+    public void realize() throws IllegalStateException, MediaException, SecurityException {
+        switch (currentState) {
+            case CLOSED -> throw new IllegalStateException();
+            case REALIZED, PREFETCHED, STARTED -> { }
+            default -> setState(REALIZED);
         }
-        setState(REALIZED);
     }
-
-    @Override
-    public abstract void prefetch() throws IllegalStateException, MediaException, SecurityException;
-
-    @Override
-    public abstract void start() throws IllegalStateException, MediaException, SecurityException;
-
-    @Override
-    public abstract void stop() throws IllegalStateException, MediaException;
-
-    @Override
-    public void deallocate() {
-        // TODO: check method logic
-        setState(REALIZED);
-    }
-
-    @Override
-    public abstract void close();
-
-    @Override
-    public abstract long setMediaTime(long now) throws IllegalStateException, MediaException;
-
-    @Override
-    public abstract long getMediaTime() throws IllegalStateException;
 
     @Override
     public int getState() {
         return currentState;
     }
-
-    @Override
-    public abstract long getDuration() throws IllegalStateException;
-
-    @Override
-    public abstract String getContentType() throws IllegalStateException;
 
     @Override
     public void addPlayerListener(PlayerListener playerListener) throws IllegalStateException {
@@ -97,13 +65,4 @@ public abstract class ExtendedPlayer implements Player {
         }
         playerListeners.remove(playerListener);
     }
-
-    @Override
-    public abstract void setLoopCount(int count) throws IllegalArgumentException, IllegalStateException;
-
-    @Override
-    public abstract Control[] getControls();
-
-    @Override
-    public abstract Control getControl(String controlType);
 }
