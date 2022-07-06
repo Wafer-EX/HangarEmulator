@@ -45,30 +45,6 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public long setMediaTime(long now) throws MediaException {
-        if (getState() == UNREALIZED || getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        clip.setMicrosecondPosition(now);
-        return now;
-    }
-
-    @Override
-    public long getMediaTime() {
-        return clip.getMicrosecondLength();
-    }
-
-    @Override
-    public long getDuration() throws IllegalStateException {
-        return clip.getMicrosecondLength();
-    }
-
-    @Override
-    public String getContentType() throws IllegalStateException {
-        return "audio/x-wav";
-    }
-
-    @Override
     public void prefetch() {
         setState(PREFETCHED);
     }
@@ -108,8 +84,8 @@ public class WavPlayer extends ExtendedPlayer {
     @Override
     public void close() {
         if (getState() != CLOSED) {
-            clip.close();
             setState(CLOSED);
+            clip.close();
             for (var playerListener : getPlayerListeners()) {
                 playerListener.playerUpdate(this, PlayerListener.CLOSED, null);
             }
@@ -117,19 +93,38 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public long setMediaTime(long now) throws MediaException {
+        if (getState() == UNREALIZED || getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
+        clip.setMicrosecondPosition(now);
+        return now;
+    }
+
+    @Override
+    public long getMediaTime() {
+        return clip.getMicrosecondLength();
+    }
+
+    @Override
+    public String getContentType() throws IllegalStateException {
+        return "audio/x-wav";
+    }
+
+    @Override
+    public long getDuration() throws IllegalStateException {
+        return clip.getMicrosecondLength();
+    }
+
+    @Override
     public void setLoopCount(int count) {
         if (getState() == STARTED || getState() == CLOSED) {
             throw new IllegalStateException();
         }
-        else {
-            if (count > 0) {
-                clip.loop(count - 1);
-                loopCount = count - 1;
-            }
-            else {
-                clip.loop(count);
-                loopCount = count;
-            }
+        switch (count) {
+            case -1 -> clip.loop(Clip.LOOP_CONTINUOUSLY);
+            case 0 -> throw new IllegalArgumentException();
+            default -> clip.loop(count - 1);
         }
     }
 
