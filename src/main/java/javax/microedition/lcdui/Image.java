@@ -40,7 +40,11 @@ public class Image {
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {
-        return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), true);
+        if (width <= 1 || height <= 1) {
+            throw new IllegalArgumentException();
+        }
+        var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        return new Image(bufferedImage, true);
     }
 
     public static Image createImage(Image source) throws NullPointerException {
@@ -49,7 +53,7 @@ public class Image {
         }
         else {
             if (source.isMutable()) {
-                var bufferedImage = (BufferedImage) source.seImage;
+                var bufferedImage = (BufferedImage) source.getSEImage();
                 var colorModel = bufferedImage.getColorModel();
                 var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
                 var writableRaster = bufferedImage.copyData(null);
