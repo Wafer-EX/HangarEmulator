@@ -21,6 +21,7 @@ import things.MIDletResources;
 import things.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -40,7 +41,14 @@ public class Image {
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {
-        return new Image(new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB), true);
+        if (width <= 1 || height <= 1) {
+            throw new IllegalArgumentException();
+        }
+        var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        var graphics = bufferedImage.createGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, width, height);
+        return new Image(bufferedImage, true);
     }
 
     public static Image createImage(Image source) throws NullPointerException {
@@ -49,7 +57,7 @@ public class Image {
         }
         else {
             if (source.isMutable()) {
-                var bufferedImage = (BufferedImage) source.seImage;
+                var bufferedImage = (BufferedImage) source.getSEImage();
                 var colorModel = bufferedImage.getColorModel();
                 var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
                 var writableRaster = bufferedImage.copyData(null);
@@ -63,9 +71,12 @@ public class Image {
     }
 
     public static Image createImage(String name) throws NullPointerException, IOException {
+        if (name == null) {
+            throw new NullPointerException();
+        }
         var stream = MIDletResources.getResourceFromJar(name);
         if (stream == null) {
-            throw new NullPointerException();
+            throw new IOException();
         }
         return new Image(ImageIO.read(stream), false);
     }
@@ -119,13 +130,8 @@ public class Image {
         if (stream == null) {
             throw new NullPointerException();
         }
-        try {
-            var bufferedImage = ImageIO.read(stream);
-            return new Image(bufferedImage, false);
-        }
-        catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
+        var bufferedImage = ImageIO.read(stream);
+        return new Image(bufferedImage, false);
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {
