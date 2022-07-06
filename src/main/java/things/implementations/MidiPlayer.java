@@ -57,17 +57,6 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public void prefetch() throws IllegalStateException, MediaException, SecurityException {
-        if (getState() != STARTED) {
-            switch (getState()) {
-                case UNREALIZED -> realize();
-                case CLOSED -> throw new IllegalStateException();
-            }
-            setState(PREFETCHED);
-        }
-    }
-
-    @Override
     public void start() throws MediaException {
         if (getState() == CLOSED) {
             throw new IllegalStateException();
@@ -145,13 +134,13 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public String getContentType() throws IllegalStateException {
-        return "audio/midi";
+    public long getDuration() throws IllegalStateException {
+        return sequencer.getMicrosecondLength();
     }
 
     @Override
-    public long getDuration() throws IllegalStateException {
-        return sequencer.getMicrosecondLength();
+    public String getContentType() throws IllegalStateException {
+        return "audio/midi";
     }
 
     @Override
@@ -167,15 +156,24 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public Control[] getControls() {
+    public Control[] getControls() throws IllegalStateException {
+        // TODO: add controls to array
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
         return new Control[0];
     }
 
     @Override
-    public Control getControl(String controlType) {
+    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException {
+        if (getState() == CLOSED) {
+            throw new IllegalStateException();
+        }
         return switch (controlType) {
+            // TODO: add ToneControl
+            case "ToneControl" -> null;
             case "VolumeControl" -> new MidiVolumeControl(this);
-            default -> null;
+            default -> throw new IllegalArgumentException();
         };
     }
 }

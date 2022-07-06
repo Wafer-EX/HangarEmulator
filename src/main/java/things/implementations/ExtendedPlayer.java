@@ -44,6 +44,17 @@ public abstract class ExtendedPlayer implements Player {
     }
 
     @Override
+    public void prefetch() throws IllegalStateException, MediaException, SecurityException {
+        if (getState() != STARTED) {
+            switch (getState()) {
+                case UNREALIZED -> realize();
+                case CLOSED -> throw new IllegalStateException();
+            }
+            setState(PREFETCHED);
+        }
+    }
+
+    @Override
     public int getState() {
         return currentState;
     }
