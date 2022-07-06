@@ -21,6 +21,7 @@ import things.MIDletResources;
 import things.utils.ImageUtils;
 
 import javax.imageio.ImageIO;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -44,6 +45,9 @@ public class Image {
             throw new IllegalArgumentException();
         }
         var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        var graphics = bufferedImage.createGraphics();
+        graphics.setColor(Color.WHITE);
+        graphics.fillRect(0, 0, width, height);
         return new Image(bufferedImage, true);
     }
 
@@ -67,9 +71,12 @@ public class Image {
     }
 
     public static Image createImage(String name) throws NullPointerException, IOException {
+        if (name == null) {
+            throw new NullPointerException();
+        }
         var stream = MIDletResources.getResourceFromJar(name);
         if (stream == null) {
-            throw new NullPointerException();
+            throw new IOException();
         }
         return new Image(ImageIO.read(stream), false);
     }
