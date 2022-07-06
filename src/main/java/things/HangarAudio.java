@@ -43,7 +43,7 @@ public final class HangarAudio {
         HangarAudio.soundbank = soundbank;
     }
 
-    public static Sequencer getSequencer() {
+    public static Sequencer getSequencerWithSoundbank() {
         try {
             if (soundbank != null) {
                 var sequencer = MidiSystem.getSequencer(false);

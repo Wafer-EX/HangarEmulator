@@ -6,6 +6,8 @@ This is a simple J2ME emulator which will let you play some old games for featur
 - Java Development Kit 17
 - ~256 MB free RAM
 ## Build
+As a result of the assembly, the `HangarEmulator-1.0-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
+
 Windows:
 ```
 gradlew.bat shadowJar build
@@ -14,4 +16,5 @@ Linux:
 ```
 ./gradlew shadowJar build
 ```
-As a result of the assembly, the `HangarEmulator-1.0-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
+## License
+Copyright 2022 Kirill Lomakin. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](README.md) for the full license text.

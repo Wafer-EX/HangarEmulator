@@ -100,6 +100,12 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public void deallocate() {
+        // TODO: rewrite method logic
+        setState(REALIZED);
+    }
+
+    @Override
     public void close() {
         if (getState() != CLOSED) {
             clip.close();
@@ -128,18 +134,15 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public int getLoopCount() {
-        // TODO: check it
-        return loopCount;
+    public Control[] getControls() {
+        return new Control[0];
     }
 
     @Override
     public Control getControl(String controlType) {
-        switch (controlType) {
-            case "VolumeControl":
-                return new WavVolumeControl(this);
-            default:
-                return null;
-        }
+        return switch (controlType) {
+            case "VolumeControl" -> new WavVolumeControl(this);
+            default -> null;
+        };
     }
 }
