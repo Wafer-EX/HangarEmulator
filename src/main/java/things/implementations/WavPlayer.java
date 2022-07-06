@@ -134,6 +134,11 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public Control[] getControls() {
+        return new Control[0];
+    }
+
+    @Override
     public Control getControl(String controlType) {
         return switch (controlType) {
             case "VolumeControl" -> new WavVolumeControl(this);

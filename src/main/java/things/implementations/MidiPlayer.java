@@ -169,6 +169,11 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
+    public Control[] getControls() {
+        return new Control[0];
+    }
+
+    @Override
     public Control getControl(String controlType) {
         return switch (controlType) {
             case "VolumeControl" -> new MidiVolumeControl(this);

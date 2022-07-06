@@ -102,14 +102,8 @@ public abstract class ExtendedPlayer implements Player {
     public abstract void setLoopCount(int count) throws IllegalArgumentException, IllegalStateException;
 
     @Override
-    public Control[] getControls() {
-        // TODO: write method logic
-        return null;
-    }
+    public abstract Control[] getControls();
 
     @Override
-    public Control getControl(String controlType) {
-        // TODO: write method logic
-        return null;
-    }
+    public abstract Control getControl(String controlType);
 }
