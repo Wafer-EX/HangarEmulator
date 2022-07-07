@@ -46,23 +46,24 @@ public class MidiPlayer extends ExtendedPlayer {
     public void realize() throws IllegalStateException, MediaException, SecurityException {
         switch (getState()) {
             case CLOSED -> throw new IllegalStateException();
-            case REALIZED, PREFETCHED, STARTED -> { }
-            default -> {
+            case UNREALIZED -> {
                 try {
-                    sequencer = HangarAudio.getSequencerWithSoundbank();
-                    sequencer.open();
-                    sequencer.addMetaEventListener(meta -> {
-                        if (meta.getType() == 47) {
-                            for (var playerListener : getPlayerListeners()) {
-                                playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
-                            }
-                            if (sequencer.getLoopCount() > 0 || sequencer.getLoopCount() == -1) {
+                    if (sequencer == null) {
+                        sequencer = HangarAudio.getSequencerWithSoundbank();
+                        sequencer.open();
+                        sequencer.addMetaEventListener(meta -> {
+                            if (meta.getType() == 47) {
                                 for (var playerListener : getPlayerListeners()) {
-                                    playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                                    playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
+                                }
+                                if (sequencer.getLoopCount() > 0 || sequencer.getLoopCount() == -1) {
+                                    for (var playerListener : getPlayerListeners()) {
+                                        playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                                    }
                                 }
                             }
-                        }
-                    });
+                        });
+                    }
                     setState(REALIZED);
                 }
                 catch (Exception ex) {
@@ -84,8 +85,8 @@ public class MidiPlayer extends ExtendedPlayer {
                     }
                     if (sequencer.getSequence() == null) {
                         sequencer.setSequence(new ByteArrayInputStream(audioSource));
-                        sequencer.setLoopCount(1);
                     }
+                    sequencer.setMicrosecondPosition(0);
                     setState(PREFETCHED);
                 }
                 catch (Exception ex) {
@@ -200,6 +201,12 @@ public class MidiPlayer extends ExtendedPlayer {
         switch (getState()) {
             case STARTED, CLOSED -> throw new IllegalStateException();
             default -> {
+                if (getState() == UNREALIZED) {
+                    try {
+                        realize();
+                    }
+                    catch (MediaException ignored) { }
+                }
                 switch (count) {
                     case -1 -> sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
                     case 0 -> throw new IllegalArgumentException();
