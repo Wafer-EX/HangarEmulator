@@ -53,13 +53,16 @@ public class MidiPlayer extends ExtendedPlayer {
                         sequencer.open();
                         sequencer.addMetaEventListener(meta -> {
                             if (meta.getType() == 47) {
-                                for (var playerListener : getPlayerListeners()) {
-                                    playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
-                                }
-                                if (sequencer.getLoopCount() > 0 || sequencer.getLoopCount() == -1) {
+                                if (sequencer.isRunning()) {
                                     for (var playerListener : getPlayerListeners()) {
-                                        playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                                        playerListener.playerUpdate(this, PlayerListener.STARTED, sequencer.getMicrosecondLength());
                                     }
+                                }
+                                else {
+                                    for (var playerListener : getPlayerListeners()) {
+                                        playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
+                                    }
+                                    setState(PREFETCHED);
                                 }
                             }
                         });
@@ -108,7 +111,7 @@ public class MidiPlayer extends ExtendedPlayer {
                 sequencer.start();
                 setState(STARTED);
                 for (var playerListener : getPlayerListeners()) {
-                    playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                    playerListener.playerUpdate(this, PlayerListener.STARTED, sequencer.getMicrosecondPosition());
                 }
             }
         }
@@ -123,7 +126,7 @@ public class MidiPlayer extends ExtendedPlayer {
             sequencer.stop();
             setState(PREFETCHED);
             for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, sequencer.getMicrosecondPosition());
             }
         }
     }
