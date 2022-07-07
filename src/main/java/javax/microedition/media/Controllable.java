@@ -17,7 +17,7 @@
 package javax.microedition.media;
 
 public interface Controllable {
-    public Control[] getControls();
+    public Control[] getControls() throws IllegalStateException;
 
-    public Control getControl(String controlType);
+    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException;
 }

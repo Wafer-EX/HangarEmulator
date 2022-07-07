@@ -69,7 +69,7 @@ public class Sound {
         return 255;
     }
 
-    public static int getConcurrentSoundCount(int type) throws IllegalArgumentException  {
+    public static int getConcurrentSoundCount(int type) throws IllegalArgumentException {
         // TODO: write method logic
         return 1;
     }
