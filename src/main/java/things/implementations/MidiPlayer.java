@@ -21,34 +21,20 @@ import things.implementations.additions.MidiVolumeControl;
 
 import javax.microedition.media.*;
 import javax.sound.midi.Sequencer;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class MidiPlayer extends ExtendedPlayer {
     private Sequencer sequencer;
+    private byte[] audioSource;
 
     public MidiPlayer(InputStream stream) {
         try {
-            sequencer = HangarAudio.getSequencerWithSoundbank();
-            sequencer.open();
-            sequencer.setSequence(stream);
-            sequencer.setLoopCount(1);
-            sequencer.setMicrosecondPosition(0);
-            sequencer.addMetaEventListener(meta -> {
-                if (meta.getType() == 47) {
-                    for (var playerListener : getPlayerListeners()) {
-                        playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
-                    }
-                    if (sequencer.getLoopCount() > 0 || sequencer.getLoopCount() == -1) {
-                        for (var playerListener : getPlayerListeners()) {
-                            playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
-                        }
-                    }
-                }
-            });
-            setState(PREFETCHED);
+            audioSource = stream.readAllBytes();
+            setState(UNREALIZED);
         }
-        catch (Exception exception) {
-            exception.printStackTrace();
+        catch (Exception ex) {
+            ex.printStackTrace();
         }
     }
 
@@ -57,18 +43,73 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public void start() throws MediaException {
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        else if (getState() != STARTED) {
-            if (getState() == UNREALIZED || getState() == REALIZED) {
-                prefetch();
+    public void realize() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case UNREALIZED -> {
+                try {
+                    if (sequencer == null) {
+                        sequencer = HangarAudio.getSequencerWithSoundbank();
+                        sequencer.open();
+                        sequencer.addMetaEventListener(meta -> {
+                            if (meta.getType() == 47) {
+                                for (var playerListener : getPlayerListeners()) {
+                                    playerListener.playerUpdate(this, PlayerListener.END_OF_MEDIA, null);
+                                }
+                                if (sequencer.getLoopCount() > 0 || sequencer.getLoopCount() == -1) {
+                                    for (var playerListener : getPlayerListeners()) {
+                                        playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                                    }
+                                }
+                            }
+                        });
+                    }
+                    setState(REALIZED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
-            sequencer.start();
-            setState(STARTED);
-            for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+        }
+    }
+
+    @Override
+    public void prefetch() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case STARTED, PREFETCHED -> { }
+            default -> {
+                try {
+                    if (getState() == UNREALIZED) {
+                        realize();
+                    }
+                    if (sequencer.getSequence() == null) {
+                        sequencer.setSequence(new ByteArrayInputStream(audioSource));
+                    }
+                    sequencer.setMicrosecondPosition(0);
+                    setState(PREFETCHED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void start() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case STARTED -> { }
+            default -> {
+                if (getState() == UNREALIZED || getState() == REALIZED) {
+                    prefetch();
+                }
+                sequencer.start();
+                setState(STARTED);
+                for (var playerListener : getPlayerListeners()) {
+                    playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+                }
             }
         }
     }
@@ -78,7 +119,7 @@ public class MidiPlayer extends ExtendedPlayer {
         if (getState() == CLOSED) {
             throw new IllegalStateException();
         }
-        if (sequencer.isRunning()) {
+        else if (sequencer.isRunning()) {
             sequencer.stop();
             setState(PREFETCHED);
             for (var playerListener : getPlayerListeners()) {
@@ -117,63 +158,83 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public long setMediaTime(long now) throws MediaException {
-        if (getState() == UNREALIZED || getState() == CLOSED) {
-            throw new IllegalStateException();
+    public long setMediaTime(long now) throws IllegalStateException, MediaException {
+        switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> {
+                sequencer.setMicrosecondPosition(now);
+                var newMediaTime = sequencer.getMicrosecondPosition();
+                for (var playerListener : getPlayerListeners()) {
+                    playerListener.playerUpdate(this, PlayerListener.DURATION_UPDATED, newMediaTime);
+                }
+                return newMediaTime;
+            }
         }
-        sequencer.setMicrosecondPosition(now);
-        return now;
     }
 
     @Override
     public long getMediaTime() throws IllegalStateException {
-        if (getState() == Player.CLOSED) {
-            throw new IllegalStateException();
-        }
-        return sequencer.getMicrosecondPosition();
+        return switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            default -> sequencer.getMicrosecondPosition();
+        };
     }
 
     @Override
     public long getDuration() throws IllegalStateException {
-        return sequencer.getMicrosecondLength();
+        return switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            default -> sequencer.getMicrosecondLength();
+        };
     }
 
     @Override
     public String getContentType() throws IllegalStateException {
-        return "audio/midi";
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> "audio/midi";
+        };
     }
 
     @Override
     public void setLoopCount(int count) throws IllegalArgumentException, IllegalStateException {
-        if (getState() == STARTED || getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        switch (count) {
-            case -1 -> sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
-            case 0 -> throw new IllegalArgumentException();
-            default -> sequencer.setLoopCount(count - 1);
+        switch (getState()) {
+            case STARTED, CLOSED -> throw new IllegalStateException();
+            default -> {
+                if (getState() == UNREALIZED) {
+                    try {
+                        realize();
+                    }
+                    catch (MediaException ignored) { }
+                }
+                switch (count) {
+                    case -1 -> sequencer.setLoopCount(Sequencer.LOOP_CONTINUOUSLY);
+                    case 0 -> throw new IllegalArgumentException();
+                    default -> sequencer.setLoopCount(count - 1);
+                }
+            }
         }
     }
 
     @Override
     public Control[] getControls() throws IllegalStateException {
         // TODO: add controls to array
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        return new Control[0];
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> new Control[0];
+        };
     }
 
     @Override
     public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException {
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        return switch (controlType) {
-            // TODO: add ToneControl
-            case "ToneControl" -> null;
-            case "VolumeControl" -> new MidiVolumeControl(this);
-            default -> throw new IllegalArgumentException();
+        // TODO: add ToneControl
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> switch (controlType) {
+                case "ToneControl" -> null;
+                case "VolumeControl" -> new MidiVolumeControl(this);
+                default -> throw new IllegalArgumentException();
+            };
         };
     }
 }
