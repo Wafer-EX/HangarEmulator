@@ -132,24 +132,6 @@ public class MidiPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public void deallocate() throws IllegalStateException {
-        switch (getState()) {
-            case CLOSED -> throw new IllegalStateException();
-            case UNREALIZED, REALIZED -> { }
-            case STARTED -> {
-                try {
-                    stop();
-                    setState(REALIZED);
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            default -> setState(REALIZED);
-        }
-    }
-
-    @Override
     public void close() {
         if (getState() != CLOSED) {
             setState(CLOSED);
