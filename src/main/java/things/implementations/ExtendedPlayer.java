@@ -55,6 +55,24 @@ public abstract class ExtendedPlayer implements Player {
     }
 
     @Override
+    public void deallocate() throws IllegalStateException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case UNREALIZED, REALIZED -> { }
+            case STARTED -> {
+                try {
+                    stop();
+                    setState(REALIZED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+            default -> setState(REALIZED);
+        }
+    }
+
+    @Override
     public int getState() {
         return currentState;
     }

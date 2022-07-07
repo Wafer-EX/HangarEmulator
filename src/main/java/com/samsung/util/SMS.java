@@ -14,10 +14,15 @@
  * limitations under the License.
  */
 
-package javax.microedition.media;
+package com.samsung.util;
 
-public interface Controllable {
-    public Control[] getControls() throws IllegalStateException;
+public class SMS {
+    public static boolean isSupported() {
+        // TODO: add support
+        return false;
+    }
 
-    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException;
+    public static void send(SM sm) throws IllegalStateException {
+        throw new IllegalStateException();
+    }
 }

@@ -70,26 +70,8 @@ public class WavPlayer extends ExtendedPlayer {
             clip.stop();
             setState(PREFETCHED);
             for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STOPPED, getMediaTime());
+                playerListener.playerUpdate(this, PlayerListener.STOPPED, clip.getMicrosecondPosition());
             }
-        }
-    }
-
-    @Override
-    public void deallocate() throws IllegalStateException {
-        switch (getState()) {
-            case CLOSED -> throw new IllegalStateException();
-            case UNREALIZED, REALIZED -> { }
-            case STARTED -> {
-                try {
-                    stop();
-                    setState(REALIZED);
-                }
-                catch (Exception ex) {
-                    ex.printStackTrace();
-                }
-            }
-            default -> setState(REALIZED);
         }
     }
 
@@ -106,26 +88,41 @@ public class WavPlayer extends ExtendedPlayer {
 
     @Override
     public long setMediaTime(long now) throws IllegalStateException, MediaException {
-        if (getState() == UNREALIZED || getState() == CLOSED) {
-            throw new IllegalStateException();
+        switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> {
+                clip.setMicrosecondPosition(now);
+                var newMediaTime = clip.getMicrosecondPosition();
+                for (var playerListener : getPlayerListeners()) {
+                    playerListener.playerUpdate(this, PlayerListener.DURATION_UPDATED, newMediaTime);
+                }
+                return newMediaTime;
+            }
         }
-        clip.setMicrosecondPosition(now);
-        return now;
     }
 
     @Override
     public long getMediaTime() throws IllegalStateException  {
-        return clip.getMicrosecondLength();
+        return switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            default -> clip.getMicrosecondPosition();
+        };
     }
 
     @Override
     public long getDuration() throws IllegalStateException {
-        return clip.getMicrosecondLength();
+        return switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            default -> clip.getMicrosecondLength();
+        };
     }
 
     @Override
     public String getContentType() throws IllegalStateException {
-        return "audio/x-wav";
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> "audio/x-wav";
+        };
     }
 
     @Override
@@ -143,22 +140,22 @@ public class WavPlayer extends ExtendedPlayer {
     @Override
     public Control[] getControls() throws IllegalStateException {
         // TODO: add controls to array
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        return new Control[0];
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> new Control[0];
+        };
     }
 
     @Override
     public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException {
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        return switch (controlType) {
-            // TODO: add ToneControl
-            case "ToneControl" -> null;
-            case "VolumeControl" -> new WavVolumeControl(this);
-            default -> throw new IllegalArgumentException();
+        // TODO: add ToneControl
+        return switch (getState()) {
+            case UNREALIZED, CLOSED -> throw new IllegalStateException();
+            default -> switch (controlType) {
+                case "ToneControl" -> null;
+                case "VolumeControl" -> new WavVolumeControl(this);
+                default -> throw new IllegalArgumentException();
+            };
         };
     }
 }

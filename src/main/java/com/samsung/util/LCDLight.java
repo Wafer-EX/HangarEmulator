@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package javax.microedition.media;
+package com.samsung.util;
 
-public interface Controllable {
-    public Control[] getControls() throws IllegalStateException;
+public class LCDLight {
+    public static boolean isSupported() {
+        // TODO: add support
+        return false;
+    }
 
-    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException;
+    public static void on(int duration) throws IllegalStateException, IllegalArgumentException {
+        throw new IllegalStateException();
+    }
+
+    public static void off() throws IllegalStateException {
+        throw new IllegalStateException();
+    }
 }

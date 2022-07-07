@@ -57,5 +57,5 @@ public abstract class Layer {
         return isVisible;
     }
 
-    public abstract void paint(Graphics g);
+    public abstract void paint(Graphics g) throws NullPointerException;
 }

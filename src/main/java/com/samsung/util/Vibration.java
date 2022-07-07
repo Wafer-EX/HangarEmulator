@@ -14,10 +14,19 @@
  * limitations under the License.
  */
 
-package javax.microedition.media;
+package com.samsung.util;
 
-public interface Controllable {
-    public Control[] getControls() throws IllegalStateException;
+public class Vibration {
+    public static boolean isSupported() {
+        // TODO: add support
+        return false;
+    }
 
-    public Control getControl(String controlType) throws IllegalArgumentException, IllegalStateException;
+    public static void start(int duration, int strength) throws IllegalStateException, IllegalArgumentException {
+        throw new IllegalStateException();
+    }
+
+    public static void stop() throws IllegalStateException {
+        throw new IllegalStateException();
+    }
 }
