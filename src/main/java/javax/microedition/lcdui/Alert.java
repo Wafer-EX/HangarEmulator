@@ -27,7 +27,7 @@ public class Alert extends Screen {
     private Image alertImage;
     private AlertType alertType;
     private int timeout = FOREVER;
-    private ArrayList<Command> commandList = new ArrayList<>();
+    private final ArrayList<Command> commandList = new ArrayList<>();
     private CommandListener commandListener;
 
     public Alert(String title) {

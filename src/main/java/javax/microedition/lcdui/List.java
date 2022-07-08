@@ -22,7 +22,7 @@ import java.util.Arrays;
 public class List extends Screen implements Choice {
     public static final Command SELECT_COMMAND = new Command("", Command.SCREEN, 0);
 
-    private final ArrayList<String> strings = new ArrayList();
+    private final ArrayList<String> strings = new ArrayList<>();
     private final int listType;
     private Ticker ticker;
     private Command selectCommand = SELECT_COMMAND;
