@@ -40,4 +40,24 @@ public class DirectGraphicsUtils {
         }
         return image;
     }
+
+    public static int getBufferedImageType(int directGraphicsImageType) throws IllegalArgumentException {
+        // TODO: do something with formats without analogues
+        return switch (directGraphicsImageType) {
+            case DirectGraphics.TYPE_BYTE_1_GRAY -> BufferedImage.TYPE_BYTE_GRAY;
+            //case DirectGraphics.TYPE_BYTE_1_GRAY_VERTICAL -> 0;
+            //case DirectGraphics.TYPE_BYTE_2_GRAY -> 0;
+            //case DirectGraphics.TYPE_BYTE_4_GRAY -> 0;
+            //case DirectGraphics.TYPE_BYTE_8_GRAY -> 0;
+            //case DirectGraphics.TYPE_BYTE_332_RGB -> 0;
+            //case DirectGraphics.TYPE_USHORT_4444_ARGB -> 0;
+            //case DirectGraphics.TYPE_USHORT_444_RGB -> 0;
+            case DirectGraphics.TYPE_USHORT_555_RGB -> BufferedImage.TYPE_USHORT_555_RGB;
+            //case DirectGraphics.TYPE_USHORT_1555_ARGB -> 0;
+            case DirectGraphics.TYPE_USHORT_565_RGB -> BufferedImage.TYPE_USHORT_565_RGB;
+            case DirectGraphics.TYPE_INT_888_RGB -> BufferedImage.TYPE_INT_RGB;
+            case DirectGraphics.TYPE_INT_8888_ARGB -> BufferedImage.TYPE_INT_ARGB;
+            default -> throw new IllegalArgumentException();
+        };
+    }
 }

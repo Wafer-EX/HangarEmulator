@@ -22,6 +22,7 @@ import things.utils.nokiautils.DirectGraphicsUtils;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class DirectGraphicsImplementation implements DirectGraphics {
     private final Graphics meGraphics;
@@ -71,7 +72,10 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
-        // TODO: write method logic
+        var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
+        image.setRGB(0, 0, width, height, pixels, offset, scanlength);
+        image = DirectGraphicsUtils.manipulateImage(image, manipulation);
+        meGraphics.getSEGraphics().drawImage(image, x, y, null);
     }
 
     @Override
