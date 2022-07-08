@@ -37,7 +37,10 @@ public class DirectGraphicsImplementation implements DirectGraphics {
     }
 
     @Override
-    public void drawImage(Image img, int x, int y, int anchor, int manipulation) {
+    public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
+        if (img == null) {
+            throw new NullPointerException();
+        }
         var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
         meGraphics.drawImage(image, x, y, anchor);
     }
@@ -59,19 +62,28 @@ public class DirectGraphicsImplementation implements DirectGraphics {
     }
 
     @Override
-    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
+    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+        if (xPoints == null || yPoints == null) {
+            throw new NullPointerException();
+        }
         meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
         meGraphics.getSEGraphics().drawPolygon(xPoints, yPoints, argbColor);
     }
 
     @Override
-    public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) {
+    public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+        if (xPoints == null || yPoints == null) {
+            throw new NullPointerException();
+        }
         meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
         meGraphics.getSEGraphics().fillPolygon(xPoints, yPoints, nPoints);
     }
 
     @Override
-    public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
+    public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+        if (pixels == null) {
+            throw new NullPointerException();
+        }
         var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
         image.setRGB(0, 0, width, height, pixels, offset, scanlength);
         image = DirectGraphicsUtils.manipulateImage(image, manipulation);
@@ -79,27 +91,27 @@ public class DirectGraphicsImplementation implements DirectGraphics {
     }
 
     @Override
-    public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
+    public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) {
+    public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) {
+    public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) {
+    public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) {
+    public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
         // TODO: write method logic
     }
 
