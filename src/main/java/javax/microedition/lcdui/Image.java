@@ -41,7 +41,7 @@ public class Image {
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {
-        if (width <= 1 || height <= 1) {
+        if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
         var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
