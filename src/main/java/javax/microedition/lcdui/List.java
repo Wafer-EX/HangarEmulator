@@ -62,29 +62,35 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public String getString(int elementNum) {
+    public String getString(int elementNum) throws IndexOutOfBoundsException {
         return strings.get(elementNum);
     }
 
     @Override
-    public Image getImage(int elementNum) {
+    public Image getImage(int elementNum) throws IndexOutOfBoundsException {
         // TODO: write method logic
         return null;
     }
 
     @Override
-    public int append(String stringPart, Image imagePart) {
+    public int append(String stringPart, Image imagePart) throws NullPointerException {
+        if (stringPart == null) {
+            throw new NullPointerException();
+        }
         strings.add(stringPart);
         return strings.size();
     }
 
     @Override
-    public void insert(int elementNum, String stringPart, Image imagePart) {
+    public void insert(int elementNum, String stringPart, Image imagePart) throws IndexOutOfBoundsException, NullPointerException {
+        if (stringPart == null) {
+            throw new NullPointerException();
+        }
         // TODO: write method logic
     }
 
     @Override
-    public void delete(int elementNum) {
+    public void delete(int elementNum) throws IndexOutOfBoundsException {
         strings.remove(elementNum);
     }
 
@@ -94,12 +100,15 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public void set(int elementNum, String stringPart, Image imagePart) {
+    public void set(int elementNum, String stringPart, Image imagePart) throws IndexOutOfBoundsException, NullPointerException {
+        if (stringPart == null) {
+            throw new NullPointerException();
+        }
         strings.set(elementNum, stringPart);
     }
 
     @Override
-    public boolean isSelected(int elementNum) {
+    public boolean isSelected(int elementNum) throws IndexOutOfBoundsException {
         return selectedElement == elementNum;
     }
 
@@ -109,13 +118,16 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public int getSelectedFlags(boolean[] selectedArray_return) {
+    public int getSelectedFlags(boolean[] selectedArray_return) throws IllegalArgumentException, NullPointerException {
         // TODO: write method logic
+        if (selectedArray_return == null) {
+            throw new NullPointerException();
+        }
         return 0;
     }
 
     @Override
-    public void setSelectedIndex(int elementNum, boolean selected) {
+    public void setSelectedIndex(int elementNum, boolean selected) throws IndexOutOfBoundsException {
         if (elementNum > strings.size() - 1) {
             selectedElement = 0;
         }
@@ -128,8 +140,11 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public void setSelectedFlags(boolean[] selectedArray) {
+    public void setSelectedFlags(boolean[] selectedArray) throws IllegalArgumentException, NullPointerException {
         // TODO: write method logic
+        if (selectedArray == null) {
+            throw new NullPointerException();
+        }
     }
 
     @Override
@@ -142,7 +157,7 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public void setFitPolicy(int fitPolicy) {
+    public void setFitPolicy(int fitPolicy) throws IllegalArgumentException {
         this.fitPolicy = fitPolicy;
     }
 
@@ -152,12 +167,12 @@ public class List extends Screen implements Choice {
     }
 
     @Override
-    public void setFont(int elementNum, Font font) {
+    public void setFont(int elementNum, Font font) throws IndexOutOfBoundsException {
         // TODO: write method logic
     }
 
     @Override
-    public Font getFont(int elementNum) {
+    public Font getFont(int elementNum) throws IndexOutOfBoundsException {
         // TODO: write method logic
         return Font.getDefaultFont();
     }

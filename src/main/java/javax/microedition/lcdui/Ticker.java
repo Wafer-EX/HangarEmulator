@@ -26,7 +26,7 @@ public class Ticker {
         this.str = str;
     }
 
-    public void setString(String str) {
+    public void setString(String str) throws NullPointerException {
         if (str == null) {
             throw new NullPointerException();
         }

@@ -46,7 +46,10 @@ public class Alert extends Screen {
         return FOREVER;
     }
 
-    public void setTimeout(int time) {
+    public void setTimeout(int time) throws IllegalArgumentException {
+        if (time < 0 && time != FOREVER) {
+            throw new IllegalArgumentException();
+        }
         timeout = time;
     }
 
