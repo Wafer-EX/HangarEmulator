@@ -27,7 +27,7 @@ public class Alert extends Screen {
     private Image alertImage;
     private AlertType alertType;
     private int timeout = FOREVER;
-    private ArrayList<Command> commandList = new ArrayList<>();
+    private final ArrayList<Command> commandList = new ArrayList<>();
     private CommandListener commandListener;
 
     public Alert(String title) {
@@ -46,7 +46,10 @@ public class Alert extends Screen {
         return FOREVER;
     }
 
-    public void setTimeout(int time) {
+    public void setTimeout(int time) throws IllegalArgumentException {
+        if (time < 0 && time != FOREVER) {
+            throw new IllegalArgumentException();
+        }
         timeout = time;
     }
 

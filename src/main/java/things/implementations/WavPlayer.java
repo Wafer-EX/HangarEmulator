@@ -23,20 +23,17 @@ import javax.microedition.media.MediaException;
 import javax.microedition.media.PlayerListener;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
 public class WavPlayer extends ExtendedPlayer {
     private Clip clip;
+    private byte[] audioSource;
 
     public WavPlayer(InputStream stream) {
         try {
-            var bufferedInputStream = new BufferedInputStream(stream);
-            var audioInputStream = AudioSystem.getAudioInputStream(bufferedInputStream);
-            clip = AudioSystem.getClip();
-            clip.open(audioInputStream);
-            clip.setMicrosecondPosition(0);
-            setState(PREFETCHED);
+            audioSource = stream.readAllBytes();
+            setState(UNREALIZED);
         }
         catch (Exception ex) {
             ex.printStackTrace();
@@ -44,19 +41,59 @@ public class WavPlayer extends ExtendedPlayer {
     }
 
     @Override
-    public void start() throws IllegalStateException, MediaException, SecurityException {
-        if (getState() == CLOSED) {
-            throw new IllegalStateException();
-        }
-        else if (getState() != STARTED) {
-            if (getState() == UNREALIZED || getState() == REALIZED) {
-                prefetch();
+    public void realize() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case UNREALIZED -> {
+                try {
+                    if (clip == null) {
+                        clip = AudioSystem.getClip();
+                    }
+                    setState(REALIZED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
             }
-            clip.setMicrosecondPosition(0);
-            clip.start();
-            setState(STARTED);
-            for (var playerListener : getPlayerListeners()) {
-                playerListener.playerUpdate(this, PlayerListener.STARTED, getMediaTime());
+        }
+    }
+
+    @Override
+    public void prefetch() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case STARTED, PREFETCHED -> { }
+            default -> {
+                try {
+                    if (getState() == UNREALIZED) {
+                        realize();
+                    }
+                    var audioInputStream = AudioSystem.getAudioInputStream(new ByteArrayInputStream(audioSource));
+                    clip.open(audioInputStream);
+                    clip.setMicrosecondPosition(0);
+                    setState(PREFETCHED);
+                }
+                catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void start() throws IllegalStateException, MediaException, SecurityException {
+        switch (getState()) {
+            case CLOSED -> throw new IllegalStateException();
+            case STARTED -> { }
+            default -> {
+                if (getState() == UNREALIZED || getState() == REALIZED) {
+                    prefetch();
+                }
+                clip.start();
+                setState(STARTED);
+                for (var playerListener : getPlayerListeners()) {
+                    playerListener.playerUpdate(this, PlayerListener.STARTED, clip.getMicrosecondPosition());
+                }
             }
         }
     }

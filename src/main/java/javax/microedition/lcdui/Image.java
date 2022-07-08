@@ -41,7 +41,7 @@ public class Image {
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {
-        if (width <= 1 || height <= 1) {
+        if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
         var bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
@@ -55,18 +55,16 @@ public class Image {
         if (source == null) {
             throw new NullPointerException();
         }
+        if (source.isMutable()) {
+            var bufferedImage = (BufferedImage) source.getSEImage();
+            var colorModel = bufferedImage.getColorModel();
+            var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+            var writableRaster = bufferedImage.copyData(null);
+            var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
+            return new Image(bufferedImageClone, false);
+        }
         else {
-            if (source.isMutable()) {
-                var bufferedImage = (BufferedImage) source.getSEImage();
-                var colorModel = bufferedImage.getColorModel();
-                var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
-                var writableRaster = bufferedImage.copyData(null);
-                var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
-                return new Image(bufferedImageClone, false);
-            }
-            else {
-                return source;
-            }
+            return source;
         }
     }
 
@@ -135,6 +133,12 @@ public class Image {
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {
+        if (rgb == null) {
+            throw new NullPointerException();
+        }
+        else if (width <= 0 || height <= 0) {
+            throw new IllegalArgumentException();
+        }
         var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
         image.setRGB(0, 0, width, height, rgb, 0, width);
         return new Image(image, false);

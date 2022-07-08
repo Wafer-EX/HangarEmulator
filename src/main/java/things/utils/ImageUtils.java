@@ -79,7 +79,7 @@ public final class ImageUtils {
         return mirroredImage;
     }
 
-    public static BufferedImage transformImage(BufferedImage image, int spriteTransformConst) {
+    public static BufferedImage transformImage(BufferedImage image, int spriteTransformConst) throws IllegalArgumentException {
         switch (spriteTransformConst) {
             case Sprite.TRANS_NONE -> { }
             case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
@@ -88,9 +88,11 @@ public final class ImageUtils {
             default -> {
                 image = ImageUtils.mirrorImageHorizontal(image);
                 switch (spriteTransformConst) {
+                    case Sprite.TRANS_MIRROR -> { }
                     case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
                     case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI, false);
                     case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3, true);
+                    default -> throw new IllegalArgumentException();
                 }
             }
         }

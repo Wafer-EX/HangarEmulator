@@ -82,7 +82,10 @@ public class Graphics {
         return 0;
     }
 
-    public void setColor(int red, int green, int blue) {
+    public void setColor(int red, int green, int blue) throws IllegalArgumentException {
+        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
+            throw new IllegalArgumentException();
+        }
         seGraphics.setColor(new Color(red, green, blue));
     }
 
@@ -90,7 +93,10 @@ public class Graphics {
         seGraphics.setColor(new Color(RGB, false));
     }
 
-    public void setGrayScale(int value) {
+    public void setGrayScale(int value) throws IllegalArgumentException {
+        if (value < 0 || value > 255) {
+            throw new IllegalArgumentException();
+        }
         // TODO: write method logic
     }
 
@@ -101,18 +107,18 @@ public class Graphics {
         return new Font(seFont);
     }
 
-    public void setStrokeStyle(int style) {
-        if (style == SOLID) {
-            seGraphics.setStroke(new BasicStroke());
-            selectedStroke = SOLID;
-        }
-        else if (style == DOTTED) {
-            var stroke = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, new float[] { 1 }, 0);
-            seGraphics.setStroke(stroke);
-            selectedStroke = DOTTED;
-        }
-        else {
-            throw new IllegalArgumentException();
+    public void setStrokeStyle(int style) throws IllegalArgumentException {
+        switch (style) {
+            case SOLID -> {
+                seGraphics.setStroke(new BasicStroke());
+                selectedStroke = SOLID;
+            }
+            case DOTTED -> {
+                var stroke = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, new float[] { 1 }, 0);
+                seGraphics.setStroke(stroke);
+                selectedStroke = DOTTED;
+            }
+            default -> throw new IllegalArgumentException();
         }
     }
 
@@ -194,7 +200,10 @@ public class Graphics {
         seGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
     }
 
-    public void drawString(String str, int x, int y, int anchor) {
+    public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
+        if (str == null) {
+            throw new NullPointerException();
+        }
         var meFont = getFont();
         x = FontUtils.alignX(meFont, str, x, anchor);
         y = FontUtils.alignY(meFont, str, y, anchor);
@@ -202,7 +211,10 @@ public class Graphics {
         seGraphics.drawString(str, x, y);
     }
 
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) {
+    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        if (str == null) {
+            throw new NullPointerException();
+        }
         if (offset < str.length()) {
             if (offset + len > str.length()) {
                 len = str.length() - offset;
@@ -212,21 +224,27 @@ public class Graphics {
         }
     }
 
-    public void drawChar(char character, int x, int y, int anchor) {
+    public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
         drawString(String.valueOf(character), x, y, anchor);
     }
 
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) {
+    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        if (data == null) {
+            throw new NullPointerException();
+        }
         drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 
-    public void drawImage(Image img, int x, int y, int anchor) {
+    public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
+        if (img == null) {
+            throw new NullPointerException();
+        }
         x = ImageUtils.alignX(img.getWidth(), x, anchor);
         y = ImageUtils.alignY(img.getHeight(), y, anchor);
         seGraphics.drawImage(img.getSEImage(), x, y, null);
     }
 
-    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) {
+    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
         if (width > 0 && height > 0) {
             var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
             var transformedImage = ImageUtils.transformImage(imageRegion, transform);
@@ -236,7 +254,7 @@ public class Graphics {
         }
     }
 
-    public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) {
+    public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {
         x_dest = ImageUtils.alignX(width, x_dest, anchor);
         y_dest = ImageUtils.alignY(height, y_dest, anchor);
         seGraphics.copyArea(x_src, y_src, width, height, x_dest, y_dest);
@@ -248,7 +266,10 @@ public class Graphics {
         seGraphics.fillPolygon(xPoints, yPoints, 3);
     }
 
-    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) {
+    public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
+        if (rgbData == null) {
+            throw new NullPointerException();
+        }
         if (width > 0 && height > 0) {
             var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
             image.setRGB(0, 0, width, height, rgbData, offset, scanlength);

@@ -52,6 +52,7 @@ public class MidiPlayer extends ExtendedPlayer {
                         sequencer = HangarAudio.getSequencerWithSoundbank();
                         sequencer.open();
                         sequencer.addMetaEventListener(meta -> {
+                            // TODO: check it
                             if (meta.getType() == 47) {
                                 if (sequencer.isRunning()) {
                                     for (var playerListener : getPlayerListeners()) {
