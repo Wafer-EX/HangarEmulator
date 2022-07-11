@@ -3,8 +3,8 @@ plugins {
     id 'java'
 }
 
-group 'com.lisowolf'
-version '1.0'
+group 'org.lisowolf'
+version '0.1-alpha'
 
 jar {
     manifest {
