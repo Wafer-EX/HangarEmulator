@@ -18,7 +18,6 @@ package javax.microedition.lcdui;
 
 import things.ui.HangarFrame;
 import things.HangarState;
-import things.utils.HangarFrameUtils;
 
 import java.util.ArrayList;
 
@@ -44,7 +43,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        var hangarPanel = HangarFrameUtils.getHangarPanel();
+        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
         return hangarPanel.getDisplayable() == this;
     }
 

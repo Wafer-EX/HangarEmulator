@@ -16,19 +16,18 @@
 
 package things.ui;
 
-import things.ui.input.HangarKeyListener;
 import things.ui.components.HangarLabel;
 import things.ui.components.HangarMenuBar;
 import things.ui.components.HangarPanel;
+import things.ui.input.HangarKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
 
 public class HangarFrame extends JFrame {
     private static final HangarFrame instance = new HangarFrame();
-    private static final Dimension defaultHangarSize = new Dimension(360, 360);
-    private HangarPanel hangarPanel;
-    private HangarLabel hangarLabel;
+    private static final Dimension defaultSize = new Dimension(360, 360);
+    private HangarPanel hangarPanel = null;
 
     private HangarFrame() {
         this.setTitle("Hangar Emulator");
@@ -41,28 +40,29 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public HangarLabel add(HangarLabel hangarLabel) {
-        hangarLabel.setPreferredSize(hangarPanel != null ? hangarPanel.getSize() : defaultHangarSize);
-        super.add(hangarLabel);
+    public HangarPanel getHangarPanel() {
+        return hangarPanel;
+    }
+
+    public void setHangarPanel(HangarPanel hangarPanel) {
+        var size = defaultSize;
+        var components = getContentPane().getComponents();
+
+        for (var component : components) {
+            if (component instanceof HangarLabel hangarLabel) {
+                size = hangarLabel.getSize();
+            }
+        }
+        hangarPanel.setPreferredSize(size);
+
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
         }
-
-        pack();
-        revalidate();
-        return this.hangarLabel = hangarLabel;
-    }
-
-    public HangarPanel add(HangarPanel hangarPanel) {
-        hangarPanel.setPreferredSize(hangarLabel != null ? hangarLabel.getSize() : defaultHangarSize);
-        super.add(hangarPanel);
-        if (hangarLabel != null) {
-            remove(hangarLabel);
-        }
-
         addKeyListener(new HangarKeyListener(hangarPanel));
+
+        super.add(hangarPanel);
         pack();
         revalidate();
-        return this.hangarPanel = hangarPanel;
+        this.hangarPanel = hangarPanel;
     }
 }
