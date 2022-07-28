@@ -51,7 +51,9 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var container = HangarFrame.getInstance().getContentPane();
+        var hangarPanel = (HangarPanel) container.getComponent(0);
+
         if (hangarPanel != null) {
             hangarPanel.refreshSerialCallTimer();
         }
@@ -71,7 +73,9 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var container = HangarFrame.getInstance().getContentPane();
+        var hangarPanel = (HangarPanel) container.getComponent(0);
+
         var keyListeners = hangarPanel.getKeyListeners();
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
