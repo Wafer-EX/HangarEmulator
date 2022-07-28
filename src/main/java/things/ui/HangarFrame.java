@@ -66,10 +66,6 @@ public class HangarFrame extends JFrame {
         return this.hangarPanel = hangarPanel;
     }
 
-    public HangarLabel getHangarLabel() {
-        return hangarLabel == null ? hangarLabel = add(new HangarLabel()) : hangarLabel;
-    }
-
     public HangarPanel getHangarPanel() {
         return hangarPanel == null ? hangarPanel = add(new HangarPanel()) : hangarPanel;
     }

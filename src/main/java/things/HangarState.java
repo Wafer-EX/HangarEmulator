@@ -19,6 +19,7 @@ package things;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
 import things.ui.HangarFrame;
+import things.ui.components.HangarPanel;
 import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
@@ -87,13 +88,13 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var hangarLabel = HangarFrame.getInstance().getHangarLabel();
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var container = HangarFrame.getInstance().getContentPane();
+        var component = container.getComponent(0);
 
-        if (scalingMode == ScalingModes.ChangeResolution) {
-            currentResolution = hangarPanel != null ? hangarPanel.getSize() : hangarLabel != null ? hangarLabel.getSize() : currentResolution;
+        if (scalingMode == ScalingModes.ChangeResolution && component != null) {
+            currentResolution = component.getSize();
         }
-        if (hangarPanel != null) {
+        if (component instanceof HangarPanel hangarPanel) {
             HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
         }
     }
