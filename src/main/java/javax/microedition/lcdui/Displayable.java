@@ -18,7 +18,7 @@ package javax.microedition.lcdui;
 
 import things.ui.HangarFrame;
 import things.HangarState;
-import things.ui.components.HangarPanel;
+import things.utils.HangarFrameUtils;
 
 import java.util.ArrayList;
 
@@ -44,11 +44,8 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        var container = HangarFrame.getInstance().getContentPane();
-        if (container.getComponent(0) instanceof HangarPanel hangarPanel) {
-            return hangarPanel.getDisplayable() == this;
-        }
-        return false;
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
+        return hangarPanel.getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) throws NullPointerException {

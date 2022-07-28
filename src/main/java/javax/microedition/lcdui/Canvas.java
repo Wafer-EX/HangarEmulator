@@ -16,10 +16,9 @@
 
 package javax.microedition.lcdui;
 
-import things.ui.HangarFrame;
 import things.HangarState;
-import things.ui.components.HangarPanel;
 import things.utils.CanvasUtils;
+import things.utils.HangarFrameUtils;
 import things.utils.HangarPanelUtils;
 
 public abstract class Canvas extends Displayable {
@@ -92,9 +91,7 @@ public abstract class Canvas extends Displayable {
     public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
         if (hangarPanel != null) {
             var position = HangarPanelUtils.canvasPointToPanel(hangarPanel, x, y);
             var scaleFactor = hangarPanel.getBufferScaleFactor();
@@ -107,9 +104,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public final void repaint() {
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
         if (hangarPanel != null) {
             hangarPanel.repaint();
         }

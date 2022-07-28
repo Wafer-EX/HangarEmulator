@@ -40,9 +40,11 @@ public class Display {
     }
 
     public static Display getDisplay(MIDlet m) {
-        var hangarPanel = new HangarPanel();
-        HangarFrame.getInstance().add(hangarPanel);
-        display = display == null ? new Display(hangarPanel) : display;
+        if (display == null) {
+            var hangarPanel = new HangarPanel();
+            HangarFrame.getInstance().add(hangarPanel);
+            display = new Display(hangarPanel);
+        }
         return display;
     }
 

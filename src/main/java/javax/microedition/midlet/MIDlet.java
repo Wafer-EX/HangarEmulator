@@ -16,8 +16,7 @@
 
 package javax.microedition.midlet;
 
-import things.ui.HangarFrame;
-import things.ui.components.HangarPanel;
+import things.utils.HangarFrameUtils;
 
 public abstract class MIDlet {
     private boolean blockExit;
@@ -39,9 +38,7 @@ public abstract class MIDlet {
     }
 
     public final void notifyPaused() {
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-        hangarPanel.repaint();
+        HangarFrameUtils.getHangarPanel().repaint();
     }
 
     public final String getAppProperty(String key) {

@@ -16,9 +16,8 @@
 
 package javax.microedition.lcdui.game;
 
-import things.ui.HangarFrame;
 import things.HangarState;
-import things.ui.components.HangarPanel;
+import things.utils.HangarFrameUtils;
 import things.utils.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -58,17 +57,13 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
         hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
         hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
         super.repaint();
     }

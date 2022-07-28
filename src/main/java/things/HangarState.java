@@ -21,6 +21,7 @@ import things.enums.ScalingModes;
 import things.ui.HangarFrame;
 import things.ui.components.HangarPanel;
 import things.ui.input.HangarKeyListener;
+import things.utils.HangarFrameUtils;
 import things.utils.HangarPanelUtils;
 
 import java.awt.*;
@@ -73,10 +74,9 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
-
+        var hangarPanel = HangarFrameUtils.getHangarPanel();
         var keyListeners = hangarPanel.getKeyListeners();
+
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
                 if (keyListener instanceof HangarKeyListener hangarKeyListener) {
