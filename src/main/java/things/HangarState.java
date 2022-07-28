@@ -19,6 +19,8 @@ package things;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
 import things.ui.HangarFrame;
+import things.ui.components.HangarLabel;
+import things.ui.components.HangarPanel;
 import things.ui.input.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
@@ -50,7 +52,9 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var container = HangarFrame.getInstance().getContentPane();
+        var hangarPanel = (HangarPanel) container.getComponent(0);
+
         if (hangarPanel != null) {
             hangarPanel.refreshSerialCallTimer();
         }
@@ -72,6 +76,7 @@ public class HangarState {
         selectedKeyboard = keyboard;
         var hangarPanel = HangarFrame.getInstance().getHangarPanel();
         var keyListeners = hangarPanel.getKeyListeners();
+
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
                 if (keyListener instanceof HangarKeyListener hangarKeyListener) {
@@ -87,14 +92,17 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var hangarLabel = HangarFrame.getInstance().getHangarLabel();
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var container = HangarFrame.getInstance().getContentPane();
 
-        if (scalingMode == ScalingModes.ChangeResolution) {
-            currentResolution = hangarPanel != null ? hangarPanel.getSize() : hangarLabel != null ? hangarLabel.getSize() : currentResolution;
-        }
-        if (hangarPanel != null) {
-            HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
+        for (var component : container.getComponents()) {
+            if (component instanceof HangarPanel || component instanceof HangarLabel) {
+                if (scalingMode == ScalingModes.ChangeResolution) {
+                    currentResolution = component.getSize();
+                }
+                if (component instanceof HangarPanel hangarPanel) {
+                    HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
+                }
+            }
         }
     }
 

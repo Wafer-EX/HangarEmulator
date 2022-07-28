@@ -19,6 +19,7 @@ import things.*;
 import things.ui.HangarFrame;
 import things.ui.components.HangarLabel;
 
+import java.awt.*;
 import java.io.File;
 import java.util.Locale;
 
@@ -36,7 +37,13 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                HangarFrame.getInstance().add(new HangarLabel());
+                var hangarFrame = HangarFrame.getInstance();
+                var hangarLabel = new HangarLabel();
+
+                hangarLabel.setPreferredSize(new Dimension(360, 360));
+                hangarFrame.add(hangarLabel);
+                hangarFrame.pack();
+                hangarFrame.revalidate();
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarFrame.getInstance().setVisible(true);
