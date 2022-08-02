@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 import things.ui.components.HangarGamePanel;
 
 import javax.microedition.midlet.MIDlet;
@@ -42,7 +42,7 @@ public class Display {
     public static Display getDisplay(MIDlet m) {
         if (display == null) {
             var hangarPanel = new HangarGamePanel();
-            HangarFrame.getInstance().setHangarGamePanel(hangarPanel);
+            HangarMainFrame.getInstance().setHangarGamePanel(hangarPanel);
             display = new Display(hangarPanel);
         }
         return display;

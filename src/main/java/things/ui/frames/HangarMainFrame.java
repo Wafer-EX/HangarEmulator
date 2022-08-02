@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.ui;
+package things.ui.frames;
 
 import things.ui.components.HangarMainPanel;
 import things.ui.components.HangarMenuBar;
@@ -24,19 +24,19 @@ import things.ui.listeners.HangarKeyListener;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarFrame extends JFrame {
-    private static final HangarFrame instance = new HangarFrame();
+public class HangarMainFrame extends JFrame {
+    private static final HangarMainFrame instance = new HangarMainFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
     private HangarGamePanel hangarGamePanel = null;
 
-    private HangarFrame() {
+    private HangarMainFrame() {
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
     }
 
-    public static HangarFrame getInstance() {
+    public static HangarMainFrame getInstance() {
         return instance;
     }
 

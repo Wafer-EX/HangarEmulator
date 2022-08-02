@@ -18,7 +18,7 @@ package things.ui.components;
 
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarMouseListener;
 import things.utils.HangarPanelUtils;
 import things.utils.ImageUtils;
@@ -76,7 +76,7 @@ public class HangarGamePanel extends JPanel {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            var hangarFrame = HangarFrame.getInstance();
+            var hangarFrame = HangarMainFrame.getInstance();
             hangarFrame.requestFocus();
             updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);

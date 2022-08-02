@@ -18,7 +18,7 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 import things.ui.components.HangarGamePanel;
 import things.ui.components.HangarMainPanel;
 import things.ui.listeners.HangarKeyListener;
@@ -52,7 +52,7 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
-        var container = HangarFrame.getInstance().getContentPane();
+        var container = HangarMainFrame.getInstance().getContentPane();
         var hangarPanel = (HangarGamePanel) container.getComponent(0);
 
         if (hangarPanel != null) {
@@ -74,7 +74,7 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var hangarPanel = HangarFrame.getInstance().getHangarGamePanel();
+        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
         var keyListeners = hangarPanel.getKeyListeners();
 
         if (keyListeners.length > 0) {
@@ -92,7 +92,7 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var container = HangarFrame.getInstance().getContentPane();
+        var container = HangarMainFrame.getInstance().getContentPane();
 
         for (var component : container.getComponents()) {
             if (component instanceof HangarGamePanel || component instanceof HangarMainPanel) {

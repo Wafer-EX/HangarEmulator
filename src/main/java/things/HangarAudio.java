@@ -16,7 +16,7 @@
 
 package things;
 
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
@@ -35,7 +35,7 @@ public final class HangarAudio {
         }
         catch (Exception ex) {
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(HangarFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
