@@ -19,7 +19,7 @@ package things.ui.listeners;
 import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.Keyboards;
-import things.utils.KeyCodeConverter;
+import things.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
@@ -44,9 +44,9 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
+            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
+                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
 
             if (pressedKeys.containsKey(convertedKeyCode)) {
@@ -72,9 +72,9 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
+            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
+                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
             pressedKeys.remove(convertedKeyCode);
             canvas.keyReleased(convertedKeyCode);

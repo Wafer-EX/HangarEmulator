@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package things.implementations;
+package things.implementations.media;
 
-import things.implementations.additions.WavVolumeControl;
+import things.implementations.media.control.WavVolumeControl;
 
 import javax.microedition.media.Control;
 import javax.microedition.media.MediaException;

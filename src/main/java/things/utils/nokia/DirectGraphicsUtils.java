@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package things.utils.nokiautils;
+package things.utils.nokia;
 
 import com.nokia.mid.ui.DirectGraphics;
-import things.utils.ImageUtils;
+import things.utils.microedition.ImageUtils;
 
 import java.awt.image.BufferedImage;
 

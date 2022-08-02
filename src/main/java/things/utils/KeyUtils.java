@@ -21,7 +21,7 @@ import com.nokia.mid.ui.FullCanvas;
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 
-public final class KeyCodeConverter {
+public final class KeyUtils {
     // TODO: check conversion
 
     public static int awtToDefault(int keyCode) {

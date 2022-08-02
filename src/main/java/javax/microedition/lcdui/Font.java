@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.ui.frames.HangarMainFrame;
-import things.utils.FontUtils;
+import things.utils.microedition.FontUtils;
 
 import java.util.Arrays;
 

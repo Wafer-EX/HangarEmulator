@@ -17,8 +17,8 @@
 package javax.microedition.lcdui;
 
 import things.HangarState;
-import things.utils.FontUtils;
-import things.utils.ImageUtils;
+import things.utils.microedition.FontUtils;
+import things.utils.microedition.ImageUtils;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

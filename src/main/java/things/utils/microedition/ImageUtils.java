@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.utils;
+package things.utils.microedition;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.game.Sprite;

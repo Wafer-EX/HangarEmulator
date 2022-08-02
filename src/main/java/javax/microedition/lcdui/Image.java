@@ -18,7 +18,7 @@ package javax.microedition.lcdui;
 
 import things.HangarState;
 import things.MIDletResources;
-import things.utils.ImageUtils;
+import things.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

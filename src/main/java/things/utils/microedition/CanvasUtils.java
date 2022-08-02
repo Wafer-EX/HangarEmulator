@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.utils;
+package things.utils.microedition;
 
 import com.nokia.mid.ui.FullCanvas;
 

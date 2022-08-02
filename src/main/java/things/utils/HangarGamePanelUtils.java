@@ -19,13 +19,14 @@ package things.utils;
 import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.ScalingModes;
+import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public final class HangarPanelUtils {
+public final class HangarGamePanelUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         if (HangarState.getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();

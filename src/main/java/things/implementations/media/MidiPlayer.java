@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package things.implementations;
+package things.implementations.media;
 
 import things.HangarAudio;
-import things.implementations.additions.MidiVolumeControl;
+import things.implementations.media.control.MidiVolumeControl;
 
 import javax.microedition.media.*;
 import javax.sound.midi.Sequencer;

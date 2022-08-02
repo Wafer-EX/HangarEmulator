@@ -18,7 +18,7 @@ package javax.microedition.lcdui.game;
 
 import things.HangarState;
 import things.ui.frames.HangarMainFrame;
-import things.utils.ImageUtils;
+import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;

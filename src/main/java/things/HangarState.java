@@ -22,7 +22,7 @@ import things.ui.frames.HangarMainFrame;
 import things.ui.components.HangarGamePanel;
 import things.ui.components.HangarMainPanel;
 import things.ui.listeners.HangarKeyListener;
-import things.utils.HangarPanelUtils;
+import things.utils.HangarGamePanelUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -100,7 +100,7 @@ public class HangarState {
                     currentResolution = component.getSize();
                 }
                 if (component instanceof HangarGamePanel hangarGamePanel) {
-                    HangarPanelUtils.fitBufferToNewResolution(hangarGamePanel, currentResolution);
+                    HangarGamePanelUtils.fitBufferToNewResolution(hangarGamePanel, currentResolution);
                 }
             }
         }
