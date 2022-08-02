@@ -35,7 +35,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarPanel extends JPanel {
+public class HangarGamePanel extends JPanel {
     private Displayable displayable;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -44,7 +44,7 @@ public class HangarPanel extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarPanel() {
+    public HangarGamePanel() {
         var hangarMouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
 
@@ -57,7 +57,7 @@ public class HangarPanel extends JPanel {
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var hangarPanel = (HangarPanel) e.getComponent();
+                var hangarPanel = (HangarGamePanel) e.getComponent();
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
                     HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);

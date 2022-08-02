@@ -38,7 +38,7 @@ public abstract class MIDlet {
     }
 
     public final void notifyPaused() {
-        HangarFrame.getInstance().getHangarPanel().repaint();
+        HangarFrame.getInstance().getHangarGamePanel().repaint();
     }
 
     public final String getAppProperty(String key) {

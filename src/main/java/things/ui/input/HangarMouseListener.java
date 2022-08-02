@@ -16,7 +16,7 @@
 
 package things.ui.input;
 
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 import things.utils.HangarPanelUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -24,32 +24,32 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 
 public class HangarMouseListener extends MouseInputAdapter {
-    private final HangarPanel hangarPanel;
+    private final HangarGamePanel hangarGamePanel;
 
-    public HangarMouseListener(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
+    public HangarMouseListener(HangarGamePanel hangarGamePanel) {
+        this.hangarGamePanel = hangarGamePanel;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarPanelUtils.panelPointToCanvas(hangarPanel, e.getX(), e.getY());
+        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarPanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
             canvas.pointerPressed(point.x, point.y);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarPanelUtils.panelPointToCanvas(hangarPanel, e.getX(), e.getY());
+        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarPanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
             canvas.pointerReleased(point.x, point.y);
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarPanelUtils.panelPointToCanvas(hangarPanel, e.getX(), e.getY());
+        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarPanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
             canvas.pointerDragged(point.x, point.y);
         }
     }

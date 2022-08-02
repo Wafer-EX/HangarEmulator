@@ -16,7 +16,7 @@
 
 package things.ui.input;
 
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.Keyboards;
 import things.utils.KeyCodeConverter;
@@ -27,11 +27,11 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class HangarKeyListener implements KeyListener {
-    private final HangarPanel hangarPanel;
+    private final HangarGamePanel hangarGamePanel;
     private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
 
-    public HangarKeyListener(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
+    public HangarKeyListener(HangarGamePanel hangarGamePanel) {
+        this.hangarGamePanel = hangarGamePanel;
     }
 
     public HashMap<Integer, Boolean> getPressedKeys() {
@@ -43,7 +43,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
+        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
@@ -71,7 +71,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
+        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
                 convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);

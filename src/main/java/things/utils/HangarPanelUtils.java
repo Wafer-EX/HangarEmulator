@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.ScalingModes;
 
@@ -37,16 +37,16 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static void fitBufferToNewResolution(HangarPanel hangarPanel, Dimension resolution) {
+    public static void fitBufferToNewResolution(HangarGamePanel hangarGamePanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             HangarState.setResolution(resolution);
 
-            if (hangarPanel != null) {
+            if (hangarGamePanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = hangarPanel.getDisplayable();
+                var displayable = hangarGamePanel.getDisplayable();
 
-                hangarPanel.setBuffer(changedBuffer);
-                hangarPanel.updateBufferTransformations();
+                hangarGamePanel.setBuffer(changedBuffer);
+                hangarGamePanel.updateBufferTransformations();
 
                 if (displayable != null) {
                     displayable.sizeChanged(resolution.width, resolution.height);
@@ -55,10 +55,10 @@ public final class HangarPanelUtils {
         }
     }
 
-    public static Point canvasPointToPanel(HangarPanel hangarPanel, int x, int y) {
+    public static Point canvasPointToPanel(HangarGamePanel hangarGamePanel, int x, int y) {
         // TODO: check this method
-        var scaleFactor = hangarPanel.getBufferScaleFactor();
-        var position = hangarPanel.getBufferPosition();
+        var scaleFactor = hangarGamePanel.getBufferScaleFactor();
+        var position = hangarGamePanel.getBufferPosition();
 
         var point = new Point();
         point.x = position.x + (int) (x * scaleFactor);
@@ -66,9 +66,9 @@ public final class HangarPanelUtils {
         return point;
     }
 
-    public static Point panelPointToCanvas(HangarPanel hangarPanel, int x, int y) {
-        var scaleFactor = hangarPanel.getBufferScaleFactor();
-        var position = hangarPanel.getBufferPosition();
+    public static Point panelPointToCanvas(HangarGamePanel hangarGamePanel, int x, int y) {
+        var scaleFactor = hangarGamePanel.getBufferScaleFactor();
+        var position = hangarGamePanel.getBufferPosition();
 
         var point = new Point();
         point.x = (int) ((x - position.x) / scaleFactor);
@@ -76,9 +76,9 @@ public final class HangarPanelUtils {
         return point;
     }
 
-    public static void displayMEList(HangarPanel hangarPanel, List meList) {
+    public static void displayMEList(HangarGamePanel hangarGamePanel, List meList) {
         var layout = new GridLayout(6, 1, 4, 4);
-        hangarPanel.setLayout(layout);
+        hangarGamePanel.setLayout(layout);
 
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));
@@ -88,15 +88,15 @@ public final class HangarPanelUtils {
                 meList.setSelectedIndex(selectedIndex, true);
                 meList.runSelectCommand();
             });
-            hangarPanel.add(button);
+            hangarGamePanel.add(button);
         }
 
         if (meList.getCommands().size() > 0) {
-            hangarPanel.add(new JLabel("Options:", SwingConstants.CENTER));
+            hangarGamePanel.add(new JLabel("Options:", SwingConstants.CENTER));
             for (var command : meList.getCommands()) {
                 var button = new JButton(command.getLabel());
                 button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
-                hangarPanel.add(button);
+                hangarGamePanel.add(button);
             }
         }
     }

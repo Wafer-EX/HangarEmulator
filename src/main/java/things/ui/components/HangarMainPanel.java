@@ -24,13 +24,16 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-public class HangarLabel extends JLabel {
-    public HangarLabel() {
+public class HangarMainPanel extends JPanel {
+    public HangarMainPanel() {
         super();
-        setHorizontalAlignment(JLabel.CENTER);
-        setVerticalAlignment(JLabel.CENTER);
-        setText("Please select a file.");
 
+        var label = new JLabel("Please select a file.");
+        label.setHorizontalAlignment(JLabel.CENTER);
+        label.setVerticalAlignment(JLabel.CENTER);
+
+        setLayout(new CardLayout());
+        add(label);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {

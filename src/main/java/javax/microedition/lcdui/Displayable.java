@@ -43,7 +43,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
+        var hangarPanel = HangarFrame.getInstance().getHangarGamePanel();
         return hangarPanel.getDisplayable() == this;
     }
 

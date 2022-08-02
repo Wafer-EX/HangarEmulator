@@ -16,9 +16,9 @@
 
 package things.ui;
 
-import things.ui.components.HangarLabel;
+import things.ui.components.HangarMainPanel;
 import things.ui.components.HangarMenuBar;
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 import things.ui.input.HangarKeyListener;
 
 import javax.swing.*;
@@ -27,7 +27,7 @@ import java.awt.*;
 public class HangarFrame extends JFrame {
     private static final HangarFrame instance = new HangarFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
-    private HangarPanel hangarPanel = null;
+    private HangarGamePanel hangarGamePanel = null;
 
     private HangarFrame() {
         this.setTitle("Hangar Emulator");
@@ -40,29 +40,30 @@ public class HangarFrame extends JFrame {
         return instance;
     }
 
-    public HangarPanel getHangarPanel() {
-        return hangarPanel;
+    public HangarGamePanel getHangarGamePanel() {
+        return hangarGamePanel;
     }
 
-    public void setHangarPanel(HangarPanel hangarPanel) {
+    public void setHangarGamePanel(HangarGamePanel hangarGamePanel) {
         var size = defaultSize;
         var components = getContentPane().getComponents();
 
         for (var component : components) {
-            if (component instanceof HangarLabel hangarLabel) {
-                size = hangarLabel.getSize();
+            if (component instanceof HangarMainPanel hangarMainPanel) {
+                size = hangarMainPanel.getSize();
+                remove(component);
             }
         }
-        hangarPanel.setPreferredSize(size);
+        hangarGamePanel.setPreferredSize(size);
 
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
         }
-        addKeyListener(new HangarKeyListener(hangarPanel));
+        addKeyListener(new HangarKeyListener(hangarGamePanel));
 
-        super.add(hangarPanel);
+        super.add(hangarGamePanel);
         pack();
         revalidate();
-        this.hangarPanel = hangarPanel;
+        this.hangarGamePanel = hangarGamePanel;
     }
 }

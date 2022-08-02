@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.ui.HangarFrame;
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -33,16 +33,16 @@ public class Display {
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
     private static Display display;
-    private final HangarPanel hangarPanel;
+    private final HangarGamePanel hangarGamePanel;
 
-    private Display(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
+    private Display(HangarGamePanel hangarGamePanel) {
+        this.hangarGamePanel = hangarGamePanel;
     }
 
     public static Display getDisplay(MIDlet m) {
         if (display == null) {
-            var hangarPanel = new HangarPanel();
-            HangarFrame.getInstance().setHangarPanel(hangarPanel);
+            var hangarPanel = new HangarGamePanel();
+            HangarFrame.getInstance().setHangarGamePanel(hangarPanel);
             display = new Display(hangarPanel);
         }
         return display;
@@ -81,11 +81,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return hangarPanel.getDisplayable();
+        return hangarGamePanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        hangarPanel.setDisplayable(displayable);
+        hangarGamePanel.setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -104,7 +104,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        hangarPanel.setCallSerially(r);
+        hangarGamePanel.setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {
