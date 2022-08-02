@@ -19,7 +19,7 @@ package things.ui.components;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.HangarFrame;
-import things.ui.input.HangarMouseListener;
+import things.ui.listeners.HangarMouseListener;
 import things.utils.HangarPanelUtils;
 import things.utils.ImageUtils;
 

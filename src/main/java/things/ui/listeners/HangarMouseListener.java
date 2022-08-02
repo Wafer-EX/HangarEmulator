@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.ui.input;
+package things.ui.listeners;
 
 import things.ui.components.HangarGamePanel;
 import things.utils.HangarPanelUtils;

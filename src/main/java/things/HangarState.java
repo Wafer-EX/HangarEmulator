@@ -21,7 +21,7 @@ import things.enums.ScalingModes;
 import things.ui.HangarFrame;
 import things.ui.components.HangarGamePanel;
 import things.ui.components.HangarMainPanel;
-import things.ui.input.HangarKeyListener;
+import things.ui.listeners.HangarKeyListener;
 import things.utils.HangarPanelUtils;
 
 import java.awt.*;

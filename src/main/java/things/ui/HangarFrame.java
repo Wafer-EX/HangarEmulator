@@ -19,7 +19,7 @@ package things.ui;
 import things.ui.components.HangarMainPanel;
 import things.ui.components.HangarMenuBar;
 import things.ui.components.HangarGamePanel;
-import things.ui.input.HangarKeyListener;
+import things.ui.listeners.HangarKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
