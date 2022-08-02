@@ -53,10 +53,10 @@ public class HangarState {
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
         var container = HangarMainFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarGamePanel) container.getComponent(0);
+        var gamePanel = (HangarGamePanel) container.getComponent(0);
 
-        if (hangarPanel != null) {
-            hangarPanel.refreshSerialCallTimer();
+        if (gamePanel != null) {
+            gamePanel.refreshSerialCallTimer();
         }
     }
 
@@ -74,8 +74,8 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        var keyListeners = hangarPanel.getKeyListeners();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var keyListeners = gamePanel.getKeyListeners();
 
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
@@ -99,8 +99,8 @@ public class HangarState {
                 if (scalingMode == ScalingModes.ChangeResolution) {
                     currentResolution = component.getSize();
                 }
-                if (component instanceof HangarGamePanel hangarGamePanel) {
-                    HangarGamePanelUtils.fitBufferToNewResolution(hangarGamePanel, currentResolution);
+                if (component instanceof HangarGamePanel gamePanel) {
+                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, currentResolution);
                 }
             }
         }

@@ -57,14 +57,14 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        hangarPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
         super.repaint();
     }
 

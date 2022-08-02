@@ -37,13 +37,13 @@ public class HangarEmulator {
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                var hangarFrame = HangarMainFrame.getInstance();
-                var hangarMainPanel = new HangarMainPanel();
+                var mainFrame = HangarMainFrame.getInstance();
+                var mainPanel = new HangarMainPanel();
 
-                hangarMainPanel.setPreferredSize(new Dimension(360, 360));
-                hangarFrame.add(hangarMainPanel);
-                hangarFrame.pack();
-                hangarFrame.revalidate();
+                mainPanel.setPreferredSize(new Dimension(360, 360));
+                mainFrame.add(mainPanel);
+                mainFrame.pack();
+                mainFrame.revalidate();
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             HangarMainFrame.getInstance().setVisible(true);

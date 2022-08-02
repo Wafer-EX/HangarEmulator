@@ -45,24 +45,24 @@ public class HangarGamePanel extends JPanel {
     private Timer serialCallTimer = new Timer();
 
     public HangarGamePanel() {
-        var hangarMouseListener = new HangarMouseListener(this);
+        var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
 
         setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
-        addMouseListener(hangarMouseListener);
-        addMouseMotionListener(hangarMouseListener);
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseListener);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var hangarPanel = (HangarGamePanel) e.getComponent();
+                var gamePanel = (HangarGamePanel) e.getComponent();
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
-                    HangarGamePanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, resolution);
                 }
-                hangarPanel.updateBufferTransformations();
+                gamePanel.updateBufferTransformations();
             }
         });
         refreshSerialCallTimer();

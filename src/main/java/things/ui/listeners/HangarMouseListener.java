@@ -24,32 +24,32 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 
 public class HangarMouseListener extends MouseInputAdapter {
-    private final HangarGamePanel hangarGamePanel;
+    private final HangarGamePanel gamePanel;
 
-    public HangarMouseListener(HangarGamePanel hangarGamePanel) {
-        this.hangarGamePanel = hangarGamePanel;
+    public HangarMouseListener(HangarGamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarGamePanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
+        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerPressed(point.x, point.y);
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarGamePanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
+        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerReleased(point.x, point.y);
         }
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (hangarGamePanel.getDisplayable() instanceof Canvas canvas) {
-            var point = HangarGamePanelUtils.panelPointToCanvas(hangarGamePanel, e.getX(), e.getY());
+        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+            var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerDragged(point.x, point.y);
         }
     }

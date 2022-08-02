@@ -87,8 +87,8 @@ public class Font {
     }
 
     public int getHeight() {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        var graphics = hangarPanel.getBuffer().getGraphics();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var graphics = gamePanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.getHeight();
     }
@@ -98,8 +98,8 @@ public class Font {
     }
 
     public int charWidth(char ch) {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        var graphics = hangarPanel.getBuffer().getGraphics();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var graphics = gamePanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.charWidth(ch);
     }
@@ -115,8 +115,8 @@ public class Font {
         if (str == null) {
             throw new NullPointerException();
         }
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        var graphics = hangarPanel.getBuffer().getGraphics();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var graphics = gamePanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }

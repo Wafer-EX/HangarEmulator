@@ -81,8 +81,8 @@ public final class FontUtils {
     }
 
     public static int alignY(Font font, String str, int y, int anchor) {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        var graphics = hangarPanel.getBuffer().getGraphics();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var graphics = gamePanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(font.getSEFont());
         var stringSize = metrics.getStringBounds(str, graphics);
 

@@ -27,7 +27,7 @@ import java.awt.*;
 public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
-    private HangarGamePanel hangarGamePanel = null;
+    private HangarGamePanel gamePanel = null;
 
     private HangarMainFrame() {
         this.setTitle("Hangar Emulator");
@@ -40,30 +40,30 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarGamePanel getHangarGamePanel() {
-        return hangarGamePanel;
+    public HangarGamePanel getGamePanel() {
+        return gamePanel;
     }
 
-    public void setHangarGamePanel(HangarGamePanel hangarGamePanel) {
+    public void setGamePanel(HangarGamePanel gamePanel) {
         var size = defaultSize;
         var components = getContentPane().getComponents();
 
         for (var component : components) {
-            if (component instanceof HangarMainPanel hangarMainPanel) {
-                size = hangarMainPanel.getSize();
+            if (component instanceof HangarMainPanel mainPanel) {
+                size = mainPanel.getSize();
                 remove(component);
             }
         }
-        hangarGamePanel.setPreferredSize(size);
+        gamePanel.setPreferredSize(size);
 
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
         }
-        addKeyListener(new HangarKeyListener(hangarGamePanel));
+        addKeyListener(new HangarKeyListener(gamePanel));
 
-        super.add(hangarGamePanel);
+        super.add(gamePanel);
         pack();
         revalidate();
-        this.hangarGamePanel = hangarGamePanel;
+        this.gamePanel = gamePanel;
     }
 }

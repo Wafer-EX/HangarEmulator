@@ -43,8 +43,8 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        var hangarPanel = HangarMainFrame.getInstance().getHangarGamePanel();
-        return hangarPanel.getDisplayable() == this;
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        return gamePanel.getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) throws NullPointerException {

@@ -33,17 +33,17 @@ public class Display {
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
     private static Display display;
-    private final HangarGamePanel hangarGamePanel;
+    private final HangarGamePanel gamePanel;
 
-    private Display(HangarGamePanel hangarGamePanel) {
-        this.hangarGamePanel = hangarGamePanel;
+    private Display(HangarGamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     public static Display getDisplay(MIDlet m) {
         if (display == null) {
-            var hangarPanel = new HangarGamePanel();
-            HangarMainFrame.getInstance().setHangarGamePanel(hangarPanel);
-            display = new Display(hangarPanel);
+            var gamePanel = new HangarGamePanel();
+            HangarMainFrame.getInstance().setGamePanel(gamePanel);
+            display = new Display(gamePanel);
         }
         return display;
     }
@@ -81,11 +81,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return hangarGamePanel.getDisplayable();
+        return gamePanel.getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        hangarGamePanel.setDisplayable(displayable);
+        gamePanel.setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -104,7 +104,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        hangarGamePanel.setCallSerially(r);
+        gamePanel.setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {
