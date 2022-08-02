@@ -18,10 +18,10 @@ package things.ui.components;
 
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.HangarFrame;
-import things.ui.input.HangarMouseListener;
-import things.utils.HangarPanelUtils;
-import things.utils.ImageUtils;
+import things.ui.frames.HangarMainFrame;
+import things.ui.listeners.HangarMouseListener;
+import things.utils.HangarGamePanelUtils;
+import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
@@ -35,7 +35,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarPanel extends JPanel {
+public class HangarGamePanel extends JPanel {
     private Displayable displayable;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -44,25 +44,25 @@ public class HangarPanel extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarPanel() {
-        var hangarMouseListener = new HangarMouseListener(this);
+    public HangarGamePanel() {
+        var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
 
         setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         setBorder(new EmptyBorder(4, 4, 4, 4));
         setPreferredSize(resolution);
 
-        addMouseListener(hangarMouseListener);
-        addMouseMotionListener(hangarMouseListener);
+        addMouseListener(mouseListener);
+        addMouseMotionListener(mouseListener);
         addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var hangarPanel = (HangarPanel) e.getComponent();
+                var gamePanel = (HangarGamePanel) e.getComponent();
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
-                    HangarPanelUtils.fitBufferToNewResolution(hangarPanel, resolution);
+                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, resolution);
                 }
-                hangarPanel.updateBufferTransformations();
+                gamePanel.updateBufferTransformations();
             }
         });
         refreshSerialCallTimer();
@@ -76,13 +76,13 @@ public class HangarPanel extends JPanel {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            var hangarFrame = HangarFrame.getInstance();
+            var hangarFrame = HangarMainFrame.getInstance();
             hangarFrame.requestFocus();
             updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
-            HangarPanelUtils.displayMEList(this, list);
+            HangarGamePanelUtils.displayMEList(this, list);
         }
         revalidate();
         repaint();
@@ -109,7 +109,7 @@ public class HangarPanel extends JPanel {
     }
 
     public void updateBufferTransformations() {
-        bufferScaleFactor = HangarPanelUtils.getBufferScaleFactor(this, buffer);
+        bufferScaleFactor = HangarGamePanelUtils.getBufferScaleFactor(this, buffer);
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package things.ui.input;
+package things.ui.listeners;
 
-import things.ui.components.HangarPanel;
+import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.Keyboards;
-import things.utils.KeyCodeConverter;
+import things.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
@@ -27,11 +27,11 @@ import java.awt.event.KeyListener;
 import java.util.HashMap;
 
 public class HangarKeyListener implements KeyListener {
-    private final HangarPanel hangarPanel;
+    private final HangarGamePanel gamePanel;
     private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
 
-    public HangarKeyListener(HangarPanel hangarPanel) {
-        this.hangarPanel = hangarPanel;
+    public HangarKeyListener(HangarGamePanel gamePanel) {
+        this.gamePanel = gamePanel;
     }
 
     public HashMap<Integer, Boolean> getPressedKeys() {
@@ -43,10 +43,10 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
+        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
+                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
 
             if (pressedKeys.containsKey(convertedKeyCode)) {
@@ -71,10 +71,10 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (hangarPanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyCodeConverter.awtToDefault(e.getKeyCode());
+        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
             if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyCodeConverter.defaultToNokia(convertedKeyCode);
+                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
             pressedKeys.remove(convertedKeyCode);
             canvas.keyReleased(convertedKeyCode);

@@ -16,7 +16,7 @@
 
 package things;
 
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
@@ -49,7 +49,7 @@ public class MIDletLoader {
     public static void startLoadedMIDlet() {
         try {
             if (midlet != null) {
-                var hangarFrame = HangarFrame.getInstance();
+                var hangarFrame = HangarMainFrame.getInstance();
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
                 hangarFrame.setIconImage(MIDletResources.getIconFromJar());
 

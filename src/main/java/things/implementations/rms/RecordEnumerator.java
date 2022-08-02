@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.implementations;
+package things.implementations.rms;
 
 import javax.microedition.rms.InvalidRecordIDException;
 import javax.microedition.rms.RecordEnumeration;

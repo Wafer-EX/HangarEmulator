@@ -18,11 +18,11 @@ package things;
 
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
-import things.ui.HangarFrame;
-import things.ui.components.HangarLabel;
-import things.ui.components.HangarPanel;
-import things.ui.input.HangarKeyListener;
-import things.utils.HangarPanelUtils;
+import things.ui.frames.HangarMainFrame;
+import things.ui.components.HangarGamePanel;
+import things.ui.components.HangarMainPanel;
+import things.ui.listeners.HangarKeyListener;
+import things.utils.HangarGamePanelUtils;
 
 import java.awt.*;
 import java.io.File;
@@ -52,11 +52,11 @@ public class HangarState {
 
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
-        var container = HangarFrame.getInstance().getContentPane();
-        var hangarPanel = (HangarPanel) container.getComponent(0);
+        var container = HangarMainFrame.getInstance().getContentPane();
+        var gamePanel = (HangarGamePanel) container.getComponent(0);
 
-        if (hangarPanel != null) {
-            hangarPanel.refreshSerialCallTimer();
+        if (gamePanel != null) {
+            gamePanel.refreshSerialCallTimer();
         }
     }
 
@@ -74,8 +74,8 @@ public class HangarState {
 
     public static void setKeyboard(Keyboards keyboard) {
         selectedKeyboard = keyboard;
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
-        var keyListeners = hangarPanel.getKeyListeners();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var keyListeners = gamePanel.getKeyListeners();
 
         if (keyListeners.length > 0) {
             for (var keyListener : keyListeners) {
@@ -92,15 +92,15 @@ public class HangarState {
 
     public static void setScalingMode(ScalingModes mode) {
         scalingMode = mode;
-        var container = HangarFrame.getInstance().getContentPane();
+        var container = HangarMainFrame.getInstance().getContentPane();
 
         for (var component : container.getComponents()) {
-            if (component instanceof HangarPanel || component instanceof HangarLabel) {
+            if (component instanceof HangarGamePanel || component instanceof HangarMainPanel) {
                 if (scalingMode == ScalingModes.ChangeResolution) {
                     currentResolution = component.getSize();
                 }
-                if (component instanceof HangarPanel hangarPanel) {
-                    HangarPanelUtils.fitBufferToNewResolution(hangarPanel, currentResolution);
+                if (component instanceof HangarGamePanel gamePanel) {
+                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, currentResolution);
                 }
             }
         }

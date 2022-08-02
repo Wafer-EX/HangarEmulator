@@ -17,7 +17,7 @@
 package things.implementations.nokia;
 
 import com.nokia.mid.ui.DirectGraphics;
-import things.utils.nokiautils.DirectGraphicsUtils;
+import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;

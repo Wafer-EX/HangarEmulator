@@ -16,8 +16,8 @@
 
 package javax.microedition.media;
 
-import things.implementations.MidiPlayer;
-import things.implementations.WavPlayer;
+import things.implementations.media.MidiPlayer;
+import things.implementations.media.WavPlayer;
 
 import java.io.InputStream;
 

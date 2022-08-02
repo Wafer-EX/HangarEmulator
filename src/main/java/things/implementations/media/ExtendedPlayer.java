@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.implementations;
+package things.implementations.media;
 
 import javax.microedition.media.MediaException;
 import javax.microedition.media.Player;

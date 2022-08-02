@@ -14,55 +14,56 @@
  * limitations under the License.
  */
 
-package things.ui;
+package things.ui.frames;
 
-import things.ui.components.HangarLabel;
+import things.ui.components.HangarMainPanel;
 import things.ui.components.HangarMenuBar;
-import things.ui.components.HangarPanel;
-import things.ui.input.HangarKeyListener;
+import things.ui.components.HangarGamePanel;
+import things.ui.listeners.HangarKeyListener;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarFrame extends JFrame {
-    private static final HangarFrame instance = new HangarFrame();
+public class HangarMainFrame extends JFrame {
+    private static final HangarMainFrame instance = new HangarMainFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
-    private HangarPanel hangarPanel = null;
+    private HangarGamePanel gamePanel = null;
 
-    private HangarFrame() {
+    private HangarMainFrame() {
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
     }
 
-    public static HangarFrame getInstance() {
+    public static HangarMainFrame getInstance() {
         return instance;
     }
 
-    public HangarPanel getHangarPanel() {
-        return hangarPanel;
+    public HangarGamePanel getGamePanel() {
+        return gamePanel;
     }
 
-    public void setHangarPanel(HangarPanel hangarPanel) {
+    public void setGamePanel(HangarGamePanel gamePanel) {
         var size = defaultSize;
         var components = getContentPane().getComponents();
 
         for (var component : components) {
-            if (component instanceof HangarLabel hangarLabel) {
-                size = hangarLabel.getSize();
+            if (component instanceof HangarMainPanel mainPanel) {
+                size = mainPanel.getSize();
+                remove(component);
             }
         }
-        hangarPanel.setPreferredSize(size);
+        gamePanel.setPreferredSize(size);
 
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
         }
-        addKeyListener(new HangarKeyListener(hangarPanel));
+        addKeyListener(new HangarKeyListener(gamePanel));
 
-        super.add(hangarPanel);
+        super.add(gamePanel);
         pack();
         revalidate();
-        this.hangarPanel = hangarPanel;
+        this.gamePanel = gamePanel;
     }
 }

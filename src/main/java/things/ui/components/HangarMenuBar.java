@@ -21,8 +21,8 @@ import things.HangarState;
 import things.MIDletLoader;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
-import things.ui.HangarFrame;
-import things.utils.HangarPanelUtils;
+import things.ui.frames.HangarMainFrame;
+import things.utils.HangarGamePanelUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -152,26 +152,26 @@ public class HangarMenuBar extends JMenuBar {
 
         radioResolution128x128.addItemListener(e -> {
             if (radioResolution128x128.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarFrame.getInstance().getHangarPanel(), new Dimension(128, 128));
+                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(128, 128));
             }
         });
         radioResolution128x160.addItemListener(e -> {
             if (radioResolution128x160.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarFrame.getInstance().getHangarPanel(), new Dimension(128, 160));
+                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(128, 160));
             }
         });
         radioResolution176x220.addItemListener(e -> {
             if (radioResolution176x220.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarFrame.getInstance().getHangarPanel(), new Dimension(176, 220));
+                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(176, 220));
             }
         });
         radioResolution240x320.addItemListener(e -> {
             if (radioResolution240x320.isSelected()) {
-                HangarPanelUtils.fitBufferToNewResolution(HangarFrame.getInstance().getHangarPanel(), new Dimension(240, 320));
+                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(240, 320));
             }
         });
 
-        allowResizingCheckBox.addItemListener(e -> HangarFrame.getInstance().setResizable(!HangarFrame.getInstance().isResizable()));
+        allowResizingCheckBox.addItemListener(e -> HangarMainFrame.getInstance().setResizable(!HangarMainFrame.getInstance().isResizable()));
 
         loadSoundbankItem.addActionListener(e -> {
             var fileChooser = new JFileChooser();

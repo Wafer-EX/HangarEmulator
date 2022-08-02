@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package things.utils;
+package things.utils.microedition;
 
-import things.ui.HangarFrame;
+import things.ui.frames.HangarMainFrame;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
@@ -81,8 +81,8 @@ public final class FontUtils {
     }
 
     public static int alignY(Font font, String str, int y, int anchor) {
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
-        var graphics = hangarPanel.getBuffer().getGraphics();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        var graphics = gamePanel.getBuffer().getGraphics();
         var metrics = graphics.getFontMetrics(font.getSEFont());
         var stringSize = metrics.getStringBounds(str, graphics);
 

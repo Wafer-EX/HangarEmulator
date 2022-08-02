@@ -17,9 +17,9 @@
 package javax.microedition.lcdui;
 
 import things.HangarState;
-import things.ui.HangarFrame;
-import things.utils.CanvasUtils;
-import things.utils.HangarPanelUtils;
+import things.ui.frames.HangarMainFrame;
+import things.utils.microedition.CanvasUtils;
+import things.utils.HangarGamePanelUtils;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
@@ -91,22 +91,22 @@ public abstract class Canvas extends Displayable {
     public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
-        if (hangarPanel != null) {
-            var position = HangarPanelUtils.canvasPointToPanel(hangarPanel, x, y);
-            var scaleFactor = hangarPanel.getBufferScaleFactor();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        if (gamePanel != null) {
+            var position = HangarGamePanelUtils.canvasPointToPanel(gamePanel, x, y);
+            var scaleFactor = gamePanel.getBufferScaleFactor();
 
             int newWidth = (int) (width * scaleFactor);
             int newHeight = (int) (height * scaleFactor);
-            hangarPanel.repaint(position.x, position.y, newWidth, newHeight);
+            gamePanel.repaint(position.x, position.y, newWidth, newHeight);
         }
         HangarState.syncWithFrameRate();
     }
 
     public final void repaint() {
-        var hangarPanel = HangarFrame.getInstance().getHangarPanel();
-        if (hangarPanel != null) {
-            hangarPanel.repaint();
+        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
+        if (gamePanel != null) {
+            gamePanel.repaint();
         }
         HangarState.syncWithFrameRate();
     }
