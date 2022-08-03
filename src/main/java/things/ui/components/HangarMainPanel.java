@@ -28,7 +28,7 @@ public class HangarMainPanel extends JPanel {
     public HangarMainPanel() {
         super();
 
-        var label = new JLabel("Please select a file.");
+        var label = new JLabel("Please select a file in the MIDlet menu.");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
 
