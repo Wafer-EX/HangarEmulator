@@ -229,6 +229,7 @@ public class HangarMenuBar extends JMenuBar {
     private void addHelpMenu() {
         var helpMenu = new JMenu("Help");
         var githubLinkMenuItem = new JMenuItem("GitHub page");
+        var showAboutMenuItem = new JMenuItem("About");
 
         githubLinkMenuItem.addActionListener(event -> {
             try {
@@ -238,8 +239,15 @@ public class HangarMenuBar extends JMenuBar {
                 e.printStackTrace();
             }
         });
+        showAboutMenuItem.addActionListener(event -> JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
+                "Hangar Emulator\n" +
+                        "Version: 0.1-alpha\n" +
+                        "Author: Kirill Lomakin (minebuilder445@gmail.com)",
+                "About",
+                JOptionPane.PLAIN_MESSAGE));
 
         helpMenu.add(githubLinkMenuItem);
+        helpMenu.add(showAboutMenuItem);
         this.add(helpMenu);
     }
 }
