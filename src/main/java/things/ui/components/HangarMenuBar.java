@@ -241,7 +241,7 @@ public class HangarMenuBar extends JMenuBar {
         });
         showAboutMenuItem.addActionListener(event -> JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
                 "Hangar Emulator\n" +
-                        "Version: 0.1-alpha\n" +
+                        "Version: 0.2-alpha\n" +
                         "Author: Kirill Lomakin (minebuilder445@gmail.com)",
                 "About",
                 JOptionPane.PLAIN_MESSAGE));
