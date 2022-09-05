@@ -44,7 +44,7 @@ public class HangarMenuBar extends JMenuBar {
         var exitMenuItem = new JMenuItem("Exit");
 
         loadMenuItem.addActionListener(e -> {
-            var fileChooser = new JFileChooser();
+            var fileChooser = new HangarJARChooser();
             fileChooser.showDialog(null, "Select MIDlet");
 
             SwingUtilities.invokeLater(() -> {
@@ -174,7 +174,7 @@ public class HangarMenuBar extends JMenuBar {
         allowResizingCheckBox.addItemListener(e -> HangarMainFrame.getInstance().setResizable(!HangarMainFrame.getInstance().isResizable()));
 
         loadSoundbankItem.addActionListener(e -> {
-            var fileChooser = new JFileChooser();
+            var fileChooser = new HangarSF2Chooser();
             fileChooser.showDialog(null, "Select soundbank");
 
             SwingUtilities.invokeLater(() -> {
