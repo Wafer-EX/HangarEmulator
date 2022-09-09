@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.dialogs;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-public class HangarSF2Chooser extends JFileChooser {
-    public HangarSF2Chooser() {
+public class HangarJARChooser extends JFileChooser {
+    public HangarJARChooser() {
         super();
 
         this.setAcceptAllFileFilterUsed(false);
@@ -30,14 +30,16 @@ public class HangarSF2Chooser extends JFileChooser {
             public boolean accept(File file) {
                 if (file.isFile()) {
                     var filename = file.getName().toLowerCase();
-                    return filename.endsWith(".sf2");
+                    return filename.endsWith(".jar");
                 }
-                else return file.isDirectory();
+                else {
+                    return file.isDirectory();
+                }
             }
 
             @Override
             public String getDescription() {
-                return "Soundbank (*.sf2)";
+                return "MIDlet (*.jar)";
             }
         });
     }

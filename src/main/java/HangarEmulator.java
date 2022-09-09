@@ -25,7 +25,13 @@ import java.util.Locale;
 
 public class HangarEmulator {
     public static void main(String[] args) {
-        FlatDarkLaf.setup();
+        try {
+            FlatDarkLaf.setup();
+        }
+        catch (NoClassDefFoundError error) {
+            error.printStackTrace();
+        }
+
         System.setProperty("sun.java2d.opengl", "true");
         System.setProperty("microedition.profiles", "MIDP-2.0");
         System.setProperty("microedition.platform", "HangarEmulator");

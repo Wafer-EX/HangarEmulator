@@ -21,6 +21,8 @@ import things.HangarState;
 import things.MIDletLoader;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.ui.dialogs.HangarJARChooser;
+import things.ui.dialogs.HangarSF2Chooser;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarGamePanelUtils;
 
