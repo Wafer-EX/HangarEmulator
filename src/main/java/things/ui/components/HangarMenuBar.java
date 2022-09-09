@@ -235,16 +235,20 @@ public class HangarMenuBar extends JMenuBar {
 
         githubLinkMenuItem.addActionListener(event -> {
             try {
-                Desktop.getDesktop().browse(new URL("https://github.com/Lisowolf/HangarEmulator").toURI());
+                var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
+                Desktop.getDesktop().browse(githubUri);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         });
         showAboutMenuItem.addActionListener(event -> JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
-                "Hangar Emulator\n" +
-                        "Version: 0.2-alpha\n" +
-                        "Author: Kirill Lomakin (minebuilder445@gmail.com)",
+                String.format("""
+                        Hangar Emulator
+                        Version: %s
+                        Author: %s""",
+                        System.getProperty("hangaremulator.version"),
+                        System.getProperty("hangaremulator.author")),
                 "About",
                 JOptionPane.PLAIN_MESSAGE));
 

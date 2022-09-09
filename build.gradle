@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.lisowolf'
-version '0.2-alpha'
+version '0.3-alpha'
 
 jar {
     manifest {
