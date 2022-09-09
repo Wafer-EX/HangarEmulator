@@ -4,7 +4,7 @@ plugins {
 }
 
 group 'org.lisowolf'
-version '0.2-alpha'
+version '0.3-alpha'
 
 jar {
     manifest {
@@ -18,10 +18,9 @@ repositories {
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.3'
-    implementation 'com.formdev:flatlaf:2.3'
+    implementation 'com.formdev:flatlaf:2.4'
 }
 
 shadowJar {
     mergeServiceFiles()
-    archiveBaseName.set('HangarEmulator')
 }

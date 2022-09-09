@@ -21,6 +21,8 @@ import things.HangarState;
 import things.MIDletLoader;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
+import things.ui.dialogs.HangarJarChooser;
+import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarGamePanelUtils;
 
@@ -44,7 +46,7 @@ public class HangarMenuBar extends JMenuBar {
         var exitMenuItem = new JMenuItem("Exit");
 
         loadMenuItem.addActionListener(e -> {
-            var fileChooser = new HangarJARChooser();
+            var fileChooser = new HangarJarChooser();
             fileChooser.showDialog(null, "Select MIDlet");
 
             SwingUtilities.invokeLater(() -> {
@@ -174,7 +176,7 @@ public class HangarMenuBar extends JMenuBar {
         allowResizingCheckBox.addItemListener(e -> HangarMainFrame.getInstance().setResizable(!HangarMainFrame.getInstance().isResizable()));
 
         loadSoundbankItem.addActionListener(e -> {
-            var fileChooser = new HangarSF2Chooser();
+            var fileChooser = new HangarSf2Chooser();
             fileChooser.showDialog(null, "Select soundbank");
 
             SwingUtilities.invokeLater(() -> {
@@ -233,16 +235,20 @@ public class HangarMenuBar extends JMenuBar {
 
         githubLinkMenuItem.addActionListener(event -> {
             try {
-                Desktop.getDesktop().browse(new URL("https://github.com/Lisowolf/HangarEmulator").toURI());
+                var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
+                Desktop.getDesktop().browse(githubUri);
             }
             catch (Exception e) {
                 e.printStackTrace();
             }
         });
         showAboutMenuItem.addActionListener(event -> JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
-                "Hangar Emulator\n" +
-                        "Version: 0.2-alpha\n" +
-                        "Author: Kirill Lomakin (minebuilder445@gmail.com)",
+                String.format("""
+                        Hangar Emulator
+                        Version: %s
+                        Author: %s""",
+                        System.getProperty("hangaremulator.version"),
+                        System.getProperty("hangaremulator.author")),
                 "About",
                 JOptionPane.PLAIN_MESSAGE));
 

@@ -25,8 +25,17 @@ import java.util.Locale;
 
 public class HangarEmulator {
     public static void main(String[] args) {
-        FlatDarkLaf.setup();
-        System.setProperty("sun.java2d.opengl", "true");
+        try {
+            FlatDarkLaf.setup();
+        }
+        catch (NoClassDefFoundError error) {
+            error.printStackTrace();
+        }
+
+        System.setProperty("hangaremulator.version", "0.3-alpha");
+        System.setProperty("hangaremulator.github", "https://github.com/Lisowolf/HangarEmulator");
+        System.setProperty("hangaremulator.author", "Kirill Lomakin (minebuilder445@gmail.com)");
+
         System.setProperty("microedition.profiles", "MIDP-2.0");
         System.setProperty("microedition.platform", "HangarEmulator");
         System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());

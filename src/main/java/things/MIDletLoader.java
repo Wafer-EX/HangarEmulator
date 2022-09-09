@@ -21,6 +21,7 @@ import things.ui.frames.HangarMainFrame;
 import javax.microedition.midlet.MIDlet;
 import javax.microedition.midlet.MIDletStateChangeException;
 import java.net.URL;
+import java.net.URLClassLoader;
 
 public class MIDletLoader {
     private static MIDlet midlet;
@@ -32,7 +33,15 @@ public class MIDletLoader {
             MIDletResources.initializeMIDletProperties();
 
             URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
-            var classLoader = new MIDletClassLoader(urls);
+            ClassLoader classLoader;
+
+            try {
+                classLoader = new MIDletClassLoader(urls);
+            }
+            catch (NoClassDefFoundError error) {
+                error.printStackTrace();
+                classLoader = new URLClassLoader(urls);
+            }
 
             var mainClass = Class.forName(MIDletResources.getMainClassName(), true, classLoader);
             var constructor = mainClass.getConstructor();
