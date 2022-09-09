@@ -21,8 +21,8 @@ import things.HangarState;
 import things.MIDletLoader;
 import things.enums.Keyboards;
 import things.enums.ScalingModes;
-import things.ui.dialogs.HangarJARChooser;
-import things.ui.dialogs.HangarSF2Chooser;
+import things.ui.dialogs.HangarJarChooser;
+import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarGamePanelUtils;
 
@@ -46,7 +46,7 @@ public class HangarMenuBar extends JMenuBar {
         var exitMenuItem = new JMenuItem("Exit");
 
         loadMenuItem.addActionListener(e -> {
-            var fileChooser = new HangarJARChooser();
+            var fileChooser = new HangarJarChooser();
             fileChooser.showDialog(null, "Select MIDlet");
 
             SwingUtilities.invokeLater(() -> {
@@ -176,7 +176,7 @@ public class HangarMenuBar extends JMenuBar {
         allowResizingCheckBox.addItemListener(e -> HangarMainFrame.getInstance().setResizable(!HangarMainFrame.getInstance().isResizable()));
 
         loadSoundbankItem.addActionListener(e -> {
-            var fileChooser = new HangarSF2Chooser();
+            var fileChooser = new HangarSf2Chooser();
             fileChooser.showDialog(null, "Select soundbank");
 
             SwingUtilities.invokeLater(() -> {

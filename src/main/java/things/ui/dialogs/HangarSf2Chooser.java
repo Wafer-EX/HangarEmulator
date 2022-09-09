@@ -20,8 +20,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-public class HangarSF2Chooser extends JFileChooser {
-    public HangarSF2Chooser() {
+public class HangarSf2Chooser extends JFileChooser {
+    public HangarSf2Chooser() {
         super();
 
         this.setAcceptAllFileFilterUsed(false);
