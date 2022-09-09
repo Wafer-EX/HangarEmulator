@@ -23,5 +23,4 @@ dependencies {
 
 shadowJar {
     mergeServiceFiles()
-    archiveBaseName.set('HangarEmulator')
 }
