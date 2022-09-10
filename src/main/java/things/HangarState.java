@@ -53,9 +53,7 @@ public class HangarState {
     public static void setFrameRate(int frameRate) {
         HangarState.frameRate = frameRate;
         var container = HangarMainFrame.getInstance().getContentPane();
-        var gamePanel = (HangarGamePanel) container.getComponent(0);
-
-        if (gamePanel != null) {
+        if (container.getComponent(0) instanceof HangarGamePanel gamePanel) {
             gamePanel.refreshSerialCallTimer();
         }
     }
