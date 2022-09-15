@@ -238,8 +238,8 @@ public class HangarMenuBar extends JMenuBar {
                 var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
                 Desktop.getDesktop().browse(githubUri);
             }
-            catch (Exception e) {
-                e.printStackTrace();
+            catch (Exception exception) {
+                exception.printStackTrace();
             }
         });
         showAboutMenuItem.addActionListener(event -> JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),

@@ -131,8 +131,8 @@ public class HangarState {
             new ProcessBuilder(command).start();
             System.exit(0);
         }
-        catch (Exception ex) {
-            throw new RuntimeException(ex);
+        catch (Exception exception) {
+            throw new RuntimeException(exception);
         }
     }
 
@@ -141,8 +141,8 @@ public class HangarState {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
-            catch (Exception ex) {
-                ex.printStackTrace();
+            catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
     }

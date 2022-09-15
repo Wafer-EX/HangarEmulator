@@ -35,8 +35,8 @@ public class WavPlayer extends ExtendedPlayer {
             audioSource = stream.readAllBytes();
             setState(UNREALIZED);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -51,8 +51,8 @@ public class WavPlayer extends ExtendedPlayer {
                     }
                     setState(REALIZED);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
@@ -73,8 +73,8 @@ public class WavPlayer extends ExtendedPlayer {
                     clip.setMicrosecondPosition(0);
                     setState(PREFETCHED);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }

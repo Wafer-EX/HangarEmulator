@@ -33,8 +33,8 @@ public final class HangarAudio {
             var soundbankInputStream = new FileInputStream(soundbankFile);
             soundbank = MidiSystem.getSoundbank(soundbankInputStream);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
@@ -59,8 +59,8 @@ public final class HangarAudio {
                 return MidiSystem.getSequencer();
             }
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }

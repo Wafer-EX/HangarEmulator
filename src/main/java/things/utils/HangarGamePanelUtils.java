@@ -80,6 +80,7 @@ public final class HangarGamePanelUtils {
     public static void displayMEList(HangarGamePanel gamePanel, List meList) {
         var layout = new GridLayout(6, 1, 4, 4);
         gamePanel.setLayout(layout);
+        gamePanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));

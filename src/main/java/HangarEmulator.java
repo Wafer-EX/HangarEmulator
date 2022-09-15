@@ -58,8 +58,8 @@ public class HangarEmulator {
             HangarMainFrame.getInstance().setVisible(true);
             HangarMainFrame.getInstance().setLocationRelativeTo(null);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }

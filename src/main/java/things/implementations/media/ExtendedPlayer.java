@@ -64,8 +64,8 @@ public abstract class ExtendedPlayer implements Player {
                     stop();
                     setState(REALIZED);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
             default -> setState(REALIZED);

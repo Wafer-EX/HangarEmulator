@@ -50,8 +50,8 @@ public class MIDletLoader {
             midlet = (MIDlet) constructor.newInstance();
             midletPath = absolutePath;
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 
@@ -66,14 +66,14 @@ public class MIDletLoader {
                     try {
                         midlet.startApp();
                     }
-                    catch (MIDletStateChangeException ex) {
-                        ex.printStackTrace();
+                    catch (MIDletStateChangeException exception) {
+                        exception.printStackTrace();
                     }
                 }).start();
             }
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 

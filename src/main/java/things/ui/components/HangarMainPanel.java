@@ -32,9 +32,9 @@ public class HangarMainPanel extends JPanel {
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
 
-        setLayout(new CardLayout());
-        add(label);
-        addComponentListener(new ComponentAdapter() {
+        this.setLayout(new CardLayout());
+        this.add(label);
+        this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (HangarState.getScalingMode() == ScalingModes.ChangeResolution) {

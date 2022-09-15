@@ -48,13 +48,12 @@ public class HangarGamePanel extends JPanel {
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getResolution();
 
-        setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
-        setBorder(new EmptyBorder(4, 4, 4, 4));
-        setPreferredSize(resolution);
+        this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
+        this.setPreferredSize(resolution);
 
-        addMouseListener(mouseListener);
-        addMouseMotionListener(mouseListener);
-        addComponentListener(new ComponentAdapter() {
+        this.addMouseListener(mouseListener);
+        this.addMouseMotionListener(mouseListener);
+        this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
                 var gamePanel = (HangarGamePanel) e.getComponent();
@@ -72,7 +71,7 @@ public class HangarGamePanel extends JPanel {
     }
 
     public void setDisplayable(Displayable displayable) {
-        removeAll();
+        this.removeAll();
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
@@ -84,8 +83,9 @@ public class HangarGamePanel extends JPanel {
         else if (displayable instanceof List list) {
             HangarGamePanelUtils.displayMEList(this, list);
         }
-        revalidate();
-        repaint();
+
+        this.revalidate();
+        this.repaint();
     }
 
     public BufferedImage getBuffer() {

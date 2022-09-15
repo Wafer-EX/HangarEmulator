@@ -39,7 +39,7 @@ public class DirectUtils {
             var image = ImageIO.read(byteArrayInputStream);
             return new Image(image, true);
         }
-        catch (Exception ex) {
+        catch (Exception exception) {
             throw new IllegalArgumentException();
         }
     }

@@ -59,11 +59,11 @@ public class HangarMainFrame extends JFrame {
         for (var keyListener : getKeyListeners()) {
             removeKeyListener(keyListener);
         }
-        addKeyListener(new HangarKeyListener(gamePanel));
+        this.addKeyListener(new HangarKeyListener(gamePanel));
 
         super.add(gamePanel);
-        pack();
-        revalidate();
+        this.pack();
+        this.revalidate();
         this.gamePanel = gamePanel;
     }
 }
