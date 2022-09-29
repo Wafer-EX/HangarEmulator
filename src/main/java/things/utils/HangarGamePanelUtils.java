@@ -38,10 +38,8 @@ public final class HangarGamePanelUtils {
         }
     }
 
-    public static void fitBufferToNewResolution(HangarGamePanel gamePanel, Dimension resolution) {
+    public static void fitBufferToResolution(HangarGamePanel gamePanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
-            HangarState.getConfiguration().setResolution(resolution);
-
             if (gamePanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
                 var displayable = gamePanel.getDisplayable();

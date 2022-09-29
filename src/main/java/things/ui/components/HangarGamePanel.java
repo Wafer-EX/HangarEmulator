@@ -58,7 +58,7 @@ public class HangarGamePanel extends JPanel {
                 var gamePanel = (HangarGamePanel) e.getComponent();
                 if (HangarState.getConfiguration().getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
-                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, resolution);
+                    HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
                 }
                 gamePanel.updateBufferTransformations();
             }

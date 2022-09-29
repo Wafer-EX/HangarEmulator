@@ -67,7 +67,7 @@ public class HangarConfiguration {
                     resolution = component.getSize();
                 }
                 if (component instanceof HangarGamePanel gamePanel) {
-                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, resolution);
+                    HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
                 }
             }
         }
@@ -79,6 +79,7 @@ public class HangarConfiguration {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
+        HangarGamePanelUtils.fitBufferToResolution(HangarMainFrame.getInstance().getGamePanel(), resolution);
     }
 
     public int getFrameRate() {

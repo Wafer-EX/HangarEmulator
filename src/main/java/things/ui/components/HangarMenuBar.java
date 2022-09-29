@@ -24,7 +24,6 @@ import things.enums.ScalingModes;
 import things.ui.dialogs.HangarJarChooser;
 import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
-import things.utils.HangarGamePanelUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -154,22 +153,22 @@ public class HangarMenuBar extends JMenuBar {
 
         radioResolution128x128.addItemListener(e -> {
             if (radioResolution128x128.isSelected()) {
-                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(128, 128));
+                HangarState.getConfiguration().setResolution(new Dimension(128, 128));
             }
         });
         radioResolution128x160.addItemListener(e -> {
             if (radioResolution128x160.isSelected()) {
-                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(128, 160));
+                HangarState.getConfiguration().setResolution(new Dimension(128, 160));
             }
         });
         radioResolution176x220.addItemListener(e -> {
             if (radioResolution176x220.isSelected()) {
-                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(176, 220));
+                HangarState.getConfiguration().setResolution(new Dimension(176, 220));
             }
         });
         radioResolution240x320.addItemListener(e -> {
             if (radioResolution240x320.isSelected()) {
-                HangarGamePanelUtils.fitBufferToNewResolution(HangarMainFrame.getInstance().getGamePanel(), new Dimension(240, 320));
+                HangarState.getConfiguration().setResolution(new Dimension(240, 320));
             }
         });
 
