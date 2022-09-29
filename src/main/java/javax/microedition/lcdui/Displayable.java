@@ -67,11 +67,13 @@ public abstract class Displayable {
     }
 
     public int getWidth() {
-        return HangarState.getResolution().width;
+        var configuration = HangarState.getConfiguration();
+        return configuration.getResolution().width;
     }
 
     public int getHeight() {
-        return HangarState.getResolution().height;
+        var configuration = HangarState.getConfiguration();
+        return configuration.getResolution().height;
     }
 
     public void sizeChanged(int w, int h) { }

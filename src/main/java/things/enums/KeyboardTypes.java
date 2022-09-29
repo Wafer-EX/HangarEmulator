@@ -16,7 +16,7 @@
 
 package things.enums;
 
-public enum Keyboards {
+public enum KeyboardTypes {
     Default,
     Nokia
 }

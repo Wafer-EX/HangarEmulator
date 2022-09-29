@@ -16,100 +16,17 @@
 
 package things;
 
-import things.enums.Keyboards;
-import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
-import things.ui.components.HangarGamePanel;
-import things.ui.components.HangarMainPanel;
-import things.ui.listeners.HangarKeyListener;
-import things.utils.HangarGamePanelUtils;
-
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class HangarState {
-    private static Keyboards selectedKeyboard = Keyboards.Nokia;
-    private static ScalingModes scalingMode = ScalingModes.None;
     private static File programFile;
-    private static Dimension currentResolution = new Dimension(240, 320);
-    private static boolean clearScreen;
-    private static boolean enableAntiAliasing;
-    private static int frameRate = 60;
+    private static final HangarConfiguration configuration = new HangarConfiguration();
 
-    public static Dimension getResolution() {
-        return currentResolution;
-    }
-
-    public static void setResolution(Dimension resolution) {
-        currentResolution = resolution;
-    }
-
-    public static int getFrameRate() {
-        return frameRate;
-    }
-
-    public static void setFrameRate(int frameRate) {
-        HangarState.frameRate = frameRate;
-        var container = HangarMainFrame.getInstance().getContentPane();
-        if (container.getComponent(0) instanceof HangarGamePanel gamePanel) {
-            gamePanel.refreshSerialCallTimer();
-        }
-    }
-
-    public static boolean getAntiAliasing() {
-        return enableAntiAliasing;
-    }
-
-    public static void setAntiAliasing(boolean antiAliasing) {
-        enableAntiAliasing = antiAliasing;
-    }
-
-    public static Keyboards getKeyboard() {
-        return selectedKeyboard;
-    }
-
-    public static void setKeyboard(Keyboards keyboard) {
-        selectedKeyboard = keyboard;
-        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
-        var keyListeners = gamePanel.getKeyListeners();
-
-        if (keyListeners.length > 0) {
-            for (var keyListener : keyListeners) {
-                if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-                    hangarKeyListener.getPressedKeys().clear();
-                }
-            }
-        }
-    }
-
-    public static ScalingModes getScalingMode() {
-        return scalingMode;
-    }
-
-    public static void setScalingMode(ScalingModes mode) {
-        scalingMode = mode;
-        var container = HangarMainFrame.getInstance().getContentPane();
-
-        for (var component : container.getComponents()) {
-            if (component instanceof HangarGamePanel || component instanceof HangarMainPanel) {
-                if (scalingMode == ScalingModes.ChangeResolution) {
-                    currentResolution = component.getSize();
-                }
-                if (component instanceof HangarGamePanel gamePanel) {
-                    HangarGamePanelUtils.fitBufferToNewResolution(gamePanel, currentResolution);
-                }
-            }
-        }
-    }
-
-    public static boolean getCanvasClearing() {
-        return clearScreen;
-    }
-
-    public static void setCanvasClearing(boolean clear) {
-        clearScreen = clear;
+    public static HangarConfiguration getConfiguration() {
+        return configuration;
     }
 
     public static void setProgramFile(File file) {
@@ -137,7 +54,7 @@ public class HangarState {
     }
 
     public static void syncWithFrameRate() {
-        if (HangarState.getFrameRate() != -1) {
+        if (configuration.getFrameRate() != -1) {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
@@ -148,12 +65,12 @@ public class HangarState {
     }
 
     public static int frameRateInMilliseconds() {
-        return 1000 / HangarState.getFrameRate();
+        return 1000 / configuration.getFrameRate();
     }
 
     public static Graphics2D applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, enableAntiAliasing ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, configuration.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         return graphics2d;
     }
 }

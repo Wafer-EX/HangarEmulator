@@ -39,8 +39,9 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        int width = HangarState.getResolution().width;
-        int height = HangarState.getResolution().height;
+        var configuration = HangarState.getConfiguration();
+        int width = configuration.getResolution().width;
+        int height = configuration.getResolution().height;
         additionalBuffer = ImageUtils.createCompatibleImage(width, height);
     }
 
