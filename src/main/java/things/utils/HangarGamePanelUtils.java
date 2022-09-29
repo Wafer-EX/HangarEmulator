@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
 
 public final class HangarGamePanelUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
-        if (HangarState.getConfiguration().getScalingMode() == ScalingModes.Contain) {
+        if (HangarState.getProfile().getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
             double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);

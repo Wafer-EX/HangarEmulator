@@ -23,10 +23,10 @@ import java.util.Arrays;
 
 public class HangarState {
     private static File programFile;
-    private static final HangarConfiguration configuration = new HangarConfiguration();
+    private static final HangarProfile profile = new HangarProfile();
 
-    public static HangarConfiguration getConfiguration() {
-        return configuration;
+    public static HangarProfile getProfile() {
+        return profile;
     }
 
     public static void setProgramFile(File file) {
@@ -54,7 +54,7 @@ public class HangarState {
     }
 
     public static void syncWithFrameRate() {
-        if (configuration.getFrameRate() != -1) {
+        if (profile.getFrameRate() != -1) {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
@@ -65,12 +65,12 @@ public class HangarState {
     }
 
     public static int frameRateInMilliseconds() {
-        return 1000 / configuration.getFrameRate();
+        return 1000 / profile.getFrameRate();
     }
 
     public static Graphics2D applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, configuration.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, profile.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
         return graphics2d;
     }
 }

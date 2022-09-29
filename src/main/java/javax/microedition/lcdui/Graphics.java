@@ -148,14 +148,14 @@ public class Graphics {
 
     public int getClipWidth() {
         var clipBounds = seGraphics.getClipBounds();
-        var configuration = HangarState.getConfiguration();
-        return clipBounds == null ? configuration.getResolution().width : clipBounds.width;
+        var profile = HangarState.getProfile();
+        return clipBounds == null ? profile.getResolution().width : clipBounds.width;
     }
 
     public int getClipHeight() {
         var clipBounds = seGraphics.getClipBounds();
-        var configuration = HangarState.getConfiguration();
-        return clipBounds == null ? configuration.getResolution().height : clipBounds.height;
+        var profile = HangarState.getProfile();
+        return clipBounds == null ? profile.getResolution().height : clipBounds.height;
     }
 
     public void clipRect(int x, int y, int width, int height) {

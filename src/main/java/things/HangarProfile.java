@@ -26,7 +26,7 @@ import things.utils.HangarGamePanelUtils;
 
 import java.awt.*;
 
-public class HangarConfiguration {
+public class HangarProfile {
     private KeyboardTypes keyboardType = KeyboardTypes.Nokia;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);

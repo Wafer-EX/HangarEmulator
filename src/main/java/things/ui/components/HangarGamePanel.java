@@ -39,13 +39,13 @@ public class HangarGamePanel extends JPanel {
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
-    private Dimension bufferScale = HangarState.getConfiguration().getResolution();
+    private Dimension bufferScale = HangarState.getProfile().getResolution();
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
     public HangarGamePanel() {
         var mouseListener = new HangarMouseListener(this);
-        var resolution = HangarState.getConfiguration().getResolution();
+        var resolution = HangarState.getProfile().getResolution();
 
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         this.setPreferredSize(resolution);
@@ -56,7 +56,7 @@ public class HangarGamePanel extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 var gamePanel = (HangarGamePanel) e.getComponent();
-                if (HangarState.getConfiguration().getScalingMode() == ScalingModes.ChangeResolution) {
+                if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
                     HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
                 }
@@ -142,9 +142,7 @@ public class HangarGamePanel extends JPanel {
         super.paintComponent(graphics);
         if (buffer != null && displayable instanceof Canvas canvas) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
-            var configuration = HangarState.getConfiguration();
-
-            if (configuration.getCanvasClearing()) {
+            if (HangarState.getProfile().getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));

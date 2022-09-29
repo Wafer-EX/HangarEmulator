@@ -45,7 +45,7 @@ public class HangarKeyListener implements KeyListener {
     public void keyPressed(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
-            if (HangarState.getConfiguration().getKeyboardType() == KeyboardTypes.Nokia) {
+            if (HangarState.getProfile().getKeyboardType() == KeyboardTypes.Nokia) {
                 convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
 
@@ -73,7 +73,7 @@ public class HangarKeyListener implements KeyListener {
     public void keyReleased(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
             int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
-            if (HangarState.getConfiguration().getKeyboardType() == KeyboardTypes.Nokia) {
+            if (HangarState.getProfile().getKeyboardType() == KeyboardTypes.Nokia) {
                 convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
             }
             pressedKeys.remove(convertedKeyCode);
