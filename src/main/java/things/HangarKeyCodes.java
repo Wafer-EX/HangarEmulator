@@ -63,7 +63,8 @@ public class HangarKeyCodes {
 
     public HangarKeyCodes(Integer up, Integer down, Integer left, Integer right, Integer fire,
                           Integer a, Integer b, Integer c, Integer d,
-                          Integer num0, Integer num1, Integer num2, Integer num3, Integer num4, Integer num5, Integer num6, Integer num7, Integer num8, Integer num9,
+                          Integer num0, Integer num1, Integer num2, Integer num3, Integer num4,
+                          Integer num5, Integer num6, Integer num7, Integer num8, Integer num9,
                           Integer star, Integer pound) {
         this.setUp(up);
         this.setDown(down);
