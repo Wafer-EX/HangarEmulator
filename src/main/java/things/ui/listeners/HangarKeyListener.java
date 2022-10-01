@@ -16,25 +16,25 @@
 
 package things.ui.listeners;
 
-import things.ui.components.HangarGamePanel;
+import things.HangarKeyCodes;
 import things.HangarState;
-import things.enums.Keyboards;
+import things.ui.components.HangarGamePanel;
 import things.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
+import java.util.HashSet;
 
 public class HangarKeyListener implements KeyListener {
     private final HangarGamePanel gamePanel;
-    private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
+    private final HashSet<Integer> pressedKeys = new HashSet<>();
 
     public HangarKeyListener(HangarGamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
-    public HashMap<Integer, Boolean> getPressedKeys() {
+    public HashSet<Integer> getPressedKeys() {
         return pressedKeys;
     }
 
@@ -44,26 +44,16 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
-            if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
-            }
+            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
-            if (pressedKeys.containsKey(convertedKeyCode)) {
-                if (!pressedKeys.get(convertedKeyCode)) {
-                    pressedKeys.put(convertedKeyCode, true);
-                }
-            }
-            else {
-                pressedKeys.put(convertedKeyCode, false);
-            }
-
-            for (int key : pressedKeys.keySet()) {
-                if (pressedKeys.get(key)) {
-                    canvas.keyRepeated(convertedKeyCode);
+            if (keyCode != 0) {
+                if (pressedKeys.add(keyCode)) {
+                    canvas.keyPressed(keyCode);
                 }
                 else {
-                    canvas.keyPressed(convertedKeyCode);
+                    canvas.keyRepeated(keyCode);
                 }
             }
         }
@@ -72,12 +62,14 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyUtils.awtToDefault(e.getKeyCode());
-            if (HangarState.getKeyboard() == Keyboards.Nokia) {
-                convertedKeyCode = KeyUtils.defaultToNokia(convertedKeyCode);
+            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
+
+            if (keyCode != 0) {
+                pressedKeys.remove(keyCode);
+                canvas.keyReleased(keyCode);
             }
-            pressedKeys.remove(convertedKeyCode);
-            canvas.keyReleased(convertedKeyCode);
         }
     }
 }

@@ -46,8 +46,8 @@ public final class RecordStoreUtils {
             var objectInputStream = new ObjectInputStream(fileInputStream);
             return (RecordStore) objectInputStream.readObject();
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }

@@ -37,9 +37,9 @@ public class MIDletResources {
             classLoader = new URLClassLoader(urls);
             jarFile = new JarFile(new File(absolutePath));
         }
-        catch (Exception ex) {
+        catch (Exception exception) {
             JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
-            ex.printStackTrace();
+            exception.printStackTrace();
         }
     }
 
@@ -50,8 +50,8 @@ public class MIDletResources {
             }
             return classLoader.getResourceAsStream(resourcePath);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
@@ -70,8 +70,8 @@ public class MIDletResources {
             var info = attributes.getValue("MIDlet-1").split(",");
             return info[2].trim();
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
@@ -91,8 +91,8 @@ public class MIDletResources {
             var inputStream = getResourceFromJar(iconPath);
             return ImageIO.read(inputStream);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
             return null;
         }
     }
@@ -108,8 +108,8 @@ public class MIDletResources {
                 System.setProperty(attribute.getKey().toString(), attribute.getValue().toString());
             }
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }

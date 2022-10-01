@@ -28,7 +28,7 @@ import java.awt.image.BufferedImage;
 
 public final class HangarGamePanelUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
-        if (HangarState.getScalingMode() == ScalingModes.Contain) {
+        if (HangarState.getProfile().getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
             double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);
@@ -38,10 +38,8 @@ public final class HangarGamePanelUtils {
         }
     }
 
-    public static void fitBufferToNewResolution(HangarGamePanel gamePanel, Dimension resolution) {
+    public static void fitBufferToResolution(HangarGamePanel gamePanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
-            HangarState.setResolution(resolution);
-
             if (gamePanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
                 var displayable = gamePanel.getDisplayable();
@@ -80,6 +78,7 @@ public final class HangarGamePanelUtils {
     public static void displayMEList(HangarGamePanel gamePanel, List meList) {
         var layout = new GridLayout(6, 1, 4, 4);
         gamePanel.setLayout(layout);
+        gamePanel.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 
         for (int i = 0; i < meList.size(); i++) {
             var button = new JButton(meList.getString(i));

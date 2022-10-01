@@ -45,8 +45,8 @@ public class MIDletClassLoader extends URLClassLoader {
                 var classByteArray = classWriter.toByteArray();
                 return defineClass(name, classByteArray, 0, classByteArray.length);
             }
-            catch (Exception ex) {
-                ex.printStackTrace();
+            catch (Exception exception) {
+                exception.printStackTrace();
             }
         }
         return super.loadClass(name);

@@ -32,7 +32,7 @@ public class HangarEmulator {
             error.printStackTrace();
         }
 
-        System.setProperty("hangaremulator.version", "0.3-alpha");
+        System.setProperty("hangaremulator.version", "0.4-alpha");
         System.setProperty("hangaremulator.github", "https://github.com/Lisowolf/HangarEmulator");
         System.setProperty("hangaremulator.author", "Kirill Lomakin (minebuilder445@gmail.com)");
 
@@ -58,8 +58,8 @@ public class HangarEmulator {
             HangarMainFrame.getInstance().setVisible(true);
             HangarMainFrame.getInstance().setLocationRelativeTo(null);
         }
-        catch (Exception ex) {
-            ex.printStackTrace();
+        catch (Exception exception) {
+            exception.printStackTrace();
         }
     }
 }

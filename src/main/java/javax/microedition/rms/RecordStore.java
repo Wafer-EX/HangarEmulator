@@ -78,8 +78,8 @@ public class RecordStore implements Serializable {
                     file.createNewFile();
                     recordStore = new RecordStore(recordStoreName, file, new RecordEnumerator());
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                     throw new RecordStoreException();
                 }
             }

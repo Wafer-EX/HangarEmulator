@@ -16,51 +16,73 @@
 
 package things.utils;
 
-import com.nokia.mid.ui.FullCanvas;
-
-import javax.microedition.lcdui.Canvas;
-import java.awt.event.KeyEvent;
+import things.HangarKeyCodes;
 
 public final class KeyUtils {
-    // TODO: check conversion
-
-    public static int awtToDefault(int keyCode) {
-        switch (keyCode) {
-            case KeyEvent.VK_UP: return Canvas.UP;
-            case KeyEvent.VK_DOWN: return Canvas.DOWN;
-            case KeyEvent.VK_LEFT: return Canvas.LEFT;
-            case KeyEvent.VK_RIGHT: return Canvas.RIGHT;
-            case KeyEvent.VK_ENTER: return Canvas.FIRE;
-            case KeyEvent.VK_1: return Canvas.GAME_A;
-            case KeyEvent.VK_2: return Canvas.GAME_B;
-            case KeyEvent.VK_3: return Canvas.GAME_C;
-            case KeyEvent.VK_4: return Canvas.GAME_D;
-            case KeyEvent.VK_NUMPAD0: return Canvas.KEY_NUM0;
-            case KeyEvent.VK_NUMPAD1: return Canvas.KEY_NUM1;
-            case KeyEvent.VK_NUMPAD2: return Canvas.KEY_NUM2;
-            case KeyEvent.VK_NUMPAD3: return Canvas.KEY_NUM3;
-            case KeyEvent.VK_NUMPAD4: return Canvas.KEY_NUM4;
-            case KeyEvent.VK_NUMPAD5: return Canvas.KEY_NUM5;
-            case KeyEvent.VK_NUMPAD6: return Canvas.KEY_NUM6;
-            case KeyEvent.VK_NUMPAD7: return Canvas.KEY_NUM7;
-            case KeyEvent.VK_NUMPAD8: return Canvas.KEY_NUM8;
-            case KeyEvent.VK_NUMPAD9: return Canvas.KEY_NUM9;
-            case KeyEvent.VK_Q: return Canvas.KEY_STAR;
-            case KeyEvent.VK_W: return Canvas.KEY_POUND;
-            default: return keyCode;
+    public static int convertKeyCode(int keyCode, HangarKeyCodes from, HangarKeyCodes to) throws IllegalArgumentException {
+        if (keyCode == from.getUp()) {
+            return to.getUp();
         }
-    }
-
-    public static int defaultToNokia(int keyCode) {
-        switch (keyCode) {
-            case Canvas.UP: return FullCanvas.KEY_UP_ARROW;
-            case Canvas.DOWN: return FullCanvas.KEY_DOWN_ARROW;
-            case Canvas.LEFT: return FullCanvas.KEY_LEFT_ARROW;
-            case Canvas.RIGHT: return FullCanvas.KEY_RIGHT_ARROW;
-            case Canvas.FIRE: return FullCanvas.KEY_SOFTKEY3;
-            case Canvas.GAME_A: return FullCanvas.KEY_SOFTKEY1;
-            case Canvas.GAME_B: return FullCanvas.KEY_SOFTKEY2;
-            default: return keyCode;
+        else if (keyCode == from.getDown()) {
+            return to.getDown();
         }
+        else if (keyCode == from.getLeft()) {
+            return to.getLeft();
+        }
+        else if (keyCode == from.getRight()) {
+            return to.getRight();
+        }
+        else if (keyCode == from.getFire()) {
+            return to.getFire();
+        }
+        else if (keyCode == from.getA()) {
+            return to.getA();
+        }
+        else if (keyCode == from.getB()) {
+            return to.getB();
+        }
+        else if (keyCode == from.getC()) {
+            return to.getC();
+        }
+        else if (keyCode == from.getD()) {
+            return to.getD();
+        }
+        else if (keyCode == from.getNum0()) {
+            return to.getNum0();
+        }
+        else if (keyCode == from.getNum1()) {
+            return to.getNum1();
+        }
+        else if (keyCode == from.getNum2()) {
+            return to.getNum2();
+        }
+        else if (keyCode == from.getNum3()) {
+            return to.getNum3();
+        }
+        else if (keyCode == from.getNum4()) {
+            return to.getNum4();
+        }
+        else if (keyCode == from.getNum5()) {
+            return to.getNum5();
+        }
+        else if (keyCode == from.getNum6()) {
+            return to.getNum6();
+        }
+        else if (keyCode == from.getNum7()) {
+            return to.getNum7();
+        }
+        else if (keyCode == from.getNum8()) {
+            return to.getNum8();
+        }
+        else if (keyCode == from.getNum9()) {
+            return to.getNum9();
+        }
+        else if (keyCode == from.getStar()) {
+            return to.getStar();
+        }
+        else if (keyCode == from.getPound()) {
+            return to.getPound();
+        }
+        return 0;
     }
 }

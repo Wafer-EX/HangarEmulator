@@ -70,8 +70,8 @@ public class MidiPlayer extends ExtendedPlayer {
                     }
                     setState(REALIZED);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }
@@ -93,8 +93,8 @@ public class MidiPlayer extends ExtendedPlayer {
                     sequencer.setMicrosecondPosition(0);
                     setState(PREFETCHED);
                 }
-                catch (Exception ex) {
-                    ex.printStackTrace();
+                catch (Exception exception) {
+                    exception.printStackTrace();
                 }
             }
         }

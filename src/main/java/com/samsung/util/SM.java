@@ -24,9 +24,9 @@ public class SM {
     public SM() { }
 
     public SM(String dest, String callback, String textMessage) throws IllegalArgumentException {
-        setDestAddress(dest);
-        setCallbackAddress(callback);
-        setData(textMessage);
+        this.setDestAddress(dest);
+        this.setCallbackAddress(callback);
+        this.setData(textMessage);
     }
 
     public void setDestAddress(String address) throws IllegalArgumentException {
