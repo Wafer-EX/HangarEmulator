@@ -88,7 +88,7 @@ public class HangarMenuBar extends JMenuBar {
         var resolutionPopupMenu = new JMenu("Resolution");
         var loadSoundbankItem = new JMenuItem("Load soundbank");
         var clearSoundBankItem = new JMenuItem("Clear soundbank");
-        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing", false);
+        var allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing", HangarState.getProfile().getWindowResizing());
         var keyboardPopupMenu = new JMenu("Keyboard");
 
         var radio15FPS = new JRadioButtonMenuItem("15 FPS", HangarState.getProfile().getFrameRate() == 15);

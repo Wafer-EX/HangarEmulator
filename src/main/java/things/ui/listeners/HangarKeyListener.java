@@ -24,17 +24,17 @@ import things.utils.KeyUtils;
 import javax.microedition.lcdui.Canvas;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.HashMap;
+import java.util.HashSet;
 
 public class HangarKeyListener implements KeyListener {
     private final HangarGamePanel gamePanel;
-    private final HashMap<Integer, Boolean> pressedKeys = new HashMap<>();
+    private final HashSet<Integer> pressedKeys = new HashSet<>();
 
     public HangarKeyListener(HangarGamePanel gamePanel) {
         this.gamePanel = gamePanel;
     }
 
-    public HashMap<Integer, Boolean> getPressedKeys() {
+    public HashSet<Integer> getPressedKeys() {
         return pressedKeys;
     }
 
@@ -49,22 +49,11 @@ public class HangarKeyListener implements KeyListener {
             int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
             if (keyCode != 0) {
-                if (pressedKeys.containsKey(keyCode)) {
-                    if (!pressedKeys.get(keyCode)) {
-                        pressedKeys.put(keyCode, true);
-                    }
+                if (pressedKeys.add(keyCode)) {
+                    canvas.keyPressed(keyCode);
                 }
                 else {
-                    pressedKeys.put(keyCode, false);
-                }
-
-                for (int key : pressedKeys.keySet()) {
-                    if (pressedKeys.get(key)) {
-                        canvas.keyRepeated(keyCode);
-                    }
-                    else {
-                        canvas.keyPressed(keyCode);
-                    }
+                    canvas.keyRepeated(keyCode);
                 }
             }
         }
