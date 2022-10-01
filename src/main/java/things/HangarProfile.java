@@ -26,7 +26,7 @@ import things.utils.HangarGamePanelUtils;
 import java.awt.*;
 
 public class HangarProfile {
-    private HangarKeyCodes midletKeyCodes = HangarKeyCodes.DEFAULT_KEYCODES;
+    private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
     private int frameRate = 60;

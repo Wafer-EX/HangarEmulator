@@ -123,8 +123,8 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.setEnabled(false);
         }
 
-        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.DEFAULT_KEYCODES);
-        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.NOKIA_KEYCODES);
+        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.MIDLET_KEYCODES_DEFAULT);
+        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.MIDLET_KEYCODES_NOKIA);
         var keyboardRadioGroup = new ButtonGroup();
         keyboardRadioGroup.add(radioDefaultKeyboard);
         keyboardRadioGroup.add(radioNokiaKeyboard);
@@ -189,12 +189,12 @@ public class HangarMenuBar extends JMenuBar {
 
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
-                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.DEFAULT_KEYCODES);
+                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.MIDLET_KEYCODES_DEFAULT);
             }
         });
         radioNokiaKeyboard.addItemListener(e -> {
             if (radioNokiaKeyboard.isSelected()) {
-                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.NOKIA_KEYCODES);
+                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.MIDLET_KEYCODES_NOKIA);
             }
         });
 

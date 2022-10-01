@@ -19,14 +19,22 @@ package things;
 import com.nokia.mid.ui.FullCanvas;
 
 import javax.microedition.lcdui.Canvas;
+import java.awt.event.KeyEvent;
 
 public class HangarKeyCodes {
-    public static final HangarKeyCodes DEFAULT_KEYCODES = new HangarKeyCodes();
-    public static final HangarKeyCodes NOKIA_KEYCODES = new HangarKeyCodes(
+    public static final HangarKeyCodes MIDLET_KEYCODES_DEFAULT = new HangarKeyCodes();
+    public static final HangarKeyCodes MIDLET_KEYCODES_NOKIA = new HangarKeyCodes(
             FullCanvas.KEY_UP_ARROW, FullCanvas.KEY_DOWN_ARROW, FullCanvas.KEY_LEFT_ARROW, FullCanvas.KEY_RIGHT_ARROW, FullCanvas.KEY_SOFTKEY3,
             FullCanvas.KEY_SOFTKEY1, FullCanvas.KEY_SOFTKEY2, null, null,
             null, null, null, null, null, null, null, null, null, null,
             null, null
+    );
+    public static final HangarKeyCodes AWT_KEYCODES_DEFAULT = new HangarKeyCodes(
+            KeyEvent.VK_UP, KeyEvent.VK_DOWN, KeyEvent.VK_LEFT, KeyEvent.VK_RIGHT, KeyEvent.VK_ENTER,
+            KeyEvent.VK_1, KeyEvent.VK_2, KeyEvent.VK_3, KeyEvent.VK_4,
+            KeyEvent.VK_NUMPAD0, KeyEvent.VK_NUMPAD1, KeyEvent.VK_NUMPAD2, KeyEvent.VK_NUMPAD3, KeyEvent.VK_NUMPAD4,
+            KeyEvent.VK_NUMPAD5, KeyEvent.VK_NUMPAD6, KeyEvent.VK_NUMPAD7, KeyEvent.VK_NUMPAD8, KeyEvent.VK_NUMPAD9,
+            KeyEvent.VK_Q, KeyEvent.VK_W
     );
 
     private int up = Canvas.UP;

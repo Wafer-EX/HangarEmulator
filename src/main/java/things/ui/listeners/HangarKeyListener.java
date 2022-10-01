@@ -16,6 +16,8 @@
 
 package things.ui.listeners;
 
+import things.HangarKeyCodes;
+import things.HangarState;
 import things.ui.components.HangarGamePanel;
 import things.utils.KeyUtils;
 
@@ -42,23 +44,27 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyUtils.awtToMidletKeyCode(e.getKeyCode());
+            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
-            if (pressedKeys.containsKey(convertedKeyCode)) {
-                if (!pressedKeys.get(convertedKeyCode)) {
-                    pressedKeys.put(convertedKeyCode, true);
-                }
-            }
-            else {
-                pressedKeys.put(convertedKeyCode, false);
-            }
-
-            for (int key : pressedKeys.keySet()) {
-                if (pressedKeys.get(key)) {
-                    canvas.keyRepeated(convertedKeyCode);
+            if (keyCode != 0) {
+                if (pressedKeys.containsKey(keyCode)) {
+                    if (!pressedKeys.get(keyCode)) {
+                        pressedKeys.put(keyCode, true);
+                    }
                 }
                 else {
-                    canvas.keyPressed(convertedKeyCode);
+                    pressedKeys.put(keyCode, false);
+                }
+
+                for (int key : pressedKeys.keySet()) {
+                    if (pressedKeys.get(key)) {
+                        canvas.keyRepeated(keyCode);
+                    }
+                    else {
+                        canvas.keyPressed(keyCode);
+                    }
                 }
             }
         }
@@ -67,9 +73,14 @@ public class HangarKeyListener implements KeyListener {
     @Override
     public void keyReleased(KeyEvent e) {
         if (gamePanel.getDisplayable() instanceof Canvas canvas) {
-            int convertedKeyCode = KeyUtils.awtToMidletKeyCode(e.getKeyCode());
-            pressedKeys.remove(convertedKeyCode);
-            canvas.keyReleased(convertedKeyCode);
+            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
+
+            if (keyCode != 0) {
+                pressedKeys.remove(keyCode);
+                canvas.keyReleased(keyCode);
+            }
         }
     }
 }

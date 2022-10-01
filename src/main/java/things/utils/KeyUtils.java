@@ -16,37 +16,73 @@
 
 package things.utils;
 
-import things.HangarState;
-
-import java.awt.event.KeyEvent;
+import things.HangarKeyCodes;
 
 public final class KeyUtils {
-    // TODO: add conversion from one to another HangarKeyCodes
-    public static int awtToMidletKeyCode(int keyCode) {
-        var keyCodes = HangarState.getProfile().getMidletKeyCodes();
-        switch (keyCode) {
-            case KeyEvent.VK_UP: return keyCodes.getUp();
-            case KeyEvent.VK_DOWN: return keyCodes.getDown();
-            case KeyEvent.VK_LEFT: return keyCodes.getLeft();
-            case KeyEvent.VK_RIGHT: return keyCodes.getRight();
-            case KeyEvent.VK_ENTER: return keyCodes.getFire();
-            case KeyEvent.VK_1: return keyCodes.getA();
-            case KeyEvent.VK_2: return keyCodes.getB();
-            case KeyEvent.VK_3: return keyCodes.getC();
-            case KeyEvent.VK_4: return keyCodes.getD();
-            case KeyEvent.VK_NUMPAD0: return keyCodes.getNum0();
-            case KeyEvent.VK_NUMPAD1: return keyCodes.getNum1();
-            case KeyEvent.VK_NUMPAD2: return keyCodes.getNum2();
-            case KeyEvent.VK_NUMPAD3: return keyCodes.getNum3();
-            case KeyEvent.VK_NUMPAD4: return keyCodes.getNum4();
-            case KeyEvent.VK_NUMPAD5: return keyCodes.getNum5();
-            case KeyEvent.VK_NUMPAD6: return keyCodes.getNum6();
-            case KeyEvent.VK_NUMPAD7: return keyCodes.getNum7();
-            case KeyEvent.VK_NUMPAD8: return keyCodes.getNum8();
-            case KeyEvent.VK_NUMPAD9: return keyCodes.getNum9();
-            case KeyEvent.VK_Q: return keyCodes.getStar();
-            case KeyEvent.VK_W: return keyCodes.getPound();
-            default: return keyCode;
+    public static int convertKeyCode(int keyCode, HangarKeyCodes from, HangarKeyCodes to) throws IllegalArgumentException {
+        if (keyCode == from.getUp()) {
+            return to.getUp();
         }
+        else if (keyCode == from.getDown()) {
+            return to.getDown();
+        }
+        else if (keyCode == from.getLeft()) {
+            return to.getLeft();
+        }
+        else if (keyCode == from.getRight()) {
+            return to.getRight();
+        }
+        else if (keyCode == from.getFire()) {
+            return to.getFire();
+        }
+        else if (keyCode == from.getA()) {
+            return to.getA();
+        }
+        else if (keyCode == from.getB()) {
+            return to.getB();
+        }
+        else if (keyCode == from.getC()) {
+            return to.getC();
+        }
+        else if (keyCode == from.getD()) {
+            return to.getD();
+        }
+        else if (keyCode == from.getNum0()) {
+            return to.getNum0();
+        }
+        else if (keyCode == from.getNum1()) {
+            return to.getNum1();
+        }
+        else if (keyCode == from.getNum2()) {
+            return to.getNum2();
+        }
+        else if (keyCode == from.getNum3()) {
+            return to.getNum3();
+        }
+        else if (keyCode == from.getNum4()) {
+            return to.getNum4();
+        }
+        else if (keyCode == from.getNum5()) {
+            return to.getNum5();
+        }
+        else if (keyCode == from.getNum6()) {
+            return to.getNum6();
+        }
+        else if (keyCode == from.getNum7()) {
+            return to.getNum7();
+        }
+        else if (keyCode == from.getNum8()) {
+            return to.getNum8();
+        }
+        else if (keyCode == from.getNum9()) {
+            return to.getNum9();
+        }
+        else if (keyCode == from.getStar()) {
+            return to.getStar();
+        }
+        else if (keyCode == from.getPound()) {
+            return to.getPound();
+        }
+        return 0;
     }
 }
