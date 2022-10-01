@@ -16,7 +16,6 @@
 
 package things;
 
-import things.enums.KeyboardTypes;
 import things.enums.ScalingModes;
 import things.ui.components.HangarGamePanel;
 import things.ui.components.HangarMainPanel;
@@ -27,7 +26,7 @@ import things.utils.HangarGamePanelUtils;
 import java.awt.*;
 
 public class HangarProfile {
-    private KeyboardTypes keyboardType = KeyboardTypes.Nokia;
+    private HangarKeyCodes midletKeyCodes = HangarKeyCodes.DEFAULT_KEYCODES;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
     private int frameRate = 60;
@@ -35,12 +34,13 @@ public class HangarProfile {
     private boolean antiAliasing = false;
     private boolean windowResizing = false;
 
-    public KeyboardTypes getKeyboardType() {
-        return keyboardType;
+    public HangarKeyCodes getMidletKeyCodes() {
+        return midletKeyCodes;
     }
 
-    public void setKeyboardType(KeyboardTypes keyboardType) {
-        this.keyboardType = keyboardType;
+    public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
+        this.midletKeyCodes = keyCodes;
+
         var gamePanel = HangarMainFrame.getInstance().getGamePanel();
         var keyListeners = gamePanel.getKeyListeners();
 

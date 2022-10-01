@@ -17,9 +17,9 @@
 package things.ui.components;
 
 import things.HangarAudio;
+import things.HangarKeyCodes;
 import things.HangarState;
 import things.MIDletLoader;
-import things.enums.KeyboardTypes;
 import things.enums.ScalingModes;
 import things.ui.dialogs.HangarJarChooser;
 import things.ui.dialogs.HangarSf2Chooser;
@@ -123,8 +123,8 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.setEnabled(false);
         }
 
-        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getProfile().getKeyboardType() == KeyboardTypes.Default);
-        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getProfile().getKeyboardType() == KeyboardTypes.Nokia);
+        var radioDefaultKeyboard = new JRadioButtonMenuItem("Default", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.DEFAULT_KEYCODES);
+        var radioNokiaKeyboard = new JRadioButtonMenuItem("Nokia", HangarState.getProfile().getMidletKeyCodes() == HangarKeyCodes.NOKIA_KEYCODES);
         var keyboardRadioGroup = new ButtonGroup();
         keyboardRadioGroup.add(radioDefaultKeyboard);
         keyboardRadioGroup.add(radioNokiaKeyboard);
@@ -189,12 +189,12 @@ public class HangarMenuBar extends JMenuBar {
 
         radioDefaultKeyboard.addItemListener(e -> {
             if (radioDefaultKeyboard.isSelected()) {
-                HangarState.getProfile().setKeyboardType(KeyboardTypes.Default);
+                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.DEFAULT_KEYCODES);
             }
         });
         radioNokiaKeyboard.addItemListener(e -> {
             if (radioNokiaKeyboard.isSelected()) {
-                HangarState.getProfile().setKeyboardType(KeyboardTypes.Nokia);
+                HangarState.getProfile().setMidletKeyCodes(HangarKeyCodes.NOKIA_KEYCODES);
             }
         });
 
