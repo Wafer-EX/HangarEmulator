@@ -36,14 +36,15 @@ public class HangarMenuBar extends JMenuBar {
         this.add(new HangarHelpMenu());
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static class HangarMIDletMenu extends JMenu {
+        private final JMenuItem loadMenuItem = new JMenuItem("Load MIDlet");
+        private final JMenuItem restartMenuItem = new JMenuItem("Restart");
+        private final JMenuItem pauseMenuItem = new JMenuItem("Call pauseApp()");
+        private final JMenuItem exitMenuItem = new JMenuItem("Exit");
+
         public HangarMIDletMenu() {
             super("MIDlet");
-            var loadMenuItem = new JMenuItem("Load MIDlet");
-            var restartMenuItem = new JMenuItem("Restart");
-            var pauseMenuItem = new JMenuItem("Call pauseApp()");
-            var exitMenuItem = new JMenuItem("Exit");
-
             loadMenuItem.addActionListener(e -> {
                 var fileChooser = new HangarJarChooser();
                 fileChooser.showDialog(null, "Select MIDlet");
@@ -82,37 +83,38 @@ public class HangarMenuBar extends JMenuBar {
         }
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static class HangarOptionsMenu extends JMenu {
-        private static final ButtonGroup frameRateRadioGroup = new ButtonGroup();
-        private static final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
-        private static final ButtonGroup resolutionRadioGroup = new ButtonGroup();
+        private final ButtonGroup frameRateRadioGroup = new ButtonGroup();
+        private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
+        private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
+
+        private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
+        private final JCheckBoxMenuItem antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing");
+        private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
+        private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
+        private final JMenu resolutionPopupMenu = new JMenu("Resolution");
+        private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank");
+        private final JMenuItem clearSoundBankItem = new JMenuItem("Clear soundbank");
+        private final JCheckBoxMenuItem allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing");
+        private final JMenu keyboardPopupMenu = new JMenu("Keyboard");
 
         public HangarOptionsMenu() {
             super("Options");
-            var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
-            var antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing");
-            var frameRatePopupMenu = new JMenu("Frame rate");
-            var scalingModePopupMenu = new JMenu("Scaling mode");
-            var resolutionPopupMenu = new JMenu("Resolution");
-            var loadSoundbankItem = new JMenuItem("Load soundbank");
-            var clearSoundBankItem = new JMenuItem("Clear soundbank");
-            var allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing");
-            var keyboardPopupMenu = new JMenu("Keyboard");
-
             canvasClearingCheckBox.setSelected(HangarState.getProfile().getCanvasClearing());
-            canvasClearingCheckBox.addItemListener(e -> HangarState.getProfile().setCanvasClearing(!HangarState.getProfile().getCanvasClearing()));
+            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfile().setCanvasClearing(!HangarState.getProfile().getCanvasClearing()));
 
             antiAliasingCheckBox.setSelected(HangarState.getProfile().getAntiAliasing());
-            antiAliasingCheckBox.addItemListener(e -> HangarState.getProfile().setAntiAliasing(!HangarState.getProfile().getAntiAliasing()));
+            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfile().setAntiAliasing(!HangarState.getProfile().getAntiAliasing()));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
             frameRatePopupMenu.add(new HangarFrameRateRadio(60));
             frameRatePopupMenu.add(new HangarFrameRateRadio(-1));
 
-            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.None, resolutionPopupMenu));
-            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.Contain, resolutionPopupMenu));
-            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.ChangeResolution, resolutionPopupMenu));
+            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.None));
+            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.Contain));
+            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.ChangeResolution));
 
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 128)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 160)));
@@ -134,10 +136,10 @@ public class HangarMenuBar extends JMenuBar {
             clearSoundBankItem.addActionListener(e -> HangarAudio.setSoundbank(null));
 
             allowResizingCheckBox.setSelected(HangarState.getProfile().getWindowResizing());
-            allowResizingCheckBox.addItemListener(e -> HangarState.getProfile().setWindowResizing(allowResizingCheckBox.getState()));
+            allowResizingCheckBox.addActionListener(e -> HangarState.getProfile().setWindowResizing(allowResizingCheckBox.getState()));
 
-            keyboardPopupMenu.add(new HangarKeyboardRadio(HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
-            keyboardPopupMenu.add(new HangarKeyboardRadio(HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
+            keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
+            keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
 
             this.add(canvasClearingCheckBox);
             this.add(antiAliasingCheckBox);
@@ -153,7 +155,7 @@ public class HangarMenuBar extends JMenuBar {
             this.add(keyboardPopupMenu);
         }
 
-        private static class HangarFrameRateRadio extends JRadioButtonMenuItem {
+        private class HangarFrameRateRadio extends JRadioButtonMenuItem {
             public HangarFrameRateRadio(int frameRate) {
                 super();
                 this.addItemListener(e -> HangarState.getProfile().setFrameRate(frameRate));
@@ -163,24 +165,23 @@ public class HangarMenuBar extends JMenuBar {
             }
         }
 
-        private static class HangarScalingModeRadio extends JRadioButtonMenuItem {
-            public HangarScalingModeRadio(ScalingModes scalingMode, JMenu resolutionMenu) {
+        private class HangarScalingModeRadio extends JRadioButtonMenuItem {
+            public HangarScalingModeRadio(ScalingModes scalingMode) {
                 super();
                 this.setText(scalingMode.toString());
                 this.setSelected(HangarState.getProfile().getScalingMode() == scalingMode);
                 this.addItemListener(e -> {
                     HangarState.getProfile().setScalingMode(scalingMode);
-                    resolutionMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
+                    resolutionPopupMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
                     if (scalingMode == ScalingModes.ChangeResolution) {
                         resolutionRadioGroup.clearSelection();
-                        // TODO: resolutionRadioGroup.clearSelection();
                     }
                 });
                 scalingModeRadioGroup.add(this);
             }
         }
 
-        private static class HangarResolutionRadio extends JRadioButtonMenuItem {
+        private class HangarResolutionRadio extends JRadioButtonMenuItem {
             public HangarResolutionRadio(Dimension resolution) {
                 super();
                 var profileResolution = HangarState.getProfile().getResolution();
@@ -199,10 +200,10 @@ public class HangarMenuBar extends JMenuBar {
         private static class HangarKeyboardRadio extends JRadioButtonMenuItem {
             private static final ButtonGroup keyboardRadioGroup = new ButtonGroup();
 
-            public HangarKeyboardRadio(HangarKeyCodes keyCodes) {
+            public HangarKeyboardRadio(String keyboardName, HangarKeyCodes keyCodes) {
                 super();
                 // TODO: rewrite text setting
-                this.setText(keyCodes == HangarKeyCodes.MIDLET_KEYCODES_NOKIA ? "Nokia" : "Default");
+                this.setText(keyboardName);
                 this.setSelected(HangarState.getProfile().getMidletKeyCodes() == keyCodes);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
@@ -214,12 +215,13 @@ public class HangarMenuBar extends JMenuBar {
         }
     }
 
+    @SuppressWarnings("FieldCanBeLocal")
     private static class HangarHelpMenu extends JMenu {
+        private final JMenuItem githubLinkMenuItem = new JMenuItem("GitHub page");
+        private final JMenuItem showAboutMenuItem = new JMenuItem("About");
+
         public HangarHelpMenu() {
             super("Help");
-            var githubLinkMenuItem = new JMenuItem("GitHub page");
-            var showAboutMenuItem = new JMenuItem("About");
-
             githubLinkMenuItem.addActionListener(e -> {
                 try {
                     var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
