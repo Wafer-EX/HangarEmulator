@@ -21,7 +21,6 @@ import things.HangarState;
 import things.enums.ScalingModes;
 import things.utils.microedition.ImageUtils;
 
-import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;

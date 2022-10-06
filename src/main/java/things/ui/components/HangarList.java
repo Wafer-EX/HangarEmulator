@@ -18,9 +18,7 @@ package things.ui.components;
 
 import javax.microedition.lcdui.List;
 import javax.swing.*;
-import javax.swing.text.TextAction;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 
 public class HangarList extends JPanel {
     private final List meList;
@@ -47,12 +45,8 @@ public class HangarList extends JPanel {
         var commands = meList.getCommands();
         for (int i = 0; i < commands.size(); i++) {
             var command = commands.get(i);
-            var button = new JButton(new TextAction(commands.get(i).getLabel()) {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    meList.getCommandListener().commandAction(command, meList);
-                }
-            });
+            var button = new JButton(commands.get(i).getLabel());
+            button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
 
             constraints.insets.set(4, i == commands.size() - 1 && commands.size() > 1 ? 0 : 4, 4, i == 0 && commands.size() > 1 ? 0 : 4);
             constraints.gridx = i;
@@ -72,12 +66,11 @@ public class HangarList extends JPanel {
 
             for (int i = 0; i < meList.size(); i++) {
                 int selectedIndex = i;
-                var button = new JButton(new TextAction(meList.getString(i)) {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        meList.setSelectedIndex(selectedIndex, true);
-                        meList.runSelectCommand();
-                    }
+                var button = new JButton(meList.getString(i));
+
+                button.addActionListener(e -> {
+                    meList.setSelectedIndex(selectedIndex, true);
+                    meList.runSelectCommand();
                 });
 
                 constraints.insets.set(i == 0 ? 4 : 2, 4, i == meList.size() - 1 ? 4 : 2, 4);
@@ -90,7 +83,6 @@ public class HangarList extends JPanel {
             constraints.gridy = meList.size();
             constraints.weighty = 1.0;
             constraints.ipady = 0;
-
             this.add(Box.createGlue(), constraints);
         }
     }
