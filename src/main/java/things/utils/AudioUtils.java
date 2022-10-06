@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package things;
+package things.utils;
 
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Soundbank;
 
-public final class HangarAudio {
+public final class AudioUtils {
     private static Soundbank soundbank;
 
     public static void setSoundbank(Soundbank soundbank) {
-        HangarAudio.soundbank = soundbank;
+        AudioUtils.soundbank = soundbank;
     }
 
     public static Sequencer getSequencerWithSoundbank() {

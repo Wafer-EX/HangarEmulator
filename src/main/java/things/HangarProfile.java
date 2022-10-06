@@ -21,6 +21,7 @@ import things.ui.components.HangarGamePanel;
 import things.ui.components.HangarMainPanel;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
+import things.utils.AudioUtils;
 import things.utils.HangarGamePanelUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -141,7 +142,7 @@ public class HangarProfile {
         var soundbankInputStream = new FileInputStream(path);
         var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
 
-        HangarAudio.setSoundbank(soundbank);
+        AudioUtils.setSoundbank(soundbank);
         this.soundbankFile = path;
     }
 }

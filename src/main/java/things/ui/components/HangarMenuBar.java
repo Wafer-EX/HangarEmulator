@@ -16,7 +16,7 @@
 
 package things.ui.components;
 
-import things.HangarAudio;
+import things.utils.AudioUtils;
 import things.HangarKeyCodes;
 import things.HangarState;
 import things.MIDletLoader;
@@ -144,7 +144,7 @@ public class HangarMenuBar extends JMenuBar {
                 });
             });
 
-            clearSoundBankItem.addActionListener(e -> HangarAudio.setSoundbank(null));
+            clearSoundBankItem.addActionListener(e -> AudioUtils.setSoundbank(null));
 
             allowResizingCheckBox.setSelected(HangarState.getProfile().getWindowResizing());
             allowResizingCheckBox.addActionListener(e -> HangarState.getProfile().setWindowResizing(allowResizingCheckBox.getState()));
