@@ -23,8 +23,13 @@ import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.HangarGamePanelUtils;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.MidiSystem;
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class HangarProfile {
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
@@ -34,6 +39,7 @@ public class HangarProfile {
     private boolean canvasClearing = false;
     private boolean antiAliasing = false;
     private boolean windowResizing = false;
+    private File soundbankFile = null;
 
     public HangarKeyCodes getMidletKeyCodes() {
         return midletKeyCodes;
@@ -94,8 +100,10 @@ public class HangarProfile {
         this.frameRate = frameRate;
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
-            if (container.getComponent(0) instanceof HangarGamePanel gamePanel) {
-                gamePanel.refreshSerialCallTimer();
+            for (var component : container.getComponents()) {
+                if (component instanceof HangarGamePanel gamePanel) {
+                    gamePanel.refreshSerialCallTimer();
+                }
             }
         });
     }
@@ -123,5 +131,17 @@ public class HangarProfile {
     public void setWindowResizing(boolean windowResizing) {
         this.windowResizing = windowResizing;
         HangarMainFrame.getInstance().setResizable(windowResizing);
+    }
+
+    public File getSoundbankFile() {
+        return soundbankFile;
+    }
+
+    public void setSoundbankFile(File path) throws IOException, InvalidMidiDataException {
+        var soundbankInputStream = new FileInputStream(path);
+        var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
+
+        HangarAudio.setSoundbank(soundbank);
+        this.soundbankFile = path;
     }
 }

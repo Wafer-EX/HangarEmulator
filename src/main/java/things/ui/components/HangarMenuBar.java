@@ -25,8 +25,10 @@ import things.ui.dialogs.HangarJarChooser;
 import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.swing.*;
 import java.awt.*;
+import java.io.IOException;
 import java.net.URL;
 
 public class HangarMenuBar extends JMenuBar {
@@ -128,7 +130,16 @@ public class HangarMenuBar extends JMenuBar {
                 SwingUtilities.invokeLater(() -> {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
-                        HangarAudio.loadSoundbank(selectedFile);
+                        try {
+                            HangarState.getProfile().setSoundbankFile(selectedFile);
+                        }
+                        catch (IOException | InvalidMidiDataException exception) {
+                            exception.printStackTrace();
+                            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
+                                    "The file format is invalid.",
+                                    "Error",
+                                    JOptionPane.ERROR_MESSAGE);
+                        }
                     }
                 });
             });

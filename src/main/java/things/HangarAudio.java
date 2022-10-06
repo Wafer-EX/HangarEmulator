@@ -16,28 +16,12 @@
 
 package things;
 
-import things.ui.frames.HangarMainFrame;
-
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Soundbank;
-import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
 
 public final class HangarAudio {
     private static Soundbank soundbank;
-
-    public static void loadSoundbank(File soundbankFile) {
-        try {
-            var soundbankInputStream = new FileInputStream(soundbankFile);
-            soundbank = MidiSystem.getSoundbank(soundbankInputStream);
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
 
     public static void setSoundbank(Soundbank soundbank) {
         HangarAudio.soundbank = soundbank;
