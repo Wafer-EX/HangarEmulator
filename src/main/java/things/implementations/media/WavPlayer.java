@@ -75,6 +75,7 @@ public class WavPlayer extends ExtendedPlayer {
                 }
                 catch (Exception exception) {
                     exception.printStackTrace();
+                    throw new MediaException();
                 }
             }
         }

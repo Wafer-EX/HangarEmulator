@@ -17,6 +17,7 @@
 package things.utils;
 
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Soundbank;
 
@@ -27,7 +28,7 @@ public final class AudioUtils {
         AudioUtils.soundbank = soundbank;
     }
 
-    public static Sequencer getSequencerWithSoundbank() {
+    public static Sequencer getSequencerWithSoundbank() throws MidiUnavailableException {
         try {
             if (soundbank != null) {
                 var sequencer = MidiSystem.getSequencer(false);
@@ -39,13 +40,10 @@ public final class AudioUtils {
 
                 return sequencer;
             }
-            else {
-                return MidiSystem.getSequencer();
-            }
         }
         catch (Exception exception) {
             exception.printStackTrace();
-            return null;
         }
+        return MidiSystem.getSequencer();
     }
 }

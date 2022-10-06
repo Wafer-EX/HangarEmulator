@@ -95,6 +95,7 @@ public class MidiPlayer extends ExtendedPlayer {
                 }
                 catch (Exception exception) {
                     exception.printStackTrace();
+                    throw new MediaException();
                 }
             }
         }
