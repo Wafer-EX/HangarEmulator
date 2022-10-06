@@ -83,6 +83,10 @@ public class HangarMenuBar extends JMenuBar {
     }
 
     private static class HangarOptionsMenu extends JMenu {
+        private static final ButtonGroup frameRateRadioGroup = new ButtonGroup();
+        private static final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
+        private static final ButtonGroup resolutionRadioGroup = new ButtonGroup();
+
         public HangarOptionsMenu() {
             super("Options");
             var canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
@@ -150,8 +154,6 @@ public class HangarMenuBar extends JMenuBar {
         }
 
         private static class HangarFrameRateRadio extends JRadioButtonMenuItem {
-            private static final ButtonGroup frameRateRadioGroup = new ButtonGroup();
-
             public HangarFrameRateRadio(int frameRate) {
                 super();
                 this.addItemListener(e -> HangarState.getProfile().setFrameRate(frameRate));
@@ -162,8 +164,6 @@ public class HangarMenuBar extends JMenuBar {
         }
 
         private static class HangarScalingModeRadio extends JRadioButtonMenuItem {
-            private static final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
-
             public HangarScalingModeRadio(ScalingModes scalingMode, JMenu resolutionMenu) {
                 super();
                 this.setText(scalingMode.toString());
@@ -172,6 +172,7 @@ public class HangarMenuBar extends JMenuBar {
                     HangarState.getProfile().setScalingMode(scalingMode);
                     resolutionMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
                     if (scalingMode == ScalingModes.ChangeResolution) {
+                        resolutionRadioGroup.clearSelection();
                         // TODO: resolutionRadioGroup.clearSelection();
                     }
                 });
@@ -180,8 +181,6 @@ public class HangarMenuBar extends JMenuBar {
         }
 
         private static class HangarResolutionRadio extends JRadioButtonMenuItem {
-            private static final ButtonGroup resolutionRadioGroup = new ButtonGroup();
-
             public HangarResolutionRadio(Dimension resolution) {
                 super();
                 var profileResolution = HangarState.getProfile().getResolution();
