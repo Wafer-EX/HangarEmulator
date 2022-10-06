@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'org.lisowolf'
-version = '0.4-alpha'
+version = '0.5-alpha'
 
 jar {
     manifest {
@@ -17,8 +17,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.ow2.asm:asm:9.3'
-    implementation 'com.formdev:flatlaf:2.4'
+    implementation 'org.ow2.asm:asm:9.4'
+    implementation 'com.formdev:flatlaf:2.5'
 }
 
 shadowJar {

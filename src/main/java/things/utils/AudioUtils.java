@@ -14,36 +14,21 @@
  * limitations under the License.
  */
 
-package things;
-
-import things.ui.frames.HangarMainFrame;
+package things.utils;
 
 import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.Sequencer;
 import javax.sound.midi.Soundbank;
-import javax.swing.*;
-import java.io.File;
-import java.io.FileInputStream;
 
-public final class HangarAudio {
+public final class AudioUtils {
     private static Soundbank soundbank;
 
-    public static void loadSoundbank(File soundbankFile) {
-        try {
-            var soundbankInputStream = new FileInputStream(soundbankFile);
-            soundbank = MidiSystem.getSoundbank(soundbankInputStream);
-        }
-        catch (Exception exception) {
-            exception.printStackTrace();
-            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
-        }
-    }
-
     public static void setSoundbank(Soundbank soundbank) {
-        HangarAudio.soundbank = soundbank;
+        AudioUtils.soundbank = soundbank;
     }
 
-    public static Sequencer getSequencerWithSoundbank() {
+    public static Sequencer getSequencerWithSoundbank() throws MidiUnavailableException {
         try {
             if (soundbank != null) {
                 var sequencer = MidiSystem.getSequencer(false);
@@ -55,13 +40,10 @@ public final class HangarAudio {
 
                 return sequencer;
             }
-            else {
-                return MidiSystem.getSequencer();
-            }
         }
         catch (Exception exception) {
             exception.printStackTrace();
-            return null;
         }
+        return MidiSystem.getSequencer();
     }
 }

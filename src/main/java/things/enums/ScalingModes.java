@@ -17,7 +17,18 @@
 package things.enums;
 
 public enum ScalingModes {
-    None,
-    Contain,
-    ChangeResolution
+    None("None"),
+    Contain("Contain"),
+    ChangeResolution("Change resolution");
+
+    private final String name;
+
+    ScalingModes(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -16,7 +16,7 @@
 
 package things.implementations.media;
 
-import things.HangarAudio;
+import things.utils.AudioUtils;
 import things.implementations.media.control.MidiVolumeControl;
 
 import javax.microedition.media.*;
@@ -49,7 +49,7 @@ public class MidiPlayer extends ExtendedPlayer {
             case UNREALIZED -> {
                 try {
                     if (sequencer == null) {
-                        sequencer = HangarAudio.getSequencerWithSoundbank();
+                        sequencer = AudioUtils.getSequencerWithSoundbank();
                         sequencer.open();
                         sequencer.addMetaEventListener(meta -> {
                             // TODO: check it
@@ -95,6 +95,7 @@ public class MidiPlayer extends ExtendedPlayer {
                 }
                 catch (Exception exception) {
                     exception.printStackTrace();
+                    throw new MediaException();
                 }
             }
         }

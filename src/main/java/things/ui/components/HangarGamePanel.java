@@ -44,6 +44,7 @@ public class HangarGamePanel extends JPanel {
     private Timer serialCallTimer = new Timer();
 
     public HangarGamePanel() {
+        super(new CardLayout());
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getProfile().getResolution();
 
@@ -63,7 +64,7 @@ public class HangarGamePanel extends JPanel {
                 gamePanel.updateBufferTransformations();
             }
         });
-        refreshSerialCallTimer();
+        this.refreshSerialCallTimer();
     }
     public Displayable getDisplayable() {
         return displayable;
@@ -74,13 +75,12 @@ public class HangarGamePanel extends JPanel {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            var hangarFrame = HangarMainFrame.getInstance();
-            hangarFrame.requestFocus();
-            updateBufferTransformations();
+            HangarMainFrame.getInstance().requestFocus();
+            this.updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
-            HangarGamePanelUtils.displayMEList(this, list);
+            this.add(new HangarList(list));
         }
 
         this.revalidate();
