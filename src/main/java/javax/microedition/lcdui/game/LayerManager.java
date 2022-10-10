@@ -16,7 +16,10 @@
 
 package javax.microedition.lcdui.game;
 
+import things.HangarState;
+
 import javax.microedition.lcdui.Graphics;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class LayerManager {
@@ -54,7 +57,17 @@ public class LayerManager {
         if (g == null) {
             throw new NullPointerException();
         }
-        // TODO: write method logic
+        if (layerList.size() > 0) {
+            var resolution = HangarState.getProfile().getResolution();
+            var bufferedImage = new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_INT_RGB);
+
+            for (int i = layerList.size() - 1; i >= 0; i--) {
+                var layer = layerList.get(i);
+                layer.paint(new Graphics(bufferedImage.getGraphics()));
+            }
+
+            g.getSEGraphics().drawImage(bufferedImage, 0, 0, null);
+        }
     }
 
     public void setViewWindow(int x, int y, int width, int height) throws IllegalArgumentException {
