@@ -31,7 +31,7 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT270 = 4;
 
     private Image image;
-    private final Dimension spritesGrid = new Dimension();
+    private final Dimension framesGrid = new Dimension();
     private final Point referencePixel = new Point();
     private int frame = 0;
 
@@ -75,8 +75,7 @@ public class Sprite extends Layer {
     }
 
     public int getRawFrameCount() {
-        // TODO: write method logic
-        return 0;
+        return framesGrid.width * framesGrid.height;
     }
 
     public int getFrameSequenceLength() {
@@ -94,21 +93,21 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        var spritePosition = new Point();
+        var framePosition = new Point();
         searchPosition: {
-            for (int j = 0; j < spritesGrid.height; j++) {
-                for (int i = 0; i < spritesGrid.width; i++) {
+            for (int j = 0; j < framesGrid.height; j++) {
+                for (int i = 0; i < framesGrid.width; i++) {
                     if (i + j == frame) {
-                        spritePosition.setLocation(i, j);
+                        framePosition.setLocation(i, j);
                         break searchPosition;
                     }
                 }
             }
         }
         var imageRegion = image.getSEImage().getSubimage(
-                size.width * spritePosition.x,
-                size.height * spritePosition.y,
-                size.width,size.height);
+                size.width * framePosition.x,
+                size.height * framePosition.y,
+                size.width, size.height);
 
         g.getSEGraphics().drawImage(imageRegion, position.x, position.y, null);
     }
@@ -121,7 +120,7 @@ public class Sprite extends Layer {
         if (img == null) {
             throw new NullPointerException();
         }
-        this.spritesGrid.setSize(img.getWidth() / frameWidth, img.getHeight() / frameHeight);
+        this.framesGrid.setSize(img.getWidth() / frameWidth, img.getHeight() / frameHeight);
         this.image = img;
         this.size.width = frameWidth;
         this.size.height = frameHeight;
