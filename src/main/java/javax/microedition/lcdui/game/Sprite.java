@@ -154,6 +154,11 @@ public class Sprite extends Layer {
         return false;
     }
 
+    public final boolean collidesWith(TiledLayer t, boolean pixelLevel) throws NullPointerException {
+        // TODO: write method logic
+        return false;
+    }
+
     public final boolean collidesWith(Image image, int x, int y, boolean pixelLevel) throws NullPointerException {
         // TODO: write method logic
         return false;
