@@ -16,14 +16,14 @@
 
 package javax.microedition.lcdui.game;
 
-import things.HangarState;
-
 import javax.microedition.lcdui.Graphics;
-import java.awt.image.BufferedImage;
+import java.awt.*;
 import java.util.ArrayList;
 
 public class LayerManager {
     private final ArrayList<Layer> layerList = new ArrayList<>();
+    private final Point viewWindowPosition = new Point();
+    private final Dimension viewWindowSize = new Dimension();
 
     public LayerManager() { }
 
@@ -58,19 +58,21 @@ public class LayerManager {
             throw new NullPointerException();
         }
         if (layerList.size() > 0) {
-            var resolution = HangarState.getProfile().getResolution();
-            var bufferedImage = new BufferedImage(resolution.width, resolution.height, BufferedImage.TYPE_INT_RGB);
+            var graphics = (Graphics2D) g.getSEGraphics();
+            int posX = x - viewWindowPosition.x;
+            int posY = y - viewWindowPosition.y;
 
+            graphics.translate(posX, posY);
             for (int i = layerList.size() - 1; i >= 0; i--) {
                 var layer = layerList.get(i);
-                layer.paint(new Graphics(bufferedImage.getGraphics()));
+                layer.paint(g);
             }
-
-            g.getSEGraphics().drawImage(bufferedImage, 0, 0, null);
+            graphics.translate(-posX, -posY);
         }
     }
 
     public void setViewWindow(int x, int y, int width, int height) throws IllegalArgumentException {
-        // TODO: write method logic
+        viewWindowPosition.setLocation(x, y);
+        viewWindowSize.setSize(width, height);
     }
 }
