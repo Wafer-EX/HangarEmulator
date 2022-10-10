@@ -18,17 +18,23 @@ package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class TiledLayer extends Layer {
-
+    private final int rows;
+    private final int columns;
+    private final Dimension tileSize = new Dimension();
     private final int[][] cells;
     private final ArrayList<java.awt.Image> tilesList = new ArrayList<>();
 
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
-        size.setSize(image.getWidth(), image.getHeight());
-        cells = new int[columns][rows];
+        this.columns = columns;
+        this.rows = rows;
+        this.tileSize.setSize(tileWidth, tileHeight);
+        this.size.setSize(image.getWidth(), image.getHeight());
+        this.cells = new int[columns][rows];
 
         for (int y = 0; y < image.getHeight() / tileHeight; y++) {
             for (int x = 0; x < image.getWidth() / tileWidth; x++) {
@@ -72,21 +78,19 @@ public class TiledLayer extends Layer {
     }
 
     public final int getCellWidth() {
-        // TODO: write method logic
-        return 0;
+        return tileSize.width;
     }
 
     public final int getCellHeight() {
-        // TODO: write method logic
-        return 0;
+        return tileSize.height;
     }
 
     public final int getColumns() {
-        return cells.length;
+        return columns;
     }
 
     public final int getRows() {
-        return cells[0].length;
+        return rows;
     }
 
     public void setStaticTileSet(Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
@@ -95,6 +99,18 @@ public class TiledLayer extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        // TODO: write method logic
+        if (g == null) {
+            throw new NullPointerException();
+        }
+        for (int y = 0; y < rows; y++) {
+            for (int x = 0; x < columns; x++) {
+                if (cells[x][y] != 0) {
+                    var tile = tilesList.get(cells[x][y]);
+                    int posX = position.x + tileSize.width * x;
+                    int posY = position.y + tileSize.height * y;
+                    g.getSEGraphics().drawImage(tile, posX, posY, null);
+                }
+            }
+        }
     }
 }
