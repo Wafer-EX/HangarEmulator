@@ -19,6 +19,8 @@ package javax.microedition.lcdui.game;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class Sprite extends Layer {
     public static final int TRANS_NONE = 0;
@@ -30,10 +32,11 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT180 = 1;
     public static final int TRANS_MIRROR_ROT270 = 4;
 
-    private Image image;
-    private final Dimension framesGrid = new Dimension();
+    private Image sprite;
+    private final ArrayList<java.awt.Image> framesList = new ArrayList<>();
+    private int[] sequence;
     private final Point referencePixel = new Point();
-    private int frame = 0;
+    private int selectedIndex = 0;
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -44,7 +47,7 @@ public class Sprite extends Layer {
     }
 
     public Sprite(Sprite s) throws NullPointerException {
-        this(s.image, s.size.width, s.size.height);
+        this(s.sprite, s.size.width, s.size.height);
     }
 
     public void defineReferencePixel(int x, int y) {
@@ -67,20 +70,19 @@ public class Sprite extends Layer {
         if (sequenceIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
-        this.frame = sequenceIndex;
+        this.selectedIndex = sequenceIndex;
     }
 
     public final int getFrame() {
-        return frame;
+        return selectedIndex;
     }
 
     public int getRawFrameCount() {
-        return framesGrid.width * framesGrid.height;
+        return framesList.size();
     }
 
     public int getFrameSequenceLength() {
-        // TODO: write method logic
-        return 0;
+        return sequence.length;
     }
 
     public void nextFrame() {
@@ -93,35 +95,42 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        var framePosition = new Point();
-        searchPosition: {
-            for (int j = 0; j < framesGrid.height; j++) {
-                for (int i = 0; i < framesGrid.width; i++) {
-                    if (i + j == frame) {
-                        framePosition.setLocation(i, j);
-                        break searchPosition;
-                    }
-                }
-            }
-        }
-        var imageRegion = image.getSEImage().getSubimage(
-                size.width * framePosition.x,
-                size.height * framePosition.y,
-                size.width, size.height);
-
-        g.getSEGraphics().drawImage(imageRegion, position.x, position.y, null);
+        g.getSEGraphics().drawImage(framesList.get(selectedIndex), position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
-        // TODO: write method logic
+        if (sequence == null || sequence.length < 1) {
+            throw new IllegalArgumentException();
+        }
+        for (int frame : sequence) {
+            if (frame < 0 || frame >= this.getRawFrameCount()) {
+                throw new ArrayIndexOutOfBoundsException();
+            }
+        }
+        this.sequence = sequence;
     }
 
     public void setImage(Image img, int frameWidth, int frameHeight) throws NullPointerException, IllegalArgumentException {
         if (img == null) {
             throw new NullPointerException();
         }
-        this.framesGrid.setSize(img.getWidth() / frameWidth, img.getHeight() / frameHeight);
-        this.image = img;
+        framesList.clear();
+        for (int y = 0; y < img.getHeight() / frameHeight; y++) {
+            for (int x = 0; x < img.getWidth() / frameWidth; x++) {
+                var image = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
+                var subImage = img.getSEImage().getSubimage(frameWidth * x, frameHeight * y, frameWidth, frameHeight);
+
+                image.getGraphics().drawImage(subImage, 0, 0, null);
+                framesList.add(image);
+            }
+        }
+        var sequence = new int[framesList.size()];
+        for (int i = 0; i < framesList.size(); i++) {
+            sequence[i] = i;
+        }
+
+        this.sprite = img;
+        this.sequence = sequence;
         this.size.width = frameWidth;
         this.size.height = frameHeight;
     }
