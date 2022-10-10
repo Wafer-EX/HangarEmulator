@@ -36,7 +36,7 @@ public class Sprite extends Layer {
     private int[] sequence;
     private int selectedIndex = 0;
     private final Point referencePixel = new Point();
-    private final ArrayList<java.awt.Image> framesList = new ArrayList<>();
+    private final ArrayList<java.awt.Image> frameList = new ArrayList<>();
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -78,7 +78,7 @@ public class Sprite extends Layer {
     }
 
     public int getRawFrameCount() {
-        return framesList.size();
+        return frameList.size();
     }
 
     public int getFrameSequenceLength() {
@@ -101,7 +101,7 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        g.getSEGraphics().drawImage(framesList.get(selectedIndex), position.x, position.y, null);
+        g.getSEGraphics().drawImage(frameList.get(selectedIndex), position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
@@ -120,25 +120,26 @@ public class Sprite extends Layer {
         if (img == null) {
             throw new NullPointerException();
         }
-        framesList.clear();
+        this.sprite = img;
+        this.size.width = frameWidth;
+        this.size.height = frameHeight;
+
+        frameList.clear();
         for (int y = 0; y < img.getHeight() / frameHeight; y++) {
             for (int x = 0; x < img.getWidth() / frameWidth; x++) {
                 var bufferedImage = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
                 var subImage = img.getSEImage().getSubimage(frameWidth * x, frameHeight * y, frameWidth, frameHeight);
 
                 bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
-                framesList.add(bufferedImage);
+                frameList.add(bufferedImage);
             }
         }
-        var sequence = new int[framesList.size()];
-        for (int i = 0; i < framesList.size(); i++) {
+
+        var sequence = new int[frameList.size()];
+        for (int i = 0; i < frameList.size(); i++) {
             sequence[i] = i;
         }
-
-        this.sprite = img;
         this.sequence = sequence;
-        this.size.width = frameWidth;
-        this.size.height = frameHeight;
     }
 
     public void defineCollisionRectangle(int x, int y, int width, int height) throws IllegalArgumentException {

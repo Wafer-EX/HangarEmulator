@@ -18,23 +18,24 @@ package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class TiledLayer extends Layer {
     private final int rows;
     private final int columns;
-    private final Dimension tileSize = new Dimension();
-    private final int[][] cells;
-    private final ArrayList<java.awt.Image> tilesList = new ArrayList<>();
+    private final int tileWidth;
+    private final int tileHeight;
+    private final int[][] cellGrid;
+    private final ArrayList<java.awt.Image> tileList = new ArrayList<>();
 
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
         this.columns = columns;
         this.rows = rows;
-        this.tileSize.setSize(tileWidth, tileHeight);
+        this.tileWidth = tileWidth;
+        this.tileHeight = tileHeight;
         this.size.setSize(image.getWidth(), image.getHeight());
-        this.cells = new int[columns][rows];
+        this.cellGrid = new int[columns][rows];
 
         for (int y = 0; y < image.getHeight() / tileHeight; y++) {
             for (int x = 0; x < image.getWidth() / tileWidth; x++) {
@@ -42,7 +43,7 @@ public class TiledLayer extends Layer {
                 var subImage = image.getSEImage().getSubimage(tileWidth * x, tileHeight * y, tileWidth, tileHeight);
 
                 bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
-                tilesList.add(bufferedImage);
+                tileList.add(bufferedImage);
             }
         }
     }
@@ -62,27 +63,27 @@ public class TiledLayer extends Layer {
     }
 
     public void setCell(int col, int row, int tileIndex) throws IndexOutOfBoundsException {
-        cells[col][row] = tileIndex;
+        cellGrid[col][row] = tileIndex;
     }
 
     public int getCell(int col, int row) throws IndexOutOfBoundsException {
-        return cells[col][row];
+        return cellGrid[col][row];
     }
 
     public void fillCells(int col, int row, int numCols, int numRows, int tileIndex) throws IndexOutOfBoundsException, IllegalArgumentException, IndexOutOfBoundsException {
         for (int y = row; y < row + numRows; y++) {
             for (int x = col; x < col + numCols; x++) {
-                cells[x][y] = tileIndex;
+                cellGrid[x][y] = tileIndex;
             }
         }
     }
 
     public final int getCellWidth() {
-        return tileSize.width;
+        return tileWidth;
     }
 
     public final int getCellHeight() {
-        return tileSize.height;
+        return tileHeight;
     }
 
     public final int getColumns() {
@@ -104,11 +105,9 @@ public class TiledLayer extends Layer {
         }
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
-                if (cells[x][y] != 0) {
-                    var tile = tilesList.get(cells[x][y] - 1);
-                    int posX = position.x + tileSize.width * x;
-                    int posY = position.y + tileSize.height * y;
-                    g.getSEGraphics().drawImage(tile, posX, posY, null);
+                if (cellGrid[x][y] != 0) {
+                    var tile = tileList.get(cellGrid[x][y] - 1);
+                    g.getSEGraphics().drawImage(tile,position.x + tileWidth * x, position.y + tileHeight * y, null);
                 }
             }
         }
