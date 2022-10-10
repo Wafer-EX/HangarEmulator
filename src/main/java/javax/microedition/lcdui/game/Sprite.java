@@ -31,7 +31,8 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT270 = 4;
 
     private Image image;
-    private Point referencePixel = new Point(0, 0);
+    private final Dimension spritesGrid = new Dimension();
+    private final Point referencePixel = new Point();
     private int frame = 0;
 
     public Sprite(Image image) throws NullPointerException {
@@ -55,20 +56,18 @@ public class Sprite extends Layer {
     }
 
     public int getRefPixelX() {
-        // TODO: write method logic
-        return 0;
+        return referencePixel.x;
     }
 
     public int getRefPixelY() {
-        // TODO: write method logic
-        return 0;
+        return referencePixel.y;
     }
 
     public void setFrame(int sequenceIndex) throws IndexOutOfBoundsException {
         if (sequenceIndex < 0) {
             throw new IndexOutOfBoundsException();
         }
-        frame = sequenceIndex;
+        this.frame = sequenceIndex;
     }
 
     public final int getFrame() {
@@ -95,7 +94,23 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        // TODO: write method logic
+        var spritePosition = new Point();
+        searchPosition: {
+            for (int j = 0; j < spritesGrid.height; j++) {
+                for (int i = 0; i < spritesGrid.width; i++) {
+                    if (i + j == frame) {
+                        spritePosition.setLocation(i, j);
+                        break searchPosition;
+                    }
+                }
+            }
+        }
+        var imageRegion = image.getSEImage().getSubimage(
+                size.width * spritePosition.x,
+                size.height * spritePosition.y,
+                size.width,size.height);
+
+        g.getSEGraphics().drawImage(imageRegion, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
@@ -106,6 +121,7 @@ public class Sprite extends Layer {
         if (img == null) {
             throw new NullPointerException();
         }
+        this.spritesGrid.setSize(img.getWidth() / frameWidth, img.getHeight() / frameHeight);
         this.image = img;
         this.size.width = frameWidth;
         this.size.height = frameHeight;
