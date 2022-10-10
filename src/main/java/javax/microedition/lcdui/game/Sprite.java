@@ -33,10 +33,10 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT270 = 4;
 
     private Image sprite;
-    private final ArrayList<java.awt.Image> framesList = new ArrayList<>();
     private int[] sequence;
-    private final Point referencePixel = new Point();
     private int selectedIndex = 0;
+    private final Point referencePixel = new Point();
+    private final ArrayList<java.awt.Image> framesList = new ArrayList<>();
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -86,11 +86,17 @@ public class Sprite extends Layer {
     }
 
     public void nextFrame() {
-        // TODO: write method logic
+        selectedIndex += 1;
+        if (selectedIndex >= sequence.length) {
+            selectedIndex = 0;
+        }
     }
 
     public void prevFrame() {
-        // TODO: write method logic
+        selectedIndex -= 1;
+        if (selectedIndex < 0) {
+            selectedIndex = sequence.length - 1;
+        }
     }
 
     @Override
