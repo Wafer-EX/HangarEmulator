@@ -20,33 +20,32 @@ import javax.microedition.lcdui.Graphics;
 import java.awt.*;
 
 public abstract class Layer {
-    private Dimension position = new Dimension(0, 0);
-    private boolean isVisible = false;
+    protected Dimension size = new Dimension(0, 0);
+    protected Point position = new Point(0, 0);
+    protected boolean isVisible = false;
 
     public void setPosition(int x, int y) {
-        position = new Dimension(x, y);
+        position.setLocation(x, y);
     }
 
     public void move(int dx, int dy) {
-        position = new Dimension(position.width + dx, position.height + dy);
+        position.setLocation(position.x + dx, position.y + dx);
     }
 
     public final int getX() {
-        return position.width;
+        return position.x;
     }
 
     public final int getY() {
-        return position.height;
+        return position.y;
     }
 
     public final int getWidth() {
-        // TODO: write method logic
-        return 0;
+        return size.width;
     }
 
     public final int getHeight() {
-        // TODO: write method logic
-        return 0;
+        return size.height;
     }
 
     public void setVisible(boolean visible) {

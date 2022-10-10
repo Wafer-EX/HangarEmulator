@@ -31,9 +31,8 @@ public class Sprite extends Layer {
     public static final int TRANS_MIRROR_ROT270 = 4;
 
     private Image image;
-    private int frameWidth;
-    private int frameHeight;
     private Point referencePixel = new Point(0, 0);
+    private int frame = 0;
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -44,7 +43,7 @@ public class Sprite extends Layer {
     }
 
     public Sprite(Sprite s) throws NullPointerException {
-        this(s.image, s.frameWidth, s.frameHeight);
+        this(s.image, s.size.width, s.size.height);
     }
 
     public void defineReferencePixel(int x, int y) {
@@ -66,12 +65,14 @@ public class Sprite extends Layer {
     }
 
     public void setFrame(int sequenceIndex) throws IndexOutOfBoundsException {
-        // TODO: write method logic
+        if (sequenceIndex < 0) {
+            throw new IndexOutOfBoundsException();
+        }
+        frame = sequenceIndex;
     }
 
     public final int getFrame() {
-        // TODO: write method logic
-        return 0;
+        return frame;
     }
 
     public int getRawFrameCount() {
@@ -106,8 +107,8 @@ public class Sprite extends Layer {
             throw new NullPointerException();
         }
         this.image = img;
-        this.frameWidth = frameWidth;
-        this.frameHeight = frameHeight;
+        this.size.width = frameWidth;
+        this.size.height = frameHeight;
     }
 
     public void defineCollisionRectangle(int x, int y, int width, int height) throws IllegalArgumentException {
@@ -122,10 +123,6 @@ public class Sprite extends Layer {
         // TODO: write method logic
         return false;
     }
-
-    //public final boolean collidesWith(TiledLayer t, boolean pixelLevel) {
-        // TODO: write method logic
-    //}
 
     public final boolean collidesWith(Image image, int x, int y, boolean pixelLevel) throws NullPointerException {
         // TODO: write method logic
