@@ -34,7 +34,8 @@ public class MIDletClassLoader extends URLClassLoader {
     public Class<?> loadClass(String name) throws ClassNotFoundException {
         if (!name.contains("java") && !name.contains("nokia") && !name.contains("things")) {
             try {
-                var classStream = MIDletResources.getResourceFromJar(name + ".class");
+                var classPath = name.replaceAll("\\.", "/");
+                var classStream = MIDletResources.getResourceFromJar(classPath + ".class");
                 assert classStream != null;
 
                 var classReader = new ClassReader(classStream);

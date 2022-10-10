@@ -22,6 +22,10 @@ import things.implementations.media.WavPlayer;
 import java.io.InputStream;
 
 public final class Manager {
+    public static String[] getSupportedContentTypes(String protocol) {
+        return new String[] { "audio/x-wav", "audio/midi" };
+    }
+
     public static Player createPlayer(InputStream stream, String type) throws MediaException {
         // TODO: write logic for other types
         return switch (type) {
