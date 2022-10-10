@@ -23,7 +23,17 @@ import java.io.InputStream;
 
 public final class Manager {
     public static String[] getSupportedContentTypes(String protocol) {
-        return new String[] { "audio/x-wav", "audio/midi" };
+        return new String[] {
+                "audio/wav",
+                "audio/x-wav",
+                "audio/midi",
+                "audio/x-midi"
+        };
+    }
+
+    public static String[] getSupportedProtocols(String content_type) {
+        // TODO: rewrite method logic
+        return new String[] { };
     }
 
     public static Player createPlayer(InputStream stream, String type) throws MediaException {

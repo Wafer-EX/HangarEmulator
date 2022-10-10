@@ -105,7 +105,7 @@ public class TiledLayer extends Layer {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 if (cells[x][y] != 0) {
-                    var tile = tilesList.get(cells[x][y]);
+                    var tile = tilesList.get(cells[x][y] - 1);
                     int posX = position.x + tileSize.width * x;
                     int posY = position.y + tileSize.height * y;
                     g.getSEGraphics().drawImage(tile, posX, posY, null);
