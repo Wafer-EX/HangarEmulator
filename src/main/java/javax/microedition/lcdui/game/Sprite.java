@@ -123,11 +123,11 @@ public class Sprite extends Layer {
         framesList.clear();
         for (int y = 0; y < img.getHeight() / frameHeight; y++) {
             for (int x = 0; x < img.getWidth() / frameWidth; x++) {
-                var image = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
+                var bufferedImage = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
                 var subImage = img.getSEImage().getSubimage(frameWidth * x, frameHeight * y, frameWidth, frameHeight);
 
-                image.getGraphics().drawImage(subImage, 0, 0, null);
-                framesList.add(image);
+                bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
+                framesList.add(bufferedImage);
             }
         }
         var sequence = new int[framesList.size()];

@@ -18,10 +18,27 @@ package javax.microedition.lcdui.game;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 public class TiledLayer extends Layer {
+
+    private final int[][] cells;
+    private final ArrayList<java.awt.Image> tilesList = new ArrayList<>();
+
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
-        // TODO: write constructor logic
+        size.setSize(image.getWidth(), image.getHeight());
+        cells = new int[columns][rows];
+
+        for (int y = 0; y < image.getHeight() / tileHeight; y++) {
+            for (int x = 0; x < image.getWidth() / tileWidth; x++) {
+                var bufferedImage = new BufferedImage(tileWidth, tileHeight, BufferedImage.TYPE_INT_ARGB);
+                var subImage = image.getSEImage().getSubimage(tileWidth * x, tileHeight * y, tileWidth, tileHeight);
+
+                bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
+                tilesList.add(bufferedImage);
+            }
+        }
     }
 
     public int createAnimatedTile(int staticTileIndex) throws IndexOutOfBoundsException {
@@ -39,16 +56,19 @@ public class TiledLayer extends Layer {
     }
 
     public void setCell(int col, int row, int tileIndex) throws IndexOutOfBoundsException {
-        // TODO: write method logic
+        cells[col][row] = tileIndex;
     }
 
     public int getCell(int col, int row) throws IndexOutOfBoundsException {
-        // TODO: write method logic
-        return 0;
+        return cells[col][row];
     }
 
     public void fillCells(int col, int row, int numCols, int numRows, int tileIndex) throws IndexOutOfBoundsException, IllegalArgumentException, IndexOutOfBoundsException {
-        // TODO: write method logic
+        for (int y = row; y < row + numRows; y++) {
+            for (int x = col; x < col + numCols; x++) {
+                cells[x][y] = tileIndex;
+            }
+        }
     }
 
     public final int getCellWidth() {
@@ -62,13 +82,11 @@ public class TiledLayer extends Layer {
     }
 
     public final int getColumns() {
-        // TODO: write method logic
-        return 0;
+        return cells.length;
     }
 
     public final int getRows() {
-        // TODO: write method logic
-        return 0;
+        return cells[0].length;
     }
 
     public void setStaticTileSet(Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
