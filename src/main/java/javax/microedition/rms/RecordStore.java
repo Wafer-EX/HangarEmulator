@@ -213,8 +213,16 @@ public class RecordStore implements Serializable {
         return bytesCopied;
     }
 
-    public byte[] getRecord(int recordId) {
-        return recordEnumerator.records.get(recordId - 1);
+    public byte[] getRecord(int recordId) throws RecordStoreNotOpenException, InvalidRecordIDException, RecordStoreException {
+        if (!isOpened) {
+            throw new RecordStoreNotOpenException();
+        }
+        try {
+            return recordEnumerator.records.get(recordId - 1);
+        }
+        catch (Exception exception) {
+            throw new RecordStoreException();
+        }
     }
 
     public void setRecord(int recordId, byte[] arr, int offset, int numBytes) throws RecordStoreException {
