@@ -21,71 +21,33 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarList extends JPanel {
-    private final List meList;
-
-    public HangarList(List meList) {
+    public HangarList(List list) {
         super(new GridBagLayout());
-        this.meList = meList;
-
-        // TODO: move commands UI to another class
 
         var constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.gridwidth = meList.size();
-        this.add(new JScrollPane(new HangarListPanel()), constraints);
-
         constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weighty = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.ipady = 12;
+        constraints.weightx = 1.0;
+        constraints.ipady = 24;
 
-        var commands = meList.getCommands();
-        for (int i = 0; i < commands.size(); i++) {
-            var command = commands.get(i);
-            var button = new JButton(commands.get(i).getLabel());
-            button.addActionListener(e -> meList.getCommandListener().commandAction(command, meList));
+        for (int i = 0; i < list.size(); i++) {
+            int selectedIndex = i;
+            var button = new JButton(list.getString(i));
 
-            constraints.insets.set(4, i == commands.size() - 1 && commands.size() > 1 ? 0 : 4, 4, i == 0 && commands.size() > 1 ? 0 : 4);
-            constraints.gridx = i;
+            button.addActionListener(e -> {
+                list.setSelectedIndex(selectedIndex, true);
+                list.runSelectCommand();
+            });
+
+            constraints.insets.set(i == 0 ? 4 : 2, 4, i == list.size() - 1 ? 4 : 2, 4);
+            constraints.gridy = i;
             this.add(button, constraints);
         }
-        this.revalidate();
-    }
 
-    private class HangarListPanel extends JPanel {
-        public HangarListPanel() {
-            super(new GridBagLayout());
-
-            var constraints = new GridBagConstraints();
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.weightx = 1.0;
-            constraints.ipady = 24;
-
-            for (int i = 0; i < meList.size(); i++) {
-                int selectedIndex = i;
-                var button = new JButton(meList.getString(i));
-
-                button.addActionListener(e -> {
-                    meList.setSelectedIndex(selectedIndex, true);
-                    meList.runSelectCommand();
-                });
-
-                constraints.insets.set(i == 0 ? 4 : 2, 4, i == meList.size() - 1 ? 4 : 2, 4);
-                constraints.gridy = i;
-                this.add(button, constraints);
-            }
-
-            constraints.insets.set(0, 0, 0, 0);
-            constraints.fill = GridBagConstraints.BOTH;
-            constraints.gridy = meList.size();
-            constraints.weighty = 1.0;
-            constraints.ipady = 0;
-            this.add(Box.createGlue(), constraints);
-        }
+        constraints.insets.set(0, 0, 0, 0);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridy = list.size();
+        constraints.weighty = 1.0;
+        constraints.ipady = 0;
+        this.add(Box.createGlue(), constraints);
     }
 }

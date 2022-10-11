@@ -81,10 +81,10 @@ public class HangarGamePanel extends JPanel {
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
-            this.add(new HangarList(list));
+            this.add(new HangarDisplayable(new HangarList(list), list));
         }
         else if (displayable instanceof Form form) {
-            this.add(new HangarForm(form));
+            this.add(new HangarDisplayable(new HangarForm(form), form));
         }
 
         this.revalidate();

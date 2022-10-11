@@ -23,43 +23,33 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarForm extends JPanel {
-    private final Form meForm;
+    public HangarForm(Form form) {
+        super(new GridBagLayout());
 
-    public HangarForm(Form meForm) {
-        super(new CardLayout());
-        this.meForm = meForm;
-        this.add(new JScrollPane(new HangarFormPanel()));
-    }
+        var items = form.getItems();
+        var constraints = new GridBagConstraints();
 
-    private class HangarFormPanel extends JPanel {
-        public HangarFormPanel() {
-            super(new GridBagLayout());
+        constraints.fill = GridBagConstraints.HORIZONTAL;
+        constraints.weightx = 1.0;
+        constraints.gridy = 0;
 
-            var items = meForm.getItems();
-            var constraints = new GridBagConstraints();
-
-            constraints.fill = GridBagConstraints.HORIZONTAL;
-            constraints.weightx = 1.0;
-            constraints.gridy = 0;
-
-            for (var item : items) {
-                Component component = null;
-                if (item instanceof StringItem stringItem) {
-                    component = new JLabel(stringItem.getText());
-                }
-                else if (item instanceof ImageItem imageItem) {
-                    var image = new ImageIcon(imageItem.getImage().getSEImage());
-                    component = new JLabel(image);
-                }
-                else {
-                    throw new IllegalArgumentException();
-                }
-                this.add(component, constraints);
-                constraints.gridy += 1;
+        for (var item : items) {
+            Component component = null;
+            if (item instanceof StringItem stringItem) {
+                component = new JLabel(stringItem.getText());
             }
-
+            else if (item instanceof ImageItem imageItem) {
+                var image = new ImageIcon(imageItem.getImage().getSEImage());
+                component = new JLabel(image);
+            }
+            else {
+                throw new IllegalArgumentException();
+            }
+            this.add(component, constraints);
             constraints.gridy += 1;
-            this.add(Box.createGlue(), constraints);
         }
+
+        constraints.gridy += 1;
+        this.add(Box.createGlue(), constraints);
     }
 }
