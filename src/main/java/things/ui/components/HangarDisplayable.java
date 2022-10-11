@@ -24,6 +24,7 @@ public class HangarDisplayable extends JPanel {
     public HangarDisplayable(JPanel screen, Displayable displayable) {
         super(new GridBagLayout());
         var constraints = new GridBagConstraints();
+        var scrollPane = new JScrollPane(screen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         var commands = displayable.getCommands();
 
         constraints.fill = GridBagConstraints.BOTH;
@@ -32,7 +33,7 @@ public class HangarDisplayable extends JPanel {
         constraints.weightx = 1.0;
         constraints.weighty = 1.0;
         constraints.gridwidth = commands.size();
-        this.add(new JScrollPane(screen), constraints);
+        this.add(scrollPane, constraints);
 
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weighty = 0;
