@@ -37,6 +37,9 @@ public class TextField extends Item {
 
     public TextField(String label, String text, int maxSize, int constraints) {
         this.setLabel(label);
+        this.text = text;
+        this.maxSize = maxSize;
+        this.constraints = constraints;
     }
 
     public String getString() {
