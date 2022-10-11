@@ -34,18 +34,18 @@ public class HangarForm extends JPanel {
         constraints.gridy = 0;
 
         for (var item : items) {
-            Component component = null;
             if (item instanceof StringItem stringItem) {
-                component = new JLabel(stringItem.getText());
+                var label = new JLabel(stringItem.getText());
+                this.add(label, constraints);
             }
             else if (item instanceof ImageItem imageItem) {
-                var image = new ImageIcon(imageItem.getImage().getSEImage());
-                component = new JLabel(image);
+                var imageIcon = new ImageIcon(imageItem.getImage().getSEImage());
+                var label = new JLabel(imageIcon);
+                this.add(label, constraints);
             }
             else {
                 throw new IllegalArgumentException();
             }
-            this.add(component, constraints);
             constraints.gridy += 1;
         }
 
