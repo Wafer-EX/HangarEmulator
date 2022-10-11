@@ -39,14 +39,6 @@ public class List extends Screen implements Choice {
         strings.addAll(Arrays.asList(stringElements));
     }
 
-    public ArrayList<Command> getCommands() {
-        return commandList;
-    }
-
-    public CommandListener getCommandListener() {
-        return commandListener;
-    }
-
     public void runSelectCommand() {
         commandListener.commandAction(selectCommand, this);
     }

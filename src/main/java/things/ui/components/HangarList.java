@@ -27,6 +27,8 @@ public class HangarList extends JPanel {
         super(new GridBagLayout());
         this.meList = meList;
 
+        // TODO: move commands UI to another class
+
         var constraints = new GridBagConstraints();
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;

@@ -28,7 +28,7 @@ public class HangarForm extends JPanel {
     public HangarForm(Form meForm) {
         super(new CardLayout());
         this.meForm = meForm;
-        this.add(new HangarFormPanel());
+        this.add(new JScrollPane(new HangarFormPanel()));
     }
 
     private class HangarFormPanel extends JPanel {
