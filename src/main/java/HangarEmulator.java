@@ -42,22 +42,22 @@ public class HangarEmulator {
         System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());
 
         try {
+            var mainFrame = HangarMainFrame.getInstance();
+            var mainPanel = new HangarMainPanel();
+
             if (args.length > 0 && new File(args[0]).isFile()) {
                 MIDletLoader.loadMIDlet(args[0]);
                 MIDletLoader.startLoadedMIDlet();
             }
             else {
-                var mainFrame = HangarMainFrame.getInstance();
-                var mainPanel = new HangarMainPanel();
-
                 mainPanel.setPreferredSize(new Dimension(360, 360));
                 mainFrame.add(mainPanel);
                 mainFrame.pack();
                 mainFrame.revalidate();
             }
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
-            HangarMainFrame.getInstance().setVisible(true);
-            HangarMainFrame.getInstance().setLocationRelativeTo(null);
+            mainFrame.setVisible(true);
+            mainFrame.setLocationRelativeTo(null);
         }
         catch (Exception exception) {
             exception.printStackTrace();
