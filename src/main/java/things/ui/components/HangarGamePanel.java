@@ -25,6 +25,7 @@ import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
@@ -81,6 +82,9 @@ public class HangarGamePanel extends JPanel {
         }
         else if (displayable instanceof List list) {
             this.add(new HangarList(list));
+        }
+        else if (displayable instanceof Form form) {
+            this.add(new HangarForm(form));
         }
 
         this.revalidate();

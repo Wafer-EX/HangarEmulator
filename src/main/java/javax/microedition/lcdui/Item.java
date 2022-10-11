@@ -19,7 +19,7 @@ package javax.microedition.lcdui;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class Item {
+public abstract class Item {
     public static final int LAYOUT_DEFAULT = 0;
     public static final int LAYOUT_LEFT = 1;
     public static final int LAYOUT_RIGHT = 2;
@@ -39,7 +39,7 @@ public class Item {
     public static final int BUTTON = 2;
 
     private String label;
-    private int layout = LAYOUT_DEFAULT;
+    protected int layout = LAYOUT_DEFAULT;
     private final ArrayList<Command> commands = new ArrayList<>();
     private ItemCommandListener itemCommandListener = null;
     private final Dimension preferredSize = new Dimension(-1, -1);

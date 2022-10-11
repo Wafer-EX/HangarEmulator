@@ -16,6 +16,6 @@
 
 package javax.microedition.lcdui;
 
-public interface ItemCommandListener {
-    public void commandAction(Command c, Item item);
+public interface ItemStateListener {
+    public void itemStateChanged(Item item);
 }
