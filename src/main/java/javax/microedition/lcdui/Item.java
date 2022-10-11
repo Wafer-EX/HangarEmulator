@@ -16,6 +16,9 @@
 
 package javax.microedition.lcdui;
 
+import java.awt.*;
+import java.util.ArrayList;
+
 public class Item {
     public static final int LAYOUT_DEFAULT = 0;
     public static final int LAYOUT_LEFT = 1;
@@ -35,5 +38,68 @@ public class Item {
     public static final int HYPERLINK = 1;
     public static final int BUTTON = 2;
 
-    // TODO: write methods
+    private String label;
+    private int layout = LAYOUT_DEFAULT;
+    private final ArrayList<Command> commands = new ArrayList<>();
+    private ItemCommandListener itemCommandListener = null;
+    private final Dimension preferredSize = new Dimension(-1, -1);
+    private Command defaultCommand = null;
+
+    public void setLabel(String label) {
+        this.label = label;
+    }
+
+    public String getLabel() {
+        return label;
+    }
+
+    public int getLayout() {
+        return layout;
+    }
+
+    public void setLayout(int layout) {
+        this.layout = layout;
+    }
+
+    public void addCommand(Command cmd) {
+        commands.add(cmd);
+    }
+
+    public void removeCommand(Command cmd) {
+        commands.remove(cmd);
+    }
+
+    public void setItemCommandListener(ItemCommandListener l) {
+        this.itemCommandListener = l;
+    }
+
+    public int getPreferredWidth() {
+        return preferredSize.width;
+    }
+
+    public int getPreferredHeight() {
+        return preferredSize.height;
+    }
+
+    public void setPreferredSize(int width, int height) {
+        preferredSize.setSize(width, height);
+    }
+
+    public int getMinimumWidth() {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public int getMinimumHeight() {
+        // TODO: write method logic
+        return 0;
+    }
+
+    public void setDefaultCommand(Command cmd) {
+        this.defaultCommand = cmd;
+    }
+
+    public void notifyStateChanged() {
+        // TODO: write method logic
+    }
 }
