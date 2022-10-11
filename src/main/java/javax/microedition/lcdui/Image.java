@@ -129,6 +129,9 @@ public class Image {
             throw new NullPointerException();
         }
         var bufferedImage = ImageIO.read(stream);
+        if (bufferedImage == null) {
+            throw new IOException();
+        }
         return new Image(bufferedImage, false);
     }
 
