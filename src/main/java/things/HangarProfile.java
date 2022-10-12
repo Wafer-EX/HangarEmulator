@@ -69,15 +69,11 @@ public class HangarProfile {
         this.scalingMode = scalingMode;
 
         SwingUtilities.invokeLater(() -> {
-            var container = HangarMainFrame.getInstance().getContentPane();
-            if (scalingMode == ScalingModes.ChangeResolution) {
-                resolution = container.getSize();
-            }
-
             var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
-            if (canvasPanel != null) {
-                HangarCanvasUtils.fitBufferToResolution(canvasPanel, resolution);
+            if (scalingMode == ScalingModes.ChangeResolution) {
+                this.setResolution(canvasPanel.getSize());
             }
+            canvasPanel.updateBufferTransformations();
         });
     }
 
@@ -87,7 +83,11 @@ public class HangarProfile {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
-        SwingUtilities.invokeLater(() -> HangarCanvasUtils.fitBufferToResolution(HangarMainFrame.getInstance().getCanvasPanel(), resolution));
+
+        SwingUtilities.invokeLater(() -> {
+            var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
+            HangarCanvasUtils.fitBufferToResolution(canvasPanel, resolution);
+        });
     }
 
     public int getFrameRate() {
