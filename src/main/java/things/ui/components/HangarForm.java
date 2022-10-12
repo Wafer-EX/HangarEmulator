@@ -44,6 +44,7 @@ public class HangarForm extends JPanel {
                 this.add(label, constraints);
             }
             else {
+                // TODO: add another items
                 throw new IllegalArgumentException();
             }
             constraints.gridy += 1;
