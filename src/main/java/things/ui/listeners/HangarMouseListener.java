@@ -17,6 +17,7 @@
 package things.ui.listeners;
 
 import things.ui.components.HangarGamePanel;
+import things.ui.frames.HangarMainFrame;
 import things.utils.HangarGamePanelUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -32,7 +33,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
             var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerPressed(point.x, point.y);
         }
@@ -40,7 +41,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
             var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerReleased(point.x, point.y);
         }
@@ -48,7 +49,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (gamePanel.getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
             var point = HangarGamePanelUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerDragged(point.x, point.y);
         }

@@ -19,6 +19,7 @@ package things.utils;
 import things.ui.components.HangarGamePanel;
 import things.HangarState;
 import things.enums.ScalingModes;
+import things.ui.frames.HangarMainFrame;
 import things.utils.microedition.ImageUtils;
 
 import javax.swing.*;
@@ -41,7 +42,7 @@ public final class HangarGamePanelUtils {
         if (resolution.width > 0 && resolution.height > 0) {
             if (gamePanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = gamePanel.getDisplayable();
+                var displayable = HangarMainFrame.getInstance().getDisplayable();
 
                 gamePanel.setBuffer(changedBuffer);
                 gamePanel.updateBufferTransformations();

@@ -67,36 +67,9 @@ public class HangarGamePanel extends JPanel {
         });
         this.refreshSerialCallTimer();
     }
-    public Displayable getDisplayable() {
-        return displayable;
-    }
 
     public void setDisplayable(Displayable displayable) {
-        this.removeAll();
         this.displayable = displayable;
-
-        if (displayable instanceof Canvas canvas) {
-            // TODO: add buttons with actions
-            var frame = HangarMainFrame.getInstance();
-            frame.setTitle(System.getProperty("MIDlet-Name"));
-            frame.requestFocus();
-
-            this.updateBufferTransformations();
-            SwingUtilities.invokeLater(canvas::showNotify);
-        }
-        else if (displayable instanceof List list) {
-            this.add(new HangarDisplayable(new HangarList(list), list));
-        }
-        else if (displayable instanceof Form form) {
-            this.add(new HangarDisplayable(new HangarForm(form), form));
-        }
-        else {
-            // TODO: add another screens support
-            throw new IllegalArgumentException();
-        }
-
-        this.revalidate();
-        this.repaint();
     }
 
     public BufferedImage getBuffer() {
