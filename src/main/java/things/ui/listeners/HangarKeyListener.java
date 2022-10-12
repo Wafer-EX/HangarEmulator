@@ -18,20 +18,20 @@ package things.ui.listeners;
 
 import things.HangarKeyCodes;
 import things.HangarState;
-import things.ui.frames.HangarMainFrame;
 import things.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Displayable;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 
 public class HangarKeyListener implements KeyListener {
-
+    private final Displayable displayable;
     private final HashSet<Integer> pressedKeys = new HashSet<>();
 
-    public HangarKeyListener() {
-        super();
+    public HangarKeyListener(Displayable displayable) {
+        this.displayable = displayable;
     }
 
     public HashSet<Integer> getPressedKeys() {
@@ -43,7 +43,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
+        if (displayable instanceof Canvas canvas) {
             var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
             var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
             int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
@@ -61,7 +61,7 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
+        if (displayable instanceof Canvas canvas) {
             var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
             var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
             int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);

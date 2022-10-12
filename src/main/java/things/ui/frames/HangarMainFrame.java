@@ -48,29 +48,6 @@ public class HangarMainFrame extends JFrame {
         return gamePanel;
     }
 
-    public void setGamePanel(HangarGamePanel gamePanel) {
-        var size = defaultSize;
-        var components = getContentPane().getComponents();
-
-        for (var component : components) {
-            if (component instanceof HangarMainPanel mainPanel) {
-                size = mainPanel.getSize();
-                remove(component);
-            }
-        }
-        gamePanel.setPreferredSize(size);
-
-        for (var keyListener : getKeyListeners()) {
-            removeKeyListener(keyListener);
-        }
-        this.addKeyListener(new HangarKeyListener());
-
-        super.add(gamePanel);
-        this.pack();
-        this.revalidate();
-        this.gamePanel = gamePanel;
-    }
-
     public Displayable getDisplayable() {
         return displayable;
     }
@@ -84,9 +61,14 @@ public class HangarMainFrame extends JFrame {
                 gamePanel = new HangarGamePanel();
             }
 
+            for (var keyListener : getKeyListeners()) {
+                removeKeyListener(keyListener);
+            }
+            this.addKeyListener(new HangarKeyListener(displayable));
+
             this.setTitle(System.getProperty("MIDlet-Name"));
             this.requestFocus();
-            this.setGamePanel(gamePanel);
+            this.getContentPane().add(gamePanel);
 
             gamePanel.setDisplayable(canvas);
             gamePanel.updateBufferTransformations();
