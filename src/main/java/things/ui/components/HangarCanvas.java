@@ -23,7 +23,6 @@ import things.utils.HangarCanvasUtils;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -33,7 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarCanvas extends JPanel {
-    private final Displayable displayable;
+    private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
@@ -41,9 +40,9 @@ public class HangarCanvas extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarCanvas(Displayable displayable) {
+    public HangarCanvas(Canvas canvas) {
         super();
-        this.displayable = displayable;
+        this.canvas = canvas;
 
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getProfile().getResolution();
@@ -93,7 +92,14 @@ public class HangarCanvas extends JPanel {
 
         bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
         bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
-        repaint();
+        this.repaint();
+    }
+
+    public Image rescaleBuffer(BufferedImage image) {
+        return switch (HangarState.getProfile().getScalingMode()) {
+            case Contain -> buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
+            default -> image;
+        };
     }
 
     public void refreshSerialCallTimer() {
@@ -117,15 +123,13 @@ public class HangarCanvas extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        if (buffer != null && displayable instanceof Canvas canvas) {
+        if (buffer != null) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
             if (HangarState.getProfile().getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
-
-            var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
-            graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
+            graphics.drawImage(rescaleBuffer(buffer), bufferPosition.x, bufferPosition.y, null);
         }
     }
 }
