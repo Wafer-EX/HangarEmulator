@@ -21,17 +21,16 @@ import things.HangarState;
 import things.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 
 public class HangarKeyListener implements KeyListener {
-    private final Displayable displayable;
+    private final Canvas canvas;
     private final HashSet<Integer> pressedKeys = new HashSet<>();
 
-    public HangarKeyListener(Displayable displayable) {
-        this.displayable = displayable;
+    public HangarKeyListener(Canvas canvas) {
+        this.canvas = canvas;
     }
 
     public HashSet<Integer> getPressedKeys() {
@@ -43,33 +42,29 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
-        if (displayable instanceof Canvas canvas) {
-            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
-            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
-            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
+        var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+        var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+        int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
-            if (keyCode != 0) {
-                if (pressedKeys.add(keyCode)) {
-                    canvas.keyPressed(keyCode);
-                }
-                else {
-                    canvas.keyRepeated(keyCode);
-                }
+        if (keyCode != 0) {
+            if (pressedKeys.add(keyCode)) {
+                canvas.keyPressed(keyCode);
+            }
+            else {
+                canvas.keyRepeated(keyCode);
             }
         }
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
-        if (displayable instanceof Canvas canvas) {
-            var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
-            var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
-            int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
+        var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
+        var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+        int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
-            if (keyCode != 0) {
-                pressedKeys.remove(keyCode);
-                canvas.keyReleased(keyCode);
-            }
+        if (keyCode != 0) {
+            pressedKeys.remove(keyCode);
+            canvas.keyReleased(keyCode);
         }
     }
 }
