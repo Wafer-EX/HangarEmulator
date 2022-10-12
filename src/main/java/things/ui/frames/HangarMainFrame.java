@@ -30,7 +30,7 @@ public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
     private Displayable displayable;
-    private HangarCanvas gamePanel = null;
+    private HangarCanvas canvasPanel = null;
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new CardLayout());
@@ -44,8 +44,8 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarCanvas getGamePanel() {
-        return gamePanel;
+    public HangarCanvas getCanvasPanel() {
+        return canvasPanel;
     }
 
     public Displayable getDisplayable() {
@@ -57,21 +57,21 @@ public class HangarMainFrame extends JFrame {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            if (gamePanel == null) {
-                gamePanel = new HangarCanvas();
+            if (canvasPanel == null) {
+                canvasPanel = new HangarCanvas();
             }
 
             for (var keyListener : getKeyListeners()) {
-                removeKeyListener(keyListener);
+                this.removeKeyListener(keyListener);
             }
             this.addKeyListener(new HangarKeyListener(displayable));
 
             this.setTitle(System.getProperty("MIDlet-Name"));
             this.requestFocus();
-            this.getContentPane().add(gamePanel);
+            this.getContentPane().add(canvasPanel);
 
-            gamePanel.setDisplayable(canvas);
-            gamePanel.updateBufferTransformations();
+            canvasPanel.setDisplayable(canvas);
+            canvasPanel.updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {

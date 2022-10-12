@@ -49,9 +49,9 @@ public class HangarProfile {
     public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
         this.midletKeyCodes = keyCodes;
 
-        var gamePanel = HangarMainFrame.getInstance().getGamePanel();
-        if (gamePanel != null) {
-            var keyListeners = gamePanel.getKeyListeners();
+        var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
+        if (canvasPanel != null) {
+            var keyListeners = canvasPanel.getKeyListeners();
             if (keyListeners.length > 0) {
                 for (var keyListener : keyListeners) {
                     if (keyListener instanceof HangarKeyListener hangarKeyListener) {
@@ -90,7 +90,7 @@ public class HangarProfile {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
-        SwingUtilities.invokeLater(() -> HangarCanvasUtils.fitBufferToResolution(HangarMainFrame.getInstance().getGamePanel(), resolution));
+        SwingUtilities.invokeLater(() -> HangarCanvasUtils.fitBufferToResolution(HangarMainFrame.getInstance().getCanvasPanel(), resolution));
     }
 
     public int getFrameRate() {

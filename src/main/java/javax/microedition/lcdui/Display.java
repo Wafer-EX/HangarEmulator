@@ -93,7 +93,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarMainFrame.getInstance().getGamePanel().setCallSerially(r);
+        HangarMainFrame.getInstance().getCanvasPanel().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {
