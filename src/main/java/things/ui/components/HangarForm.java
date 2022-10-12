@@ -49,7 +49,8 @@ public class HangarForm extends JPanel {
             constraints.gridy += 1;
         }
 
-        constraints.gridy += 1;
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weighty = 1.0;
         this.add(Box.createGlue(), constraints);
     }
 }
