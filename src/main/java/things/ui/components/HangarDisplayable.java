@@ -21,41 +21,48 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarDisplayable extends JPanel {
-    public HangarDisplayable(JPanel screen, Displayable displayable) {
-        super(new GridBagLayout());
-        var constraints = new GridBagConstraints();
-        var scrollPane = new JScrollPane(screen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        var commands = displayable.getCommands();
+    private final Displayable displayable;
 
-        if (screen instanceof HangarCanvas) {
+    public HangarDisplayable(JPanel screen, Displayable displayable) {
+        super(new BorderLayout());
+        this.displayable = displayable;
+
+        var scrollPane = new JScrollPane(screen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        if (screen instanceof HangarCanvas && displayable.getCommands().size() == 0) {
             scrollPane.setBorder(BorderFactory.createEmptyBorder());
             scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
             scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         }
 
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.gridwidth = commands.size();
-        this.add(scrollPane, constraints);
-
-        constraints.fill = GridBagConstraints.HORIZONTAL;
-        constraints.weighty = 0;
-        constraints.gridy = 1;
-        constraints.gridwidth = 1;
-        constraints.ipady = 12;
-
-        for (int i = 0; i < commands.size(); i++) {
-            var command = commands.get(i);
-            var button = new JButton(commands.get(i).getLabel());
-            button.addActionListener(e -> displayable.getCommandListener().commandAction(command, displayable));
-
-            constraints.insets.set(4, i == commands.size() - 1 && commands.size() > 2 ? 0 : 4, 4, i == 0 && commands.size() > 1 ? 0 : 4);
-            constraints.gridx = i;
-            this.add(button, constraints);
+        this.add(scrollPane, BorderLayout.CENTER);
+        if (displayable.getCommands().size() > 0) {
+            this.add(new HangarDisplayableCommands(), BorderLayout.SOUTH);
         }
         this.revalidate();
+    }
+
+    private class HangarDisplayableCommands extends JScrollPane {
+        public HangarDisplayableCommands() {
+            super(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            var panel = new JPanel(new GridBagLayout());
+            var commands = displayable.getCommands();
+            var constraints = new GridBagConstraints();
+
+            panel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1.0;
+            constraints.ipady = 12;
+            constraints.insets.set(4, 2, 4, 2);
+
+            for (int i = 0; i < commands.size(); i++) {
+                var command = commands.get(i);
+                var button = new JButton(commands.get(i).getLabel());
+
+                button.addActionListener(e -> displayable.getCommandListener().commandAction(command, displayable));
+                constraints.gridx = i;
+                panel.add(button, constraints);
+            }
+            this.setViewportView(panel);
+        }
     }
 }
