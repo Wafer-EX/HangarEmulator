@@ -28,11 +28,7 @@ public class HangarDisplayable extends JPanel {
         this.displayable = displayable;
 
         var scrollPane = new JScrollPane(screen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        if (screen instanceof HangarCanvas && displayable.getCommands().size() == 0) {
-            scrollPane.setBorder(BorderFactory.createEmptyBorder());
-            scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
-            scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
-        }
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         this.add(scrollPane, BorderLayout.CENTER);
         if (displayable.getCommands().size() > 0) {
