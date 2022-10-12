@@ -26,6 +26,14 @@ public abstract class Displayable {
     protected CommandListener commandListener;
     protected ArrayList<Command> commandList = new ArrayList<>();
 
+    public ArrayList<Command> getCommands() {
+        return commandList;
+    }
+
+    public CommandListener getCommandListener() {
+        return commandListener;
+    }
+
     public String getTitle() {
         return HangarMainFrame.getInstance().getTitle();
     }

@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+import java.io.IOException;
 
-    void recordChanged(RecordStore recordStore, int recordId);
+public class ConnectionNotFoundException extends IOException {
+    public ConnectionNotFoundException() {
+        super();
+    }
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public ConnectionNotFoundException(String s) {
+        super(s);
+    }
 }

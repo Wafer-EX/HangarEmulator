@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+public interface CommConnection extends StreamConnection {
+    public int getBaudRate();
 
-    void recordChanged(RecordStore recordStore, int recordId);
-
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public int setBaudRate(int baudrate);
 }

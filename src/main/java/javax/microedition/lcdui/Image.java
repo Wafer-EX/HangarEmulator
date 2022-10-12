@@ -87,8 +87,8 @@ public class Image {
             var imageInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
             return createImage(imageInputStream);
         }
-        catch (IOException ex) {
-            throw new IllegalArgumentException(ex);
+        catch (IOException exception) {
+            throw new IllegalArgumentException(exception);
         }
     }
 
@@ -129,6 +129,9 @@ public class Image {
             throw new NullPointerException();
         }
         var bufferedImage = ImageIO.read(stream);
+        if (bufferedImage == null) {
+            throw new IOException();
+        }
         return new Image(bufferedImage, false);
     }
 

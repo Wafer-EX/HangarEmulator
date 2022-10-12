@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+import javax.microedition.pki.Certificate;
 
-    void recordChanged(RecordStore recordStore, int recordId);
+public interface SecurityInfo {
+    public Certificate getServerCertificate();
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public String getProtocolVersion();
+
+    public String getProtocolName();
+
+    public String getCipherSuite();
 }

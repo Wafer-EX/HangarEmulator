@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
-    void recordChanged(RecordStore recordStore, int recordId);
+public interface OutputConnection extends Connection {
+    public OutputStream openOutputStream() throws IOException;
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public DataOutputStream openDataOutputStream() throws IOException;
 }

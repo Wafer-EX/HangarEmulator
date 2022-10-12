@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.lcdui;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
-
-    void recordChanged(RecordStore recordStore, int recordId);
-
-    void recordDeleted(RecordStore recordStore, int recordId);
+public interface ItemCommandListener {
+    public void commandAction(Command c, Item item);
 }

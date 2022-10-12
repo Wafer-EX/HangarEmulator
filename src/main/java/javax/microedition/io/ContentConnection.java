@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+public interface ContentConnection extends StreamConnection {
+    public String getType();
 
-    void recordChanged(RecordStore recordStore, int recordId);
+    public String getEncoding();
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public long getLength();
 }

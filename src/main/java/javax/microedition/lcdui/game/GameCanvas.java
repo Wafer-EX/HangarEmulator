@@ -51,6 +51,11 @@ public abstract class GameCanvas extends Canvas {
         return new Graphics(graphics);
     }
 
+    public int getKeyStates() {
+        // TODO: write method logic
+        return 0;
+    }
+
     @Override
     public void paint(Graphics g) {
         // TODO: rewrite method logic?
@@ -59,14 +64,18 @@ public abstract class GameCanvas extends Canvas {
 
     public void flushGraphics(int x, int y, int width, int height) {
         var gamePanel = HangarMainFrame.getInstance().getGamePanel();
-        gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
-        super.repaint(x, y, width, height);
+        if (gamePanel != null) {
+            gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+            super.repaint(x, y, width, height);
+        }
     }
 
     public void flushGraphics() {
         var gamePanel = HangarMainFrame.getInstance().getGamePanel();
-        gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
-        super.repaint();
+        if (gamePanel != null) {
+            gamePanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+            super.repaint();
+        }
     }
 
     @Override

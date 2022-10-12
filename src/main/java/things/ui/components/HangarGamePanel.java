@@ -25,6 +25,7 @@ import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
@@ -75,12 +76,23 @@ public class HangarGamePanel extends JPanel {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            HangarMainFrame.getInstance().requestFocus();
+            // TODO: add buttons with actions
+            var frame = HangarMainFrame.getInstance();
+            frame.setTitle(System.getProperty("MIDlet-Name"));
+            frame.requestFocus();
+
             this.updateBufferTransformations();
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
-            this.add(new HangarList(list));
+            this.add(new HangarDisplayable(new HangarList(list), list));
+        }
+        else if (displayable instanceof Form form) {
+            this.add(new HangarDisplayable(new HangarForm(form), form));
+        }
+        else {
+            // TODO: add another screens support
+            throw new IllegalArgumentException();
         }
 
         this.revalidate();

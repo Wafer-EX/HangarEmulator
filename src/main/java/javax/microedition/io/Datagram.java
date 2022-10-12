@@ -14,12 +14,28 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.io;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+import java.io.DataInput;
+import java.io.DataOutput;
+import java.io.IOException;
 
-    void recordChanged(RecordStore recordStore, int recordId);
+public interface Datagram extends DataInput, DataOutput {
+    public String getAddress();
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public byte[] getData();
+
+    public int getLength();
+
+    public int getOffset();
+
+    public void setAddress(String addr) throws IOException;
+
+    public void setAddress(Datagram reference);
+
+    public void setLength(int len);
+
+    public void setData(byte[] buffer, int offset, int len);
+
+    public void reset();
 }

@@ -14,12 +14,22 @@
  * limitations under the License.
  */
 
-package javax.microedition.rms;
+package javax.microedition.pki;
 
-public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+public interface Certificate {
+    public String getSubject();
 
-    void recordChanged(RecordStore recordStore, int recordId);
+    public String getIssuer();
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public String getType();
+
+    public String getVersion();
+
+    public String getSigAlgName();
+
+    public long getNotBefore();
+
+    public long getNotAfter();
+
+    public String getSerialNumber();
 }
