@@ -57,10 +57,6 @@ public class HangarMainFrame extends JFrame {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            if (canvasPanel == null) {
-                canvasPanel = new HangarCanvas();
-            }
-
             for (var keyListener : getKeyListeners()) {
                 this.removeKeyListener(keyListener);
             }
@@ -68,10 +64,10 @@ public class HangarMainFrame extends JFrame {
 
             this.setTitle(System.getProperty("MIDlet-Name"));
             this.requestFocus();
-            this.getContentPane().add(canvasPanel);
 
-            canvasPanel.setDisplayable(canvas);
-            canvasPanel.updateBufferTransformations();
+            this.canvasPanel = new HangarCanvas(canvas);
+            this.getContentPane().add(new HangarDisplayable(canvasPanel, canvas));
+
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {

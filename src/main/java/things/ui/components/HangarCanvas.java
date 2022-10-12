@@ -33,7 +33,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarCanvas extends JPanel {
-    private Displayable displayable;
+    private final Displayable displayable;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
@@ -41,8 +41,10 @@ public class HangarCanvas extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarCanvas() {
-        super(new CardLayout());
+    public HangarCanvas(Displayable displayable) {
+        super();
+        this.displayable = displayable;
+
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getProfile().getResolution();
 
@@ -63,10 +65,6 @@ public class HangarCanvas extends JPanel {
             }
         });
         this.refreshSerialCallTimer();
-    }
-
-    public void setDisplayable(Displayable displayable) {
-        this.displayable = displayable;
     }
 
     public BufferedImage getBuffer() {
