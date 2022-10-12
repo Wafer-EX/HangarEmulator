@@ -18,7 +18,6 @@ package things;
 
 import things.enums.ScalingModes;
 import things.ui.components.HangarCanvas;
-import things.ui.components.HangarMainPanel;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
@@ -71,15 +70,13 @@ public class HangarProfile {
 
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
-            for (var component : container.getComponents()) {
-                if (component instanceof HangarCanvas || component instanceof HangarMainPanel) {
-                    if (scalingMode == ScalingModes.ChangeResolution) {
-                        resolution = component.getSize();
-                    }
-                    if (component instanceof HangarCanvas gamePanel) {
-                        HangarCanvasUtils.fitBufferToResolution(gamePanel, resolution);
-                    }
-                }
+            if (scalingMode == ScalingModes.ChangeResolution) {
+                resolution = container.getSize();
+            }
+
+            var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
+            if (canvasPanel != null) {
+                HangarCanvasUtils.fitBufferToResolution(canvasPanel, resolution);
             }
         });
     }

@@ -38,14 +38,14 @@ public final class HangarCanvasUtils {
         }
     }
 
-    public static void fitBufferToResolution(HangarCanvas gamePanel, Dimension resolution) {
+    public static void fitBufferToResolution(HangarCanvas canvasPanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
-            if (gamePanel != null) {
+            if (canvasPanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
                 var displayable = HangarMainFrame.getInstance().getDisplayable();
 
-                gamePanel.setBuffer(changedBuffer);
-                gamePanel.updateBufferTransformations();
+                canvasPanel.setBuffer(changedBuffer);
+                canvasPanel.updateBufferTransformations();
 
                 if (displayable != null) {
                     displayable.sizeChanged(resolution.width, resolution.height);
@@ -54,10 +54,10 @@ public final class HangarCanvasUtils {
         }
     }
 
-    public static Point canvasPointToPanel(HangarCanvas gamePanel, int x, int y) {
+    public static Point canvasPointToPanel(HangarCanvas canvasPanel, int x, int y) {
         // TODO: check this method
-        var scaleFactor = gamePanel.getBufferScaleFactor();
-        var position = gamePanel.getBufferPosition();
+        var scaleFactor = canvasPanel.getBufferScaleFactor();
+        var position = canvasPanel.getBufferPosition();
 
         var point = new Point();
         point.x = position.x + (int) (x * scaleFactor);
@@ -65,9 +65,9 @@ public final class HangarCanvasUtils {
         return point;
     }
 
-    public static Point panelPointToCanvas(HangarCanvas gamePanel, int x, int y) {
-        var scaleFactor = gamePanel.getBufferScaleFactor();
-        var position = gamePanel.getBufferPosition();
+    public static Point panelPointToCanvas(HangarCanvas canvasPanel, int x, int y) {
+        var scaleFactor = canvasPanel.getBufferScaleFactor();
+        var position = canvasPanel.getBufferPosition();
 
         var point = new Point();
         point.x = (int) ((x - position.x) / scaleFactor);

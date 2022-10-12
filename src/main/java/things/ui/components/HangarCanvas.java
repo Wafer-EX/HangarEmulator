@@ -56,12 +56,12 @@ public class HangarCanvas extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var gamePanel = (HangarCanvas) e.getComponent();
                 if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
-                    HangarCanvasUtils.fitBufferToResolution(gamePanel, resolution);
+                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, resolution);
+                    HangarState.getProfile().setResolution(resolution);
                 }
-                gamePanel.updateBufferTransformations();
+                HangarCanvas.this.updateBufferTransformations();
             }
         });
         this.refreshSerialCallTimer();
