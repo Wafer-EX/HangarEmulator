@@ -76,6 +76,7 @@ public class HangarGamePanel extends JPanel {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
+            // TODO: add buttons with actions
             var frame = HangarMainFrame.getInstance();
             frame.setTitle(System.getProperty("MIDlet-Name"));
             frame.requestFocus();
@@ -89,7 +90,10 @@ public class HangarGamePanel extends JPanel {
         else if (displayable instanceof Form form) {
             this.add(new HangarDisplayable(new HangarForm(form), form));
         }
-        // TODO: add another screens
+        else {
+            // TODO: add another screens support
+            throw new IllegalArgumentException();
+        }
 
         this.revalidate();
         this.repaint();
