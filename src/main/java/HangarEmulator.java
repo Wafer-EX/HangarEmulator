@@ -32,7 +32,7 @@ public class HangarEmulator {
             error.printStackTrace();
         }
 
-        System.setProperty("hangaremulator.version", "0.6-alpha");
+        System.setProperty("hangaremulator.version", "0.6.1-alpha");
         System.setProperty("hangaremulator.github", "https://github.com/Lisowolf/HangarEmulator");
         System.setProperty("hangaremulator.author", "Kirill Lomakin (minebuilder445@gmail.com)");
 
