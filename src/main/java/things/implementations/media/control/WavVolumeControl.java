@@ -43,6 +43,7 @@ public class WavVolumeControl implements VolumeControl {
 
     @Override
     public int setLevel(int level) {
+        // TODO: write the volume setting for the player
         if (level < 0) {
             level = 0;
         }
