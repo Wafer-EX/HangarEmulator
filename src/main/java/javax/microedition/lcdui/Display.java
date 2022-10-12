@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import things.ui.frames.HangarMainFrame;
-import things.ui.components.HangarGamePanel;
 
 import javax.microedition.midlet.MIDlet;
 

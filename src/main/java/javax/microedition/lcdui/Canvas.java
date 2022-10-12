@@ -19,7 +19,7 @@ package javax.microedition.lcdui;
 import things.HangarState;
 import things.ui.frames.HangarMainFrame;
 import things.utils.microedition.CanvasUtils;
-import things.utils.HangarGamePanelUtils;
+import things.utils.HangarCanvasUtils;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
@@ -93,7 +93,7 @@ public abstract class Canvas extends Displayable {
     public final void repaint(int x, int y, int width, int height) {
         var gamePanel = HangarMainFrame.getInstance().getGamePanel();
         if (gamePanel != null) {
-            var position = HangarGamePanelUtils.canvasPointToPanel(gamePanel, x, y);
+            var position = HangarCanvasUtils.canvasPointToPanel(gamePanel, x, y);
             var scaleFactor = gamePanel.getBufferScaleFactor();
 
             int newWidth = (int) (width * scaleFactor);

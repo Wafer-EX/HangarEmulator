@@ -18,15 +18,12 @@ package things.ui.components;
 
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarMouseListener;
-import things.utils.HangarGamePanelUtils;
+import things.utils.HangarCanvasUtils;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -35,7 +32,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarGamePanel extends JPanel {
+public class HangarCanvas extends JPanel {
     private Displayable displayable;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -44,7 +41,7 @@ public class HangarGamePanel extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarGamePanel() {
+    public HangarCanvas() {
         super(new CardLayout());
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getProfile().getResolution();
@@ -57,10 +54,10 @@ public class HangarGamePanel extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var gamePanel = (HangarGamePanel) e.getComponent();
+                var gamePanel = (HangarCanvas) e.getComponent();
                 if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
                     var resolution = e.getComponent().getSize();
-                    HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
+                    HangarCanvasUtils.fitBufferToResolution(gamePanel, resolution);
                 }
                 gamePanel.updateBufferTransformations();
             }
@@ -93,7 +90,7 @@ public class HangarGamePanel extends JPanel {
     }
 
     public void updateBufferTransformations() {
-        bufferScaleFactor = HangarGamePanelUtils.getBufferScaleFactor(this, buffer);
+        bufferScaleFactor = HangarCanvasUtils.getBufferScaleFactor(this, buffer);
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);

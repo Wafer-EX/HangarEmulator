@@ -17,12 +17,12 @@
 package things;
 
 import things.enums.ScalingModes;
-import things.ui.components.HangarGamePanel;
+import things.ui.components.HangarCanvas;
 import things.ui.components.HangarMainPanel;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
-import things.utils.HangarGamePanelUtils;
+import things.utils.HangarCanvasUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -72,12 +72,12 @@ public class HangarProfile {
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
             for (var component : container.getComponents()) {
-                if (component instanceof HangarGamePanel || component instanceof HangarMainPanel) {
+                if (component instanceof HangarCanvas || component instanceof HangarMainPanel) {
                     if (scalingMode == ScalingModes.ChangeResolution) {
                         resolution = component.getSize();
                     }
-                    if (component instanceof HangarGamePanel gamePanel) {
-                        HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
+                    if (component instanceof HangarCanvas gamePanel) {
+                        HangarCanvasUtils.fitBufferToResolution(gamePanel, resolution);
                     }
                 }
             }
@@ -90,7 +90,7 @@ public class HangarProfile {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
-        SwingUtilities.invokeLater(() -> HangarGamePanelUtils.fitBufferToResolution(HangarMainFrame.getInstance().getGamePanel(), resolution));
+        SwingUtilities.invokeLater(() -> HangarCanvasUtils.fitBufferToResolution(HangarMainFrame.getInstance().getGamePanel(), resolution));
     }
 
     public int getFrameRate() {
@@ -102,7 +102,7 @@ public class HangarProfile {
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
             for (var component : container.getComponents()) {
-                if (component instanceof HangarGamePanel gamePanel) {
+                if (component instanceof HangarCanvas gamePanel) {
                     gamePanel.refreshSerialCallTimer();
                 }
             }

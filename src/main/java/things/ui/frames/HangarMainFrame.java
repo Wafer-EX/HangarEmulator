@@ -30,7 +30,7 @@ public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
     private static final Dimension defaultSize = new Dimension(360, 360);
     private Displayable displayable;
-    private HangarGamePanel gamePanel = null;
+    private HangarCanvas gamePanel = null;
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new CardLayout());
@@ -44,7 +44,7 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarGamePanel getGamePanel() {
+    public HangarCanvas getGamePanel() {
         return gamePanel;
     }
 
@@ -58,7 +58,7 @@ public class HangarMainFrame extends JFrame {
 
         if (displayable instanceof Canvas canvas) {
             if (gamePanel == null) {
-                gamePanel = new HangarGamePanel();
+                gamePanel = new HangarCanvas();
             }
 
             for (var keyListener : getKeyListeners()) {

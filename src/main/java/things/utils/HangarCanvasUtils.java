@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.ui.components.HangarGamePanel;
+import things.ui.components.HangarCanvas;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.frames.HangarMainFrame;
@@ -26,7 +26,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public final class HangarGamePanelUtils {
+public final class HangarCanvasUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         if (HangarState.getProfile().getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
@@ -38,7 +38,7 @@ public final class HangarGamePanelUtils {
         }
     }
 
-    public static void fitBufferToResolution(HangarGamePanel gamePanel, Dimension resolution) {
+    public static void fitBufferToResolution(HangarCanvas gamePanel, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             if (gamePanel != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
@@ -54,7 +54,7 @@ public final class HangarGamePanelUtils {
         }
     }
 
-    public static Point canvasPointToPanel(HangarGamePanel gamePanel, int x, int y) {
+    public static Point canvasPointToPanel(HangarCanvas gamePanel, int x, int y) {
         // TODO: check this method
         var scaleFactor = gamePanel.getBufferScaleFactor();
         var position = gamePanel.getBufferPosition();
@@ -65,7 +65,7 @@ public final class HangarGamePanelUtils {
         return point;
     }
 
-    public static Point panelPointToCanvas(HangarGamePanel gamePanel, int x, int y) {
+    public static Point panelPointToCanvas(HangarCanvas gamePanel, int x, int y) {
         var scaleFactor = gamePanel.getBufferScaleFactor();
         var position = gamePanel.getBufferPosition();
 
