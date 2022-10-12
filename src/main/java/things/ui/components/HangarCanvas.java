@@ -49,17 +49,19 @@ public class HangarCanvas extends JPanel {
         var resolution = HangarState.getProfile().getResolution();
 
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
-        this.setPreferredSize(resolution);
-
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                var componentSize = e.getComponent().getSize();
                 if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
-                    var resolution = e.getComponent().getSize();
-                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, resolution);
-                    HangarState.getProfile().setResolution(resolution);
+                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, componentSize);
+                    HangarState.getProfile().setResolution(componentSize);
+                    HangarCanvas.this.setPreferredSize(new Dimension(10, 10));
+                }
+                else {
+                    HangarCanvas.this.setPreferredSize(resolution);
                 }
                 HangarCanvas.this.updateBufferTransformations();
             }

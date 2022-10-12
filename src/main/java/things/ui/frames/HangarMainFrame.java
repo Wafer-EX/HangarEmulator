@@ -28,7 +28,6 @@ import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
-    private static final Dimension defaultSize = new Dimension(360, 360);
     private Displayable displayable;
     private HangarCanvas canvasPanel = null;
 
