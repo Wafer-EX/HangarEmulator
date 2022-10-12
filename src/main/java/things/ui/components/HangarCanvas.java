@@ -18,15 +18,11 @@ package things.ui.components;
 
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarMouseListener;
-import things.utils.HangarGamePanelUtils;
+import things.utils.HangarCanvasUtils;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
@@ -35,8 +31,8 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarGamePanel extends JPanel {
-    private Displayable displayable;
+public class HangarCanvas extends JPanel {
+    private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
@@ -44,59 +40,27 @@ public class HangarGamePanel extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarGamePanel() {
-        super(new CardLayout());
+    public HangarCanvas(Canvas canvas) {
+        super();
+        this.canvas = canvas;
+
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getProfile().getResolution();
 
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
-        this.setPreferredSize(resolution);
-
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var gamePanel = (HangarGamePanel) e.getComponent();
                 if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
-                    var resolution = e.getComponent().getSize();
-                    HangarGamePanelUtils.fitBufferToResolution(gamePanel, resolution);
+                    HangarState.getProfile().setResolution(HangarCanvas.this.getSize());
+                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, HangarCanvas.this.getSize());
                 }
-                gamePanel.updateBufferTransformations();
+                HangarCanvas.this.updateBufferTransformations();
             }
         });
         this.refreshSerialCallTimer();
-    }
-    public Displayable getDisplayable() {
-        return displayable;
-    }
-
-    public void setDisplayable(Displayable displayable) {
-        this.removeAll();
-        this.displayable = displayable;
-
-        if (displayable instanceof Canvas canvas) {
-            // TODO: add buttons with actions
-            var frame = HangarMainFrame.getInstance();
-            frame.setTitle(System.getProperty("MIDlet-Name"));
-            frame.requestFocus();
-
-            this.updateBufferTransformations();
-            SwingUtilities.invokeLater(canvas::showNotify);
-        }
-        else if (displayable instanceof List list) {
-            this.add(new HangarDisplayable(new HangarList(list), list));
-        }
-        else if (displayable instanceof Form form) {
-            this.add(new HangarDisplayable(new HangarForm(form), form));
-        }
-        else {
-            // TODO: add another screens support
-            throw new IllegalArgumentException();
-        }
-
-        this.revalidate();
-        this.repaint();
     }
 
     public BufferedImage getBuffer() {
@@ -120,7 +84,7 @@ public class HangarGamePanel extends JPanel {
     }
 
     public void updateBufferTransformations() {
-        bufferScaleFactor = HangarGamePanelUtils.getBufferScaleFactor(this, buffer);
+        bufferScaleFactor = HangarCanvasUtils.getBufferScaleFactor(this, buffer);
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);
@@ -128,7 +92,14 @@ public class HangarGamePanel extends JPanel {
 
         bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
         bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
-        repaint();
+        this.repaint();
+    }
+
+    public Image rescaleBuffer(BufferedImage image) {
+        return switch (HangarState.getProfile().getScalingMode()) {
+            case Contain -> buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
+            default -> image;
+        };
     }
 
     public void refreshSerialCallTimer() {
@@ -152,15 +123,13 @@ public class HangarGamePanel extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        if (buffer != null && displayable instanceof Canvas canvas) {
+        if (buffer != null) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
             if (HangarState.getProfile().getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
-
-            var scaledBuffer = buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
-            graphics.drawImage(scaledBuffer, bufferPosition.x, bufferPosition.y, null);
+            graphics.drawImage(rescaleBuffer(buffer), bufferPosition.x, bufferPosition.y, null);
         }
     }
 }

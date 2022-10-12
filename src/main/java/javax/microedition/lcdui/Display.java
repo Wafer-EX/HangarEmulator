@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import things.ui.frames.HangarMainFrame;
-import things.ui.components.HangarGamePanel;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -32,19 +31,9 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
-    private static Display display;
-    private final HangarGamePanel gamePanel;
-
-    private Display(HangarGamePanel gamePanel) {
-        this.gamePanel = gamePanel;
-    }
+    private static final Display display = new Display();
 
     public static Display getDisplay(MIDlet m) {
-        if (display == null) {
-            var gamePanel = new HangarGamePanel();
-            HangarMainFrame.getInstance().setGamePanel(gamePanel);
-            display = new Display(gamePanel);
-        }
         return display;
     }
 
@@ -81,11 +70,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return gamePanel.getDisplayable();
+        return HangarMainFrame.getInstance().getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        gamePanel.setDisplayable(displayable);
+        HangarMainFrame.getInstance().setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -104,7 +93,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        gamePanel.setCallSerially(r);
+        HangarMainFrame.getInstance().getCanvasPanel().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

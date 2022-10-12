@@ -16,20 +16,23 @@
 
 package things.ui.frames;
 
-import things.ui.components.HangarMainPanel;
-import things.ui.components.HangarMenuBar;
-import things.ui.components.HangarGamePanel;
+import things.ui.components.*;
 import things.ui.listeners.HangarKeyListener;
 
+import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
-    private static final Dimension defaultSize = new Dimension(360, 360);
-    private HangarGamePanel gamePanel = null;
+    private Displayable displayable;
+    private HangarCanvas canvasPanel = null;
 
     private HangarMainFrame() {
+        this.getContentPane().setLayout(new CardLayout());
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -40,30 +43,43 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarGamePanel getGamePanel() {
-        return gamePanel;
+    public HangarCanvas getCanvasPanel() {
+        return canvasPanel;
     }
 
-    public void setGamePanel(HangarGamePanel gamePanel) {
-        var size = defaultSize;
-        var components = getContentPane().getComponents();
+    public Displayable getDisplayable() {
+        return displayable;
+    }
 
-        for (var component : components) {
-            if (component instanceof HangarMainPanel mainPanel) {
-                size = mainPanel.getSize();
-                remove(component);
+    public void setDisplayable(Displayable displayable) {
+        this.getContentPane().removeAll();
+        this.displayable = displayable;
+
+        if (displayable instanceof Canvas canvas) {
+            this.canvasPanel = new HangarCanvas(canvas);
+            this.getContentPane().add(new HangarDisplayable(canvasPanel, canvas));
+
+            for (var keyListener : getKeyListeners()) {
+                this.removeKeyListener(keyListener);
             }
-        }
-        gamePanel.setPreferredSize(size);
+            this.addKeyListener(new HangarKeyListener(canvas));
 
-        for (var keyListener : getKeyListeners()) {
-            removeKeyListener(keyListener);
+            this.setTitle(System.getProperty("MIDlet-Name"));
+            this.requestFocus();
+            SwingUtilities.invokeLater(canvas::showNotify);
         }
-        this.addKeyListener(new HangarKeyListener(gamePanel));
+        else if (displayable instanceof List list) {
+            this.getContentPane().add(new HangarDisplayable(new HangarList(list), list));
+        }
+        else if (displayable instanceof Form form) {
+            this.getContentPane().add(new HangarDisplayable(new HangarForm(form), form));
+        }
+        else {
+            // TODO: add another screens support
+            throw new IllegalArgumentException();
+        }
 
-        super.add(gamePanel);
-        this.pack();
         this.revalidate();
-        this.gamePanel = gamePanel;
+        this.repaint();
     }
 }
