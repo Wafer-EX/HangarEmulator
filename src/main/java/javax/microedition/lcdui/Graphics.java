@@ -35,16 +35,22 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final Graphics2D seGraphics;
+    private final BufferedImage seImage;
     private java.awt.Font seFont;
     private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
 
-    public Graphics(java.awt.Graphics seGraphics) {
+    public Graphics(java.awt.Graphics seGraphics, BufferedImage seImage) {
         this.seGraphics = (Graphics2D) seGraphics;
+        this.seImage = seImage;
     }
 
     public java.awt.Graphics getSEGraphics() {
         return seGraphics;
+    }
+
+    public BufferedImage getSEImage() {
+        return seImage;
     }
 
     public void translate(int x, int y) {

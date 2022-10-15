@@ -128,7 +128,7 @@ public class HangarCanvas extends JPanel {
             if (HangarState.getProfile().getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
-            canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
+            canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
             graphics.drawImage(rescaleBuffer(buffer), bufferPosition.x, bufferPosition.y, null);
         }
     }
