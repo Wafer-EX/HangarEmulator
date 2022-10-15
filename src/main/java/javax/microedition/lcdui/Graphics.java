@@ -35,16 +35,22 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final Graphics2D seGraphics;
+    private final BufferedImage seImage;
     private java.awt.Font seFont;
     private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
 
-    public Graphics(java.awt.Graphics seGraphics) {
+    public Graphics(java.awt.Graphics seGraphics, BufferedImage seImage) {
         this.seGraphics = (Graphics2D) seGraphics;
+        this.seImage = seImage;
     }
 
     public java.awt.Graphics getSEGraphics() {
         return seGraphics;
+    }
+
+    public BufferedImage getSEImage() {
+        return seImage;
     }
 
     public void translate(int x, int y) {
@@ -247,6 +253,9 @@ public class Graphics {
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
+        if (src == null) {
+            throw new NullPointerException();
+        }
         if (width > 0 && height > 0) {
             var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
             var transformedImage = ImageUtils.transformImage(imageRegion, transform);
@@ -280,6 +289,6 @@ public class Graphics {
     }
 
     public int getDisplayColor(int color) {
-        return Color.WHITE.getRGB();
+        return color;
     }
 }

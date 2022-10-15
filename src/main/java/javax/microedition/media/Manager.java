@@ -19,6 +19,7 @@ package javax.microedition.media;
 import things.implementations.media.MidiPlayer;
 import things.implementations.media.WavPlayer;
 
+import java.io.IOException;
 import java.io.InputStream;
 
 public final class Manager {
@@ -36,7 +37,11 @@ public final class Manager {
         return new String[] { };
     }
 
-    public static Player createPlayer(InputStream stream, String type) throws MediaException {
+    public static Player createPlayer(InputStream stream, String type) throws IOException, MediaException {
+        if (stream == null) {
+            throw new IllegalArgumentException();
+        }
+
         // TODO: write logic for other types
         return switch (type) {
             case "audio/midi" -> new MidiPlayer(stream);

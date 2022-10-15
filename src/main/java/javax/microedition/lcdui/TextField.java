@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import java.util.Arrays;
+
 public class TextField extends Item {
     public static final int ANY = 0;
     public static final int EMAILADDR = 1;
@@ -61,11 +63,17 @@ public class TextField extends Item {
     }
 
     public void setChars(char[] data, int offset, int length) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
-        // TODO: write method logic
+        // TODO: check it
+        var chars = text.toCharArray();
+        for (int i = offset, j = 0; i < length + offset; i++, j++) {
+            chars[i] = data[j];
+        }
+        text = Arrays.toString(chars);
     }
 
     public void insert(String src, int position) throws IllegalArgumentException, NullPointerException {
-        // TODO: write method logic
+        // TODO: check it
+        text = text.substring(0, position) + src + text.substring(position + 1);
     }
 
     public void insert(char[] data, int offset, int length, int position) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
@@ -73,7 +81,8 @@ public class TextField extends Item {
     }
 
     public void delete(int offset, int length) throws IllegalArgumentException, StringIndexOutOfBoundsException {
-        // TODO: write method logic
+        // TODO: check it
+        text = text.substring(0, offset) + text.substring(offset + length + 1);
     }
 
     public int getMaxSize() {

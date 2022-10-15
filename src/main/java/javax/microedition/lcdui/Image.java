@@ -105,7 +105,7 @@ public class Image {
         if (isMutable()) {
             var graphics = seImage.getGraphics();
             HangarState.applyRenderingHints(graphics);
-            return new Graphics(graphics);
+            return new Graphics(graphics, this.getSEImage());
         }
         else {
             throw new IllegalStateException();

@@ -25,13 +25,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecordEnumerator implements RecordEnumeration, Serializable {
-    public List<byte[]> records;
+    public List<byte[]> records = new ArrayList<>();
     private int currentRecord = 1;
     private boolean isDestroyed = false;
 
-    public RecordEnumerator() {
-        records = new ArrayList();
-    }
+    public RecordEnumerator() { }
 
     @Override
     public int numRecords() {
@@ -50,7 +48,8 @@ public class RecordEnumerator implements RecordEnumeration, Serializable {
             int nextId = nextRecordId();
             byte[] nextRecord = records.get(nextId);
             return nextRecord.clone();
-        } catch (InvalidRecordIDException exception) {
+        }
+        catch (InvalidRecordIDException exception) {
             throw new InvalidRecordIDException();
         }
     }
@@ -69,12 +68,22 @@ public class RecordEnumerator implements RecordEnumeration, Serializable {
 
     @Override
     public boolean hasNextElement() {
-        return records.get(currentRecord + 1) != null;
+        try {
+            return records.get(currentRecord + 1) != null;
+        }
+        catch (Exception exception) {
+            return false;
+        }
     }
 
     @Override
     public boolean hasPreviousElement() {
-        return records.get(currentRecord - 1) != null;
+        try {
+            return records.get(currentRecord - 1) != null;
+        }
+        catch (Exception exception) {
+            return false;
+        }
     }
 
     @Override

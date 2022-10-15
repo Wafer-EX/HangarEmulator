@@ -48,7 +48,7 @@ public abstract class GameCanvas extends Canvas {
     protected Graphics getGraphics() {
         var graphics = additionalBuffer.getGraphics();
         HangarState.applyRenderingHints(graphics);
-        return new Graphics(graphics);
+        return new Graphics(graphics, this.additionalBuffer);
     }
 
     public int getKeyStates() {

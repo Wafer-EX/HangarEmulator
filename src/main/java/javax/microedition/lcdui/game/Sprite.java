@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui.game;
 
+import things.utils.microedition.ImageUtils;
+
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
@@ -36,7 +38,8 @@ public class Sprite extends Layer {
     private int[] sequence;
     private int selectedIndex = 0;
     private final Point referencePixel = new Point();
-    private final ArrayList<java.awt.Image> frameList = new ArrayList<>();
+    private final ArrayList<BufferedImage> frameList = new ArrayList<>();
+    private int transform = TRANS_NONE;
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -67,7 +70,7 @@ public class Sprite extends Layer {
     }
 
     public void setFrame(int sequenceIndex) throws IndexOutOfBoundsException {
-        if (sequenceIndex < 0) {
+        if (sequenceIndex < 0 || sequenceIndex >= sequence.length) {
             throw new IndexOutOfBoundsException();
         }
         this.selectedIndex = sequenceIndex;
@@ -82,12 +85,17 @@ public class Sprite extends Layer {
     }
 
     public int getFrameSequenceLength() {
-        return sequence.length;
+        if (sequence == null) {
+            return frameList.size();
+        }
+        else {
+            return sequence.length;
+        }
     }
 
     public void nextFrame() {
         selectedIndex += 1;
-        if (selectedIndex >= sequence.length) {
+        if (selectedIndex >= (sequence == null ? frameList.size() : sequence.length)) {
             selectedIndex = 0;
         }
     }
@@ -101,18 +109,23 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        g.getSEGraphics().drawImage(frameList.get(selectedIndex), position.x, position.y, null);
+        var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
+        var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
+        g.getSEGraphics().drawImage(transformedImage, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
-        if (sequence == null || sequence.length < 1) {
-            throw new IllegalArgumentException();
-        }
-        for (int frame : sequence) {
-            if (frame < 0 || frame >= this.getRawFrameCount()) {
-                throw new ArrayIndexOutOfBoundsException();
+        if (sequence != null) {
+            if (sequence.length < 1) {
+                throw new IllegalArgumentException();
+            }
+            for (int frame : sequence) {
+                if (frame < 0 || frame >= this.getRawFrameCount()) {
+                    throw new ArrayIndexOutOfBoundsException();
+                }
             }
         }
+        this.selectedIndex = 0;
         this.sequence = sequence;
     }
 
@@ -147,7 +160,7 @@ public class Sprite extends Layer {
     }
 
     public void setTransform(int transform) throws IllegalArgumentException {
-        // TODO: write method logic
+        this.transform = transform;
     }
 
     public final boolean collidesWith(Sprite s, boolean pixelLevel) throws NullPointerException {
