@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui.game;
 
+import things.utils.microedition.ImageUtils;
+
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
@@ -36,7 +38,8 @@ public class Sprite extends Layer {
     private int[] sequence;
     private int selectedIndex = 0;
     private final Point referencePixel = new Point();
-    private final ArrayList<java.awt.Image> frameList = new ArrayList<>();
+    private final ArrayList<BufferedImage> frameList = new ArrayList<>();
+    private int transform = TRANS_NONE;
 
     public Sprite(Image image) throws NullPointerException {
         this(image, image.getWidth(), image.getHeight());
@@ -101,7 +104,9 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        g.getSEGraphics().drawImage(frameList.get(selectedIndex), position.x, position.y, null);
+        var bufferedImage = frameList.get(selectedIndex);
+        var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
+        g.getSEGraphics().drawImage(transformedImage, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
@@ -147,7 +152,7 @@ public class Sprite extends Layer {
     }
 
     public void setTransform(int transform) throws IllegalArgumentException {
-        // TODO: write method logic
+        this.transform = transform;
     }
 
     public final boolean collidesWith(Sprite s, boolean pixelLevel) throws NullPointerException {
