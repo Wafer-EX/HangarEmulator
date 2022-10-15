@@ -253,6 +253,9 @@ public class Graphics {
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
+        if (src == null) {
+            throw new NullPointerException();
+        }
         if (width > 0 && height > 0) {
             var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
             var transformedImage = ImageUtils.transformImage(imageRegion, transform);
@@ -286,6 +289,6 @@ public class Graphics {
     }
 
     public int getDisplayColor(int color) {
-        return Color.WHITE.getRGB();
+        return color;
     }
 }
