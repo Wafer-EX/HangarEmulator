@@ -70,7 +70,7 @@ public class Sprite extends Layer {
     }
 
     public void setFrame(int sequenceIndex) throws IndexOutOfBoundsException {
-        if (sequenceIndex < 0) {
+        if (sequenceIndex < 0 || sequenceIndex >= sequence.length) {
             throw new IndexOutOfBoundsException();
         }
         this.selectedIndex = sequenceIndex;
@@ -85,12 +85,17 @@ public class Sprite extends Layer {
     }
 
     public int getFrameSequenceLength() {
-        return sequence.length;
+        if (sequence == null) {
+            return frameList.size();
+        }
+        else {
+            return sequence.length;
+        }
     }
 
     public void nextFrame() {
         selectedIndex += 1;
-        if (selectedIndex >= sequence.length) {
+        if (selectedIndex >= (sequence == null ? frameList.size() : sequence.length)) {
             selectedIndex = 0;
         }
     }
@@ -104,20 +109,23 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        var bufferedImage = frameList.get(selectedIndex);
+        var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
         var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
         g.getSEGraphics().drawImage(transformedImage, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
-        if (sequence == null || sequence.length < 1) {
-            throw new IllegalArgumentException();
-        }
-        for (int frame : sequence) {
-            if (frame < 0 || frame >= this.getRawFrameCount()) {
-                throw new ArrayIndexOutOfBoundsException();
+        if (sequence != null) {
+            if (sequence.length < 1) {
+                throw new IllegalArgumentException();
+            }
+            for (int frame : sequence) {
+                if (frame < 0 || frame >= this.getRawFrameCount()) {
+                    throw new ArrayIndexOutOfBoundsException();
+                }
             }
         }
+        this.selectedIndex = 0;
         this.sequence = sequence;
     }
 
