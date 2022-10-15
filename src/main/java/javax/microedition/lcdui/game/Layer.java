@@ -29,7 +29,7 @@ public abstract class Layer {
     }
 
     public void move(int dx, int dy) {
-        position.setLocation(position.x + dx, position.y + dx);
+        position.setLocation(position.x + dx, position.y + dy);
     }
 
     public final int getX() {
