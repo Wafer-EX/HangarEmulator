@@ -134,10 +134,12 @@ public class HangarProfile {
     }
 
     public void setSoundbankFile(File path) throws IOException, InvalidMidiDataException {
-        var soundbankInputStream = new FileInputStream(path);
-        var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
+        if (path != null) {
+            var soundbankInputStream = new FileInputStream(path);
+            var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
 
-        AudioUtils.setSoundbank(soundbank);
+            AudioUtils.setSoundbank(soundbank);
+        }
         this.soundbankFile = path;
     }
 }
