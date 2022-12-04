@@ -27,7 +27,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
-public class MIDletResources {
+public final class JarResources {
     private static URLClassLoader classLoader;
     private static JarFile jarFile;
 
@@ -43,7 +43,7 @@ public class MIDletResources {
         }
     }
 
-    public static InputStream getResourceFromJar(String resourcePath) {
+    public static InputStream getResource(String resourcePath) {
         try {
             if (resourcePath.charAt(0) == '/') {
                 resourcePath = resourcePath.substring(1);
@@ -56,8 +56,8 @@ public class MIDletResources {
         }
     }
 
-    public static InputStream getResourceFromJar(Class inputClass, String resourcePath) {
-        return getResourceFromJar(resourcePath);
+    public static InputStream getResource(Class inputClass, String resourcePath) {
+        return getResource(resourcePath);
     }
 
     public static String getMainClassName() {
@@ -76,7 +76,7 @@ public class MIDletResources {
         }
     }
 
-    public static Image getIconFromJar() {
+    public static Image getIcon() {
         if (jarFile == null) {
             throw new IllegalStateException();
         }
@@ -88,7 +88,7 @@ public class MIDletResources {
                 var info = attributes.getValue("MIDlet-1").split(",");
                 iconPath = info[1].trim();
             }
-            var inputStream = getResourceFromJar(iconPath);
+            var inputStream = getResource(iconPath);
             return ImageIO.read(inputStream);
         }
         catch (Exception exception) {
@@ -97,7 +97,7 @@ public class MIDletResources {
         }
     }
 
-    public static void initializeMIDletProperties() {
+    public static void initializeProperties() {
         if (jarFile == null) {
             throw new IllegalStateException();
         }
