@@ -51,11 +51,9 @@ public class HangarProfile {
         var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
         if (canvasPanel != null) {
             var keyListeners = canvasPanel.getKeyListeners();
-            if (keyListeners.length > 0) {
-                for (var keyListener : keyListeners) {
-                    if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-                        hangarKeyListener.getPressedKeys().clear();
-                    }
+            for (var keyListener : keyListeners) {
+                if (keyListener instanceof HangarKeyListener hangarKeyListener) {
+                    hangarKeyListener.getPressedKeys().clear();
                 }
             }
         }

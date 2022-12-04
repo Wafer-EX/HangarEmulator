@@ -46,8 +46,9 @@ public class HangarEmulator {
             var mainPanel = new HangarMainPanel();
 
             if (args.length > 0 && new File(args[0]).isFile()) {
-                MIDletLoader.loadMIDlet(args[0]);
-                MIDletLoader.startLoadedMIDlet();
+                var midletLoader = new MIDletLoader(args[0]);
+                HangarState.setMIDletLoader(midletLoader);
+                midletLoader.startMIDlet();
             }
             else {
                 mainPanel.setPreferredSize(new Dimension(360, 360));

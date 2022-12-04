@@ -23,14 +23,23 @@ import java.util.Arrays;
 
 public class HangarState {
     private static File programFile;
+    private static MIDletLoader midletLoader;
     private static final HangarProfile profile = new HangarProfile();
-
-    public static HangarProfile getProfile() {
-        return profile;
-    }
 
     public static void setProgramFile(File file) {
         programFile = file;
+    }
+
+    public static MIDletLoader getMIDletLoader() {
+        return midletLoader;
+    }
+
+    public static void setMIDletLoader(MIDletLoader loader) {
+        midletLoader = loader;
+    }
+
+    public static HangarProfile getProfile() {
+        return profile;
     }
 
     public static void restartApp(String midletPath) {

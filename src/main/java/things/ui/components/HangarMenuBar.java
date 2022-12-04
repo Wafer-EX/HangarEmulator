@@ -16,10 +16,10 @@
 
 package things.ui.components;
 
+import things.MIDletLoader;
 import things.utils.AudioUtils;
 import things.HangarKeyCodes;
 import things.HangarState;
-import things.MIDletLoader;
 import things.enums.ScalingModes;
 import things.ui.dialogs.HangarJarChooser;
 import things.ui.dialogs.HangarSf2Chooser;
@@ -54,9 +54,10 @@ public class HangarMenuBar extends JMenuBar {
                 SwingUtilities.invokeLater(() -> {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
-                        if (!MIDletLoader.isLoaded()) {
-                            MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
-                            MIDletLoader.startLoadedMIDlet();
+                        if (HangarState.getMIDletLoader() == null) {
+                            var midletLoader = new MIDletLoader(fileChooser.getSelectedFile().getAbsolutePath());
+                            HangarState.setMIDletLoader(midletLoader);
+                            midletLoader.startMIDlet();
                         }
                         else {
                             HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
@@ -65,12 +66,15 @@ public class HangarMenuBar extends JMenuBar {
                 });
             });
 
-            restartMenuItem.addActionListener(e -> HangarState.restartApp(MIDletLoader.getLastLoadedPath()));
+            restartMenuItem.addActionListener(e ->  {
+                var midletPath = HangarState.getMIDletLoader().getMIDletPath();
+                HangarState.restartApp(midletPath);
+            });
 
             pauseMenuItem.addActionListener(e -> {
-                var lastLoaded = MIDletLoader.getLastLoaded();
-                if (lastLoaded != null) {
-                    lastLoaded.pauseApp();
+                var currentMidlet = HangarState.getMIDletLoader().getMIDlet();
+                if (currentMidlet != null) {
+                    currentMidlet.pauseApp();
                 }
             });
 
