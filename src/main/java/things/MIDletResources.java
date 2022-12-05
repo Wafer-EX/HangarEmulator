@@ -56,10 +56,6 @@ public final class MIDletResources {
         }
     }
 
-    public static InputStream getResource(Class inputClass, String resourcePath) {
-        return getResource(resourcePath);
-    }
-
     public static String getMainClassName() {
         if (jarFile == null) {
             throw new IllegalStateException();

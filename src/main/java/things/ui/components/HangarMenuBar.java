@@ -30,6 +30,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 
 public class HangarMenuBar extends JMenuBar {
     public HangarMenuBar() {
@@ -41,8 +42,9 @@ public class HangarMenuBar extends JMenuBar {
     @SuppressWarnings("FieldCanBeLocal")
     private static class HangarMIDletMenu extends JMenu {
         private final JMenuItem loadMenuItem = new JMenuItem("Load MIDlet");
-        private final JMenuItem restartMenuItem = new JMenuItem("Restart");
         private final JMenuItem pauseMenuItem = new JMenuItem("Call pauseApp()");
+        private final JMenuItem restartMenuItem = new JMenuItem("Restart");
+        private final JCheckBoxMenuItem useSystemLanguageCheckbox = new JCheckBoxMenuItem("Use system language");
         private final JMenuItem exitMenuItem = new JMenuItem("Exit");
 
         public HangarMIDletMenu() {
@@ -66,6 +68,13 @@ public class HangarMenuBar extends JMenuBar {
                 });
             });
 
+            pauseMenuItem.addActionListener(e -> {
+                var currentMidlet = HangarState.getMIDletLoader().getMIDlet();
+                if (currentMidlet != null) {
+                    currentMidlet.pauseApp();
+                }
+            });
+
             restartMenuItem.addActionListener(e ->  {
                 var currentMidlet = HangarState.getMIDletLoader();
                 if (currentMidlet != null) {
@@ -77,11 +86,9 @@ public class HangarMenuBar extends JMenuBar {
                 }
             });
 
-            pauseMenuItem.addActionListener(e -> {
-                var currentMidlet = HangarState.getMIDletLoader().getMIDlet();
-                if (currentMidlet != null) {
-                    currentMidlet.pauseApp();
-                }
+            useSystemLanguageCheckbox.addActionListener(e -> {
+                var property = useSystemLanguageCheckbox.getState() ? Locale.getDefault().toLanguageTag() : "en-US";
+                HangarState.getProperties().setProperty("microedition.locale", property);
             });
 
             exitMenuItem.addActionListener(e -> System.exit(0));
@@ -90,6 +97,7 @@ public class HangarMenuBar extends JMenuBar {
             this.add(new JSeparator());
             this.add(pauseMenuItem);
             this.add(restartMenuItem);
+            this.add(useSystemLanguageCheckbox);
             this.add(new JSeparator());
             this.add(exitMenuItem);
         }
