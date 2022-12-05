@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+
+<properties>
+    <!-- Hangar Emulator properties -->
+    <entry key="hangaremulator.version">0.6.2-alpha</entry>
+    <entry key="hangaremulator.github">https://github.com/Lisowolf/HangarEmulator</entry>
+    <entry key="hangaremulator.author">Kirill Lomakin (minebuilder445@gmail.com)</entry>
+
+    <!-- Java ME properties -->
+    <entry key="microedition.profiles">MIDP-2.0</entry>
+    <entry key="microedition.platform">PC</entry>
+    <entry key="microedition.locale">en_US</entry>
+
+    <!-- Other properties -->
+    <entry key="sun.java2d.opengl">true</entry>
+</properties>

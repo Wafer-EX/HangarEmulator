@@ -22,33 +22,21 @@ import things.ui.components.HangarMainPanel;
 
 import java.awt.*;
 import java.io.File;
-import java.util.Locale;
+import java.util.Properties;
 
 public class HangarEmulator {
     public static void main(String[] args) {
         // TODO: add args parsing
-
         try {
             FlatDarkLaf.setup();
-        }
-        catch (NoClassDefFoundError error) {
-            error.printStackTrace();
-        }
 
-        System.setProperty("hangaremulator.version", "0.6.2-alpha");
-        System.setProperty("hangaremulator.github", "https://github.com/Lisowolf/HangarEmulator");
-        System.setProperty("hangaremulator.author", "Kirill Lomakin (minebuilder445@gmail.com)");
-
-        System.setProperty("sun.java2d.opengl", "true");
-        System.setProperty("microedition.profiles", "MIDP-2.0");
-        System.setProperty("microedition.platform", "HangarEmulator");
-        System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());
-
-        try {
             var profileManager = new HangarProfileManager(null);
+            var properties = new Properties();
+            properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("app.xml"));
 
             HangarState.setProfileManager(profileManager);
             HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+            HangarState.setProperties(properties);
 
             var mainFrame = HangarMainFrame.getInstance();
             var mainPanel = new HangarMainPanel();

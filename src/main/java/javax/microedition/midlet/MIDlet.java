@@ -16,13 +16,14 @@
 
 package javax.microedition.midlet;
 
+import things.HangarState;
 import things.ui.frames.HangarMainFrame;
 
 public abstract class MIDlet {
     private boolean blockExit;
 
     protected MIDlet() {
-        blockExit = false;
+        this.blockExit = false;
     }
 
     public abstract void startApp() throws MIDletStateChangeException;
@@ -42,7 +43,7 @@ public abstract class MIDlet {
     }
 
     public final String getAppProperty(String key) {
-        return System.getProperty(key);
+        return HangarState.getProperties().getProperty(key);
     }
 
     public final void resumeRequest() {

@@ -22,14 +22,24 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 
 public class HangarState {
     private static File programFile;
+    private static Properties properties;
     private static MIDletLoader midletLoader;
     private static HangarProfileManager profileManager;
 
     public static void setProgramFile(File file) {
         programFile = file;
+    }
+
+    public static Properties getProperties() {
+        return properties;
+    }
+
+    public static void setProperties(Properties properties) {
+        HangarState.properties = properties;
     }
 
     public static MIDletLoader getMIDletLoader() {
@@ -85,7 +95,8 @@ public class HangarState {
 
     public static Graphics2D applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        var hintValue = profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
     }
 }

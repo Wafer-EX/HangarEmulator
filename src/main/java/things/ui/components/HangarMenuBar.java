@@ -245,7 +245,7 @@ public class HangarMenuBar extends JMenuBar {
             super("Help");
             githubLinkMenuItem.addActionListener(e -> {
                 try {
-                    var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
+                    var githubUri = new URL(HangarState.getProperties().getProperty("hangaremulator.github")).toURI();
                     Desktop.getDesktop().browse(githubUri);
                 }
                 catch (Exception exception) {
@@ -259,8 +259,8 @@ public class HangarMenuBar extends JMenuBar {
                             Hangar Emulator
                             Version: %s
                             Author: %s""",
-                            System.getProperty("hangaremulator.version"),
-                            System.getProperty("hangaremulator.author")),
+                            HangarState.getProperties().getProperty("hangaremulator.version"),
+                            HangarState.getProperties().getProperty("hangaremulator.author")),
                     "About",
                     JOptionPane.PLAIN_MESSAGE));
 
