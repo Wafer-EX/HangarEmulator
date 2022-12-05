@@ -26,6 +26,8 @@ import java.util.Locale;
 
 public class HangarEmulator {
     public static void main(String[] args) {
+        // TODO: add args parsing
+
         try {
             FlatDarkLaf.setup();
         }
