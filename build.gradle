@@ -18,7 +18,7 @@ repositories {
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.4'
-    implementation 'com.formdev:flatlaf:2.5'
+    implementation 'com.formdev:flatlaf:2.6'
 }
 
 shadowJar {
