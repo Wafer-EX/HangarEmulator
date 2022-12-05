@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.HangarState;
-import things.JarResources;
+import things.MIDletResources;
 import things.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
@@ -72,7 +72,7 @@ public class Image {
         if (name == null) {
             throw new NullPointerException();
         }
-        var stream = JarResources.getResource(name);
+        var stream = MIDletResources.getResource(name);
         if (stream == null) {
             throw new IOException();
         }

@@ -16,14 +16,14 @@
 
 package things.utils.microedition;
 
-import things.JarResources;
+import things.MIDletResources;
 
 import javax.microedition.rms.RecordStore;
 import java.io.*;
 
 public final class RecordStoreUtils {
     public static String getRecordsPath() {
-        return String.format("hangar-data/records/%s/", JarResources.getMainClassName());
+        return String.format("hangar-data/records/%s/", MIDletResources.getMainClassName());
     }
 
     public static void writeRecordStore(RecordStore recordStore, File file) {

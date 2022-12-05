@@ -29,8 +29,8 @@ public class MIDletLoader {
 
     public MIDletLoader(String absolutePath) {
         try {
-            JarResources.setJar(absolutePath);
-            JarResources.initializeProperties();
+            MIDletResources.setJar(absolutePath);
+            MIDletResources.initializeProperties();
 
             URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             ClassLoader classLoader;
@@ -43,7 +43,7 @@ public class MIDletLoader {
                 classLoader = new URLClassLoader(urls);
             }
 
-            var mainClass = Class.forName(JarResources.getMainClassName(), true, classLoader);
+            var mainClass = Class.forName(MIDletResources.getMainClassName(), true, classLoader);
             var constructor = mainClass.getConstructor();
             constructor.setAccessible(true);
 
@@ -60,7 +60,7 @@ public class MIDletLoader {
             if (midlet != null) {
                 var hangarFrame = HangarMainFrame.getInstance();
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
-                hangarFrame.setIconImage(JarResources.getIcon());
+                hangarFrame.setIconImage(MIDletResources.getIcon());
 
                 new Thread(() -> {
                     try {

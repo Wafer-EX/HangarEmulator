@@ -31,7 +31,7 @@ public class HangarClassVisitor extends ClassVisitor {
             @Override
             public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
                 if (name.equals("getResourceAsStream")) {
-                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "things/JarResources", "getResource", "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", false);
+                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "things/MIDletResources", "getResource", "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", false);
                 }
                 else {
                     mv.visitMethodInsn(opcode, owner, name, descriptor, isInterface);

@@ -27,7 +27,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.jar.JarFile;
 
-public final class JarResources {
+public final class MIDletResources {
     private static URLClassLoader classLoader;
     private static JarFile jarFile;
 
