@@ -24,13 +24,13 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 public class MIDletLoader {
-    private static MIDlet midlet;
-    private static String midletPath;
+    private MIDlet midlet;
+    private String midletPath;
 
-    public static void loadMIDlet(String absolutePath) {
+    public MIDletLoader(String absolutePath) {
         try {
             MIDletResources.setJar(absolutePath);
-            MIDletResources.initializeMIDletProperties();
+            MIDletResources.initializeProperties();
 
             URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             ClassLoader classLoader;
@@ -55,12 +55,12 @@ public class MIDletLoader {
         }
     }
 
-    public static void startLoadedMIDlet() {
+    public void startMIDlet() {
         try {
             if (midlet != null) {
                 var hangarFrame = HangarMainFrame.getInstance();
                 hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
-                hangarFrame.setIconImage(MIDletResources.getIconFromJar());
+                hangarFrame.setIconImage(MIDletResources.getIcon());
 
                 new Thread(() -> {
                     try {
@@ -77,15 +77,11 @@ public class MIDletLoader {
         }
     }
 
-    public static boolean isLoaded() {
-        return midlet != null;
-    }
-
-    public static MIDlet getLastLoaded() {
+    public MIDlet getMIDlet() {
         return midlet;
     }
 
-    public static String getLastLoadedPath() {
+    public String getMIDletPath() {
         return midletPath;
     }
 }

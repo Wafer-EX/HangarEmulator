@@ -35,7 +35,7 @@ public class MIDletClassLoader extends URLClassLoader {
         if (!name.contains("java") && !name.contains("nokia") && !name.contains("things")) {
             try {
                 var classPath = name.replaceAll("\\.", "/");
-                var classStream = MIDletResources.getResourceFromJar(classPath + ".class");
+                var classStream = MIDletResources.getResource(classPath + ".class");
                 assert classStream != null;
 
                 var classReader = new ClassReader(classStream);

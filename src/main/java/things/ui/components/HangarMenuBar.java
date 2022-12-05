@@ -16,13 +16,12 @@
 
 package things.ui.components;
 
+import things.MIDletLoader;
+import things.ui.dialogs.HangarFileChooser;
 import things.utils.AudioUtils;
 import things.HangarKeyCodes;
 import things.HangarState;
-import things.MIDletLoader;
 import things.enums.ScalingModes;
-import things.ui.dialogs.HangarJarChooser;
-import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -30,6 +29,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Locale;
 
 public class HangarMenuBar extends JMenuBar {
     public HangarMenuBar() {
@@ -41,22 +41,24 @@ public class HangarMenuBar extends JMenuBar {
     @SuppressWarnings("FieldCanBeLocal")
     private static class HangarMIDletMenu extends JMenu {
         private final JMenuItem loadMenuItem = new JMenuItem("Load MIDlet");
-        private final JMenuItem restartMenuItem = new JMenuItem("Restart");
         private final JMenuItem pauseMenuItem = new JMenuItem("Call pauseApp()");
+        private final JCheckBoxMenuItem systemLanguageCheckbox = new JCheckBoxMenuItem("Use system language");
+        private final JMenuItem restartMenuItem = new JMenuItem("Restart");
         private final JMenuItem exitMenuItem = new JMenuItem("Exit");
 
         public HangarMIDletMenu() {
             super("MIDlet");
             loadMenuItem.addActionListener(e -> {
-                var fileChooser = new HangarJarChooser();
+                var fileChooser = new HangarFileChooser(new String[] { "jar" }, "MIDlet (*.jar)");
                 fileChooser.showDialog(null, "Select MIDlet");
 
                 SwingUtilities.invokeLater(() -> {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
-                        if (!MIDletLoader.isLoaded()) {
-                            MIDletLoader.loadMIDlet(fileChooser.getSelectedFile().getAbsolutePath());
-                            MIDletLoader.startLoadedMIDlet();
+                        if (HangarState.getMIDletLoader() == null) {
+                            var midletLoader = new MIDletLoader(fileChooser.getSelectedFile().getAbsolutePath());
+                            HangarState.setMIDletLoader(midletLoader);
+                            midletLoader.startMIDlet();
                         }
                         else {
                             HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
@@ -65,12 +67,26 @@ public class HangarMenuBar extends JMenuBar {
                 });
             });
 
-            restartMenuItem.addActionListener(e -> HangarState.restartApp(MIDletLoader.getLastLoadedPath()));
-
             pauseMenuItem.addActionListener(e -> {
-                var lastLoaded = MIDletLoader.getLastLoaded();
-                if (lastLoaded != null) {
-                    lastLoaded.pauseApp();
+                var currentMidlet = HangarState.getMIDletLoader().getMIDlet();
+                if (currentMidlet != null) {
+                    currentMidlet.pauseApp();
+                }
+            });
+
+            systemLanguageCheckbox.addActionListener(e -> {
+                var property = systemLanguageCheckbox.getState() ? Locale.getDefault().toLanguageTag() : "en-US";
+                HangarState.getProperties().setProperty("microedition.locale", property);
+            });
+
+            restartMenuItem.addActionListener(e ->  {
+                var currentMidlet = HangarState.getMIDletLoader();
+                if (currentMidlet != null) {
+                    var midletPath = currentMidlet.getMIDletPath();
+                    HangarState.restartApp(midletPath);
+                }
+                else {
+                    HangarState.restartApp(null);
                 }
             });
 
@@ -79,6 +95,7 @@ public class HangarMenuBar extends JMenuBar {
             this.add(loadMenuItem);
             this.add(new JSeparator());
             this.add(pauseMenuItem);
+            this.add(systemLanguageCheckbox);
             this.add(restartMenuItem);
             this.add(new JSeparator());
             this.add(exitMenuItem);
@@ -103,11 +120,11 @@ public class HangarMenuBar extends JMenuBar {
 
         public HangarOptionsMenu() {
             super("Options");
-            canvasClearingCheckBox.setSelected(HangarState.getProfile().getCanvasClearing());
-            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfile().setCanvasClearing(!HangarState.getProfile().getCanvasClearing()));
+            canvasClearingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getCanvasClearing());
+            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setCanvasClearing(!HangarState.getProfileManager().getCurrent().getCanvasClearing()));
 
-            antiAliasingCheckBox.setSelected(HangarState.getProfile().getAntiAliasing());
-            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfile().setAntiAliasing(!HangarState.getProfile().getAntiAliasing()));
+            antiAliasingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getAntiAliasing());
+            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setAntiAliasing(!HangarState.getProfileManager().getCurrent().getAntiAliasing()));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -124,14 +141,14 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
 
             loadSoundbankItem.addActionListener(e -> {
-                var fileChooser = new HangarSf2Chooser();
+                var fileChooser = new HangarFileChooser(new String[] { "sf2" }, "Soundbank (*.sf2)");
                 fileChooser.showDialog(null, "Select soundbank");
 
                 SwingUtilities.invokeLater(() -> {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
                         try {
-                            HangarState.getProfile().setSoundbankFile(selectedFile);
+                            HangarState.getProfileManager().getCurrent().setSoundbankFile(selectedFile);
                         }
                         catch (IOException | InvalidMidiDataException exception) {
                             exception.printStackTrace();
@@ -146,8 +163,8 @@ public class HangarMenuBar extends JMenuBar {
 
             clearSoundBankItem.addActionListener(e -> AudioUtils.setSoundbank(null));
 
-            allowResizingCheckBox.setSelected(HangarState.getProfile().getWindowResizing());
-            allowResizingCheckBox.addActionListener(e -> HangarState.getProfile().setWindowResizing(allowResizingCheckBox.getState()));
+            allowResizingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getWindowResizing());
+            allowResizingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setWindowResizing(allowResizingCheckBox.getState()));
 
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
@@ -169,9 +186,9 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarFrameRateRadio extends JRadioButtonMenuItem {
             public HangarFrameRateRadio(int frameRate) {
                 super();
-                this.addItemListener(e -> HangarState.getProfile().setFrameRate(frameRate));
+                this.addItemListener(e -> HangarState.getProfileManager().getCurrent().setFrameRate(frameRate));
                 this.setText(frameRate > -1 ? frameRate + " FPS" : "Unlimited");
-                this.setSelected(HangarState.getProfile().getFrameRate() == frameRate);
+                this.setSelected(HangarState.getProfileManager().getCurrent().getFrameRate() == frameRate);
                 frameRateRadioGroup.add(this);
             }
         }
@@ -180,9 +197,9 @@ public class HangarMenuBar extends JMenuBar {
             public HangarScalingModeRadio(ScalingModes scalingMode) {
                 super();
                 this.setText(scalingMode.toString());
-                this.setSelected(HangarState.getProfile().getScalingMode() == scalingMode);
+                this.setSelected(HangarState.getProfileManager().getCurrent().getScalingMode() == scalingMode);
                 this.addItemListener(e -> {
-                    HangarState.getProfile().setScalingMode(scalingMode);
+                    HangarState.getProfileManager().getCurrent().setScalingMode(scalingMode);
                     resolutionPopupMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
                     if (scalingMode == ScalingModes.ChangeResolution) {
                         resolutionRadioGroup.clearSelection();
@@ -195,13 +212,13 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarResolutionRadio extends JRadioButtonMenuItem {
             public HangarResolutionRadio(Dimension resolution) {
                 super();
-                var profileResolution = HangarState.getProfile().getResolution();
+                var profileResolution = HangarState.getProfileManager().getCurrent().getResolution();
 
                 this.setText(resolution.width + "x" + resolution.height);
                 this.setSelected(profileResolution.width == resolution.width && profileResolution.height == resolution.height);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfile().setResolution(resolution);
+                        HangarState.getProfileManager().getCurrent().setResolution(resolution);
                     }
                 });
                 resolutionRadioGroup.add(this);
@@ -215,10 +232,10 @@ public class HangarMenuBar extends JMenuBar {
                 super();
                 // TODO: rewrite text setting
                 this.setText(keyboardName);
-                this.setSelected(HangarState.getProfile().getMidletKeyCodes() == keyCodes);
+                this.setSelected(HangarState.getProfileManager().getCurrent().getMidletKeyCodes() == keyCodes);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfile().setMidletKeyCodes(keyCodes);
+                        HangarState.getProfileManager().getCurrent().setMidletKeyCodes(keyCodes);
                     }
                 });
                 keyboardRadioGroup.add(this);
@@ -235,7 +252,7 @@ public class HangarMenuBar extends JMenuBar {
             super("Help");
             githubLinkMenuItem.addActionListener(e -> {
                 try {
-                    var githubUri = new URL(System.getProperty("hangaremulator.github")).toURI();
+                    var githubUri = new URL(HangarState.getProperties().getProperty("hangaremulator.github")).toURI();
                     Desktop.getDesktop().browse(githubUri);
                 }
                 catch (Exception exception) {
@@ -249,8 +266,8 @@ public class HangarMenuBar extends JMenuBar {
                             Hangar Emulator
                             Version: %s
                             Author: %s""",
-                            System.getProperty("hangaremulator.version"),
-                            System.getProperty("hangaremulator.author")),
+                            HangarState.getProperties().getProperty("hangaremulator.version"),
+                            HangarState.getProperties().getProperty("hangaremulator.author")),
                     "About",
                     JOptionPane.PLAIN_MESSAGE));
 

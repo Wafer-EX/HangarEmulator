@@ -153,15 +153,17 @@ public class Graphics {
     }
 
     public int getClipWidth() {
+        var profile = HangarState.getProfileManager().getCurrent();
         var clipBounds = seGraphics.getClipBounds();
-        var profile = HangarState.getProfile();
-        return clipBounds == null ? profile.getResolution().width : clipBounds.width;
+        var resolution = profile.getResolution();
+        return clipBounds == null ? resolution.width : clipBounds.width;
     }
 
     public int getClipHeight() {
+        var profile = HangarState.getProfileManager().getCurrent();
         var clipBounds = seGraphics.getClipBounds();
-        var profile = HangarState.getProfile();
-        return clipBounds == null ? profile.getResolution().height : clipBounds.height;
+        var resolution = profile.getResolution();
+        return clipBounds == null ? resolution.height : clipBounds.height;
     }
 
     public void clipRect(int x, int y, int width, int height) {

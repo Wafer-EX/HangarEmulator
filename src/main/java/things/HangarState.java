@@ -16,21 +16,46 @@
 
 package things;
 
+import things.profiles.HangarProfileManager;
+
 import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Properties;
 
 public class HangarState {
     private static File programFile;
-    private static final HangarProfile profile = new HangarProfile();
-
-    public static HangarProfile getProfile() {
-        return profile;
-    }
+    private static Properties properties;
+    private static MIDletLoader midletLoader;
+    private static HangarProfileManager profileManager;
 
     public static void setProgramFile(File file) {
         programFile = file;
+    }
+
+    public static Properties getProperties() {
+        return properties;
+    }
+
+    public static void setProperties(Properties properties) {
+        HangarState.properties = properties;
+    }
+
+    public static MIDletLoader getMIDletLoader() {
+        return midletLoader;
+    }
+
+    public static void setMIDletLoader(MIDletLoader loader) {
+        midletLoader = loader;
+    }
+
+    public static HangarProfileManager getProfileManager() {
+        return profileManager;
+    }
+
+    public static void setProfileManager(HangarProfileManager manager) {
+        profileManager = manager;
     }
 
     public static void restartApp(String midletPath) {
@@ -54,7 +79,7 @@ public class HangarState {
     }
 
     public static void syncWithFrameRate() {
-        if (profile.getFrameRate() != -1) {
+        if (profileManager.getCurrent().getFrameRate() != -1) {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
@@ -65,12 +90,13 @@ public class HangarState {
     }
 
     public static int frameRateInMilliseconds() {
-        return 1000 / profile.getFrameRate();
+        return 1000 / profileManager.getCurrent().getFrameRate();
     }
 
     public static Graphics2D applyRenderingHints(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, profile.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF);
+        var hintValue = profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
+        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
     }
 }

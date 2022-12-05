@@ -72,7 +72,7 @@ public class Image {
         if (name == null) {
             throw new NullPointerException();
         }
-        var stream = MIDletResources.getResourceFromJar(name);
+        var stream = MIDletResources.getResource(name);
         if (stream == null) {
             throw new IOException();
         }

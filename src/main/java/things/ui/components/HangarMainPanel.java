@@ -37,7 +37,7 @@ public class HangarMainPanel extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var profile = HangarState.getProfile();
+                var profile = HangarState.getProfileManager().getCurrent();
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
                     profile.setResolution(e.getComponent().getSize());
                 }

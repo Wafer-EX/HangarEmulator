@@ -28,7 +28,8 @@ import java.awt.image.BufferedImage;
 
 public final class HangarCanvasUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
-        if (HangarState.getProfile().getScalingMode() == ScalingModes.Contain) {
+        var profile = HangarState.getProfileManager().getCurrent();
+        if (profile.getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
             double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);

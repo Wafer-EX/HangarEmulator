@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package things;
+package things.profiles;
 
+import things.HangarKeyCodes;
 import things.enums.ScalingModes;
 import things.ui.components.HangarCanvas;
 import things.ui.frames.HangarMainFrame;
@@ -51,11 +52,9 @@ public class HangarProfile {
         var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
         if (canvasPanel != null) {
             var keyListeners = canvasPanel.getKeyListeners();
-            if (keyListeners.length > 0) {
-                for (var keyListener : keyListeners) {
-                    if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-                        hangarKeyListener.getPressedKeys().clear();
-                    }
+            for (var keyListener : keyListeners) {
+                if (keyListener instanceof HangarKeyListener hangarKeyListener) {
+                    hangarKeyListener.getPressedKeys().clear();
                 }
             }
         }
@@ -136,10 +135,12 @@ public class HangarProfile {
     }
 
     public void setSoundbankFile(File path) throws IOException, InvalidMidiDataException {
-        var soundbankInputStream = new FileInputStream(path);
-        var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
+        if (path != null) {
+            var soundbankInputStream = new FileInputStream(path);
+            var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
 
-        AudioUtils.setSoundbank(soundbank);
+            AudioUtils.setSoundbank(soundbank);
+        }
         this.soundbankFile = path;
     }
 }

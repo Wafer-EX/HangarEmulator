@@ -20,8 +20,8 @@ import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import java.io.File;
 
-public class HangarSf2Chooser extends JFileChooser {
-    public HangarSf2Chooser() {
+public class HangarFileChooser extends JFileChooser {
+    public HangarFileChooser(String[] filetypes, String description) {
         super();
 
         this.setAcceptAllFileFilterUsed(false);
@@ -30,7 +30,12 @@ public class HangarSf2Chooser extends JFileChooser {
             public boolean accept(File file) {
                 if (file.isFile()) {
                     var filename = file.getName().toLowerCase();
-                    return filename.endsWith(".sf2");
+                    for (var type : filetypes) {
+                        if (filename.endsWith('.' + type)) {
+                            return true;
+                        }
+                    }
+                    return false;
                 }
                 else {
                     return file.isDirectory();
@@ -39,7 +44,7 @@ public class HangarSf2Chooser extends JFileChooser {
 
             @Override
             public String getDescription() {
-                return "Soundbank (*.sf2)";
+                return description;
             }
         });
     }

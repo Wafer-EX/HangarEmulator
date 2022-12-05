@@ -16,38 +16,36 @@
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
+import things.profiles.HangarProfileManager;
 import things.ui.frames.HangarMainFrame;
 import things.ui.components.HangarMainPanel;
 
 import java.awt.*;
 import java.io.File;
-import java.util.Locale;
+import java.util.Properties;
 
 public class HangarEmulator {
     public static void main(String[] args) {
+        // TODO: add args parsing
         try {
             FlatDarkLaf.setup();
-        }
-        catch (NoClassDefFoundError error) {
-            error.printStackTrace();
-        }
 
-        System.setProperty("hangaremulator.version", "0.6.1-alpha");
-        System.setProperty("hangaremulator.github", "https://github.com/Lisowolf/HangarEmulator");
-        System.setProperty("hangaremulator.author", "Kirill Lomakin (minebuilder445@gmail.com)");
+            var profileManager = new HangarProfileManager(null);
+            var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
+            var properties = new Properties();
+            properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("app.xml"));
 
-        System.setProperty("sun.java2d.opengl", "true");
-        System.setProperty("microedition.profiles", "MIDP-2.0");
-        System.setProperty("microedition.platform", "HangarEmulator");
-        System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());
+            HangarState.setProfileManager(profileManager);
+            HangarState.setProgramFile(programFile);
+            HangarState.setProperties(properties);
 
-        try {
             var mainFrame = HangarMainFrame.getInstance();
             var mainPanel = new HangarMainPanel();
 
             if (args.length > 0 && new File(args[0]).isFile()) {
-                MIDletLoader.loadMIDlet(args[0]);
-                MIDletLoader.startLoadedMIDlet();
+                var midletLoader = new MIDletLoader(args[0]);
+                HangarState.setMIDletLoader(midletLoader);
+                midletLoader.startMIDlet();
             }
             else {
                 mainPanel.setPreferredSize(new Dimension(360, 360));
@@ -55,7 +53,6 @@ public class HangarEmulator {
                 mainFrame.pack();
                 mainFrame.revalidate();
             }
-            HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }

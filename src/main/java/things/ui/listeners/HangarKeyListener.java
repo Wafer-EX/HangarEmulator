@@ -42,8 +42,9 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent e) {
+        var profile = HangarState.getProfileManager().getCurrent();
         var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
-        var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+        var midletKeyCodes = profile.getMidletKeyCodes();
         int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
         if (keyCode != 0) {
@@ -58,8 +59,9 @@ public class HangarKeyListener implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        var profile = HangarState.getProfileManager().getCurrent();
         var awtKeyCodes = HangarKeyCodes.AWT_KEYCODES_DEFAULT;
-        var midletKeyCodes = HangarState.getProfile().getMidletKeyCodes();
+        var midletKeyCodes = profile.getMidletKeyCodes();
         int keyCode = KeyUtils.convertKeyCode(e.getKeyCode(), awtKeyCodes, midletKeyCodes);
 
         if (keyCode != 0) {
