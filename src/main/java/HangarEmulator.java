@@ -31,11 +31,12 @@ public class HangarEmulator {
             FlatDarkLaf.setup();
 
             var profileManager = new HangarProfileManager(null);
+            var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             var properties = new Properties();
             properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("app.xml"));
 
             HangarState.setProfileManager(profileManager);
-            HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+            HangarState.setProgramFile(programFile);
             HangarState.setProperties(properties);
 
             var mainFrame = HangarMainFrame.getInstance();
