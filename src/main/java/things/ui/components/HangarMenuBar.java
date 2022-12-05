@@ -17,12 +17,11 @@
 package things.ui.components;
 
 import things.MIDletLoader;
+import things.ui.dialogs.HangarFileChooser;
 import things.utils.AudioUtils;
 import things.HangarKeyCodes;
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.dialogs.HangarJarChooser;
-import things.ui.dialogs.HangarSf2Chooser;
 import things.ui.frames.HangarMainFrame;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -50,7 +49,7 @@ public class HangarMenuBar extends JMenuBar {
         public HangarMIDletMenu() {
             super("MIDlet");
             loadMenuItem.addActionListener(e -> {
-                var fileChooser = new HangarJarChooser();
+                var fileChooser = new HangarFileChooser(new String[] { "jar" }, "MIDlet (*.jar)");
                 fileChooser.showDialog(null, "Select MIDlet");
 
                 SwingUtilities.invokeLater(() -> {
@@ -142,7 +141,7 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
 
             loadSoundbankItem.addActionListener(e -> {
-                var fileChooser = new HangarSf2Chooser();
+                var fileChooser = new HangarFileChooser(new String[] { "sf2" }, "Soundbank (*.sf2)");
                 fileChooser.showDialog(null, "Select soundbank");
 
                 SwingUtilities.invokeLater(() -> {
