@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package things;
+package things.profiles;
 
+import things.HangarKeyCodes;
 import things.enums.ScalingModes;
 import things.ui.components.HangarCanvas;
 import things.ui.frames.HangarMainFrame;

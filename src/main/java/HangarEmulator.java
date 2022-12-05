@@ -16,6 +16,7 @@
 
 import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
+import things.profiles.HangarProfileManager;
 import things.ui.frames.HangarMainFrame;
 import things.ui.components.HangarMainPanel;
 
@@ -42,6 +43,11 @@ public class HangarEmulator {
         System.setProperty("microedition.locale", Locale.getDefault().toLanguageTag());
 
         try {
+            var profileManager = new HangarProfileManager(null);
+
+            HangarState.setProfileManager(profileManager);
+            HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
+
             var mainFrame = HangarMainFrame.getInstance();
             var mainPanel = new HangarMainPanel();
 
@@ -56,7 +62,6 @@ public class HangarEmulator {
                 mainFrame.pack();
                 mainFrame.revalidate();
             }
-            HangarState.setProgramFile(new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI()));
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }

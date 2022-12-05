@@ -39,7 +39,7 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        var profile = HangarState.getProfile();
+        var profile = HangarState.getProfileManager().getCurrent();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
         additionalBuffer = ImageUtils.createCompatibleImage(width, height);

@@ -36,7 +36,7 @@ public class HangarCanvas extends JPanel {
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
-    private Dimension bufferScale = HangarState.getProfile().getResolution();
+    private Dimension bufferScale = HangarState.getProfileManager().getCurrent().getResolution();
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
@@ -44,8 +44,9 @@ public class HangarCanvas extends JPanel {
         super();
         this.canvas = canvas;
 
+        var profile = HangarState.getProfileManager().getCurrent();
         var mouseListener = new HangarMouseListener(this);
-        var resolution = HangarState.getProfile().getResolution();
+        var resolution = profile.getResolution();
 
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         this.addMouseListener(mouseListener);
@@ -53,8 +54,8 @@ public class HangarCanvas extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                if (HangarState.getProfile().getScalingMode() == ScalingModes.ChangeResolution) {
-                    HangarState.getProfile().setResolution(HangarCanvas.this.getSize());
+                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
+                    profile.setResolution(HangarCanvas.this.getSize());
                     HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, HangarCanvas.this.getSize());
                 }
                 HangarCanvas.this.updateBufferTransformations();
@@ -96,7 +97,8 @@ public class HangarCanvas extends JPanel {
     }
 
     public Image rescaleBuffer(BufferedImage image) {
-        return switch (HangarState.getProfile().getScalingMode()) {
+        var profile = HangarState.getProfileManager().getCurrent();
+        return switch (profile.getScalingMode()) {
             case Contain -> buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
             default -> image;
         };
@@ -125,7 +127,9 @@ public class HangarCanvas extends JPanel {
         super.paintComponent(graphics);
         if (buffer != null) {
             var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
-            if (HangarState.getProfile().getCanvasClearing()) {
+            var profile = HangarState.getProfileManager().getCurrent();
+
+            if (profile.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
