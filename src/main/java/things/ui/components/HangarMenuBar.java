@@ -43,8 +43,8 @@ public class HangarMenuBar extends JMenuBar {
     private static class HangarMIDletMenu extends JMenu {
         private final JMenuItem loadMenuItem = new JMenuItem("Load MIDlet");
         private final JMenuItem pauseMenuItem = new JMenuItem("Call pauseApp()");
+        private final JCheckBoxMenuItem systemLanguageCheckbox = new JCheckBoxMenuItem("Use system language");
         private final JMenuItem restartMenuItem = new JMenuItem("Restart");
-        private final JCheckBoxMenuItem useSystemLanguageCheckbox = new JCheckBoxMenuItem("Use system language");
         private final JMenuItem exitMenuItem = new JMenuItem("Exit");
 
         public HangarMIDletMenu() {
@@ -75,6 +75,11 @@ public class HangarMenuBar extends JMenuBar {
                 }
             });
 
+            systemLanguageCheckbox.addActionListener(e -> {
+                var property = systemLanguageCheckbox.getState() ? Locale.getDefault().toLanguageTag() : "en-US";
+                HangarState.getProperties().setProperty("microedition.locale", property);
+            });
+
             restartMenuItem.addActionListener(e ->  {
                 var currentMidlet = HangarState.getMIDletLoader();
                 if (currentMidlet != null) {
@@ -86,18 +91,13 @@ public class HangarMenuBar extends JMenuBar {
                 }
             });
 
-            useSystemLanguageCheckbox.addActionListener(e -> {
-                var property = useSystemLanguageCheckbox.getState() ? Locale.getDefault().toLanguageTag() : "en-US";
-                HangarState.getProperties().setProperty("microedition.locale", property);
-            });
-
             exitMenuItem.addActionListener(e -> System.exit(0));
 
             this.add(loadMenuItem);
             this.add(new JSeparator());
             this.add(pauseMenuItem);
+            this.add(systemLanguageCheckbox);
             this.add(restartMenuItem);
-            this.add(useSystemLanguageCheckbox);
             this.add(new JSeparator());
             this.add(exitMenuItem);
         }
