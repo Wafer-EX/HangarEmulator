@@ -96,14 +96,6 @@ public class HangarViewport extends JPanel {
         this.repaint();
     }
 
-    public Image rescaleBuffer(BufferedImage image) {
-        var profile = HangarState.getProfileManager().getCurrent();
-        return switch (profile.getScalingMode()) {
-            case Contain -> buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
-            default -> image;
-        };
-    }
-
     public void refreshSerialCallTimer() {
         serialCallTimer.cancel();
         serialCallTimer.purge();
@@ -133,7 +125,7 @@ public class HangarViewport extends JPanel {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
-            graphics.drawImage(rescaleBuffer(buffer), bufferPosition.x, bufferPosition.y, null);
+            graphics.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }
 }
