@@ -25,7 +25,7 @@ public class HangarMainFrame extends JFrame {
     // TODO: add all screens at once, turn it with actions (set displayable and etc.)
     // TODO: move displayable only to HangarDisplayable
     private static final HangarMainFrame instance = new HangarMainFrame();
-    private final HangarDisplayableWrapper displayableWrapper = new HangarDisplayableWrapper();
+    private final HangarViewport displayableWrapper = new HangarViewport();
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new CardLayout());
@@ -40,7 +40,7 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarDisplayableWrapper getDisplayableWrapper() {
+    public HangarViewport getDisplayableWrapper() {
         return displayableWrapper;
     }
 }

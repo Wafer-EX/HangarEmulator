@@ -49,7 +49,7 @@ public class HangarProfile {
     public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
         this.midletKeyCodes = keyCodes;
 
-        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getViewport();
+        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper();
         if (canvasPanel != null) {
             var keyListeners = canvasPanel.getKeyListeners();
             for (var keyListener : keyListeners) {
@@ -68,7 +68,7 @@ public class HangarProfile {
         this.scalingMode = scalingMode;
 
         SwingUtilities.invokeLater(() -> {
-            var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getViewport();
+            var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper();
             if (scalingMode == ScalingModes.ChangeResolution) {
                 this.setResolution(canvasPanel.getSize());
             }
@@ -84,7 +84,7 @@ public class HangarProfile {
         this.resolution = resolution;
 
         SwingUtilities.invokeLater(() -> {
-            var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getViewport();
+            var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper();
             HangarCanvasUtils.fitBufferToResolution(canvasPanel, resolution);
         });
     }

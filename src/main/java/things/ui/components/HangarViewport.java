@@ -26,12 +26,12 @@ import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarDisplayableWrapper extends JPanel {
+public class HangarViewport extends JPanel {
     // TODO: add displayable setting, replace main screen with setting another displayable
     private Displayable displayable = null;
     private HangarCanvasWrapper canvasWrapper = null;
 
-    public HangarDisplayableWrapper() {
+    public HangarViewport() {
         super(new BorderLayout());
 
         var scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -41,7 +41,7 @@ public class HangarDisplayableWrapper extends JPanel {
         this.setPreferredSize(new Dimension(360, 360));
     }
 
-    public HangarCanvasWrapper getViewport() {
+    public HangarCanvasWrapper getCanvasWrapper() {
         return canvasWrapper;
     }
 

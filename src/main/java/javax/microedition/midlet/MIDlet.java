@@ -39,7 +39,7 @@ public abstract class MIDlet {
     }
 
     public final void notifyPaused() {
-        HangarMainFrame.getInstance().getDisplayableWrapper().getViewport().repaint();
+        HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper().repaint();
     }
 
     public final String getAppProperty(String key) {

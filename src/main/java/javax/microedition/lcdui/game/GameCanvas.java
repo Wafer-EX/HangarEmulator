@@ -63,7 +63,7 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getViewport();
+        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper();
         if (canvasPanel != null) {
             canvasPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
             super.repaint(x, y, width, height);
@@ -71,7 +71,7 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics() {
-        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getViewport();
+        var canvasPanel = HangarMainFrame.getInstance().getDisplayableWrapper().getCanvasWrapper();
         if (canvasPanel != null) {
             canvasPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
             super.repaint();
