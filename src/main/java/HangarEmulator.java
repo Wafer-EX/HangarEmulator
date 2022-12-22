@@ -26,13 +26,14 @@ public class HangarEmulator {
     public static void main(String[] args) {
         // TODO: add args parsing
         try {
-            //System.setProperty("sun.java2d.uiScale", "1.0");
+            System.setProperty("sun.java2d.uiScale", "1.0");
+            System.setProperty("sun.java2d.opengl", "true");
             FlatDarkLaf.setup();
 
             var profileManager = new HangarProfileManager(null);
             var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
             var properties = new Properties();
-            properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("app.xml"));
+            properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("properties.xml"));
 
             HangarState.setProfileManager(profileManager);
             HangarState.setProgramFile(programFile);
