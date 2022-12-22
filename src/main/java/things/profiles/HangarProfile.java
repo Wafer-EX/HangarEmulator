@@ -18,7 +18,7 @@ package things.profiles;
 
 import things.HangarKeyCodes;
 import things.enums.ScalingModes;
-import things.ui.components.HangarViewport;
+import things.ui.components.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
@@ -98,8 +98,8 @@ public class HangarProfile {
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
             for (var component : container.getComponents()) {
-                if (component instanceof HangarViewport gamePanel) {
-                    gamePanel.refreshSerialCallTimer();
+                if (component instanceof HangarCanvasWrapper canvasWrapper) {
+                    canvasWrapper.refreshSerialCallTimer();
                 }
             }
         });

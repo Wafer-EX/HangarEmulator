@@ -16,7 +16,7 @@
 
 package things.ui.listeners;
 
-import things.ui.components.HangarViewport;
+import things.ui.components.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarCanvasUtils;
 
@@ -25,16 +25,16 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 
 public class HangarMouseListener extends MouseInputAdapter {
-    private final HangarViewport gamePanel;
+    private final HangarCanvasWrapper canvasWrapper;
 
-    public HangarMouseListener(HangarViewport gamePanel) {
-        this.gamePanel = gamePanel;
+    public HangarMouseListener(HangarCanvasWrapper canvasWrapper) {
+        this.canvasWrapper = canvasWrapper;
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
         if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
-            var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
+            var point = HangarCanvasUtils.panelPointToCanvas(canvasWrapper, e.getX(), e.getY());
             canvas.pointerPressed(point.x, point.y);
         }
     }
@@ -42,7 +42,7 @@ public class HangarMouseListener extends MouseInputAdapter {
     @Override
     public void mouseReleased(MouseEvent e) {
         if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
-            var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
+            var point = HangarCanvasUtils.panelPointToCanvas(canvasWrapper, e.getX(), e.getY());
             canvas.pointerReleased(point.x, point.y);
         }
     }
@@ -50,7 +50,7 @@ public class HangarMouseListener extends MouseInputAdapter {
     @Override
     public void mouseDragged(MouseEvent e) {
         if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
-            var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
+            var point = HangarCanvasUtils.panelPointToCanvas(canvasWrapper, e.getX(), e.getY());
             canvas.pointerDragged(point.x, point.y);
         }
     }

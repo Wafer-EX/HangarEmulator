@@ -29,7 +29,7 @@ import java.awt.*;
 public class HangarDisplayableWrapper extends JPanel {
     // TODO: add displayable setting, replace main screen with setting another displayable
     private Displayable displayable = null;
-    private HangarViewport viewport = null;
+    private HangarCanvasWrapper canvasWrapper = null;
 
     public HangarDisplayableWrapper() {
         super(new BorderLayout());
@@ -41,8 +41,8 @@ public class HangarDisplayableWrapper extends JPanel {
         this.setPreferredSize(new Dimension(360, 360));
     }
 
-    public HangarViewport getViewport() {
-        return viewport;
+    public HangarCanvasWrapper getViewport() {
+        return canvasWrapper;
     }
 
     public Displayable getDisplayable() {
@@ -59,8 +59,8 @@ public class HangarDisplayableWrapper extends JPanel {
         }
 
         if (displayable instanceof Canvas canvas) {
-            this.viewport = new HangarViewport(canvas);
-            this.add(viewport, BorderLayout.CENTER);
+            this.canvasWrapper = new HangarCanvasWrapper(canvas);
+            this.add(canvasWrapper, BorderLayout.CENTER);
 
             var mainFrame = HangarMainFrame.getInstance();
             for (var keyListener : mainFrame.getKeyListeners()) {
@@ -73,12 +73,12 @@ public class HangarDisplayableWrapper extends JPanel {
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
-            var hangarList = new HangarList(list);
-            this.add(hangarList, BorderLayout.CENTER);
+            var listWrapper = new HangarListWrapper(list);
+            this.add(listWrapper, BorderLayout.CENTER);
         }
         else if (displayable instanceof Form form) {
-            var hangarForm = new HangarForm(form);
-            this.add(hangarForm, BorderLayout.CENTER);
+            var formWrapper = new HangarFormWrapper(form);
+            this.add(formWrapper, BorderLayout.CENTER);
         }
         else {
             // TODO: add another screens support
