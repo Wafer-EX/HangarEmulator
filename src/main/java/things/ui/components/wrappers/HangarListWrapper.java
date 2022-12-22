@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.components.wrappers;
 
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarList extends JPanel {
-    public HangarList(List list) {
+public class HangarListWrapper extends JPanel {
+    public HangarListWrapper(List list) {
         super(new GridBagLayout());
 
         var constraints = new GridBagConstraints();

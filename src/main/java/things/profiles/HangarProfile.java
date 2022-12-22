@@ -18,11 +18,11 @@ package things.profiles;
 
 import things.HangarKeyCodes;
 import things.enums.ScalingModes;
-import things.ui.components.HangarCanvas;
+import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
-import things.utils.HangarCanvasUtils;
+import things.utils.CanvasWrapperUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -49,9 +49,9 @@ public class HangarProfile {
     public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
         this.midletKeyCodes = keyCodes;
 
-        var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
-        if (canvasPanel != null) {
-            var keyListeners = canvasPanel.getKeyListeners();
+        var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
+        if (canvasWrapper != null) {
+            var keyListeners = canvasWrapper.getKeyListeners();
             for (var keyListener : keyListeners) {
                 if (keyListener instanceof HangarKeyListener hangarKeyListener) {
                     hangarKeyListener.getPressedKeys().clear();
@@ -68,11 +68,15 @@ public class HangarProfile {
         this.scalingMode = scalingMode;
 
         SwingUtilities.invokeLater(() -> {
-            var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
             if (scalingMode == ScalingModes.ChangeResolution) {
-                this.setResolution(canvasPanel.getSize());
+                var contentPane = HangarMainFrame.getInstance().getContentPane();
+                this.setResolution(contentPane.getSize());
             }
-            canvasPanel.updateBufferTransformations();
+
+            var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
+            if (canvasWrapper != null) {
+                canvasWrapper.updateBufferTransformations();
+            }
         });
     }
 
@@ -84,8 +88,8 @@ public class HangarProfile {
         this.resolution = resolution;
 
         SwingUtilities.invokeLater(() -> {
-            var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
-            HangarCanvasUtils.fitBufferToResolution(canvasPanel, resolution);
+            var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
+            CanvasWrapperUtils.fitBufferToResolution(canvasWrapper, resolution);
         });
     }
 
@@ -98,8 +102,8 @@ public class HangarProfile {
         SwingUtilities.invokeLater(() -> {
             var container = HangarMainFrame.getInstance().getContentPane();
             for (var component : container.getComponents()) {
-                if (component instanceof HangarCanvas gamePanel) {
-                    gamePanel.refreshSerialCallTimer();
+                if (component instanceof HangarCanvasWrapper canvasWrapper) {
+                    canvasWrapper.refreshSerialCallTimer();
                 }
             }
         });

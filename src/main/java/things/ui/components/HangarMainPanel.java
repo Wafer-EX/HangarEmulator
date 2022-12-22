@@ -25,6 +25,7 @@ import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
 public class HangarMainPanel extends JPanel {
+    // TODO: replace with profiles menu
     public HangarMainPanel() {
         super();
 

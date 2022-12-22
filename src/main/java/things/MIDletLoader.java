@@ -16,6 +16,7 @@
 
 package things;
 
+import things.asm.HangarClassLoader;
 import things.ui.frames.HangarMainFrame;
 
 import javax.microedition.midlet.MIDlet;
@@ -36,7 +37,7 @@ public class MIDletLoader {
             ClassLoader classLoader;
 
             try {
-                classLoader = new MIDletClassLoader(urls);
+                classLoader = new HangarClassLoader(urls);
             }
             catch (NoClassDefFoundError error) {
                 error.printStackTrace();

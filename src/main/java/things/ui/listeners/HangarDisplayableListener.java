@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-package things;
+package things.ui.listeners;
 
-import things.profiles.HangarProfile;
+import things.ui.listeners.events.HangarDisplayableEvent;
 
-public final class HangarArgumentParser {
-    public static HangarProfile parseProfileArguments(String[] args) {
-        // TODO: write method logic
-        return null;
-    }
+import java.util.EventListener;
+
+public interface HangarDisplayableListener extends EventListener {
+    void displayableStateChanged(HangarDisplayableEvent e);
 }

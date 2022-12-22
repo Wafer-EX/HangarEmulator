@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.components.wrappers;
 
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.listeners.HangarMouseListener;
-import things.utils.HangarCanvasUtils;
+import things.utils.CanvasWrapperUtils;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarCanvas extends JPanel {
+public class HangarCanvasWrapper extends JPanel {
     private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -40,7 +40,7 @@ public class HangarCanvas extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarCanvas(Canvas canvas) {
+    public HangarCanvasWrapper(Canvas canvas) {
         super();
         this.canvas = canvas;
 
@@ -55,10 +55,10 @@ public class HangarCanvas extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(HangarCanvas.this.getSize());
-                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, HangarCanvas.this.getSize());
+                    profile.setResolution(HangarCanvasWrapper.this.getSize());
+                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapper.this, HangarCanvasWrapper.this.getSize());
                 }
-                HangarCanvas.this.updateBufferTransformations();
+                HangarCanvasWrapper.this.updateBufferTransformations();
             }
         });
         this.refreshSerialCallTimer();
@@ -85,7 +85,7 @@ public class HangarCanvas extends JPanel {
     }
 
     public void updateBufferTransformations() {
-        bufferScaleFactor = HangarCanvasUtils.getBufferScaleFactor(this, buffer);
+        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, buffer);
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);
@@ -94,14 +94,6 @@ public class HangarCanvas extends JPanel {
         bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
         bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
         this.repaint();
-    }
-
-    public Image rescaleBuffer(BufferedImage image) {
-        var profile = HangarState.getProfileManager().getCurrent();
-        return switch (profile.getScalingMode()) {
-            case Contain -> buffer.getScaledInstance(bufferScale.width, bufferScale.height, Image.SCALE_AREA_AVERAGING);
-            default -> image;
-        };
     }
 
     public void refreshSerialCallTimer() {
@@ -133,7 +125,7 @@ public class HangarCanvas extends JPanel {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
-            graphics.drawImage(rescaleBuffer(buffer), bufferPosition.x, bufferPosition.y, null);
+            graphics.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }
 }

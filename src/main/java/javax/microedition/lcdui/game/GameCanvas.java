@@ -63,17 +63,17 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
-        if (canvasPanel != null) {
-            canvasPanel.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+        var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
+        if (canvasWrapper != null) {
+            canvasWrapper.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
             super.repaint(x, y, width, height);
         }
     }
 
     public void flushGraphics() {
-        var canvasPanel = HangarMainFrame.getInstance().getCanvasPanel();
-        if (canvasPanel != null) {
-            canvasPanel.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+        var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
+        if (canvasWrapper != null) {
+            canvasWrapper.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
             super.repaint();
         }
     }

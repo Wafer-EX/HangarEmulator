@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.components.wrappers;
 
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ImageItem;
@@ -22,8 +22,8 @@ import javax.microedition.lcdui.StringItem;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarForm extends JPanel {
-    public HangarForm(Form form) {
+public class HangarFormWrapper extends JPanel {
+    public HangarFormWrapper(Form form) {
         super(new GridBagLayout());
 
         var items = form.getItems();

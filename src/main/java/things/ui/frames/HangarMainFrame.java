@@ -16,70 +16,64 @@
 
 package things.ui.frames;
 
+import things.ui.listeners.events.HangarDisplayableEvent;
 import things.ui.components.*;
 import things.ui.listeners.HangarKeyListener;
 
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
+    // TODO: add more screens
     private static final HangarMainFrame instance = new HangarMainFrame();
-    private Displayable displayable;
-    private HangarCanvas canvasPanel = null;
+    private final GridBagConstraints constraints = new GridBagConstraints();
+    private final HangarMainPanel mainPanel = new HangarMainPanel();
+    private final HangarViewport viewport = new HangarViewport();
 
     private HangarMainFrame() {
-        this.getContentPane().setLayout(new CardLayout());
+        this.getContentPane().setLayout(new GridBagLayout());
+        this.getContentPane().setPreferredSize(new Dimension(360, 360));
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
+
+        this.viewport.addDisplayableListener(e -> {
+            if (e.getStateChange() == HangarDisplayableEvent.SET) {
+                for (var keyListener : getKeyListeners()) {
+                    removeKeyListener(keyListener);
+                }
+                if (e.getSource() instanceof Canvas canvas) {
+                    addKeyListener(new HangarKeyListener(canvas));
+                    setTitle(System.getProperty("MIDlet-Name"));
+                    requestFocus();
+                }
+
+                mainPanel.setVisible(false);
+                viewport.setVisible(true);
+            }
+        });
+        viewport.setVisible(false);
+
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        this.add(mainPanel, constraints);
+
+        constraints.gridx = 1;
+        this.add(viewport, constraints);
+
+        this.pack();
+        this.revalidate();
     }
 
     public static HangarMainFrame getInstance() {
         return instance;
     }
 
-    public HangarCanvas getCanvasPanel() {
-        return canvasPanel;
-    }
-
-    public Displayable getDisplayable() {
-        return displayable;
-    }
-
-    public void setDisplayable(Displayable displayable) {
-        this.getContentPane().removeAll();
-        this.displayable = displayable;
-
-        if (displayable instanceof Canvas canvas) {
-            this.canvasPanel = new HangarCanvas(canvas);
-            this.getContentPane().add(new HangarDisplayable(canvasPanel, canvas));
-
-            for (var keyListener : getKeyListeners()) {
-                this.removeKeyListener(keyListener);
-            }
-            this.addKeyListener(new HangarKeyListener(canvas));
-
-            this.setTitle(System.getProperty("MIDlet-Name"));
-            this.requestFocus();
-            SwingUtilities.invokeLater(canvas::showNotify);
-        }
-        else if (displayable instanceof List list) {
-            this.getContentPane().add(new HangarDisplayable(new HangarList(list), list));
-        }
-        else if (displayable instanceof Form form) {
-            this.getContentPane().add(new HangarDisplayable(new HangarForm(form), form));
-        }
-        else {
-            // TODO: add another screens support
-            throw new IllegalArgumentException();
-        }
-
-        this.revalidate();
-        this.repaint();
+    public HangarViewport getViewport() {
+        return viewport;
     }
 }

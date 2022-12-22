@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.ui.components.HangarCanvas;
+import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.frames.HangarMainFrame;
@@ -26,7 +26,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public final class HangarCanvasUtils {
+public final class CanvasWrapperUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         var profile = HangarState.getProfileManager().getCurrent();
         if (profile.getScalingMode() == ScalingModes.Contain) {
@@ -39,14 +39,14 @@ public final class HangarCanvasUtils {
         }
     }
 
-    public static void fitBufferToResolution(HangarCanvas canvasPanel, Dimension resolution) {
+    public static void fitBufferToResolution(HangarCanvasWrapper canvasWrapper, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
-            if (canvasPanel != null) {
+            if (canvasWrapper != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = HangarMainFrame.getInstance().getDisplayable();
+                var displayable = HangarMainFrame.getInstance().getViewport().getDisplayable();
 
-                canvasPanel.setBuffer(changedBuffer);
-                canvasPanel.updateBufferTransformations();
+                canvasWrapper.setBuffer(changedBuffer);
+                canvasWrapper.updateBufferTransformations();
 
                 if (displayable != null) {
                     displayable.sizeChanged(resolution.width, resolution.height);
@@ -55,10 +55,10 @@ public final class HangarCanvasUtils {
         }
     }
 
-    public static Point canvasPointToPanel(HangarCanvas canvasPanel, int x, int y) {
+    public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
         // TODO: check this method
-        var scaleFactor = canvasPanel.getBufferScaleFactor();
-        var position = canvasPanel.getBufferPosition();
+        var scaleFactor = canvasWrapper.getBufferScaleFactor();
+        var position = canvasWrapper.getBufferPosition();
 
         var point = new Point();
         point.x = position.x + (int) (x * scaleFactor);
@@ -66,9 +66,9 @@ public final class HangarCanvasUtils {
         return point;
     }
 
-    public static Point panelPointToCanvas(HangarCanvas canvasPanel, int x, int y) {
-        var scaleFactor = canvasPanel.getBufferScaleFactor();
-        var position = canvasPanel.getBufferPosition();
+    public static Point panelPointToCanvas(HangarCanvasWrapper canvasWrapper, int x, int y) {
+        var scaleFactor = canvasWrapper.getBufferScaleFactor();
+        var position = canvasWrapper.getBufferPosition();
 
         var point = new Point();
         point.x = (int) ((x - position.x) / scaleFactor);
