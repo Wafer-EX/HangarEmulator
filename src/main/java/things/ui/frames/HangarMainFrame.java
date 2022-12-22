@@ -35,7 +35,6 @@ public class HangarMainFrame extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
-        this.add(displayableWrapper);
 
         this.displayableWrapper.addDisplayableListener(e -> {
             if (e.getStateChange() == HangarDisplayableEvent.SET) {
@@ -49,6 +48,10 @@ public class HangarMainFrame extends JFrame {
                 }
             }
         });
+
+        this.add(displayableWrapper);
+        this.pack();
+        this.revalidate();
     }
 
     public static HangarMainFrame getInstance() {
