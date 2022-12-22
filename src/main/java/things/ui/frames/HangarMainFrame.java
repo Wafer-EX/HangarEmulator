@@ -29,7 +29,7 @@ public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
     private final GridBagConstraints constraints = new GridBagConstraints();
     private final HangarMainPanel mainPanel = new HangarMainPanel();
-    private final HangarViewport displayableWrapper = new HangarViewport();
+    private final HangarViewport viewport = new HangarViewport();
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new GridBagLayout());
@@ -39,7 +39,7 @@ public class HangarMainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
 
-        this.displayableWrapper.addDisplayableListener(e -> {
+        this.viewport.addDisplayableListener(e -> {
             if (e.getStateChange() == HangarDisplayableEvent.SET) {
                 for (var keyListener : getKeyListeners()) {
                     removeKeyListener(keyListener);
@@ -51,10 +51,10 @@ public class HangarMainFrame extends JFrame {
                 }
 
                 mainPanel.setVisible(false);
-                displayableWrapper.setVisible(true);
+                viewport.setVisible(true);
             }
         });
-        displayableWrapper.setVisible(false);
+        viewport.setVisible(false);
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
@@ -63,7 +63,7 @@ public class HangarMainFrame extends JFrame {
         this.add(mainPanel, constraints);
 
         constraints.gridx = 1;
-        this.add(displayableWrapper, constraints);
+        this.add(viewport, constraints);
 
         this.pack();
         this.revalidate();
@@ -73,7 +73,7 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarViewport getDisplayableWrapper() {
-        return displayableWrapper;
+    public HangarViewport getViewport() {
+        return viewport;
     }
 }

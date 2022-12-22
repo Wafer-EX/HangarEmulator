@@ -43,7 +43,7 @@ public final class HangarCanvasUtils {
         if (resolution.width > 0 && resolution.height > 0) {
             if (canvasWrapper != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable();
+                var displayable = HangarMainFrame.getInstance().getViewport().getDisplayable();
 
                 canvasWrapper.setBuffer(changedBuffer);
                 canvasWrapper.updateBufferTransformations();
