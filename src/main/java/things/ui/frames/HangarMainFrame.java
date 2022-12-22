@@ -29,7 +29,7 @@ import java.awt.*;
 public class HangarMainFrame extends JFrame {
     private static final HangarMainFrame instance = new HangarMainFrame();
     private Displayable displayable;
-    private HangarCanvas canvasPanel = null;
+    private HangarViewport viewport = null;
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new CardLayout());
@@ -43,8 +43,8 @@ public class HangarMainFrame extends JFrame {
         return instance;
     }
 
-    public HangarCanvas getCanvasPanel() {
-        return canvasPanel;
+    public HangarViewport getCanvasPanel() {
+        return viewport;
     }
 
     public Displayable getDisplayable() {
@@ -56,8 +56,8 @@ public class HangarMainFrame extends JFrame {
         this.displayable = displayable;
 
         if (displayable instanceof Canvas canvas) {
-            this.canvasPanel = new HangarCanvas(canvas);
-            this.getContentPane().add(new HangarDisplayable(canvasPanel, canvas));
+            this.viewport = new HangarViewport(canvas);
+            this.getContentPane().add(new HangarDisplayable(viewport, canvas));
 
             for (var keyListener : getKeyListeners()) {
                 this.removeKeyListener(keyListener);

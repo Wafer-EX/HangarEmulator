@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class HangarCanvas extends JPanel {
+public class HangarViewport extends JPanel {
     private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -40,7 +40,7 @@ public class HangarCanvas extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    public HangarCanvas(Canvas canvas) {
+    public HangarViewport(Canvas canvas) {
         super();
         this.canvas = canvas;
 
@@ -55,10 +55,10 @@ public class HangarCanvas extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(HangarCanvas.this.getSize());
-                    HangarCanvasUtils.fitBufferToResolution(HangarCanvas.this, HangarCanvas.this.getSize());
+                    profile.setResolution(HangarViewport.this.getSize());
+                    HangarCanvasUtils.fitBufferToResolution(HangarViewport.this, HangarViewport.this.getSize());
                 }
-                HangarCanvas.this.updateBufferTransformations();
+                HangarViewport.this.updateBufferTransformations();
             }
         });
         this.refreshSerialCallTimer();

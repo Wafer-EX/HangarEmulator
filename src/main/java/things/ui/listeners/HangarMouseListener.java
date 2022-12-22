@@ -16,7 +16,7 @@
 
 package things.ui.listeners;
 
-import things.ui.components.HangarCanvas;
+import things.ui.components.HangarViewport;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarCanvasUtils;
 
@@ -25,9 +25,9 @@ import javax.swing.event.MouseInputAdapter;
 import java.awt.event.MouseEvent;
 
 public class HangarMouseListener extends MouseInputAdapter {
-    private final HangarCanvas gamePanel;
+    private final HangarViewport gamePanel;
 
-    public HangarMouseListener(HangarCanvas gamePanel) {
+    public HangarMouseListener(HangarViewport gamePanel) {
         this.gamePanel = gamePanel;
     }
 
