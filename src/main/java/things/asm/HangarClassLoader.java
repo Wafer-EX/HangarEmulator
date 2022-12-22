@@ -14,19 +14,19 @@
  * limitations under the License.
  */
 
-package things;
+package things.asm;
 
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
-import things.asm.HangarClassVisitor;
+import things.MIDletResources;
 
 import java.net.URL;
 import java.net.URLClassLoader;
 
-public class MIDletClassLoader extends URLClassLoader {
+public class HangarClassLoader extends URLClassLoader {
 
-    public MIDletClassLoader(URL[] urls) {
+    public HangarClassLoader(URL[] urls) {
         super(urls);
     }
 

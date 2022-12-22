@@ -22,7 +22,7 @@ import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
-import things.utils.HangarCanvasUtils;
+import things.utils.CanvasWrapperUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
@@ -89,7 +89,7 @@ public class HangarProfile {
 
         SwingUtilities.invokeLater(() -> {
             var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
-            HangarCanvasUtils.fitBufferToResolution(canvasWrapper, resolution);
+            CanvasWrapperUtils.fitBufferToResolution(canvasWrapper, resolution);
         });
     }
 

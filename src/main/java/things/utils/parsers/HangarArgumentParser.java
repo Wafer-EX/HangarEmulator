@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things;
+package things.utils.parsers;
 
 import things.profiles.HangarProfile;
 

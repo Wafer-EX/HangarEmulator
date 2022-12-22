@@ -19,7 +19,7 @@ package things.ui.components.wrappers;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.listeners.HangarMouseListener;
-import things.utils.HangarCanvasUtils;
+import things.utils.CanvasWrapperUtils;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -56,7 +56,7 @@ public class HangarCanvasWrapper extends JPanel {
             public void componentResized(ComponentEvent e) {
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
                     profile.setResolution(HangarCanvasWrapper.this.getSize());
-                    HangarCanvasUtils.fitBufferToResolution(HangarCanvasWrapper.this, HangarCanvasWrapper.this.getSize());
+                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapper.this, HangarCanvasWrapper.this.getSize());
                 }
                 HangarCanvasWrapper.this.updateBufferTransformations();
             }
@@ -85,7 +85,7 @@ public class HangarCanvasWrapper extends JPanel {
     }
 
     public void updateBufferTransformations() {
-        bufferScaleFactor = HangarCanvasUtils.getBufferScaleFactor(this, buffer);
+        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, buffer);
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);

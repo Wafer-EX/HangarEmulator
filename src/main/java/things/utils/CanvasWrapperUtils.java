@@ -26,7 +26,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
-public final class HangarCanvasUtils {
+public final class CanvasWrapperUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         var profile = HangarState.getProfileManager().getCurrent();
         if (profile.getScalingMode() == ScalingModes.Contain) {
