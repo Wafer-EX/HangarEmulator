@@ -16,14 +16,16 @@
 
 package things.ui.frames;
 
+import things.ui.listeners.events.HangarDisplayableEvent;
 import things.ui.components.*;
+import things.ui.listeners.HangarKeyListener;
 
+import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
     // TODO: add all screens at once, turn it with actions (set displayable and etc.)
-    // TODO: move displayable only to HangarDisplayable
     private static final HangarMainFrame instance = new HangarMainFrame();
     private final HangarViewport displayableWrapper = new HangarViewport();
 
@@ -34,6 +36,19 @@ public class HangarMainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
         this.add(displayableWrapper);
+
+        this.displayableWrapper.addDisplayableListener(e -> {
+            if (e.getStateChange() == HangarDisplayableEvent.SET) {
+                for (var keyListener : getKeyListeners()) {
+                    removeKeyListener(keyListener);
+                }
+                if (e.getSource() instanceof Canvas canvas) {
+                    addKeyListener(new HangarKeyListener(canvas));
+                    setTitle(System.getProperty("MIDlet-Name"));
+                    requestFocus();
+                }
+            }
+        });
     }
 
     public static HangarMainFrame getInstance() {

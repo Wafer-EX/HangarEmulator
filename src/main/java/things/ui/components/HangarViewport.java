@@ -16,11 +16,11 @@
 
 package things.ui.components;
 
+import things.ui.listeners.events.HangarDisplayableEvent;
+import things.ui.listeners.HangarDisplayableListener;
 import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.components.wrappers.HangarFormWrapper;
 import things.ui.components.wrappers.HangarListWrapper;
-import things.ui.frames.HangarMainFrame;
-import things.ui.listeners.HangarKeyListener;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
@@ -28,9 +28,10 @@ import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
-    // TODO: add displayable setting, replace main screen with setting another displayable
+    private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
     private Displayable displayable = null;
     private HangarCanvasWrapper canvasWrapper = null;
 
@@ -64,15 +65,6 @@ public class HangarViewport extends JPanel {
         if (displayable instanceof Canvas canvas) {
             this.canvasWrapper = new HangarCanvasWrapper(canvas);
             this.add(canvasWrapper, BorderLayout.CENTER);
-
-            var mainFrame = HangarMainFrame.getInstance();
-            for (var keyListener : mainFrame.getKeyListeners()) {
-                mainFrame.removeKeyListener(keyListener);
-            }
-            mainFrame.addKeyListener(new HangarKeyListener(canvas));
-            mainFrame.setTitle(System.getProperty("MIDlet-Name"));
-            mainFrame.requestFocus();
-
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
@@ -88,7 +80,15 @@ public class HangarViewport extends JPanel {
             throw new IllegalArgumentException();
         }
 
+        for (var displayableListener : displayableListeners) {
+            var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
+            displayableListener.displayableStateChanged(displayableEvent);
+        }
         this.revalidate();
         this.repaint();
+    }
+
+    public void addDisplayableListener(HangarDisplayableListener listener) {
+        this.displayableListeners.add(listener);
     }
 }
