@@ -25,12 +25,15 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
-    // TODO: add all screens at once, turn it with actions (set displayable and etc.)
+    // TODO: add more screens
     private static final HangarMainFrame instance = new HangarMainFrame();
+    private final GridBagConstraints constraints = new GridBagConstraints();
+    private final HangarMainPanel mainPanel = new HangarMainPanel();
     private final HangarViewport displayableWrapper = new HangarViewport();
 
     private HangarMainFrame() {
-        this.getContentPane().setLayout(new CardLayout());
+        this.getContentPane().setLayout(new GridBagLayout());
+        this.getContentPane().setPreferredSize(new Dimension(360, 360));
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -46,10 +49,22 @@ public class HangarMainFrame extends JFrame {
                     setTitle(System.getProperty("MIDlet-Name"));
                     requestFocus();
                 }
+
+                mainPanel.setVisible(false);
+                displayableWrapper.setVisible(true);
             }
         });
+        displayableWrapper.setVisible(false);
 
-        this.add(displayableWrapper);
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridx = 0;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        this.add(mainPanel, constraints);
+
+        constraints.gridx = 1;
+        this.add(displayableWrapper, constraints);
+
         this.pack();
         this.revalidate();
     }

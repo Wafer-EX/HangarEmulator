@@ -42,7 +42,6 @@ public class HangarViewport extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         this.add(scrollPane, BorderLayout.CENTER);
-        this.setPreferredSize(new Dimension(360, 360));
     }
 
     public HangarCanvasWrapper getCanvasWrapper() {
@@ -76,7 +75,7 @@ public class HangarViewport extends JPanel {
             this.add(formWrapper, BorderLayout.CENTER);
         }
         else {
-            // TODO: add another screens support
+            // TODO: add more screens support
             throw new IllegalArgumentException();
         }
 
