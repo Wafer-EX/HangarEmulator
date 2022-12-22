@@ -27,6 +27,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
+    // TODO: add all screens at once, turn it with actions (set displayable and etc.)
+    // TODO: move displayable only to HangarDisplayable
     private static final HangarMainFrame instance = new HangarMainFrame();
     private Displayable displayable;
     private HangarViewport viewport = null;

@@ -21,6 +21,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public class HangarDisplayable extends JPanel {
+    // TODO: add displayable setting, replace main screen with setting another displayable
     private final Displayable displayable;
 
     public HangarDisplayable(JPanel screen, Displayable displayable) {
