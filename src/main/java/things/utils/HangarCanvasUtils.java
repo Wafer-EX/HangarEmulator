@@ -16,7 +16,7 @@
 
 package things.utils;
 
-import things.ui.components.HangarCanvasWrapper;
+import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.frames.HangarMainFrame;

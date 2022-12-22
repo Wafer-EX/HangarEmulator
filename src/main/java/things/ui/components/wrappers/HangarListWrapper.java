@@ -14,44 +14,40 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.components.wrappers;
 
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.ImageItem;
-import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarFormWrapper extends JPanel {
-    public HangarFormWrapper(Form form) {
+public class HangarListWrapper extends JPanel {
+    public HangarListWrapper(List list) {
         super(new GridBagLayout());
 
-        var items = form.getItems();
         var constraints = new GridBagConstraints();
-
         constraints.fill = GridBagConstraints.HORIZONTAL;
         constraints.weightx = 1.0;
-        constraints.gridy = 0;
+        constraints.ipady = 24;
 
-        for (var item : items) {
-            if (item instanceof StringItem stringItem) {
-                var label = new JLabel(stringItem.getText());
-                this.add(label, constraints);
-            }
-            else if (item instanceof ImageItem imageItem) {
-                var imageIcon = new ImageIcon(imageItem.getImage().getSEImage());
-                var label = new JLabel(imageIcon);
-                this.add(label, constraints);
-            }
-            else {
-                // TODO: add another items
-                throw new IllegalArgumentException();
-            }
-            constraints.gridy += 1;
+        for (int i = 0; i < list.size(); i++) {
+            int selectedIndex = i;
+            var button = new JButton(list.getString(i));
+
+            button.addActionListener(e -> {
+                list.setSelectedIndex(selectedIndex, true);
+                list.runSelectCommand();
+            });
+
+            constraints.insets.set(i == 0 ? 4 : 2, 4, i == list.size() - 1 ? 4 : 2, 4);
+            constraints.gridy = i;
+            this.add(button, constraints);
         }
 
+        constraints.insets.set(0, 0, 0, 0);
         constraints.fill = GridBagConstraints.BOTH;
+        constraints.gridy = list.size();
         constraints.weighty = 1.0;
+        constraints.ipady = 0;
         this.add(Box.createGlue(), constraints);
     }
 }

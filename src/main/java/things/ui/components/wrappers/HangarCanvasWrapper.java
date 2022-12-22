@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.ui.components;
+package things.ui.components.wrappers;
 
 import things.HangarState;
 import things.enums.ScalingModes;

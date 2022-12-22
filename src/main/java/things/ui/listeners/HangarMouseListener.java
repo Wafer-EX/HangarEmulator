@@ -16,7 +16,7 @@
 
 package things.ui.listeners;
 
-import things.ui.components.HangarCanvasWrapper;
+import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.utils.HangarCanvasUtils;
 

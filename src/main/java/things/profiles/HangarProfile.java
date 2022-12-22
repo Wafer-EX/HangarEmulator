@@ -18,7 +18,7 @@ package things.profiles;
 
 import things.HangarKeyCodes;
 import things.enums.ScalingModes;
-import things.ui.components.HangarCanvasWrapper;
+import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.utils.AudioUtils;
