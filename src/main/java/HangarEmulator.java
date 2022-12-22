@@ -18,9 +18,7 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
 import things.profiles.HangarProfileManager;
 import things.ui.frames.HangarMainFrame;
-import things.ui.components.HangarMainPanel;
 
-import java.awt.*;
 import java.io.File;
 import java.util.Properties;
 
@@ -41,7 +39,7 @@ public class HangarEmulator {
             HangarState.setProperties(properties);
 
             var mainFrame = HangarMainFrame.getInstance();
-            var mainPanel = new HangarMainPanel();
+            //var mainPanel = new HangarMainPanel();
 
             if (args.length > 0 && new File(args[0]).isFile()) {
                 var midletLoader = new MIDletLoader(args[0]);
@@ -49,11 +47,13 @@ public class HangarEmulator {
                 midletLoader.startMIDlet();
             }
             else {
-                mainPanel.setPreferredSize(new Dimension(360, 360));
-                mainFrame.add(mainPanel);
-                mainFrame.pack();
-                mainFrame.revalidate();
+                //mainPanel.setPreferredSize(new Dimension(360, 360));
+                //mainFrame.add(mainPanel);
+                //mainFrame.pack();
+                //mainFrame.revalidate();
             }
+            mainFrame.pack();
+            mainFrame.revalidate();
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }

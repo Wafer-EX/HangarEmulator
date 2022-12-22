@@ -33,7 +33,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
             var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerPressed(point.x, point.y);
         }
@@ -41,7 +41,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
             var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerReleased(point.x, point.y);
         }
@@ -49,7 +49,7 @@ public class HangarMouseListener extends MouseInputAdapter {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if (HangarMainFrame.getInstance().getDisplayable() instanceof Canvas canvas) {
+        if (HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable() instanceof Canvas canvas) {
             var point = HangarCanvasUtils.panelPointToCanvas(gamePanel, e.getX(), e.getY());
             canvas.pointerDragged(point.x, point.y);
         }

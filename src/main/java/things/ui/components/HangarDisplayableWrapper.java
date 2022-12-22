@@ -16,26 +16,77 @@
 
 package things.ui.components;
 
+import things.ui.frames.HangarMainFrame;
+import things.ui.listeners.HangarKeyListener;
+
+import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Displayable;
+import javax.microedition.lcdui.Form;
+import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarDisplayable extends JPanel {
+public class HangarDisplayableWrapper extends JPanel {
     // TODO: add displayable setting, replace main screen with setting another displayable
-    private final Displayable displayable;
+    private Displayable displayable = null;
+    private HangarViewport viewport = null;
 
-    public HangarDisplayable(JPanel screen, Displayable displayable) {
+    public HangarDisplayableWrapper() {
         super(new BorderLayout());
-        this.displayable = displayable;
 
-        var scrollPane = new JScrollPane(screen, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        var scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
 
         this.add(scrollPane, BorderLayout.CENTER);
+        this.setPreferredSize(new Dimension(360, 360));
+    }
+
+    public HangarViewport getViewport() {
+        return viewport;
+    }
+
+    public Displayable getDisplayable() {
+        return displayable;
+    }
+
+    public void setDisplayable(Displayable displayable) {
+        this.removeAll();
+        this.displayable = displayable;
+
         if (displayable.getCommands().size() > 0) {
-            this.add(new HangarDisplayableCommands(), BorderLayout.SOUTH);
+            var displayableCommands = new HangarDisplayableCommands();
+            this.add(displayableCommands, BorderLayout.SOUTH);
         }
+
+        if (displayable instanceof Canvas canvas) {
+            this.viewport = new HangarViewport(canvas);
+            this.add(viewport, BorderLayout.CENTER);
+
+            var mainFrame = HangarMainFrame.getInstance();
+            for (var keyListener : mainFrame.getKeyListeners()) {
+                mainFrame.removeKeyListener(keyListener);
+            }
+            mainFrame.addKeyListener(new HangarKeyListener(canvas));
+            mainFrame.setTitle(System.getProperty("MIDlet-Name"));
+            mainFrame.requestFocus();
+
+            SwingUtilities.invokeLater(canvas::showNotify);
+        }
+        else if (displayable instanceof List list) {
+            var hangarList = new HangarList(list);
+            this.add(hangarList, BorderLayout.CENTER);
+        }
+        else if (displayable instanceof Form form) {
+            var hangarForm = new HangarForm(form);
+            this.add(hangarForm, BorderLayout.CENTER);
+        }
+        else {
+            // TODO: add another screens support
+            throw new IllegalArgumentException();
+        }
+
         this.revalidate();
+        this.repaint();
     }
 
     private class HangarDisplayableCommands extends JScrollPane {

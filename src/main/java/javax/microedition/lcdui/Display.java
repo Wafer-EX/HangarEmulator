@@ -70,11 +70,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return HangarMainFrame.getInstance().getDisplayable();
+        return HangarMainFrame.getInstance().getDisplayableWrapper().getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarMainFrame.getInstance().setDisplayable(displayable);
+        HangarMainFrame.getInstance().getDisplayableWrapper().setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -93,7 +93,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarMainFrame.getInstance().getCanvasPanel().setCallSerially(r);
+        HangarMainFrame.getInstance().getDisplayableWrapper().getViewport().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

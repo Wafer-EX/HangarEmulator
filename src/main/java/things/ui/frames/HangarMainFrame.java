@@ -17,12 +17,7 @@
 package things.ui.frames;
 
 import things.ui.components.*;
-import things.ui.listeners.HangarKeyListener;
 
-import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
@@ -30,8 +25,7 @@ public class HangarMainFrame extends JFrame {
     // TODO: add all screens at once, turn it with actions (set displayable and etc.)
     // TODO: move displayable only to HangarDisplayable
     private static final HangarMainFrame instance = new HangarMainFrame();
-    private Displayable displayable;
-    private HangarViewport viewport = null;
+    private final HangarDisplayableWrapper displayableWrapper = new HangarDisplayableWrapper();
 
     private HangarMainFrame() {
         this.getContentPane().setLayout(new CardLayout());
@@ -39,49 +33,14 @@ public class HangarMainFrame extends JFrame {
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
+        this.add(displayableWrapper);
     }
 
     public static HangarMainFrame getInstance() {
         return instance;
     }
 
-    public HangarViewport getCanvasPanel() {
-        return viewport;
-    }
-
-    public Displayable getDisplayable() {
-        return displayable;
-    }
-
-    public void setDisplayable(Displayable displayable) {
-        this.getContentPane().removeAll();
-        this.displayable = displayable;
-
-        if (displayable instanceof Canvas canvas) {
-            this.viewport = new HangarViewport(canvas);
-            this.getContentPane().add(new HangarDisplayable(viewport, canvas));
-
-            for (var keyListener : getKeyListeners()) {
-                this.removeKeyListener(keyListener);
-            }
-            this.addKeyListener(new HangarKeyListener(canvas));
-
-            this.setTitle(System.getProperty("MIDlet-Name"));
-            this.requestFocus();
-            SwingUtilities.invokeLater(canvas::showNotify);
-        }
-        else if (displayable instanceof List list) {
-            this.getContentPane().add(new HangarDisplayable(new HangarList(list), list));
-        }
-        else if (displayable instanceof Form form) {
-            this.getContentPane().add(new HangarDisplayable(new HangarForm(form), form));
-        }
-        else {
-            // TODO: add another screens support
-            throw new IllegalArgumentException();
-        }
-
-        this.revalidate();
-        this.repaint();
+    public HangarDisplayableWrapper getDisplayableWrapper() {
+        return displayableWrapper;
     }
 }
