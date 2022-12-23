@@ -90,4 +90,29 @@ public class HangarViewport extends JPanel {
     public void addDisplayableListener(HangarDisplayableListener listener) {
         this.displayableListeners.add(listener);
     }
+
+    private static class HangarViewportCommands extends JScrollPane {
+        public HangarViewportCommands(Displayable displayable) {
+            super(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED);
+            var panel = new JPanel(new GridBagLayout());
+            var commands = displayable.getCommands();
+            var constraints = new GridBagConstraints();
+
+            panel.setBorder(BorderFactory.createEmptyBorder(0, 2, 0, 2));
+            constraints.fill = GridBagConstraints.HORIZONTAL;
+            constraints.weightx = 1.0;
+            constraints.ipady = 12;
+            constraints.insets.set(4, 2, 4, 2);
+
+            for (int i = 0; i < commands.size(); i++) {
+                var command = commands.get(i);
+                var button = new JButton(commands.get(i).getLabel());
+
+                button.addActionListener(e -> displayable.getCommandListener().commandAction(command, displayable));
+                constraints.gridx = i;
+                panel.add(button, constraints);
+            }
+            this.setViewportView(panel);
+        }
+    }
 }
