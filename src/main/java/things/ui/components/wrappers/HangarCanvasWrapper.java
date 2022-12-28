@@ -18,7 +18,11 @@ package things.ui.components.wrappers;
 
 import things.HangarState;
 import things.enums.ScalingModes;
+import things.profiles.HangarProfile;
+import things.ui.frames.HangarMainFrame;
+import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;
+import things.ui.listeners.events.HangarProfileEvent;
 import things.utils.CanvasWrapperUtils;
 import things.utils.microedition.ImageUtils;
 
@@ -62,6 +66,28 @@ public class HangarCanvasWrapper extends JPanel {
             }
         });
         this.refreshSerialCallTimer();
+
+        HangarState.getProfileManager().getDefaultProfile().addProfileListener(e -> {
+            switch (e.getStateChange()) {
+                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
+                    for (var keyListener : getKeyListeners()) {
+                        if (keyListener instanceof HangarKeyListener hangarKeyListener) {
+                            hangarKeyListener.getPressedKeys().clear();
+                        }
+                    }
+                }
+                case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
+                    if (e.getValue() == ScalingModes.ChangeResolution) {
+                        var contentPane = HangarMainFrame.getInstance().getContentPane();
+                        var source = (HangarProfile) e.getSource();
+                        source.setResolution(contentPane.getSize());
+                    }
+                    updateBufferTransformations();
+                });
+                case HangarProfileEvent.RESOLUTION_CHANGED -> SwingUtilities.invokeLater(() -> CanvasWrapperUtils.fitBufferToResolution(this, (Dimension) e.getValue()));
+                case HangarProfileEvent.FRAME_RATE_CHANGED -> refreshSerialCallTimer();
+            }
+        });
     }
 
     public BufferedImage getBuffer() {

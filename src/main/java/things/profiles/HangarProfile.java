@@ -18,21 +18,21 @@ package things.profiles;
 
 import things.HangarKeyCodes;
 import things.enums.ScalingModes;
-import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.frames.HangarMainFrame;
-import things.ui.listeners.HangarKeyListener;
+import things.ui.listeners.HangarProfileListener;
+import things.ui.listeners.events.HangarProfileEvent;
 import things.utils.AudioUtils;
-import things.utils.CanvasWrapperUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiSystem;
-import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 public class HangarProfile {
+    private final ArrayList<HangarProfileListener> profileListeners = new ArrayList<>();
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
@@ -48,15 +48,8 @@ public class HangarProfile {
 
     public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
         this.midletKeyCodes = keyCodes;
-
-        var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
-            var keyListeners = canvasWrapper.getKeyListeners();
-            for (var keyListener : keyListeners) {
-                if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-                    hangarKeyListener.getPressedKeys().clear();
-                }
-            }
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.MIDLET_KEYCODES_CHANGED, keyCodes));
         }
     }
 
@@ -66,18 +59,9 @@ public class HangarProfile {
 
     public void setScalingMode(ScalingModes scalingMode) {
         this.scalingMode = scalingMode;
-
-        SwingUtilities.invokeLater(() -> {
-            if (scalingMode == ScalingModes.ChangeResolution) {
-                var contentPane = HangarMainFrame.getInstance().getContentPane();
-                this.setResolution(contentPane.getSize());
-            }
-
-            var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
-            if (canvasWrapper != null) {
-                canvasWrapper.updateBufferTransformations();
-            }
-        });
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.SCALING_MODE_CHANGED, scalingMode));
+        }
     }
 
     public Dimension getResolution() {
@@ -86,11 +70,9 @@ public class HangarProfile {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
-
-        SwingUtilities.invokeLater(() -> {
-            var canvasWrapper = HangarMainFrame.getInstance().getViewport().getCanvasWrapper();
-            CanvasWrapperUtils.fitBufferToResolution(canvasWrapper, resolution);
-        });
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.RESOLUTION_CHANGED, resolution));
+        }
     }
 
     public int getFrameRate() {
@@ -99,14 +81,9 @@ public class HangarProfile {
 
     public void setFrameRate(int frameRate) {
         this.frameRate = frameRate;
-        SwingUtilities.invokeLater(() -> {
-            var container = HangarMainFrame.getInstance().getContentPane();
-            for (var component : container.getComponents()) {
-                if (component instanceof HangarCanvasWrapper canvasWrapper) {
-                    canvasWrapper.refreshSerialCallTimer();
-                }
-            }
-        });
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.FRAME_RATE_CHANGED, frameRate));
+        }
     }
 
     public boolean getCanvasClearing() {
@@ -115,6 +92,9 @@ public class HangarProfile {
 
     public void setCanvasClearing(boolean canvasClearing) {
         this.canvasClearing = canvasClearing;
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.CANVAS_CLEARING_CHANGED, canvasClearing));
+        }
     }
 
     public boolean getAntiAliasing() {
@@ -123,6 +103,9 @@ public class HangarProfile {
 
     public void setAntiAliasing(boolean antiAliasing) {
         this.antiAliasing = antiAliasing;
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.ANTI_ALIASING_CHANGED, antiAliasing));
+        }
     }
 
     public boolean getWindowResizing() {
@@ -131,6 +114,11 @@ public class HangarProfile {
 
     public void setWindowResizing(boolean windowResizing) {
         this.windowResizing = windowResizing;
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.WINDOW_RESIZING_CHANGED, windowResizing));
+        }
+
+        // TODO: use event system
         HangarMainFrame.getInstance().setResizable(windowResizing);
     }
 
@@ -139,12 +127,21 @@ public class HangarProfile {
     }
 
     public void setSoundbankFile(File path) throws IOException, InvalidMidiDataException {
+        // TODO: use event system
         if (path != null) {
             var soundbankInputStream = new FileInputStream(path);
             var soundbank = MidiSystem.getSoundbank(soundbankInputStream);
 
             AudioUtils.setSoundbank(soundbank);
         }
+
         this.soundbankFile = path;
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.SOUNDBANK_CHANGED, path));
+        }
+    }
+
+    public void addProfileListener(HangarProfileListener listener) {
+        this.profileListeners.add(listener);
     }
 }
