@@ -144,4 +144,12 @@ public class HangarProfile {
     public void addProfileListener(HangarProfileListener listener) {
         this.profileListeners.add(listener);
     }
+
+    public void removeProfileListener(HangarProfileListener listener) {
+        this.profileListeners.remove(listener);
+    }
+
+    public HangarProfileListener[] getProfileListeners() {
+        return (HangarProfileListener[]) this.profileListeners.toArray();
+    }
 }

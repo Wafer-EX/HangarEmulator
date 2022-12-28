@@ -23,6 +23,7 @@ import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;
 import things.ui.listeners.events.HangarProfileEvent;
+import things.ui.listeners.events.HangarProfileManagerEvent;
 import things.utils.CanvasWrapperUtils;
 import things.utils.microedition.ImageUtils;
 
@@ -67,7 +68,20 @@ public class HangarCanvasWrapper extends JPanel {
         });
         this.refreshSerialCallTimer();
 
-        HangarState.getProfileManager().getDefaultProfile().addProfileListener(e -> {
+        HangarState.getProfileManager().addProfileManagerListener(e -> {
+            switch (e.getStateChange()) {
+                case HangarProfileManagerEvent.PROFILE_SET -> {
+                    // TODO: write code here
+                }
+                case HangarProfileManagerEvent.PROFILE_UNSET -> {
+                    for (var profileListener : e.getProfile().getProfileListeners()) {
+                        e.getProfile().removeProfileListener(profileListener);
+                    }
+                }
+            }
+        });
+
+        HangarState.getProfileManager().getCurrent().addProfileListener(e -> {
             switch (e.getStateChange()) {
                 case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
                     for (var keyListener : getKeyListeners()) {
