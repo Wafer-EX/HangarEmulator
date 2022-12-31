@@ -36,6 +36,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarCanvasWrapper extends JPanel {
+    // TODO: add quality support
     private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
