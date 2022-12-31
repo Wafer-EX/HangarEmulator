@@ -41,7 +41,7 @@ public class HangarCanvasWrapper extends JPanel {
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
-    private Dimension bufferScale = HangarState.getProfileManager().getCurrent().getResolution();
+    private Dimension bufferScale = HangarState.getProfileManager().getCurrentProfile().getResolution();
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
@@ -49,7 +49,7 @@ public class HangarCanvasWrapper extends JPanel {
         super();
         this.canvas = canvas;
 
-        var profile = HangarState.getProfileManager().getCurrent();
+        var profile = HangarState.getProfileManager().getCurrentProfile();
         var mouseListener = new HangarMouseListener(this);
         var resolution = profile.getResolution();
 
@@ -81,7 +81,7 @@ public class HangarCanvasWrapper extends JPanel {
             }
         });
 
-        HangarState.getProfileManager().getCurrent().addProfileListener(e -> {
+        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
             switch (e.getStateChange()) {
                 case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
                     for (var keyListener : getKeyListeners()) {
@@ -161,7 +161,7 @@ public class HangarCanvasWrapper extends JPanel {
         var graphics2d = (Graphics2D) graphics;
         if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
-            var profile = HangarState.getProfileManager().getCurrent();
+            var profile = HangarState.getProfileManager().getCurrentProfile();
 
             if (profile.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());

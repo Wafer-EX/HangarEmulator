@@ -120,11 +120,11 @@ public class HangarMenuBar extends JMenuBar {
 
         public HangarOptionsMenu() {
             super("Options");
-            canvasClearingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getCanvasClearing());
-            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setCanvasClearing(!HangarState.getProfileManager().getCurrent().getCanvasClearing()));
+            canvasClearingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getCanvasClearing());
+            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setCanvasClearing(!HangarState.getProfileManager().getCurrentProfile().getCanvasClearing()));
 
-            antiAliasingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getAntiAliasing());
-            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setAntiAliasing(!HangarState.getProfileManager().getCurrent().getAntiAliasing()));
+            antiAliasingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getAntiAliasing());
+            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setAntiAliasing(!HangarState.getProfileManager().getCurrentProfile().getAntiAliasing()));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -148,7 +148,7 @@ public class HangarMenuBar extends JMenuBar {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
                         try {
-                            HangarState.getProfileManager().getCurrent().setSoundbankFile(selectedFile);
+                            HangarState.getProfileManager().getCurrentProfile().setSoundbankFile(selectedFile);
                         }
                         catch (IOException | InvalidMidiDataException exception) {
                             exception.printStackTrace();
@@ -163,8 +163,8 @@ public class HangarMenuBar extends JMenuBar {
 
             clearSoundBankItem.addActionListener(e -> AudioUtils.setSoundbank(null));
 
-            allowResizingCheckBox.setSelected(HangarState.getProfileManager().getCurrent().getWindowResizing());
-            allowResizingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrent().setWindowResizing(allowResizingCheckBox.getState()));
+            allowResizingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getWindowResizing());
+            allowResizingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setWindowResizing(allowResizingCheckBox.getState()));
 
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
@@ -186,9 +186,9 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarFrameRateRadio extends JRadioButtonMenuItem {
             public HangarFrameRateRadio(int frameRate) {
                 super();
-                this.addItemListener(e -> HangarState.getProfileManager().getCurrent().setFrameRate(frameRate));
+                this.addItemListener(e -> HangarState.getProfileManager().getCurrentProfile().setFrameRate(frameRate));
                 this.setText(frameRate > -1 ? frameRate + " FPS" : "Unlimited");
-                this.setSelected(HangarState.getProfileManager().getCurrent().getFrameRate() == frameRate);
+                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getFrameRate() == frameRate);
                 frameRateRadioGroup.add(this);
             }
         }
@@ -197,9 +197,9 @@ public class HangarMenuBar extends JMenuBar {
             public HangarScalingModeRadio(ScalingModes scalingMode) {
                 super();
                 this.setText(scalingMode.toString());
-                this.setSelected(HangarState.getProfileManager().getCurrent().getScalingMode() == scalingMode);
+                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getScalingMode() == scalingMode);
                 this.addItemListener(e -> {
-                    HangarState.getProfileManager().getCurrent().setScalingMode(scalingMode);
+                    HangarState.getProfileManager().getCurrentProfile().setScalingMode(scalingMode);
                     resolutionPopupMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
                     if (scalingMode == ScalingModes.ChangeResolution) {
                         resolutionRadioGroup.clearSelection();
@@ -212,13 +212,13 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarResolutionRadio extends JRadioButtonMenuItem {
             public HangarResolutionRadio(Dimension resolution) {
                 super();
-                var profileResolution = HangarState.getProfileManager().getCurrent().getResolution();
+                var profileResolution = HangarState.getProfileManager().getCurrentProfile().getResolution();
 
                 this.setText(resolution.width + "x" + resolution.height);
                 this.setSelected(profileResolution.width == resolution.width && profileResolution.height == resolution.height);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfileManager().getCurrent().setResolution(resolution);
+                        HangarState.getProfileManager().getCurrentProfile().setResolution(resolution);
                     }
                 });
                 resolutionRadioGroup.add(this);
@@ -232,10 +232,10 @@ public class HangarMenuBar extends JMenuBar {
                 super();
                 // TODO: rewrite text setting
                 this.setText(keyboardName);
-                this.setSelected(HangarState.getProfileManager().getCurrent().getMidletKeyCodes() == keyCodes);
+                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getMidletKeyCodes() == keyCodes);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfileManager().getCurrent().setMidletKeyCodes(keyCodes);
+                        HangarState.getProfileManager().getCurrentProfile().setMidletKeyCodes(keyCodes);
                     }
                 });
                 keyboardRadioGroup.add(this);

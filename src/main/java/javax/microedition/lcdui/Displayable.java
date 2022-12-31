@@ -73,12 +73,12 @@ public abstract class Displayable {
     }
 
     public int getWidth() {
-        var profile = HangarState.getProfileManager().getCurrent();
+        var profile = HangarState.getProfileManager().getCurrentProfile();
         return profile.getResolution().width;
     }
 
     public int getHeight() {
-        var profile = HangarState.getProfileManager().getCurrent();
+        var profile = HangarState.getProfileManager().getCurrentProfile();
         return profile.getResolution().height;
     }
 

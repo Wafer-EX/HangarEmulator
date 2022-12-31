@@ -24,85 +24,40 @@ import java.util.Objects;
 
 public class HangarProfileManager {
     private final ArrayList<HangarProfileManagerListener> profileManagerListeners = new ArrayList<>();
-    private final ArrayList<HangarProfile> profiles;
-    private  HangarProfile defaultProfile;
-    private int selectedIndex = 0;
+    private final ArrayList<HangarProfile> profileList;
+    private final HangarProfile defaultProfile;
+    private HangarProfile currentProfile;
 
     public HangarProfileManager(HangarProfile defaultProfile) {
+        this.profileList = new ArrayList<>();
         this.defaultProfile = Objects.requireNonNullElseGet(defaultProfile, HangarProfile::new);
-        this.profiles = new ArrayList<>();
+        this.currentProfile = new HangarProfile();
     }
 
-    public HangarProfile getDefaultProfile() {
-        return defaultProfile;
+    public ArrayList<HangarProfile> getProfileList() {
+        return profileList;
     }
 
-    public void setDefaultProfile(HangarProfile profile) {
-        this.defaultProfile = profile;
-        for (var profileManagerListener : profileManagerListeners) {
-            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.DEFAULT_PROFILE_CHANGED, profile);
-            profileManagerListener.profileManagerStateChanged(event);
-        }
+    public HangarProfile getCurrentProfile() {
+        return currentProfile;
     }
 
-    public int size(boolean includeDefault) {
-        if (includeDefault) {
-            return profiles.size() + 1;
-        }
-        return profiles.size();
-    }
-
-    public int next() throws IllegalStateException {
-        notifyUnset();
-        selectedIndex++;
-        if (selectedIndex > profiles.size()) {
-            selectedIndex = 0;
-        }
-
-        notifySet();
-        return selectedIndex;
-    }
-
-    public int previous() throws IllegalStateException {
-        notifyUnset();
-        selectedIndex--;
-        if (selectedIndex < 0) {
-            selectedIndex = profiles.size() - 1;
-        }
-
-        notifySet();
-        return selectedIndex;
-    }
-
-    public HangarProfile getCurrent() {
-        if (selectedIndex == 0) {
-            return defaultProfile;
-        }
-        return profiles.get(selectedIndex - 1);
-    }
-
-    public void add(HangarProfile profile) {
+    public void setCurrentProfile(HangarProfile profile) {
         if (profile == null) {
             throw new NullPointerException();
         }
-        this.profiles.add(profile);
+
+        for (var profileManagerListener : profileManagerListeners) {
+            var setEvent = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_SET, profile);
+            var unsetEvent = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_UNSET, currentProfile);
+            profileManagerListener.profileManagerStateChanged(setEvent);
+            profileManagerListener.profileManagerStateChanged(unsetEvent);
+        }
+
+        this.currentProfile = profile;
     }
 
     public void addProfileManagerListener(HangarProfileManagerListener listener) {
         this.profileManagerListeners.add(listener);
-    }
-
-    private void notifySet() {
-        for (var profileManagerListener : profileManagerListeners) {
-            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_SET, getCurrent());
-            profileManagerListener.profileManagerStateChanged(event);
-        }
-    }
-
-    private void notifyUnset() {
-        for (var profileManagerListener : profileManagerListeners) {
-            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_UNSET, getCurrent());
-            profileManagerListener.profileManagerStateChanged(event);
-        }
     }
 }

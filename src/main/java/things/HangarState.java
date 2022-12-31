@@ -61,7 +61,7 @@ public class HangarState {
     }
 
     public static void syncWithFrameRate() {
-        if (profileManager.getCurrent().getFrameRate() != -1) {
+        if (profileManager.getCurrentProfile().getFrameRate() != -1) {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
@@ -72,12 +72,12 @@ public class HangarState {
     }
 
     public static int frameRateInMilliseconds() {
-        return 1000 / profileManager.getCurrent().getFrameRate();
+        return 1000 / profileManager.getCurrentProfile().getFrameRate();
     }
 
     public static Graphics2D applyAntiAliasing(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        var hintValue = profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
+        var hintValue = profileManager.getCurrentProfile().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
     }
