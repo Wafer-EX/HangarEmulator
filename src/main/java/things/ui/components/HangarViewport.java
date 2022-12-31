@@ -37,11 +37,6 @@ public class HangarViewport extends JPanel {
 
     public HangarViewport() {
         super(new BorderLayout());
-
-        var scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollPane.setBorder(BorderFactory.createEmptyBorder());
-
-        this.add(scrollPane, BorderLayout.CENTER);
     }
 
     public HangarCanvasWrapper getCanvasWrapper() {
@@ -56,27 +51,33 @@ public class HangarViewport extends JPanel {
         this.removeAll();
         this.displayable = displayable;
 
-        if (displayable.getCommands().size() > 0) {
-            var displayableCommands = new HangarViewportCommands(displayable);
-            this.add(displayableCommands, BorderLayout.SOUTH);
-        }
+        var scrollPane = new JScrollPane();
+        scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        this.add(scrollPane, BorderLayout.CENTER);
 
         if (displayable instanceof Canvas canvas) {
             this.canvasWrapper = new HangarCanvasWrapper(canvas);
-            this.add(canvasWrapper, BorderLayout.CENTER);
+            scrollPane.setViewportView(canvasWrapper);
             SwingUtilities.invokeLater(canvas::showNotify);
         }
         else if (displayable instanceof List list) {
             var listWrapper = new HangarListWrapper(list);
-            this.add(listWrapper, BorderLayout.CENTER);
+            scrollPane.setViewportView(listWrapper);
         }
         else if (displayable instanceof Form form) {
             var formWrapper = new HangarFormWrapper(form);
-            this.add(formWrapper, BorderLayout.CENTER);
+            scrollPane.setViewportView(formWrapper);
         }
         else {
             // TODO: add more screens support
             throw new IllegalArgumentException();
+        }
+
+        if (displayable.getCommands().size() > 0) {
+            var displayableCommands = new HangarViewportCommands(displayable);
+            this.add(displayableCommands, BorderLayout.SOUTH);
         }
 
         for (var displayableListener : displayableListeners) {
