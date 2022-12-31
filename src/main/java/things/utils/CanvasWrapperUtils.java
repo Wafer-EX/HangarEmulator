@@ -27,7 +27,7 @@ import java.awt.image.BufferedImage;
 
 public final class CanvasWrapperUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
-        var profile = HangarState.getProfileManager().getCurrent();
+        var profile = HangarState.getProfileManager().getCurrentProfile();
         if (profile.getScalingMode() == ScalingModes.Contain) {
             double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
             double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
