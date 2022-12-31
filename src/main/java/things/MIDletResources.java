@@ -16,8 +16,6 @@
 
 package things;
 
-import things.ui.frames.HangarMainFrame;
-
 import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
@@ -38,7 +36,7 @@ public final class MIDletResources {
             jarFile = new JarFile(new File(absolutePath));
         }
         catch (Exception exception) {
-            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(HangarState.getMainFrame(), "The file format is invalid.", "Error", JOptionPane.ERROR_MESSAGE);
             exception.printStackTrace();
         }
     }

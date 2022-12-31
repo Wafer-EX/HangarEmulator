@@ -38,7 +38,9 @@ public class HangarEmulator {
                 midletLoader.startMIDlet();
             }
 
-            var mainFrame = HangarMainFrame.getInstance();
+            var mainFrame = new HangarMainFrame();
+            HangarState.setMainFrame(mainFrame);
+
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }

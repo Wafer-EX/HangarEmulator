@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.ui.frames.HangarMainFrame;
+import things.HangarState;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -70,11 +70,11 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return HangarMainFrame.getInstance().getViewport().getDisplayable();
+        return HangarState.getMainFrame().getViewport().getDisplayable();
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarMainFrame.getInstance().getViewport().setDisplayable(displayable);
+        HangarState.getMainFrame().getViewport().setDisplayable(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -93,7 +93,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarMainFrame.getInstance().getViewport().getCanvasWrapper().setCallSerially(r);
+        HangarState.getMainFrame().getViewport().getCanvasWrapper().setCallSerially(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

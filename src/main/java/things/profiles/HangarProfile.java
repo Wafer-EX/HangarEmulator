@@ -17,8 +17,8 @@
 package things.profiles;
 
 import things.HangarKeyCodes;
+import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarProfileListener;
 import things.ui.listeners.events.HangarProfileEvent;
 import things.utils.AudioUtils;
@@ -119,7 +119,7 @@ public class HangarProfile {
         }
 
         // TODO: use event system
-        HangarMainFrame.getInstance().setResizable(windowResizing);
+        HangarState.getMainFrame().setResizable(windowResizing);
     }
 
     public File getSoundbankFile() {

@@ -19,7 +19,6 @@ package things.ui.components.wrappers;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.profiles.HangarProfile;
-import things.ui.frames.HangarMainFrame;
 import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;
 import things.ui.listeners.events.HangarProfileEvent;
@@ -92,7 +91,7 @@ public class HangarCanvasWrapper extends JPanel {
                 }
                 case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
                     if (e.getValue() == ScalingModes.ChangeResolution) {
-                        var contentPane = HangarMainFrame.getInstance().getContentPane();
+                        var contentPane = HangarState.getMainFrame().getContentPane();
                         var source = (HangarProfile) e.getSource();
                         source.setResolution(contentPane.getSize());
                     }

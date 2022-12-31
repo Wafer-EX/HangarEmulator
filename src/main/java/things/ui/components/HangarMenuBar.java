@@ -22,7 +22,6 @@ import things.utils.AudioUtils;
 import things.HangarKeyCodes;
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
 import things.utils.SystemUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
@@ -153,7 +152,7 @@ public class HangarMenuBar extends JMenuBar {
                         }
                         catch (IOException | InvalidMidiDataException exception) {
                             exception.printStackTrace();
-                            JOptionPane.showMessageDialog(HangarMainFrame.getInstance(),
+                            JOptionPane.showMessageDialog(HangarState.getMainFrame(),
                                     "The file format is invalid.",
                                     "Error",
                                     JOptionPane.ERROR_MESSAGE);
@@ -262,7 +261,7 @@ public class HangarMenuBar extends JMenuBar {
             });
 
             showAboutMenuItem.addActionListener(e -> JOptionPane.showMessageDialog(
-                    HangarMainFrame.getInstance(),
+                    HangarState.getMainFrame(),
                     String.format("""
                             Hangar Emulator
                             Version: %s

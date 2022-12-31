@@ -26,12 +26,11 @@ import java.awt.*;
 
 public class HangarMainFrame extends JFrame {
     // TODO: add more screens
-    private static final HangarMainFrame instance = new HangarMainFrame();
     private final GridBagConstraints constraints = new GridBagConstraints();
     private final HangarMainPanel mainPanel = new HangarMainPanel();
     private final HangarViewport viewport = new HangarViewport();
 
-    private HangarMainFrame() {
+    public HangarMainFrame() {
         this.getContentPane().setLayout(new GridBagLayout());
         this.getContentPane().setPreferredSize(new Dimension(360, 360));
         this.setTitle("Hangar Emulator");
@@ -67,10 +66,6 @@ public class HangarMainFrame extends JFrame {
 
         this.pack();
         this.revalidate();
-    }
-
-    public static HangarMainFrame getInstance() {
-        return instance;
     }
 
     public HangarViewport getViewport() {

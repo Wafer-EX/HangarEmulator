@@ -17,14 +17,24 @@
 package things;
 
 import things.profiles.HangarProfileManager;
+import things.ui.frames.HangarMainFrame;
 
 import java.awt.*;
 import java.util.Properties;
 
 public class HangarState {
+    private static HangarMainFrame mainFrame;
     private static Properties properties;
     private static MIDletLoader midletLoader;
     private static HangarProfileManager profileManager;
+
+    public static HangarMainFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    public static void setMainFrame(HangarMainFrame mainFrame) {
+        HangarState.mainFrame = mainFrame;
+    }
 
     public static Properties getProperties() {
         return properties;

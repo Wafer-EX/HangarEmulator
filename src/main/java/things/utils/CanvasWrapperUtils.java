@@ -19,7 +19,6 @@ package things.utils;
 import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.ui.frames.HangarMainFrame;
 import things.utils.microedition.ImageUtils;
 
 import javax.swing.*;
@@ -43,7 +42,7 @@ public final class CanvasWrapperUtils {
         if (resolution.width > 0 && resolution.height > 0) {
             if (canvasWrapper != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = HangarMainFrame.getInstance().getViewport().getDisplayable();
+                var displayable = HangarState.getMainFrame().getViewport().getDisplayable();
 
                 canvasWrapper.setBuffer(changedBuffer);
                 canvasWrapper.updateBufferTransformations();
