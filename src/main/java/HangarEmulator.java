@@ -40,7 +40,6 @@ public class HangarEmulator {
 
             var mainFrame = new HangarMainFrame();
             HangarState.setMainFrame(mainFrame);
-
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }
