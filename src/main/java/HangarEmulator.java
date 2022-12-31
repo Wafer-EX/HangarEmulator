@@ -26,7 +26,6 @@ public class HangarEmulator {
     public static void main(String[] args) {
         // TODO: add args parsing
         try {
-            System.setProperty("sun.java2d.uiScale", "1.0");
             System.setProperty("sun.java2d.opengl", "true");
             FlatDarkLaf.setup();
 

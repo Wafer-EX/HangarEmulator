@@ -93,10 +93,16 @@ public class HangarState {
         return 1000 / profileManager.getCurrent().getFrameRate();
     }
 
-    public static Graphics2D applyRenderingHints(Graphics graphics) {
+    public static Graphics2D applyAntiAliasing(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
         var hintValue = profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
+    }
+
+    public static float getScalingInUnits() {
+        float defaultDpi = 96;
+        float dpi = Toolkit.getDefaultToolkit().getScreenResolution();
+        return dpi / defaultDpi;
     }
 }

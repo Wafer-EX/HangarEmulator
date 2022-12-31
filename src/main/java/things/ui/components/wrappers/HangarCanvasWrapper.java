@@ -157,15 +157,18 @@ public class HangarCanvasWrapper extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+
+        var graphics2d = (Graphics2D) graphics;
         if (buffer != null) {
-            var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
+            var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
             var profile = HangarState.getProfileManager().getCurrent();
 
             if (profile.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
-            graphics.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+            graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            graphics2d.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }
 }
