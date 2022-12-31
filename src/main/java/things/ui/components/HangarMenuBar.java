@@ -23,6 +23,7 @@ import things.HangarKeyCodes;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.ui.frames.HangarMainFrame;
+import things.utils.SystemUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.swing.*;
@@ -61,7 +62,7 @@ public class HangarMenuBar extends JMenuBar {
                             midletLoader.startMIDlet();
                         }
                         else {
-                            HangarState.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
+                            SystemUtils.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
                         }
                     }
                 });
@@ -83,10 +84,10 @@ public class HangarMenuBar extends JMenuBar {
                 var currentMidlet = HangarState.getMIDletLoader();
                 if (currentMidlet != null) {
                     var midletPath = currentMidlet.getMIDletPath();
-                    HangarState.restartApp(midletPath);
+                    SystemUtils.restartApp(midletPath);
                 }
                 else {
-                    HangarState.restartApp(null);
+                    SystemUtils.restartApp(null);
                 }
             });
 
