@@ -18,26 +18,19 @@ import com.formdev.flatlaf.FlatDarkLaf;
 import things.*;
 import things.profiles.HangarProfileManager;
 import things.ui.frames.HangarMainFrame;
+import things.utils.SystemUtils;
 
 import java.io.File;
-import java.util.Properties;
 
 public class HangarEmulator {
     public static void main(String[] args) {
         // TODO: add args parsing
         try {
-            System.setProperty("sun.java2d.uiScale", "1.0");
             System.setProperty("sun.java2d.opengl", "true");
             FlatDarkLaf.setup();
 
-            var profileManager = new HangarProfileManager(null);
-            var programFile = new File(HangarEmulator.class.getProtectionDomain().getCodeSource().getLocation().toURI());
-            var properties = new Properties();
-            properties.loadFromXML(HangarEmulator.class.getClassLoader().getResourceAsStream("properties.xml"));
-
-            HangarState.setProfileManager(profileManager);
-            HangarState.setProgramFile(programFile);
-            HangarState.setProperties(properties);
+            HangarState.setProfileManager(new HangarProfileManager(null));
+            HangarState.setProperties(SystemUtils.getAppProperties());
 
             if (args.length > 0 && new File(args[0]).isFile()) {
                 var midletLoader = new MIDletLoader(args[0]);
@@ -45,7 +38,9 @@ public class HangarEmulator {
                 midletLoader.startMIDlet();
             }
 
-            var mainFrame = HangarMainFrame.getInstance();
+            var mainFrame = new HangarMainFrame();
+            HangarState.setMainFrame(mainFrame);
+
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
         }

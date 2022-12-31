@@ -21,19 +21,22 @@ import things.ui.components.*;
 import things.ui.listeners.HangarKeyListener;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
 
+@SuppressWarnings("FieldCanBeLocal")
 public class HangarMainFrame extends JFrame {
     // TODO: add more screens
-    private static final HangarMainFrame instance = new HangarMainFrame();
     private final GridBagConstraints constraints = new GridBagConstraints();
     private final HangarMainPanel mainPanel = new HangarMainPanel();
     private final HangarViewport viewport = new HangarViewport();
 
-    private HangarMainFrame() {
-        this.getContentPane().setLayout(new GridBagLayout());
-        this.getContentPane().setPreferredSize(new Dimension(360, 360));
+    public HangarMainFrame() {
+        super();
+
+        this.setLayout(new GridBagLayout());
+        this.setPreferredSize(new Dimension(360, 360));
         this.setTitle("Hangar Emulator");
         this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -44,12 +47,14 @@ public class HangarMainFrame extends JFrame {
                 for (var keyListener : getKeyListeners()) {
                     removeKeyListener(keyListener);
                 }
-                if (e.getSource() instanceof Canvas canvas) {
+
+                var displayable = (Displayable) e.getSource();
+                if (displayable instanceof Canvas canvas) {
                     addKeyListener(new HangarKeyListener(canvas));
-                    setTitle(System.getProperty("MIDlet-Name"));
                     requestFocus();
                 }
 
+                HangarMainFrame.this.setTitle(displayable.getTitle());
                 mainPanel.setVisible(false);
                 viewport.setVisible(true);
             }
@@ -67,10 +72,6 @@ public class HangarMainFrame extends JFrame {
 
         this.pack();
         this.revalidate();
-    }
-
-    public static HangarMainFrame getInstance() {
-        return instance;
     }
 
     public HangarViewport getViewport() {

@@ -16,10 +16,14 @@
 
 package things.profiles;
 
+import things.ui.listeners.HangarProfileManagerListener;
+import things.ui.listeners.events.HangarProfileManagerEvent;
+
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class HangarProfileManager {
+    private final ArrayList<HangarProfileManagerListener> profileManagerListeners = new ArrayList<>();
     private final ArrayList<HangarProfile> profiles;
     private  HangarProfile defaultProfile;
     private int selectedIndex = 0;
@@ -35,6 +39,10 @@ public class HangarProfileManager {
 
     public void setDefaultProfile(HangarProfile profile) {
         this.defaultProfile = profile;
+        for (var profileManagerListener : profileManagerListeners) {
+            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.DEFAULT_PROFILE_CHANGED, profile);
+            profileManagerListener.profileManagerStateChanged(event);
+        }
     }
 
     public int size(boolean includeDefault) {
@@ -45,18 +53,24 @@ public class HangarProfileManager {
     }
 
     public int next() throws IllegalStateException {
+        notifyUnset();
         selectedIndex++;
         if (selectedIndex > profiles.size()) {
             selectedIndex = 0;
         }
+
+        notifySet();
         return selectedIndex;
     }
 
     public int previous() throws IllegalStateException {
+        notifyUnset();
         selectedIndex--;
         if (selectedIndex < 0) {
             selectedIndex = profiles.size() - 1;
         }
+
+        notifySet();
         return selectedIndex;
     }
 
@@ -72,5 +86,23 @@ public class HangarProfileManager {
             throw new NullPointerException();
         }
         this.profiles.add(profile);
+    }
+
+    public void addProfileManagerListener(HangarProfileManagerListener listener) {
+        this.profileManagerListeners.add(listener);
+    }
+
+    private void notifySet() {
+        for (var profileManagerListener : profileManagerListeners) {
+            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_SET, getCurrent());
+            profileManagerListener.profileManagerStateChanged(event);
+        }
+    }
+
+    private void notifyUnset() {
+        for (var profileManagerListener : profileManagerListeners) {
+            var event = new HangarProfileManagerEvent(this, HangarProfileManagerEvent.PROFILE_UNSET, getCurrent());
+            profileManagerListener.profileManagerStateChanged(event);
+        }
     }
 }

@@ -16,7 +16,6 @@
 
 package javax.microedition.lcdui;
 
-import things.ui.frames.HangarMainFrame;
 import things.HangarState;
 
 import java.util.ArrayList;
@@ -35,11 +34,11 @@ public abstract class Displayable {
     }
 
     public String getTitle() {
-        return HangarMainFrame.getInstance().getTitle();
+        return HangarState.getMainFrame().getTitle();
     }
 
     public void setTitle(String s) {
-        HangarMainFrame.getInstance().setTitle(s);
+        HangarState.getMainFrame().setTitle(s);
     }
 
     public Ticker getTicker() {
@@ -51,7 +50,7 @@ public abstract class Displayable {
     }
 
     public boolean isShown() {
-        return HangarMainFrame.getInstance().getViewport().getDisplayable() == this;
+        return HangarState.getMainFrame().getViewport().getDisplayable() == this;
     }
 
     public void addCommand(Command cmd) throws NullPointerException {

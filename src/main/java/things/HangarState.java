@@ -17,21 +17,23 @@
 package things;
 
 import things.profiles.HangarProfileManager;
+import things.ui.frames.HangarMainFrame;
 
 import java.awt.*;
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Properties;
 
 public class HangarState {
-    private static File programFile;
+    private static HangarMainFrame mainFrame;
     private static Properties properties;
     private static MIDletLoader midletLoader;
     private static HangarProfileManager profileManager;
 
-    public static void setProgramFile(File file) {
-        programFile = file;
+    public static HangarMainFrame getMainFrame() {
+        return mainFrame;
+    }
+
+    public static void setMainFrame(HangarMainFrame mainFrame) {
+        HangarState.mainFrame = mainFrame;
     }
 
     public static Properties getProperties() {
@@ -58,26 +60,6 @@ public class HangarState {
         profileManager = manager;
     }
 
-    public static void restartApp(String midletPath) {
-        try {
-            var javaBin = System.getProperty("java.home") + File.separator + "bin" + File.separator + "java";
-            var command = new ArrayList<String>();
-
-            if (System.getProperty("os.name").contains("nix")) {
-                command.add("bash -c");
-            }
-            command.addAll(Arrays.asList(javaBin, "-jar", programFile.toString()));
-            if (midletPath != null) {
-                command.add(midletPath);
-            }
-            new ProcessBuilder(command).start();
-            System.exit(0);
-        }
-        catch (Exception exception) {
-            throw new RuntimeException(exception);
-        }
-    }
-
     public static void syncWithFrameRate() {
         if (profileManager.getCurrent().getFrameRate() != -1) {
             try {
@@ -93,7 +75,7 @@ public class HangarState {
         return 1000 / profileManager.getCurrent().getFrameRate();
     }
 
-    public static Graphics2D applyRenderingHints(Graphics graphics) {
+    public static Graphics2D applyAntiAliasing(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
         var hintValue = profileManager.getCurrent().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);

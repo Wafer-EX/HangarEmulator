@@ -18,7 +18,11 @@ package things.ui.components.wrappers;
 
 import things.HangarState;
 import things.enums.ScalingModes;
+import things.profiles.HangarProfile;
+import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;
+import things.ui.listeners.events.HangarProfileEvent;
+import things.ui.listeners.events.HangarProfileManagerEvent;
 import things.utils.CanvasWrapperUtils;
 import things.utils.microedition.ImageUtils;
 
@@ -32,6 +36,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class HangarCanvasWrapper extends JPanel {
+    // TODO: add quality support
     private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
@@ -62,6 +67,41 @@ public class HangarCanvasWrapper extends JPanel {
             }
         });
         this.refreshSerialCallTimer();
+
+        HangarState.getProfileManager().addProfileManagerListener(e -> {
+            switch (e.getStateChange()) {
+                case HangarProfileManagerEvent.PROFILE_SET -> {
+                    // TODO: write code here
+                }
+                case HangarProfileManagerEvent.PROFILE_UNSET -> {
+                    for (var profileListener : e.getProfile().getProfileListeners()) {
+                        e.getProfile().removeProfileListener(profileListener);
+                    }
+                }
+            }
+        });
+
+        HangarState.getProfileManager().getCurrent().addProfileListener(e -> {
+            switch (e.getStateChange()) {
+                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
+                    for (var keyListener : getKeyListeners()) {
+                        if (keyListener instanceof HangarKeyListener hangarKeyListener) {
+                            hangarKeyListener.getPressedKeys().clear();
+                        }
+                    }
+                }
+                case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
+                    if (e.getValue() == ScalingModes.ChangeResolution) {
+                        var contentPane = HangarState.getMainFrame().getContentPane();
+                        var source = (HangarProfile) e.getSource();
+                        source.setResolution(contentPane.getSize());
+                    }
+                    updateBufferTransformations();
+                });
+                case HangarProfileEvent.RESOLUTION_CHANGED -> SwingUtilities.invokeLater(() -> CanvasWrapperUtils.fitBufferToResolution(this, (Dimension) e.getValue()));
+                case HangarProfileEvent.FRAME_RATE_CHANGED -> refreshSerialCallTimer();
+            }
+        });
     }
 
     public BufferedImage getBuffer() {
@@ -117,15 +157,18 @@ public class HangarCanvasWrapper extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+
+        var graphics2d = (Graphics2D) graphics;
         if (buffer != null) {
-            var graphicsWithHints = HangarState.applyRenderingHints(buffer.getGraphics());
+            var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
             var profile = HangarState.getProfileManager().getCurrent();
 
             if (profile.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
-            graphics.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+            graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+            graphics2d.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }
 }

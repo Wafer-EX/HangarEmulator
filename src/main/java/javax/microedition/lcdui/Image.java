@@ -104,7 +104,7 @@ public class Image {
     public Graphics getGraphics() throws IllegalStateException {
         if (isMutable()) {
             var graphics = seImage.getGraphics();
-            HangarState.applyRenderingHints(graphics);
+            HangarState.applyAntiAliasing(graphics);
             return new Graphics(graphics, this.getSEImage());
         }
         else {
