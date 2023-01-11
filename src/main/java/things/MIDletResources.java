@@ -1,5 +1,5 @@
 /*
- * Copyright 2022 Kirill Lomakin
+ * Copyright 2022-2023 Kirill Lomakin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public final class MIDletResources {
 
     public static void setJar(String absolutePath) {
         try {
-            URL[] urls = {new URL("jar:file:" + absolutePath + "!/")};
+            URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
             classLoader = new URLClassLoader(urls);
             jarFile = new JarFile(new File(absolutePath));
         }
