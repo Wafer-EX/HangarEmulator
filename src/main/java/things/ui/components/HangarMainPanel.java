@@ -16,13 +16,8 @@
 
 package things.ui.components;
 
-import things.HangarState;
-import things.enums.ScalingModes;
-
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class HangarMainPanel extends JPanel {
     // TODO: replace with profiles menu
@@ -35,14 +30,5 @@ public class HangarMainPanel extends JPanel {
 
         this.setLayout(new CardLayout());
         this.add(label);
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                var profile = HangarState.getProfileManager().getCurrentProfile();
-                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(e.getComponent().getSize());
-                }
-            }
-        });
     }
 }
