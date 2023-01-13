@@ -16,14 +16,16 @@
 
 package javax.bluetooth;
 
+import java.util.Objects;
+
 public class UUID {
-    protected final long value;
+    protected final String value;
 
     public UUID(long uuidValue) {
+        this(Long.toHexString(uuidValue), false);
         if (uuidValue < 0) {
             throw new IllegalArgumentException();
         }
-        this.value = uuidValue;
     }
 
     public UUID(String uuidValue, boolean shortUUID) {
@@ -33,27 +35,24 @@ public class UUID {
         if (uuidValue.length() == 0 || (shortUUID && uuidValue.length() > 8) || uuidValue.length() > 32) {
             throw new IllegalArgumentException();
         }
-        // TODO: fix it
-        this.value = Long.decode(uuidValue);
+        this.value = uuidValue;
     }
 
     @Override
     public String toString() {
-        // TODO: check it
-        return Long.toHexString(value);
+        return value;
     }
 
     @Override
     public boolean equals(Object value) {
         if (value instanceof UUID uuid) {
-            return this.value == uuid.value;
+            return Objects.equals(this.value, uuid.value);
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        // TODO: check it
-        return super.hashCode();
+        return value.hashCode();
     }
 }
