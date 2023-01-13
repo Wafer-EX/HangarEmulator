@@ -20,9 +20,7 @@ import java.io.IOException;
 
 public interface SourceStream {
     static final int NOT_SEEKABLE = 0;
-
     static final int SEEKABLE_TO_START = 1;
-
     static final int RANDOM_ACCESSIBLE = 2;
 
     ContentDescriptor getContentDescriptor();
