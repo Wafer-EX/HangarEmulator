@@ -101,6 +101,8 @@ public final class MIDletResources {
             for (var attribute : attributes) {
                 var key = attribute.getKey().toString();
                 var value = attribute.getValue().toString();
+
+                System.setProperty(key, value);
                 HangarState.getProperties().setProperty(key, value);
             }
         }
