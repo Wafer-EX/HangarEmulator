@@ -148,6 +148,12 @@ public class Image {
     }
 
     public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        if (rgbData == null) {
+            throw new NullPointerException();
+        }
+        if (scanlength < width) {
+            throw new IllegalArgumentException();
+        }
         seImage.getRGB(x, y, width, height, rgbData, offset, scanlength);
     }
 }

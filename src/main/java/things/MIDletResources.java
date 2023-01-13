@@ -31,7 +31,7 @@ public final class MIDletResources {
 
     public static void setJar(String absolutePath) {
         try {
-            URL[] urls = { new URL("jar:file:" + absolutePath + "!/") };
+            var urls = new URL[] { new URL("jar:file:" + absolutePath + "!/") };
             classLoader = new URLClassLoader(urls);
             jarFile = new JarFile(new File(absolutePath));
         }
@@ -99,7 +99,11 @@ public final class MIDletResources {
             var manifest = jarFile.getManifest();
             var attributes = manifest.getMainAttributes().entrySet();
             for (var attribute : attributes) {
-                System.setProperty(attribute.getKey().toString(), attribute.getValue().toString());
+                var key = attribute.getKey().toString();
+                var value = attribute.getValue().toString();
+
+                System.setProperty(key, value);
+                HangarState.getProperties().setProperty(key, value);
             }
         }
         catch (Exception exception) {
