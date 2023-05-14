@@ -18,6 +18,7 @@ package things.ui.components.wrappers.canvas;
 
 import things.HangarState;
 import things.enums.ScalingModes;
+import things.graphics.HangarSwingGraphicsProvider;
 import things.profiles.HangarProfile;
 import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;
@@ -145,7 +146,8 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
             if (profile.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
-            canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
+            //canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints, buffer));
+            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints, buffer)));
             graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             graphics2d.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }

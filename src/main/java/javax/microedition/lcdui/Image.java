@@ -18,6 +18,7 @@ package javax.microedition.lcdui;
 
 import things.HangarState;
 import things.MIDletResources;
+import things.graphics.HangarSwingGraphicsProvider;
 import things.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
@@ -105,7 +106,8 @@ public class Image {
         if (isMutable()) {
             var graphics = seImage.getGraphics();
             HangarState.applyAntiAliasing(graphics);
-            return new Graphics(graphics, this.getSEImage());
+            //return new Graphics(graphics, this.getSEImage());
+            return new Graphics(new HangarSwingGraphicsProvider(graphics, this.getSEImage()));
         }
         else {
             throw new IllegalStateException();

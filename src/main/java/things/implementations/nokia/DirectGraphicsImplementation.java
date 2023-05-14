@@ -21,7 +21,6 @@ import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class DirectGraphicsImplementation implements DirectGraphics {
@@ -33,7 +32,7 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public void setARGBColor(int argbColor) {
-        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
+        meGraphics.getGraphicsProvider().setColor(argbColor);
     }
 
     @Override
@@ -49,16 +48,16 @@ public class DirectGraphicsImplementation implements DirectGraphics {
     public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
         var xPoints = new int[] { x1, x2, x3 };
         var yPoints = new int[] { y1, y2, y3 };
-        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
-        meGraphics.getSEGraphics().drawPolygon(xPoints, yPoints, 3);
+        setARGBColor(argbColor);
+        meGraphics.getGraphicsProvider().drawPolygon(xPoints, yPoints, 3);
     }
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
         var xPoints = new int[] { x1, x2, x3 };
         var yPoints = new int[] { y1, y2, y3 };
-        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
-        meGraphics.getSEGraphics().fillPolygon(xPoints, yPoints, 3);
+        setARGBColor(argbColor);
+        meGraphics.getGraphicsProvider().fillPolygon(xPoints, yPoints, 3);
     }
 
     @Override
@@ -66,8 +65,8 @@ public class DirectGraphicsImplementation implements DirectGraphics {
         if (xPoints == null || yPoints == null) {
             throw new NullPointerException();
         }
-        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
-        meGraphics.getSEGraphics().drawPolygon(xPoints, yPoints, argbColor);
+        setARGBColor(argbColor);
+        meGraphics.getGraphicsProvider().drawPolygon(xPoints, yPoints, argbColor);
     }
 
     @Override
@@ -75,8 +74,8 @@ public class DirectGraphicsImplementation implements DirectGraphics {
         if (xPoints == null || yPoints == null) {
             throw new NullPointerException();
         }
-        meGraphics.getSEGraphics().setColor(new Color(argbColor, true));
-        meGraphics.getSEGraphics().fillPolygon(xPoints, yPoints, nPoints);
+        setARGBColor(argbColor);
+        meGraphics.getGraphicsProvider().fillPolygon(xPoints, yPoints, nPoints);
     }
 
     @Override
@@ -87,7 +86,7 @@ public class DirectGraphicsImplementation implements DirectGraphics {
         var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
         image.setRGB(0, 0, width, height, pixels, offset, scanlength);
         image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-        meGraphics.getSEGraphics().drawImage(image, x, y, null);
+        meGraphics.getGraphicsProvider().drawImage(new Image(image, true), x, y, 0);
     }
 
     @Override
@@ -123,6 +122,6 @@ public class DirectGraphicsImplementation implements DirectGraphics {
 
     @Override
     public int getAlphaComponent() {
-        return meGraphics.getSEGraphics().getColor().getAlpha();
+        return meGraphics.getGraphicsProvider().getAlphaComponent();
     }
 }

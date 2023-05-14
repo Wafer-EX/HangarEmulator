@@ -17,11 +17,13 @@
 package javax.microedition.lcdui.game;
 
 import things.HangarState;
+import things.graphics.HangarSwingGraphicsProvider;
 import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -48,7 +50,8 @@ public abstract class GameCanvas extends Canvas {
     protected Graphics getGraphics() {
         var graphics = additionalBuffer.getGraphics();
         HangarState.applyAntiAliasing(graphics);
-        return new Graphics(graphics, this.additionalBuffer);
+        //return new Graphics(graphics, this.additionalBuffer);
+        return new Graphics(new HangarSwingGraphicsProvider(graphics, this.additionalBuffer));
     }
 
     public int getKeyStates() {
@@ -59,7 +62,8 @@ public abstract class GameCanvas extends Canvas {
     @Override
     public void paint(Graphics g) {
         // TODO: rewrite method logic?
-        g.getSEGraphics().drawImage(additionalBuffer, 0, 0, null);
+        //g.getSEGraphics().drawImage(additionalBuffer, 0, 0, null);
+        g.getGraphicsProvider().drawImage(new Image(additionalBuffer, false), 0, 0, 0);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {

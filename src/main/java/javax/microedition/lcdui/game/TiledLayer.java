@@ -107,7 +107,8 @@ public class TiledLayer extends Layer {
             for (int x = 0; x < columns; x++) {
                 if (cellGrid[x][y] != 0) {
                     var tile = tileList.get(cellGrid[x][y] - 1);
-                    g.getSEGraphics().drawImage(tile,position.x + tileWidth * x, position.y + tileHeight * y, null);
+                    //g.getSEGraphics().drawImage(tile,position.x + tileWidth * x, position.y + tileHeight * y, null);
+                    g.getGraphicsProvider().drawImage(new Image((BufferedImage) tile, false), position.x + tileWidth * x, position.y + tileHeight * y, 0);
                 }
             }
         }
