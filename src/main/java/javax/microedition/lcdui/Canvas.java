@@ -93,7 +93,7 @@ public abstract class Canvas extends Displayable {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
         if (canvasWrapper != null) {
             var position = CanvasWrapperUtils.canvasPointToPanel(canvasWrapper, x, y);
-            var scaleFactor = canvasWrapper.getBufferScaleFactor();
+            var scaleFactor = canvasWrapper.getScaleFactor();
 
             int newWidth = (int) (width * scaleFactor);
             int newHeight = (int) (height * scaleFactor);

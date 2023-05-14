@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.ui.components.wrappers;
+package things.ui.components.wrappers.canvas;
 
 import things.HangarState;
 import things.enums.ScalingModes;
@@ -32,22 +32,16 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
-import java.util.Timer;
-import java.util.TimerTask;
 
-public class HangarCanvasWrapper extends JPanel {
+public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
-    private final Canvas canvas;
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
     private Dimension bufferScale = HangarState.getProfileManager().getCurrentProfile().getResolution();
-    private Runnable callSerially;
-    private Timer serialCallTimer = new Timer();
 
-    public HangarCanvasWrapper(Canvas canvas) {
-        super();
-        this.canvas = canvas;
+    public HangarCanvasWrapperSwing(Canvas canvas) {
+        super(canvas);
 
         var profile = HangarState.getProfileManager().getCurrentProfile();
         var mouseListener = new HangarMouseListener(this);
@@ -60,13 +54,12 @@ public class HangarCanvasWrapper extends JPanel {
             @Override
             public void componentResized(ComponentEvent e) {
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(HangarCanvasWrapper.this.getSize());
-                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapper.this, HangarCanvasWrapper.this.getSize());
+                    profile.setResolution(HangarCanvasWrapperSwing.this.getSize());
+                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, HangarCanvasWrapperSwing.this.getSize());
                 }
-                HangarCanvasWrapper.this.updateBufferTransformations();
+                HangarCanvasWrapperSwing.this.updateBufferTransformations();
             }
         });
-        this.refreshSerialCallTimer();
 
         HangarState.getProfileManager().addProfileManagerListener(e -> {
             switch (e.getStateChange()) {
@@ -116,12 +109,9 @@ public class HangarCanvasWrapper extends JPanel {
         return bufferPosition;
     }
 
-    public double getBufferScaleFactor() {
+    @Override
+    public double getScaleFactor() {
         return bufferScaleFactor;
-    }
-
-    public void setCallSerially(Runnable runnable) {
-        this.callSerially = runnable;
     }
 
     public void updateBufferTransformations() {
@@ -136,22 +126,11 @@ public class HangarCanvasWrapper extends JPanel {
         this.repaint();
     }
 
-    public void refreshSerialCallTimer() {
-        serialCallTimer.cancel();
-        serialCallTimer.purge();
-        serialCallTimer = new Timer();
-
-        var frameRateInMilliseconds = HangarState.frameRateInMilliseconds();
-        if (frameRateInMilliseconds >= 0) {
-            serialCallTimer.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    if (callSerially != null) {
-                        callSerially.run();
-                    }
-                }
-            }, 0, frameRateInMilliseconds);
-        }
+    @Override
+    public Rectangle getDisplayedArea() {
+        int width = (int) (buffer.getWidth() * bufferScaleFactor);
+        int height = (int) (buffer.getWidth() * bufferScaleFactor);
+        return new Rectangle(bufferPosition.x, bufferPosition.y, width, height);
     }
 
     @Override

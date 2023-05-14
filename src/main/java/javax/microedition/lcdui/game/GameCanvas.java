@@ -17,6 +17,7 @@
 package javax.microedition.lcdui.game;
 
 import things.HangarState;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -64,7 +65,10 @@ public abstract class GameCanvas extends Canvas {
     public void flushGraphics(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
         if (canvasWrapper != null) {
-            canvasWrapper.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+            // TODO: replace with graphics provider
+            if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
+                canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+            }
             super.repaint(x, y, width, height);
         }
     }
@@ -72,7 +76,10 @@ public abstract class GameCanvas extends Canvas {
     public void flushGraphics() {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
         if (canvasWrapper != null) {
-            canvasWrapper.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+            // TODO: replace with graphics provider
+            if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
+                canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+            }
             super.repaint();
         }
     }
