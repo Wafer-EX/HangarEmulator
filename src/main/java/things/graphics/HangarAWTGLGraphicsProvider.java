@@ -220,15 +220,16 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
         var buffer = img.convertToByteBuffer();
 
         awtglCanvas.getGLActions().add(() -> {
-            glEnable(GL_TEXTURE_2D);
-
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);
+            glEnable(GL_TEXTURE_2D);
+
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             glBegin(GL_QUADS);
+            glColor3f(1, 1, 1);
             glTexCoord2f(0, 0);
             glVertex2f(alignedX, alignedY);
             glTexCoord2f(1, 0);
@@ -240,6 +241,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glEnd();
 
             glDisable(GL_TEXTURE_2D);
+            glDeleteTextures(textureId);
         });
     }
 
