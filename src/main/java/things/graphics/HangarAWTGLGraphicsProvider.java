@@ -16,38 +16,39 @@
 
 package things.graphics;
 
-import things.graphics.awtgl.HangarGLAction;
 import things.graphics.awtgl.HangarAWTGLCanvas;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
-import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
-    private HangarAWTGLCanvas awtglCanvas;
+    private final HangarAWTGLCanvas awtglCanvas;
+    private int translateX = 0, translateY = 0;
     private Color color;
 
     public HangarAWTGLGraphicsProvider(HangarAWTGLCanvas awtglCanvas) {
         this.awtglCanvas = awtglCanvas;
-        this.color = Color.BLACK;
+        this.color = new Color(0);
     }
 
     @Override
     public void translate(int x, int y) {
-
+        // TODO: add translation to actions
+        translateX += x;
+        translateY += y;
     }
 
     @Override
     public int getTranslateX() {
-        return 0;
+        return translateX;
     }
 
     @Override
     public int getTranslateY() {
-        return 0;
+        return translateY;
     }
 
     @Override
@@ -82,7 +83,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setColor(int RGB) {
-        color = new Color(RGB);
+        color = new Color(RGB, false);
     }
 
     @Override
@@ -92,7 +93,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public Font getFont() {
-        return null;
+        return Font.getDefaultFont();
     }
 
     @Override
@@ -142,14 +143,20 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
-
+        awtglCanvas.getGLActions().add(() -> {
+            glBegin(GL_LINE);
+            glColor3f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255);
+            glVertex2f(x1, y1);
+            glVertex2f(x2, y2);
+            glEnd();
+        });
     }
 
     @Override
     public void fillRect(int x, int y, int width, int height) {
         awtglCanvas.getGLActions().add(() -> {
             glBegin(GL_QUADS);
-            glColor3f(color.getRed(), color.getGreen(), color.getBlue());
+            glColor3f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255);
             glVertex2f(x, y);
             glVertex2f(x + width, y);
             glVertex2f(x + width, y + height);
@@ -230,12 +237,12 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public int getDisplayColor(int color) {
-        return 0;
+        return color;
     }
 
     @Override
     public void setARGBColor(int argbColor) {
-
+        this.color = new Color(argbColor, true);
     }
 
     @Override

@@ -152,7 +152,7 @@ public class Graphics {
     }
 
     public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
-        drawString(str, x, y, anchor);
+        graphicsProvider.drawString(str, x, y, anchor);
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
