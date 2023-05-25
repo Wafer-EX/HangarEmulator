@@ -25,10 +25,11 @@ import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLCanvas extends AWTGLCanvas {
-    private ArrayList<HangarGLAction> glActions;
+    private final ArrayList<HangarGLAction> glActions;
 
     public HangarAWTGLCanvas(GLData glData) {
-        super();
+        super(glData);
+        glActions = new ArrayList<>();
     }
 
     @Override
@@ -50,10 +51,12 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         for (var glAction : glActions) {
             glAction.execute();
         }
+        glActions.clear();
+
         swapBuffers();
     }
 
-    public void setGLActions(ArrayList<HangarGLAction> glActions) {
-        this.glActions = glActions;
+    public ArrayList<HangarGLAction> getGLActions() {
+        return glActions;
     }
 }

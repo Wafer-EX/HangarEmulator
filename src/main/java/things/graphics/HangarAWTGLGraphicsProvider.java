@@ -28,17 +28,11 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     private HangarAWTGLCanvas awtglCanvas;
-    private final ArrayList<HangarGLAction> glActions;
     private Color color;
 
     public HangarAWTGLGraphicsProvider(HangarAWTGLCanvas awtglCanvas) {
         this.awtglCanvas = awtglCanvas;
-        this.glActions = new ArrayList<>();
         this.color = Color.BLACK;
-    }
-
-    public ArrayList<HangarGLAction> getGLActions() {
-        return glActions;
     }
 
     @Override
@@ -153,7 +147,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillRect(int x, int y, int width, int height) {
-        glActions.add(() -> {
+        awtglCanvas.getGLActions().add(() -> {
             glBegin(GL_QUADS);
             glColor3f(color.getRed(), color.getGreen(), color.getBlue());
             glVertex2f(x, y);
