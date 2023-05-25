@@ -24,16 +24,17 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL33.GL_TEXTURE_SWIZZLE_RGBA;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     private final HangarAWTGLCanvas awtglCanvas;
     private int translateX = 0, translateY = 0;
     private Color color;
+    private final Rectangle clip;
 
     public HangarAWTGLGraphicsProvider(HangarAWTGLCanvas awtglCanvas) {
         this.awtglCanvas = awtglCanvas;
         this.color = new Color(0);
+        this.clip = new Rectangle(0, 0, 240, 320);
     }
 
     @Override
@@ -115,22 +116,22 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public int getClipX() {
-        return 0;
+        return clip.x;
     }
 
     @Override
     public int getClipY() {
-        return 0;
+        return clip.y;
     }
 
     @Override
     public int getClipWidth() {
-        return 0;
+        return clip.width;
     }
 
     @Override
     public int getClipHeight() {
-        return 0;
+        return clip.height;
     }
 
     @Override
@@ -140,14 +141,15 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-
+        // TODO: fix it
+        //clip.setBounds(x, y, width, height);
     }
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
         System.out.println("drawLine");
         awtglCanvas.getGLActions().add(() -> {
-            glBegin(GL_LINE);
+            glBegin(GL_LINES);
             glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
             glVertex2f(x1, y1);
             glVertex2f(x2, y2);
@@ -222,16 +224,18 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
         var buffer = img.convertToByteBuffer();
 
         awtglCanvas.getGLActions().add(() -> {
+            glEnable(GL_TEXTURE_2D);
+            glEnable(GL_BLEND);
+            glEnable(GL_SCISSOR_TEST);
+
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);
-            glEnable(GL_TEXTURE_2D);
-
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            glEnable(GL_BLEND);
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glScissor(clip.x, clip.y, clip.width, clip.height);
             glDepthMask(true);
 
             glBegin(GL_QUADS);
@@ -244,21 +248,23 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glVertex2f(alignedX + width, alignedY + height);
             glTexCoord2f(0, 1);
             glVertex2f(alignedX, alignedY + height);
-
             glEnd();
+
             glDisable(GL_TEXTURE_2D);
+            glDisable(GL_BLEND);
+            glDisable(GL_SCISSOR_TEST);
             glDeleteTextures(textureId);
         });
     }
 
     @Override
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
-
+        System.out.println("drawRegion");
     }
 
     @Override
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {
-
+        System.out.println("copyArea");
     }
 
     @Override
@@ -268,7 +274,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
-
+        System.out.println("drawRGB");
     }
 
     @Override
