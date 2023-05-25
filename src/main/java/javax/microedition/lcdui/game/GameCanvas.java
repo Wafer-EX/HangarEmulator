@@ -50,7 +50,6 @@ public abstract class GameCanvas extends Canvas {
     protected Graphics getGraphics() {
         var graphics = additionalBuffer.getGraphics();
         HangarState.applyAntiAliasing(graphics);
-        //return new Graphics(graphics, this.additionalBuffer);
         return new Graphics(new HangarSwingGraphicsProvider(graphics, this.additionalBuffer));
     }
 
@@ -62,7 +61,6 @@ public abstract class GameCanvas extends Canvas {
     @Override
     public void paint(Graphics g) {
         // TODO: rewrite method logic?
-        //g.getSEGraphics().drawImage(additionalBuffer, 0, 0, null);
         g.getGraphicsProvider().drawImage(new Image(additionalBuffer, false), 0, 0, 0);
     }
 

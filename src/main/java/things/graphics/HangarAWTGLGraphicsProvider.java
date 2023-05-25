@@ -24,6 +24,7 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL33.GL_TEXTURE_SWIZZLE_RGBA;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     private final HangarAWTGLCanvas awtglCanvas;
@@ -144,9 +145,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
+        System.out.println("drawLine");
         awtglCanvas.getGLActions().add(() -> {
             glBegin(GL_LINE);
-            glColor3f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255);
+            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
             glVertex2f(x1, y1);
             glVertex2f(x2, y2);
             glEnd();
@@ -157,7 +159,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     public void fillRect(int x, int y, int width, int height) {
         awtglCanvas.getGLActions().add(() -> {
             glBegin(GL_QUADS);
-            glColor3f((float) color.getRed() / 255, (float) color.getGreen() / 255, (float) color.getBlue() / 255);
+            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
             glVertex2f(x, y);
             glVertex2f(x + width, y);
             glVertex2f(x + width, y + height);
@@ -168,7 +170,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawRect(int x, int y, int width, int height) {
-
+        System.out.println("drawRect");
     }
 
     @Override
@@ -228,6 +230,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glDepthMask(true);
+
             glBegin(GL_QUADS);
             glColor3f(1, 1, 1);
             glTexCoord2f(0, 0);
@@ -238,8 +244,8 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glVertex2f(alignedX + width, alignedY + height);
             glTexCoord2f(0, 1);
             glVertex2f(alignedX, alignedY + height);
-            glEnd();
 
+            glEnd();
             glDisable(GL_TEXTURE_2D);
             glDeleteTextures(textureId);
         });
@@ -257,7 +263,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-
+        System.out.println("fillTriangle");
     }
 
     @Override
