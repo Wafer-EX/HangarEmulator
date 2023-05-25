@@ -27,6 +27,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 public class Image {
     private final BufferedImage seImage;
@@ -39,6 +40,19 @@ public class Image {
 
     public BufferedImage getSEImage() {
         return seImage;
+    }
+
+    public ByteBuffer convertToByteBuffer() {
+        int[] pixels = seImage.getRGB(0, 0, seImage.getWidth(), seImage.getHeight(), null, 0, seImage.getWidth());
+        ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
+        for (int pixel : pixels) {
+            buffer.put((byte) ((pixel >> 16) & 0xFF));
+            buffer.put((byte) ((pixel >> 8) & 0xFF));
+            buffer.put((byte) (pixel & 0xFF));
+            buffer.put((byte) ((pixel >> 24) & 0xFF));
+        }
+        buffer.flip();
+        return buffer;
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {

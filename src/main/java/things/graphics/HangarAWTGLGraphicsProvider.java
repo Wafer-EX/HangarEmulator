@@ -17,6 +17,7 @@
 package things.graphics;
 
 import things.graphics.awtgl.HangarAWTGLCanvas;
+import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
@@ -212,7 +213,33 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
+        int width = img.getWidth();
+        int height = img.getHeight();
+        int alignedX = ImageUtils.alignX(img.getWidth(), x, anchor);
+        int alignedY = ImageUtils.alignY(img.getHeight(), y, anchor);
 
+        var buffer = img.convertToByteBuffer();
+
+        awtglCanvas.getGLActions().add(() -> {
+            int textureId = glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, textureId);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+
+            glEnable(GL_TEXTURE_2D);
+
+            glBegin(GL_QUADS);
+            glTexCoord2f(0, 0);
+            glVertex2f(alignedX, alignedY);
+            glTexCoord2f(1, 0);
+            glVertex2f(alignedX + width, alignedY);
+            glTexCoord2f(1, 1);
+            glVertex2f(alignedX + width, alignedY + height);
+            glTexCoord2f(0, 1);
+            glVertex2f(alignedX, alignedY + height);
+            glEnd();
+        });
     }
 
     @Override
