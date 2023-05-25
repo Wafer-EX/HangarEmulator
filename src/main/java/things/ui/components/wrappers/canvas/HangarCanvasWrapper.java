@@ -30,7 +30,7 @@ public abstract class HangarCanvasWrapper extends JPanel {
     private Timer serialCallTimer = new Timer();
 
     protected HangarCanvasWrapper(Canvas canvas) {
-        super();
+        super(new CardLayout());
         this.canvas = canvas;
         this.refreshSerialCallTimer();
     }
