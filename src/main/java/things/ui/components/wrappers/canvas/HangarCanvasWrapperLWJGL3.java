@@ -24,9 +24,9 @@ import javax.microedition.lcdui.Canvas;
 import java.awt.*;
 
 public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
-    private GLData glData;
-    private HangarAWTGLCanvas awtglCanvas;
-    private HangarAWTGLGraphicsProvider graphicsProvider;
+    private final GLData glData;
+    private final HangarAWTGLCanvas awtglCanvas;
+    private final HangarAWTGLGraphicsProvider graphicsProvider;
 
     public HangarCanvasWrapperLWJGL3(Canvas canvas) {
         super(canvas);
