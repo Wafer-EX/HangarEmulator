@@ -341,7 +341,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
         if (offscreenBuffer.getGraphicsProvider() instanceof HangarAWTGLGraphicsProvider awtglGraphicsProvider) {
             glActions.addAll(awtglGraphicsProvider.getGLActions());
             glActions.add(() -> {
-                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+                glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, awtglGraphicsProvider.frameBufferTextureId);
