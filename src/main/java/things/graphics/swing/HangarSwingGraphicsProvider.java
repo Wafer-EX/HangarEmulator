@@ -16,9 +16,11 @@
 
 package things.graphics.swing;
 
+import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
+import things.implementations.nokia.DirectGraphicsImplementation;
 import things.utils.microedition.FontUtils;
 import things.utils.microedition.ImageUtils;
 
@@ -39,6 +41,11 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     public HangarSwingGraphicsProvider(java.awt.Graphics seGraphics, BufferedImage seImage) {
         this.seGraphics = (Graphics2D) seGraphics;
         this.seImage = seImage;
+    }
+
+    @Override
+    public DirectGraphics getDirectGraphics(javax.microedition.lcdui.Graphics graphics) {
+        return new DirectGraphicsImplementation(graphics);
     }
 
     @Override
@@ -319,11 +326,6 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     public int getDisplayColor(int color) {
         // TODO: check it
         return color;
-    }
-
-    @Override
-    public void setARGBColor(int argbColor) {
-        seGraphics.setColor(new Color(argbColor, true));
     }
 
     @Override

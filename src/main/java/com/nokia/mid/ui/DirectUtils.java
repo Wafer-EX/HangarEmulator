@@ -16,8 +16,6 @@
 
 package com.nokia.mid.ui;
 
-import things.implementations.nokia.DirectGraphicsImplementation;
-
 import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -27,7 +25,8 @@ import java.io.ByteArrayInputStream;
 
 public class DirectUtils {
     public static DirectGraphics getDirectGraphics(Graphics g) {
-        return new DirectGraphicsImplementation(g);
+        //return new DirectGraphicsImplementation(g);
+        return g.getGraphicsProvider().getDirectGraphics(g);
     }
 
     public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws ArrayIndexOutOfBoundsException, NullPointerException, IllegalArgumentException {

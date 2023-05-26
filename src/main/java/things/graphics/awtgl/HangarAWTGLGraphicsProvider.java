@@ -16,11 +16,13 @@
 
 package things.graphics.awtgl;
 
+import com.nokia.mid.ui.DirectGraphics;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,6 +64,90 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     public ArrayList<HangarGLAction> getGLActions() {
         return glActions;
+    }
+
+    @Override
+    public DirectGraphics getDirectGraphics(Graphics graphics) {
+        return new DirectGraphics() {
+            @Override
+            public void setARGBColor(int argbColor) {
+                color = new Color(argbColor, true);
+            }
+
+            @Override
+            public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
+
+            }
+
+            @Override
+            public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+
+            }
+
+            @Override
+            public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+
+            }
+
+            @Override
+            public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+
+            }
+
+            @Override
+            public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+                var color = new Color(argbColor, true);
+                glActions.add(() -> {
+                    glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+                    glBegin(GL_POLYGON);
+                    glColor3b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+                    for (int i = 0; i < nPoints; i++) {
+                        glVertex2f(xPoints[i], yPoints[i]);
+                    }
+                    glEnd();
+                });
+            }
+
+            @Override
+            public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+
+            }
+
+            @Override
+            public int getNativePixelFormat() {
+                return 0;
+            }
+
+            @Override
+            public int getAlphaComponent() {
+                return 0;
+            }
+        };
     }
 
     @Override
@@ -302,7 +388,16 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-        System.out.println("fillTriangle");
+        glActions.add(() -> {
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+
+            glBegin(GL_TRIANGLES);
+            glColor3b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+            glVertex2i(x1, y1);
+            glVertex2i(x2, y2);
+            glVertex2i(x3, y3);
+            glEnd();
+        });
     }
 
     @Override
@@ -313,11 +408,6 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public int getDisplayColor(int color) {
         return color;
-    }
-
-    @Override
-    public void setARGBColor(int argbColor) {
-        this.color = new Color(argbColor, true);
     }
 
     @Override

@@ -16,10 +16,15 @@
 
 package things.graphics;
 
+import com.nokia.mid.ui.DirectGraphics;
+
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public interface HangarGraphicsProvider {
+    public DirectGraphics getDirectGraphics(Graphics graphics);
+
     public void translate(int x, int y);
 
     public int getTranslateX();
@@ -95,8 +100,6 @@ public interface HangarGraphicsProvider {
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
 
     public int getDisplayColor(int color);
-
-    public void setARGBColor(int argbColor);
 
     public void drawPolygon(int[] x, int[] y, int numberOfPoints);
 
