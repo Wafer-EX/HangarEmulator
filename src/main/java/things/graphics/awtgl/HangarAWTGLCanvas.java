@@ -18,6 +18,7 @@ package things.graphics.awtgl;
 
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
+import things.HangarState;
 
 import java.util.ArrayList;
 
@@ -44,12 +45,17 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
 
     @Override
     public void paintGL() {
+        var profile = HangarState.getProfileManager().getCurrentProfile();
+        int width = profile.getResolution().width;
+        int height = profile.getResolution().height;
+
         glClear(GL_COLOR_BUFFER_BIT);
-        glViewport(0, 0, 240, 320);
+        // TODO: separate it for offscreen buffer
+        glViewport(0, 0, width, height);
 
         glMatrixMode(GL_PROJECTION_MATRIX);
         glLoadIdentity();
-        glOrtho(0, 240, 320, 0, 1, -1);
+        glOrtho(0, width, height, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW_MATRIX);
 
         for (var glAction : glActions) {

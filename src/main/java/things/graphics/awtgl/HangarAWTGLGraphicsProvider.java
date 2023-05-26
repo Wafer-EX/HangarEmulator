@@ -17,6 +17,7 @@
 package things.graphics.awtgl;
 
 import com.nokia.mid.ui.DirectGraphics;
+import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
@@ -44,13 +45,17 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     public HangarAWTGLGraphicsProvider() {
         this(0);
+        var profile = HangarState.getProfileManager().getCurrentProfile();
+        int width = profile.getResolution().width;
+        int height = profile.getResolution().height;
+
         glActions.add(() -> {
             frameBufferId = glGenFramebuffers();
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             frameBufferTextureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, frameBufferTextureId);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 240, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -59,7 +64,6 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     }
 
     public HangarAWTGLGraphicsProvider(int renderBufferId) {
-        //this.awtglCanvas = awtglCanvas;
         this.glActions = new ArrayList<>();
         this.color = new Color(0);
         this.clip = new Rectangle(0, 0, 240, 320);
@@ -452,6 +456,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer instanceof HangarAWTGLOffscreenBuffer awtglOffscreenBuffer) {
             var graphicsProvider = (HangarAWTGLGraphicsProvider) awtglOffscreenBuffer.getGraphicsProvider();
+            var profile = HangarState.getProfileManager().getCurrentProfile();
+            int width = profile.getResolution().width;
+            int height = profile.getResolution().height;
+
             glActions.addAll(graphicsProvider.glActions);
             glActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
@@ -464,11 +472,11 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                 glTexCoord2f(0, 1);
                 glVertex2f(0, 0);
                 glTexCoord2f(1, 1);
-                glVertex2f(240, 0);
+                glVertex2f(width, 0);
                 glTexCoord2f(1, 0);
-                glVertex2f(240, 320);
+                glVertex2f(width, height);
                 glTexCoord2f(0, 0);
-                glVertex2f(0, 320);
+                glVertex2f(0, height);
                 glEnd();
 
                 glDisable(GL_TEXTURE_2D);
