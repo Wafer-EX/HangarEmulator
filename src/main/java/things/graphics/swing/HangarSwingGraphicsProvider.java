@@ -20,9 +20,9 @@ import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.implementations.nokia.DirectGraphicsImplementation;
 import things.utils.microedition.FontUtils;
 import things.utils.microedition.ImageUtils;
+import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Image;
 import java.awt.*;
@@ -45,7 +45,102 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public DirectGraphics getDirectGraphics(javax.microedition.lcdui.Graphics graphics) {
-        return new DirectGraphicsImplementation(graphics);
+        return new DirectGraphics() {
+            @Override
+            public void setARGBColor(int argbColor) {
+                seGraphics.setColor(new Color(argbColor));
+            }
+
+            @Override
+            public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
+                if (img == null) {
+                    throw new NullPointerException();
+                }
+                var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
+                HangarSwingGraphicsProvider.this.drawImage(image, x, y, anchor);
+            }
+
+            @Override
+            public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+                var xPoints = new int[] { x1, x2, x3 };
+                var yPoints = new int[] { y1, y2, y3 };
+                setARGBColor(argbColor);
+                seGraphics.drawPolygon(xPoints, yPoints, 3);
+            }
+
+            @Override
+            public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+                var xPoints = new int[] { x1, x2, x3 };
+                var yPoints = new int[] { y1, y2, y3 };
+                setARGBColor(argbColor);
+                seGraphics.fillPolygon(xPoints, yPoints, 3);
+            }
+
+            @Override
+            public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+                if (xPoints == null || yPoints == null) {
+                    throw new NullPointerException();
+                }
+                setARGBColor(argbColor);
+                seGraphics.drawPolygon(xPoints, yPoints, argbColor);
+            }
+
+            @Override
+            public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+                if (xPoints == null || yPoints == null) {
+                    throw new NullPointerException();
+                }
+                setARGBColor(argbColor);
+                seGraphics.fillPolygon(xPoints, yPoints, nPoints);
+            }
+
+            @Override
+            public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                if (pixels == null) {
+                    throw new NullPointerException();
+                }
+                var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
+                image.setRGB(0, 0, width, height, pixels, offset, scanlength);
+                image = DirectGraphicsUtils.manipulateImage(image, manipulation);
+                HangarSwingGraphicsProvider.this.drawImage(new Image(image, true), x, y, 0);
+            }
+
+            @Override
+            public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public int getNativePixelFormat() {
+                // TODO: write method logic
+                return 0;
+            }
+
+            @Override
+            public int getAlphaComponent() {
+                return HangarSwingGraphicsProvider.this.seGraphics.getColor().getAlpha();
+            }
+        };
     }
 
     @Override
@@ -326,21 +421,6 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     public int getDisplayColor(int color) {
         // TODO: check it
         return color;
-    }
-
-    @Override
-    public void drawPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        seGraphics.drawPolygon(xPoints, yPoints, nPoints);
-    }
-
-    @Override
-    public void fillPolygon(int[] xPoints, int[] yPoints, int nPoints) {
-        seGraphics.fillPolygon(xPoints, yPoints, nPoints);
-    }
-
-    @Override
-    public int getAlphaComponent() {
-        return seGraphics.getColor().getAlpha();
     }
 
     @Override

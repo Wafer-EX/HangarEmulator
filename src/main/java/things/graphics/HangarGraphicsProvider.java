@@ -101,11 +101,5 @@ public interface HangarGraphicsProvider {
 
     public int getDisplayColor(int color);
 
-    public void drawPolygon(int[] x, int[] y, int numberOfPoints);
-
-    public void fillPolygon(int[] x, int[] y, int numberOfPoints);
-
-    public int getAlphaComponent();
-
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
 }

@@ -96,7 +96,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
             @Override
             public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                var color = new Color(argbColor, true);
+                setARGBColor(argbColor);
                 glActions.add(() -> {
                     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
                     glBegin(GL_POLYGON);
@@ -408,21 +408,6 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public int getDisplayColor(int color) {
         return color;
-    }
-
-    @Override
-    public void drawPolygon(int[] x, int[] y, int numberOfPoints) {
-
-    }
-
-    @Override
-    public void fillPolygon(int[] x, int[] y, int numberOfPoints) {
-
-    }
-
-    @Override
-    public int getAlphaComponent() {
-        return 0;
     }
 
     @Override
