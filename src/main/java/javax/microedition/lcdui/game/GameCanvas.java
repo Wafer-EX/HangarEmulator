@@ -19,6 +19,7 @@ package javax.microedition.lcdui.game;
 import things.HangarState;
 import things.graphics.HangarOffscreenBuffer;
 import things.graphics.awtgl.HangarAWTGLOffscreenBuffer;
+import things.graphics.swing.HangarSwingOffscreenBuffer;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
@@ -34,7 +35,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private HangarOffscreenBuffer offscreenBuffer;
+    private final HangarOffscreenBuffer offscreenBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -47,9 +48,6 @@ public abstract class GameCanvas extends Canvas {
 
     protected Graphics getGraphics() {
         // TODO: use anti-aliasing support
-        //var graphics = additionalBuffer.getGraphics();
-        //HangarState.applyAntiAliasing(graphics);
-        //return new Graphics(new HangarSwingGraphicsProvider(graphics, this.additionalBuffer));
         return new Graphics(offscreenBuffer.getGraphicsProvider());
     }
 

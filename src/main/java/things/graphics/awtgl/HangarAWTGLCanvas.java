@@ -52,12 +52,10 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         glOrtho(0, 240, 320, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW_MATRIX);
 
-        if (glActions != null) {
-            for (var glAction : glActions) {
-                glAction.execute();
-            }
-            glActions.clear();
+        for (var glAction : glActions) {
+            glAction.execute();
         }
+        glActions.clear();
         swapBuffers();
     }
 }

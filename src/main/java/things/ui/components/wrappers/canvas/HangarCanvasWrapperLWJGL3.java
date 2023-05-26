@@ -59,6 +59,7 @@ public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
         awtglCanvas.setGLActions(graphicsProvider.getGLActions());
+        graphicsProvider.getGLActions().clear();
         awtglCanvas.render();
     }
 }

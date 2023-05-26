@@ -19,6 +19,7 @@ package things.graphics.awtgl;
 import com.nokia.mid.ui.DirectGraphics;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
+import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
@@ -33,7 +34,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
-    private ArrayList<HangarGLAction> glActions;
+    private final ArrayList<HangarGLAction> glActions;
     private int translateX = 0, translateY = 0;
     private Color color;
     private final Rectangle clip;
@@ -43,7 +44,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     public HangarAWTGLGraphicsProvider() {
         this(0);
-        glActions.add(0, () -> {
+        glActions.add(() -> {
             frameBufferId = glGenFramebuffers();
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
@@ -66,7 +67,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     }
 
     public ArrayList<HangarGLAction> getGLActions() {
-        return (ArrayList<HangarGLAction>) glActions.clone();
+        return glActions;
     }
 
     @Override
@@ -439,13 +440,14 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        if (offscreenBuffer.getGraphicsProvider() instanceof HangarAWTGLGraphicsProvider awtglGraphicsProvider) {
-            glActions.addAll(awtglGraphicsProvider.glActions);
+        if (offscreenBuffer instanceof HangarAWTGLOffscreenBuffer awtglOffscreenBuffer) {
+            var graphicsProvider = (HangarAWTGLGraphicsProvider) awtglOffscreenBuffer.getGraphicsProvider();
+            glActions.addAll(graphicsProvider.glActions);
             glActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
                 glEnable(GL_TEXTURE_2D);
-                glBindTexture(GL_TEXTURE_2D, awtglGraphicsProvider.frameBufferTextureId);
+                glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTextureId);
 
                 glBegin(GL_QUADS);
                 glColor3f(1, 1, 1);
@@ -461,8 +463,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 glDisable(GL_TEXTURE_2D);
             });
-            awtglGraphicsProvider.glActions.clear();
-            //awtglGraphicsProvider.glActions = new ArrayList<>();
+            graphicsProvider.glActions.clear();
+        }
+        else if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
+            drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
         }
     }
 }
