@@ -25,11 +25,15 @@ import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLCanvas extends AWTGLCanvas {
-    private final ArrayList<HangarGLAction> glActions;
+    private ArrayList<HangarGLAction> glActions;
 
     public HangarAWTGLCanvas(GLData glData) {
         super(glData);
         glActions = new ArrayList<>();
+    }
+
+    public void setGLActions(ArrayList<HangarGLAction> glActions) {
+        this.glActions = glActions;
     }
 
     @Override
@@ -48,15 +52,13 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         glOrtho(0, 240, 320, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW_MATRIX);
 
-        for (var glAction : glActions) {
-            glAction.execute();
+        if (glActions != null) {
+            for (var glAction : glActions) {
+                glAction.execute();
+            }
+            glActions.clear();
         }
-        glActions.clear();
 
         swapBuffers();
-    }
-
-    public ArrayList<HangarGLAction> getGLActions() {
-        return glActions;
     }
 }
