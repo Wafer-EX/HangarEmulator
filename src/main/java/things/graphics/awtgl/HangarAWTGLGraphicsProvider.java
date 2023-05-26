@@ -22,13 +22,11 @@ import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
-import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
-import static org.lwjgl.opengl.GL32.glFramebufferTexture;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     private final ArrayList<HangarGLAction> glActions;
@@ -40,19 +38,19 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     public HangarAWTGLGraphicsProvider() {
         this(0);
-        SwingUtilities.invokeLater(() -> glActions.add(() -> {
+        glActions.add(0, () -> {
             frameBufferId = glGenFramebuffers();
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             frameBufferTextureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, frameBufferTextureId);
-
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 240, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, frameBufferTextureId, 0);
-        }));
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameBufferTextureId, 0);
+        });
     }
 
     public HangarAWTGLGraphicsProvider(int renderBufferId) {
@@ -341,7 +339,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer.getGraphicsProvider() instanceof HangarAWTGLGraphicsProvider awtglGraphicsProvider) {
+            glActions.addAll(awtglGraphicsProvider.getGLActions());
             glActions.add(() -> {
+                glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, awtglGraphicsProvider.frameBufferTextureId);
 
@@ -356,6 +357,8 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                 glTexCoord2f(0, 1);
                 glVertex2f(0, 320);
                 glEnd();
+
+                glDisable(GL_TEXTURE_2D);
             });
         }
     }
