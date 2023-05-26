@@ -21,6 +21,7 @@ import things.graphics.awtgl.HangarAWTGLCanvas;
 import things.graphics.awtgl.HangarAWTGLGraphicsProvider;
 
 import javax.microedition.lcdui.Canvas;
+import javax.swing.*;
 import java.awt.*;
 
 public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {

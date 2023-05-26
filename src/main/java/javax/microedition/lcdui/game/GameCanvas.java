@@ -60,11 +60,6 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        // TODO: rewrite method logic?
-        //g.getGraphicsProvider().drawImage(new Image(additionalBuffer, false), 0, 0, 0);
-        //if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
-        //    g.getGraphicsProvider().drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
-        //}
         g.getGraphicsProvider().paintOffscreenBuffer(offscreenBuffer);
     }
 

@@ -33,7 +33,7 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
     }
 
     public void setGLActions(ArrayList<HangarGLAction> glActions) {
-        this.glActions = glActions;
+        this.glActions.addAll(glActions);
     }
 
     @Override
@@ -58,7 +58,6 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
             }
             glActions.clear();
         }
-
         swapBuffers();
     }
 }

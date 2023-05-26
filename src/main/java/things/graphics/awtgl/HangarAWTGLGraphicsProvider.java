@@ -20,18 +20,20 @@ import com.nokia.mid.ui.DirectGraphics;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.utils.microedition.ImageUtils;
+import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
-    private final ArrayList<HangarGLAction> glActions;
+    private ArrayList<HangarGLAction> glActions;
     private int translateX = 0, translateY = 0;
     private Color color;
     private final Rectangle clip;
@@ -63,7 +65,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     }
 
     public ArrayList<HangarGLAction> getGLActions() {
-        return glActions;
+        return (ArrayList<HangarGLAction>) glActions.clone();
     }
 
     @Override
@@ -76,22 +78,26 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
             @Override
             public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
-
+                if (img == null) {
+                    throw new NullPointerException();
+                }
+                var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
+                HangarAWTGLGraphicsProvider.this.drawImage(image, x, y, anchor);
             }
 
             @Override
             public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-
+                setARGBColor(argbColor);
             }
 
             @Override
             public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-
+                setARGBColor(argbColor);
             }
 
             @Override
             public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-
+                setARGBColor(argbColor);
             }
 
             @Override
@@ -100,7 +106,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                 glActions.add(() -> {
                     glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
                     glBegin(GL_POLYGON);
-                    glColor3b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+                    glColor4b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
                     for (int i = 0; i < nPoints; i++) {
                         glVertex2f(xPoints[i], yPoints[i]);
                     }
@@ -378,7 +384,17 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
-        System.out.println("drawRegion");
+        if (src == null) {
+            throw new NullPointerException();
+        }
+        if (width > 0 && height > 0) {
+            var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
+            var transformedImage = ImageUtils.transformImage(imageRegion, transform);
+            x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
+            y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
+
+            drawImage(new Image(transformedImage, false), x_dest, y_dest, anchor);
+        }
     }
 
     @Override
@@ -402,7 +418,14 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
-        System.out.println("drawRGB");
+        if (rgbData == null) {
+            throw new NullPointerException();
+        }
+        if (width > 0 && height > 0) {
+            var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+            image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
+            drawImage(new Image(image, false), x, y, 0);
+        }
     }
 
     @Override
@@ -413,7 +436,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer.getGraphicsProvider() instanceof HangarAWTGLGraphicsProvider awtglGraphicsProvider) {
-            glActions.addAll(awtglGraphicsProvider.getGLActions());
+            glActions.addAll(awtglGraphicsProvider.glActions);
             glActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
@@ -434,6 +457,8 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 glDisable(GL_TEXTURE_2D);
             });
+            awtglGraphicsProvider.glActions.clear();
+            //awtglGraphicsProvider.glActions = new ArrayList<>();
         }
     }
 }
