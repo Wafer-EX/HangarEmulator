@@ -40,21 +40,19 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     public HangarAWTGLGraphicsProvider() {
         this(0);
-        SwingUtilities.invokeLater(() -> {
-            glActions.add(() -> {
-                frameBufferId = glGenFramebuffers();
-                glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+        SwingUtilities.invokeLater(() -> glActions.add(() -> {
+            frameBufferId = glGenFramebuffers();
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
-                frameBufferTextureId = glGenTextures();
-                glBindTexture(GL_TEXTURE_2D, frameBufferTextureId);
+            frameBufferTextureId = glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, frameBufferTextureId);
 
-                glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 240, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, 240, 320, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-                glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, frameBufferTextureId, 0);
-            });
-        });
+            glFramebufferTexture(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, frameBufferTextureId, 0);
+        }));
     }
 
     public HangarAWTGLGraphicsProvider(int renderBufferId) {
