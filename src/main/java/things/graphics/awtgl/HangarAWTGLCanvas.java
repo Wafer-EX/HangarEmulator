@@ -25,7 +25,7 @@ import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLCanvas extends AWTGLCanvas {
-    private ArrayList<HangarGLAction> glActions;
+    private final ArrayList<HangarGLAction> glActions;
 
     public HangarAWTGLCanvas(GLData glData) {
         super(glData);
