@@ -17,6 +17,7 @@
 package things.ui.components;
 
 import things.MIDletLoader;
+import things.enums.GraphicsEngines;
 import things.ui.dialogs.HangarFileChooser;
 import things.utils.AudioUtils;
 import things.HangarKeyCodes;
@@ -104,12 +105,14 @@ public class HangarMenuBar extends JMenuBar {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static class HangarOptionsMenu extends JMenu {
+        private final ButtonGroup graphicsEngineRadioGroup = new ButtonGroup();
         private final ButtonGroup frameRateRadioGroup = new ButtonGroup();
         private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
         private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
 
         private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
         private final JCheckBoxMenuItem antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing");
+        private final JMenu graphicsEnginePopupMenu = new JMenu("Graphics engine");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
@@ -125,6 +128,9 @@ public class HangarMenuBar extends JMenuBar {
 
             antiAliasingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getAntiAliasing());
             antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setAntiAliasing(!HangarState.getProfileManager().getCurrentProfile().getAntiAliasing()));
+
+            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.Swing));
+            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.LWJGL3));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -171,6 +177,7 @@ public class HangarMenuBar extends JMenuBar {
 
             this.add(canvasClearingCheckBox);
             this.add(antiAliasingCheckBox);
+            this.add(graphicsEnginePopupMenu);
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);
             this.add(resolutionPopupMenu);
@@ -181,6 +188,16 @@ public class HangarMenuBar extends JMenuBar {
             this.add(allowResizingCheckBox);
             this.add(new JSeparator());
             this.add(keyboardPopupMenu);
+        }
+
+        private class HangarGraphicsEngineRadio extends JRadioButtonMenuItem {
+            public HangarGraphicsEngineRadio(GraphicsEngines graphicsEngines) {
+                super();
+                this.addItemListener(e -> HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngines));
+                this.setText(graphicsEngines.toString());
+                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine() == graphicsEngines);
+                graphicsEngineRadioGroup.add(this);
+            }
         }
 
         private class HangarFrameRateRadio extends JRadioButtonMenuItem {

@@ -42,8 +42,11 @@ public abstract class GameCanvas extends Canvas {
         var profile = HangarState.getProfileManager().getCurrentProfile();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
-        //offscreenBuffer = new HangarSwingOffscreenBuffer(width, height);
-        offscreenBuffer = new HangarAWTGLOffscreenBuffer(width, height);
+
+        offscreenBuffer = switch (HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine()) {
+            case Swing -> new HangarSwingOffscreenBuffer(width, height);
+            case LWJGL3 -> new HangarAWTGLOffscreenBuffer(width, height);
+        };
     }
 
     protected Graphics getGraphics() {

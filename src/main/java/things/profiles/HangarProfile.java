@@ -18,6 +18,7 @@ package things.profiles;
 
 import things.HangarKeyCodes;
 import things.HangarState;
+import things.enums.GraphicsEngines;
 import things.enums.ScalingModes;
 import things.ui.listeners.HangarProfileListener;
 import things.ui.listeners.events.HangarProfileEvent;
@@ -35,6 +36,7 @@ public class HangarProfile {
     private final ArrayList<HangarProfileListener> profileListeners = new ArrayList<>();
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
     private ScalingModes scalingMode = ScalingModes.None;
+    private GraphicsEngines graphicsEngine = GraphicsEngines.Swing;
     private Dimension resolution = new Dimension(240, 320);
     private int frameRate = 60;
     private boolean canvasClearing = false;
@@ -61,6 +63,17 @@ public class HangarProfile {
         this.scalingMode = scalingMode;
         for (var profileListener : profileListeners) {
             profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.SCALING_MODE_CHANGED, scalingMode));
+        }
+    }
+
+    public GraphicsEngines getGraphicsEngine() {
+        return graphicsEngine;
+    }
+
+    public void setGraphicsEngine(GraphicsEngines graphicsEngine) {
+        this.graphicsEngine = graphicsEngine;
+        for (var profileListener : profileListeners) {
+            profileListener.profileStateChanged(new HangarProfileEvent(this, HangarProfileEvent.GRAPHICS_ENGINE_CHANGED, graphicsEngine));
         }
     }
 

@@ -33,6 +33,12 @@ dependencies {
     runtimeOnly "org.lwjgl:lwjgl-openal::natives-windows"
     runtimeOnly "org.lwjgl:lwjgl-opengl::natives-windows"
     runtimeOnly "org.lwjgl:lwjgl-stb::natives-windows"
+    runtimeOnly "org.lwjgl:lwjgl::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-assimp::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-glfw::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-openal::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-opengl::natives-linux"
+    runtimeOnly "org.lwjgl:lwjgl-stb::natives-linux"
     implementation "org.lwjglx:lwjgl3-awt:0.1.8"
 }
 
