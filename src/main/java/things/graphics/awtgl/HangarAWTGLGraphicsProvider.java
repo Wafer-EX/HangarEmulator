@@ -14,8 +14,10 @@
  * limitations under the License.
  */
 
-package things.graphics;
+package things.graphics.awtgl;
 
+import things.graphics.HangarGraphicsProvider;
+import things.graphics.HangarOffscreenBuffer;
 import things.graphics.awtgl.HangarAWTGLCanvas;
 import things.utils.microedition.ImageUtils;
 
@@ -300,5 +302,10 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public int getAlphaComponent() {
         return 0;
+    }
+
+    @Override
+    public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
+
     }
 }

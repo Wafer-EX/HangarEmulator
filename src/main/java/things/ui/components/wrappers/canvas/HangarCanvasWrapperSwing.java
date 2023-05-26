@@ -18,7 +18,7 @@ package things.ui.components.wrappers.canvas;
 
 import things.HangarState;
 import things.enums.ScalingModes;
-import things.graphics.HangarSwingGraphicsProvider;
+import things.graphics.swing.HangarSwingGraphicsProvider;
 import things.profiles.HangarProfile;
 import things.ui.listeners.HangarKeyListener;
 import things.ui.listeners.HangarMouseListener;

@@ -17,7 +17,9 @@
 package javax.microedition.lcdui.game;
 
 import things.HangarState;
-import things.graphics.HangarSwingGraphicsProvider;
+import things.graphics.HangarOffscreenBuffer;
+import things.graphics.swing.HangarSwingGraphicsProvider;
+import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.utils.microedition.ImageUtils;
 
@@ -37,20 +39,27 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private BufferedImage additionalBuffer;
+    //private BufferedImage additionalBuffer;
+    private HangarOffscreenBuffer offscreenBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
         var profile = HangarState.getProfileManager().getCurrentProfile();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
-        additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        offscreenBuffer = new HangarSwingOffscreenBuffer(width, height);
+
+        //var profile = HangarState.getProfileManager().getCurrentProfile();
+        //int width = profile.getResolution().width;
+        //int height = profile.getResolution().height;
+        //additionalBuffer = ImageUtils.createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
-        var graphics = additionalBuffer.getGraphics();
-        HangarState.applyAntiAliasing(graphics);
-        return new Graphics(new HangarSwingGraphicsProvider(graphics, this.additionalBuffer));
+        //var graphics = additionalBuffer.getGraphics();
+        //HangarState.applyAntiAliasing(graphics);
+        //return new Graphics(new HangarSwingGraphicsProvider(graphics, this.additionalBuffer));
+        return new Graphics(offscreenBuffer.getGraphicsProvider());
     }
 
     public int getKeyStates() {
@@ -61,33 +70,42 @@ public abstract class GameCanvas extends Canvas {
     @Override
     public void paint(Graphics g) {
         // TODO: rewrite method logic?
-        g.getGraphicsProvider().drawImage(new Image(additionalBuffer, false), 0, 0, 0);
+        //g.getGraphicsProvider().drawImage(new Image(additionalBuffer, false), 0, 0, 0);
+        //if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
+        //    g.getGraphicsProvider().drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
+        //}
+        g.getGraphicsProvider().paintOffscreenBuffer(offscreenBuffer);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
-            // TODO: replace with graphics provider
-            if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
-                canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
-            }
-            super.repaint(x, y, width, height);
-        }
+        //var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
+        //if (canvasWrapper != null) {
+        //    // TODO: replace with graphics provider
+        //    if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
+        //        canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+        //    }
+        //    super.repaint(x, y, width, height);
+        //}
+        offscreenBuffer.flushToCanvasWrapper(x, y, width, height);
+        super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
+        //var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
+        //if (canvasWrapper != null) {
             // TODO: replace with graphics provider
-            if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
-                canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
-            }
-            super.repaint();
-        }
+        //    if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
+        //        canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, 0, 0, null);
+        //    }
+        //    super.repaint();
+        //}
+        offscreenBuffer.flushToCanvasWrapper(0, 0, offscreenBuffer.getWidth(), offscreenBuffer.getHeight());
+        super.repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
-        additionalBuffer = ImageUtils.createCompatibleImage(w, h);
+        //additionalBuffer = ImageUtils.createCompatibleImage(w, h);
+        offscreenBuffer.refreshResolution(w, h);
     }
 }

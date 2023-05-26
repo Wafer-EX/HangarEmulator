@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-package things.graphics;
+package things.graphics.swing;
 
 import things.HangarState;
+import things.graphics.HangarGraphicsProvider;
+import things.graphics.HangarOffscreenBuffer;
 import things.utils.microedition.FontUtils;
 import things.utils.microedition.ImageUtils;
 
@@ -337,5 +339,13 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public int getAlphaComponent() {
         return seGraphics.getColor().getAlpha();
+    }
+
+    @Override
+    public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
+        if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
+            drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
+        }
+        // TODO: draw another offscreen buffer?
     }
 }

@@ -18,7 +18,7 @@ package javax.microedition.lcdui;
 
 import things.HangarState;
 import things.MIDletResources;
-import things.graphics.HangarSwingGraphicsProvider;
+import things.graphics.swing.HangarSwingGraphicsProvider;
 import things.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;

@@ -103,4 +103,6 @@ public interface HangarGraphicsProvider {
     public void fillPolygon(int[] x, int[] y, int numberOfPoints);
 
     public int getAlphaComponent();
+
+    public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
 }

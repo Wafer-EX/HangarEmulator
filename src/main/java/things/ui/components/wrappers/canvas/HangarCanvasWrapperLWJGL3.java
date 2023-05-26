@@ -18,7 +18,7 @@ package things.ui.components.wrappers.canvas;
 
 import org.lwjgl.opengl.awt.GLData;
 import things.graphics.awtgl.HangarAWTGLCanvas;
-import things.graphics.HangarAWTGLGraphicsProvider;
+import things.graphics.awtgl.HangarAWTGLGraphicsProvider;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.*;
