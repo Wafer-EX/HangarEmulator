@@ -23,6 +23,7 @@ import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
 public interface HangarGraphicsProvider {
+    // TODO: simplify
     public DirectGraphics getDirectGraphics(Graphics graphics);
 
     public void translate(int x, int y);

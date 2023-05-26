@@ -91,16 +91,19 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                 @Override
                 public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
                     setARGBColor(argbColor);
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
                     setARGBColor(argbColor);
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
                     setARGBColor(argbColor);
+                    // TODO: write method logic
                 }
 
                 @Override
@@ -121,36 +124,37 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 @Override
                 public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-
+                    // TODO: write method logic
                 }
 
                 @Override
                 public int getNativePixelFormat() {
+                    // TODO: write method logic
                     return 0;
                 }
 
@@ -202,6 +206,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public int getGrayScale() {
+        // TODO: write method logic
         return 0;
     }
 
@@ -217,27 +222,29 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setGrayScale(int value) throws IllegalArgumentException {
-
+        // TODO: write method logic
     }
 
     @Override
     public Font getFont() {
+        // TODO: write method logic
         return Font.getDefaultFont();
     }
 
     @Override
     public void setStrokeStyle(int style) throws IllegalArgumentException {
-
+        // TODO: write method logic
     }
 
     @Override
     public int getStrokeStyle() {
+        // TODO: write method logic
         return 0;
     }
 
     @Override
     public void setFont(Font font) {
-
+        // TODO: write method logic
     }
 
     @Override
@@ -262,7 +269,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void clipRect(int x, int y, int width, int height) {
-
+        // TODO: write method logic
     }
 
     @Override
@@ -273,7 +280,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
-        System.out.println("drawLine");
+        // TODO: fix it (line matching problems)
         glActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
@@ -302,47 +309,47 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void drawRect(int x, int y, int width, int height) {
-        System.out.println("drawRect");
+        // TODO: write method logic
     }
 
     @Override
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
-
+        // TODO: write method logic
     }
 
     @Override
     public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-
+        // TODO: write method logic
     }
 
     @Override
@@ -406,7 +413,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {
-        System.out.println("copyArea");
+        // TODO: write method logic
     }
 
     @Override
@@ -437,6 +444,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public int getDisplayColor(int color) {
+        // TODO: write method logic?
         return color;
     }
 

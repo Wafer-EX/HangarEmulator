@@ -22,27 +22,27 @@ import javax.microedition.lcdui.Canvas;
 
 public final class CanvasUtils {
     public static int keyCodeToGameAction(int keyCode) {
-        switch (keyCode) {
-            case Canvas.KEY_NUM1: return Canvas.GAME_A;
-            case Canvas.KEY_NUM2: return Canvas.UP;
-            case Canvas.KEY_NUM3: return Canvas.GAME_B;
-            case Canvas.KEY_NUM4: return Canvas.LEFT;
-            case Canvas.KEY_NUM5: return Canvas.FIRE;
-            case Canvas.KEY_NUM6: return Canvas.RIGHT;
-            case Canvas.KEY_NUM7: return Canvas.GAME_C;
-            case Canvas.KEY_NUM8: return Canvas.DOWN;
-            case Canvas.KEY_NUM9: return Canvas.GAME_D;
+        return switch (keyCode) {
+            case Canvas.KEY_NUM1 -> Canvas.GAME_A;
+            case Canvas.KEY_NUM2 -> Canvas.UP;
+            case Canvas.KEY_NUM3 -> Canvas.GAME_B;
+            case Canvas.KEY_NUM4 -> Canvas.LEFT;
+            case Canvas.KEY_NUM5 -> Canvas.FIRE;
+            case Canvas.KEY_NUM6 -> Canvas.RIGHT;
+            case Canvas.KEY_NUM7 -> Canvas.GAME_C;
+            case Canvas.KEY_NUM8 -> Canvas.DOWN;
+            case Canvas.KEY_NUM9 -> Canvas.GAME_D;
 
-            case FullCanvas.KEY_UP_ARROW: return Canvas.UP;
-            case FullCanvas.KEY_LEFT_ARROW: return Canvas.LEFT;
-            case FullCanvas.KEY_RIGHT_ARROW: return Canvas.RIGHT;
-            case FullCanvas.KEY_DOWN_ARROW: return Canvas.DOWN;
-            case FullCanvas.KEY_SOFTKEY1: return Canvas.GAME_A;
-            case FullCanvas.KEY_SOFTKEY2: return Canvas.GAME_B;
-            case FullCanvas.KEY_SOFTKEY3: return Canvas.FIRE;
+            case FullCanvas.KEY_UP_ARROW -> Canvas.UP;
+            case FullCanvas.KEY_LEFT_ARROW -> Canvas.LEFT;
+            case FullCanvas.KEY_RIGHT_ARROW -> Canvas.RIGHT;
+            case FullCanvas.KEY_DOWN_ARROW -> Canvas.DOWN;
+            case FullCanvas.KEY_SOFTKEY1 -> Canvas.GAME_A;
+            case FullCanvas.KEY_SOFTKEY2 -> Canvas.GAME_B;
+            case FullCanvas.KEY_SOFTKEY3 -> Canvas.FIRE;
 
-            default: return keyCode;
-        }
+            default -> keyCode;
+        };
     }
 
     public static int gameActionToKeyCode(int gameAction) {
@@ -54,6 +54,7 @@ public final class CanvasUtils {
             case Canvas.FIRE: return FullCanvas.KEY_SOFTKEY3;
             case Canvas.RIGHT: return FullCanvas.KEY_RIGHT_ARROW;
             case Canvas.DOWN: return FullCanvas.KEY_DOWN_ARROW;
+
             default: return gameAction;
         }
     }
