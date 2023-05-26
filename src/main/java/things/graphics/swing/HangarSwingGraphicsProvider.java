@@ -432,6 +432,5 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
         if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
             drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
         }
-        // TODO: draw another offscreen buffer?
     }
 }

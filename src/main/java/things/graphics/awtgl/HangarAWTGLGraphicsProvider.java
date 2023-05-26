@@ -76,7 +76,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             directGraphics = new DirectGraphics() {
                 @Override
                 public void setARGBColor(int argbColor) {
-                    color = new Color(argbColor, true);
+                    glActions.add(() -> color = new Color(argbColor, true));
                 }
 
                 @Override
@@ -108,12 +108,14 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                     setARGBColor(argbColor);
                     glActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+                        glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
                         glColor4b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
                         for (int i = 0; i < nPoints; i++) {
                             glVertex2f(xPoints[i], yPoints[i]);
                         }
                         glEnd();
+                        glDisable(GL_BLEND);
                     });
                 }
 
@@ -154,7 +156,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 @Override
                 public int getAlphaComponent() {
-                    return 0;
+                    return color.getAlpha();
                 }
             };
         }
@@ -205,12 +207,12 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        color = new Color(red, green, blue);
+        glActions.add(() -> color = new Color(red, green, blue));
     }
 
     @Override
     public void setColor(int RGB) {
-        color = new Color(RGB, false);
+        glActions.add(() -> color = new Color(RGB));
     }
 
     @Override
@@ -266,7 +268,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void setClip(int x, int y, int width, int height) {
         // TODO: fix it
-        //clip.setBounds(x, y, width, height);
+        //glActions.add(() -> clip.setBounds(x, y, width, height));
     }
 
     @Override
