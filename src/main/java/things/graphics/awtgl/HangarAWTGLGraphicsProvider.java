@@ -451,13 +451,13 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 glBegin(GL_QUADS);
                 glColor3f(1, 1, 1);
-                glTexCoord2f(0, 0);
-                glVertex2f(0, 0);
-                glTexCoord2f(1, 0);
-                glVertex2f(240, 0);
-                glTexCoord2f(1, 1);
-                glVertex2f(240, 320);
                 glTexCoord2f(0, 1);
+                glVertex2f(0, 0);
+                glTexCoord2f(1, 1);
+                glVertex2f(240, 0);
+                glTexCoord2f(1, 0);
+                glVertex2f(240, 320);
+                glTexCoord2f(0, 0);
                 glVertex2f(0, 320);
                 glEnd();
 
