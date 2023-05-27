@@ -57,7 +57,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
                 var profile = HangarState.getProfileManager().getCurrentProfile();
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
                     profile.setResolution(HangarCanvasWrapperSwing.this.getSize());
-                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, HangarCanvasWrapperSwing.this.getSize());
+                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, getSize());
                 }
                 HangarCanvasWrapperSwing.this.updateBufferTransformations();
             }
@@ -105,10 +105,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
 
     public void setBuffer(BufferedImage buffer) {
         this.buffer = buffer;
-    }
-
-    public Point getBufferPosition() {
-        return bufferPosition;
     }
 
     @Override
