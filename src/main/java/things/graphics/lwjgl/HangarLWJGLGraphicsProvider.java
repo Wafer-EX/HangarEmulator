@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.awtgl;
+package things.graphics.lwjgl;
 
 import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
@@ -34,8 +34,8 @@ import java.util.ArrayList;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
-    private final ArrayList<HangarGLAction> glActions;
+public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
+    private final ArrayList<HangarLWJGLAction> lwjglActions;
     private int translateX = 0, translateY = 0;
     private Color color;
     private final Rectangle clip;
@@ -43,13 +43,13 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     protected int frameBufferTextureId;
     private DirectGraphics directGraphics;
 
-    public HangarAWTGLGraphicsProvider() {
+    public HangarLWJGLGraphicsProvider() {
         this(0);
         var profile = HangarState.getProfileManager().getCurrentProfile();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
 
-        glActions.add(() -> {
+        lwjglActions.add(() -> {
             frameBufferId = glGenFramebuffers();
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
@@ -63,15 +63,15 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
         });
     }
 
-    public HangarAWTGLGraphicsProvider(int renderBufferId) {
-        this.glActions = new ArrayList<>();
+    public HangarLWJGLGraphicsProvider(int renderBufferId) {
+        this.lwjglActions = new ArrayList<>();
         this.color = new Color(0);
         this.clip = new Rectangle(0, 0, 240, 320);
         this.frameBufferId = renderBufferId;
     }
 
-    public ArrayList<HangarGLAction> getGLActions() {
-        return glActions;
+    public ArrayList<HangarLWJGLAction> getGLActions() {
+        return lwjglActions;
     }
 
     @Override
@@ -80,7 +80,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             directGraphics = new DirectGraphics() {
                 @Override
                 public void setARGBColor(int argbColor) {
-                    glActions.add(() -> color = new Color(argbColor, true));
+                    lwjglActions.add(() -> color = new Color(argbColor, true));
                 }
 
                 @Override
@@ -89,7 +89,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                         throw new NullPointerException();
                     }
                     var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
-                    HangarAWTGLGraphicsProvider.this.drawImage(image, x, y, anchor);
+                    HangarLWJGLGraphicsProvider.this.drawImage(image, x, y, anchor);
                 }
 
                 @Override
@@ -113,7 +113,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                 @Override
                 public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
                     setARGBColor(argbColor);
-                    glActions.add(() -> {
+                    lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
                         glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
@@ -216,12 +216,12 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        glActions.add(() -> color = new Color(red, green, blue));
+        lwjglActions.add(() -> color = new Color(red, green, blue));
     }
 
     @Override
     public void setColor(int RGB) {
-        glActions.add(() -> color = new Color(RGB, false));
+        lwjglActions.add(() -> color = new Color(RGB, false));
     }
 
     @Override
@@ -279,13 +279,13 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void setClip(int x, int y, int width, int height) {
         // TODO: fix it
-        //glActions.add(() -> clip.setBounds(x, y, width, height));
+        //lwjglActions.add(() -> clip.setBounds(x, y, width, height));
     }
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
         // TODO: fix it (line matching problems)
-        glActions.add(() -> {
+        lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             glBegin(GL_LINES);
@@ -298,7 +298,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillRect(int x, int y, int width, int height) {
-        glActions.add(() -> {
+        lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             glBegin(GL_QUADS);
@@ -364,7 +364,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
         int alignedY = ImageUtils.alignY(img.getHeight(), y, anchor);
         var buffer = img.convertToByteBuffer();
 
-        glActions.add(() -> {
+        lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             glEnable(GL_TEXTURE_2D);
@@ -423,7 +423,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-        glActions.add(() -> {
+        lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             glBegin(GL_TRIANGLES);
@@ -455,14 +455,14 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        if (offscreenBuffer instanceof HangarAWTGLOffscreenBuffer awtglOffscreenBuffer) {
-            var graphicsProvider = (HangarAWTGLGraphicsProvider) awtglOffscreenBuffer.getGraphicsProvider();
+        if (offscreenBuffer instanceof HangarLWJGLOffscreenBuffer lwjglOffscreenBuffer) {
+            var graphicsProvider = (HangarLWJGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();
             var profile = HangarState.getProfileManager().getCurrentProfile();
             int width = profile.getResolution().width;
             int height = profile.getResolution().height;
 
-            glActions.addAll(graphicsProvider.glActions);
-            glActions.add(() -> {
+            lwjglActions.addAll(graphicsProvider.lwjglActions);
+            lwjglActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
                 glEnable(GL_TEXTURE_2D);
@@ -482,7 +482,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
                 glDisable(GL_TEXTURE_2D);
             });
-            graphicsProvider.glActions.clear();
+            graphicsProvider.lwjglActions.clear();
         }
         else if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
             drawImage(new Image(swingOffscreenBuffer.getBufferedImage(), false), 0, 0, 0);

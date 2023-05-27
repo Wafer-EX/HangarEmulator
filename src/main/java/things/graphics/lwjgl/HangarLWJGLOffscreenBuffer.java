@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-package things.graphics.awtgl;
+package things.graphics.lwjgl;
 
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.ui.components.wrappers.canvas.HangarCanvasWrapperLWJGL3;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperLWJGL;
 
-public class HangarAWTGLOffscreenBuffer implements HangarOffscreenBuffer {
+public class HangarLWJGLOffscreenBuffer implements HangarOffscreenBuffer {
     private int width, height;
-    private final HangarAWTGLGraphicsProvider graphicsProvider;
+    private final HangarLWJGLGraphicsProvider graphicsProvider;
 
-    public HangarAWTGLOffscreenBuffer(int width, int height) {
+    public HangarLWJGLOffscreenBuffer(int width, int height) {
         this.width = width;
         this.height = height;
-        this.graphicsProvider = new HangarAWTGLGraphicsProvider();
+        this.graphicsProvider = new HangarLWJGLGraphicsProvider();
     }
 
     @Override
@@ -39,8 +39,8 @@ public class HangarAWTGLOffscreenBuffer implements HangarOffscreenBuffer {
     @Override
     public void flushToCanvasWrapper(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper instanceof HangarCanvasWrapperLWJGL3 canvasWrapperLWJGL3) {
-            canvasWrapperLWJGL3.getGraphicsProvider().paintOffscreenBuffer(this);
+        if (canvasWrapper instanceof HangarCanvasWrapperLWJGL canvasWrapperLWJGL) {
+            canvasWrapperLWJGL.getGraphicsProvider().paintOffscreenBuffer(this);
         }
     }
 

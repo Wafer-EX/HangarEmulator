@@ -17,31 +17,31 @@
 package things.ui.components.wrappers.canvas;
 
 import org.lwjgl.opengl.awt.GLData;
-import things.graphics.awtgl.HangarAWTGLCanvas;
-import things.graphics.awtgl.HangarAWTGLGraphicsProvider;
+import things.graphics.lwjgl.HangarLWJGLGraphicsProvider;
+import things.ui.components.wrappers.canvas.lwjgl.HangarLWJGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.*;
 
-public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
+public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
     private final GLData glData;
-    private final HangarAWTGLCanvas awtglCanvas;
-    private final HangarAWTGLGraphicsProvider graphicsProvider;
+    private final HangarLWJGLCanvas lwjglCanvas;
+    private final HangarLWJGLGraphicsProvider graphicsProvider;
 
-    public HangarCanvasWrapperLWJGL3(Canvas canvas) {
+    public HangarCanvasWrapperLWJGL(Canvas canvas) {
         super(canvas);
 
         this.glData = new GLData();
-        this.awtglCanvas = new HangarAWTGLCanvas(glData);
-        this.graphicsProvider = new HangarAWTGLGraphicsProvider(0);
+        this.lwjglCanvas = new HangarLWJGLCanvas(glData);
+        this.graphicsProvider = new HangarLWJGLGraphicsProvider(0);
 
-        awtglCanvas.setFocusable(false);
-        awtglCanvas.setPreferredSize(this.getPreferredSize());
+        lwjglCanvas.setFocusable(false);
+        lwjglCanvas.setPreferredSize(this.getPreferredSize());
 
-        this.add(awtglCanvas);
+        this.add(lwjglCanvas);
     }
 
-    public HangarAWTGLGraphicsProvider getGraphicsProvider() {
+    public HangarLWJGLGraphicsProvider getGraphicsProvider() {
         return graphicsProvider;
     }
 
@@ -60,8 +60,8 @@ public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        awtglCanvas.setGLActions(graphicsProvider.getGLActions());
+        lwjglCanvas.setLwjglActions(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
-        awtglCanvas.render();
+        lwjglCanvas.render();
     }
 }

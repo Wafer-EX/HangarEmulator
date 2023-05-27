@@ -130,7 +130,7 @@ public class HangarMenuBar extends JMenuBar {
             antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setAntiAliasing(!HangarState.getProfileManager().getCurrentProfile().getAntiAliasing()));
 
             graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.Swing));
-            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.LWJGL3));
+            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.LWJGL));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));

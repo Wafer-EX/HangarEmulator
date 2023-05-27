@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-package things.graphics.awtgl;
+package things.graphics.lwjgl;
 
-public interface HangarGLAction {
+public interface HangarLWJGLAction {
     public void execute();
 }

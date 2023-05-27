@@ -14,27 +14,28 @@
  * limitations under the License.
  */
 
-package things.graphics.awtgl;
+package things.ui.components.wrappers.canvas.lwjgl;
 
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import things.HangarState;
+import things.graphics.lwjgl.HangarLWJGLAction;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public class HangarAWTGLCanvas extends AWTGLCanvas {
-    private final ArrayList<HangarGLAction> glActions;
+public class HangarLWJGLCanvas extends AWTGLCanvas {
+    private final ArrayList<HangarLWJGLAction> lwjglActions;
 
-    public HangarAWTGLCanvas(GLData glData) {
+    public HangarLWJGLCanvas(GLData glData) {
         super(glData);
-        glActions = new ArrayList<>();
+        lwjglActions = new ArrayList<>();
     }
 
-    public void setGLActions(ArrayList<HangarGLAction> glActions) {
-        this.glActions.addAll(glActions);
+    public void setLwjglActions(ArrayList<HangarLWJGLAction> lwjglActions) {
+        this.lwjglActions.addAll(lwjglActions);
     }
 
     @Override
@@ -58,10 +59,10 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         glOrtho(0, width, height, 0, 1, -1);
         glMatrixMode(GL_MODELVIEW_MATRIX);
 
-        for (var glAction : glActions) {
-            glAction.execute();
+        for (var lwjglAction : lwjglActions) {
+            lwjglAction.execute();
         }
-        glActions.clear();
+        lwjglActions.clear();
         swapBuffers();
     }
 }

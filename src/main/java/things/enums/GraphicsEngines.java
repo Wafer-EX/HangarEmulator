@@ -18,7 +18,7 @@ package things.enums;
 
 public enum GraphicsEngines {
     Swing("Swing"),
-    LWJGL3("LWJGL3 (EXPERIMENTAL!!)");
+    LWJGL("LWJGL (experimental)");
 
     private final String name;
 
