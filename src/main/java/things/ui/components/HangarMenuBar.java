@@ -191,11 +191,23 @@ public class HangarMenuBar extends JMenuBar {
         }
 
         private class HangarGraphicsEngineRadio extends JRadioButtonMenuItem {
-            public HangarGraphicsEngineRadio(GraphicsEngines graphicsEngines) {
+            public HangarGraphicsEngineRadio(GraphicsEngines graphicsEngine) {
                 super();
-                this.addItemListener(e -> HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngines));
-                this.setText(graphicsEngines.toString());
-                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine() == graphicsEngines);
+                this.addItemListener(e -> {
+                    HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngine);
+                    if (graphicsEngine == GraphicsEngines.LWJGL && this.isSelected()) {
+                        JOptionPane.showMessageDialog(this, """
+                                        You've chose the LWJGL graphics engine. It's very raw
+                                        graphics engine that doesn't support many functions.
+                                        If you interested to comfortable game process, please,
+                                        use the Swing graphics engine.
+                                        """,
+                                "Warning!", JOptionPane.WARNING_MESSAGE);
+                    }
+                });
+
+                this.setText(graphicsEngine.toString());
+                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine() == graphicsEngine);
                 graphicsEngineRadioGroup.add(this);
             }
         }
