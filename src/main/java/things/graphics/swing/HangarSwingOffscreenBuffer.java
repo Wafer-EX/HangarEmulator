@@ -26,11 +26,10 @@ import java.awt.image.BufferedImage;
 
 public class HangarSwingOffscreenBuffer implements HangarOffscreenBuffer {
     private BufferedImage additionalBuffer;
-    private final HangarSwingGraphicsProvider graphicsProvider;
+    private HangarSwingGraphicsProvider graphicsProvider;
 
     public HangarSwingOffscreenBuffer(int width, int height) {
-        this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
-        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics(), additionalBuffer);
+        refreshResolution(width, height);
     }
 
     public BufferedImage getBufferedImage() {
@@ -62,6 +61,7 @@ public class HangarSwingOffscreenBuffer implements HangarOffscreenBuffer {
 
     @Override
     public void refreshResolution(int width, int height) {
-        additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics(), additionalBuffer);
     }
 }
