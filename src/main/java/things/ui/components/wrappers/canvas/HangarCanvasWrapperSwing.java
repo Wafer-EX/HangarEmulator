@@ -54,6 +54,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
+                var profile = HangarState.getProfileManager().getCurrentProfile();
                 if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
                     profile.setResolution(HangarCanvasWrapperSwing.this.getSize());
                     CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, HangarCanvasWrapperSwing.this.getSize());

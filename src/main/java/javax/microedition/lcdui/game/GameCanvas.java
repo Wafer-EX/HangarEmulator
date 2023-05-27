@@ -43,7 +43,7 @@ public abstract class GameCanvas extends Canvas {
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
 
-        offscreenBuffer = switch (HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine()) {
+        offscreenBuffer = switch (profile.getGraphicsEngine()) {
             case Swing -> new HangarSwingOffscreenBuffer(width, height);
             case LWJGL -> new HangarLWJGLOffscreenBuffer(width, height);
         };
