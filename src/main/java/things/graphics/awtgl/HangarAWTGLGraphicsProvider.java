@@ -117,7 +117,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
                         glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
-                        glColor4b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
+                        glColor4ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
                         for (int i = 0; i < nPoints; i++) {
                             glVertex2f(xPoints[i], yPoints[i]);
                         }
@@ -221,7 +221,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setColor(int RGB) {
-        glActions.add(() -> color = new Color(RGB));
+        glActions.add(() -> color = new Color(RGB, false));
     }
 
     @Override
@@ -426,7 +426,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
 
             glBegin(GL_TRIANGLES);
-            glColor3b((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
             glVertex2i(x1, y1);
             glVertex2i(x2, y2);
             glVertex2i(x3, y3);
