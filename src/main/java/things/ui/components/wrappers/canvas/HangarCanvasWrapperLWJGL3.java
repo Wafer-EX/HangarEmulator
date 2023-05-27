@@ -36,6 +36,7 @@ public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
         this.graphicsProvider = new HangarAWTGLGraphicsProvider(0);
 
         awtglCanvas.setFocusable(false);
+        awtglCanvas.setPreferredSize(this.getPreferredSize());
 
         this.add(awtglCanvas);
     }
