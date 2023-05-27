@@ -31,7 +31,7 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
 
     public HangarLWJGLCanvas(GLData glData) {
         super(glData);
-        lwjglActions = new ArrayList<>();
+        this.lwjglActions = new ArrayList<>();
     }
 
     public void setLwjglActions(ArrayList<HangarLWJGLAction> lwjglActions) {
@@ -51,9 +51,6 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
         int height = profile.getResolution().height;
 
         glClear(GL_COLOR_BUFFER_BIT);
-        // TODO: separate it for offscreen buffer
-        glViewport(0, 0, width, height);
-
         glMatrixMode(GL_PROJECTION_MATRIX);
         glLoadIdentity();
         glOrtho(0, width, height, 0, 1, -1);

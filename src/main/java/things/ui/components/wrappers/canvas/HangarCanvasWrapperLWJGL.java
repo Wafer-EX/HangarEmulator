@@ -17,11 +17,15 @@
 package things.ui.components.wrappers.canvas;
 
 import org.lwjgl.opengl.awt.GLData;
+import things.HangarState;
 import things.graphics.lwjgl.HangarLWJGLGraphicsProvider;
 import things.ui.components.wrappers.canvas.lwjgl.HangarLWJGLCanvas;
+import things.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
     private final HangarLWJGLCanvas lwjglCanvas;
@@ -37,6 +41,20 @@ public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
         lwjglCanvas.setPreferredSize(this.getPreferredSize());
 
         this.add(lwjglCanvas);
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                var profile = HangarState.getProfileManager().getCurrentProfile();
+                float scaling = SystemUtils.getScalingInUnits();
+
+                int centerX = (int) ((getWidth() / 2) * scaling);
+                int centerY = (int) ((getHeight() / 2) * scaling);
+                int width = profile.getResolution().width;
+                int height = profile.getResolution().height;
+
+                graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
+            }
+        });
     }
 
     public HangarLWJGLGraphicsProvider getGraphicsProvider() {

@@ -44,6 +44,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     protected int frameBufferId;
     protected int frameBufferTextureId;
     private DirectGraphics directGraphics;
+    private int viewportX, viewportY, viewportWidth, viewportHeight;
 
     public HangarLWJGLGraphicsProvider() {
         this(0);
@@ -62,6 +63,11 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameBufferTextureId, 0);
+
+            this.viewportX = 0;
+            this.viewportY = 0;
+            this.viewportWidth = width;
+            this.viewportHeight = height;
         });
     }
 
@@ -74,6 +80,13 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     public ArrayList<HangarLWJGLAction> getGLActions() {
         return lwjglActions;
+    }
+
+    public void setViewportValues(int x, int y, int width, int height) {
+        this.viewportX = x;
+        this.viewportY = y;
+        this.viewportWidth = width;
+        this.viewportHeight = height;
     }
 
     @Override
@@ -117,6 +130,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     setARGBColor(argbColor);
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+                        glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
                         glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
@@ -290,6 +304,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         // TODO: fix it (line matching problems)
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glBegin(GL_LINES);
             glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
@@ -303,6 +318,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     public void fillRect(int x, int y, int width, int height) {
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glBegin(GL_QUADS);
             glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
@@ -343,6 +359,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             double prevY = Math.cos(angle) * halfHeight + y + halfHeight;
 
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+
             glBegin(GL_TRIANGLES);
             glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
 
@@ -397,6 +415,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -456,6 +475,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glBegin(GL_TRIANGLES);
             glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
@@ -495,6 +515,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             lwjglActions.addAll(graphicsProvider.lwjglActions);
             lwjglActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+                glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
                 glEnable(GL_TEXTURE_2D);
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTextureId);
