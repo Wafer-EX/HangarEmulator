@@ -430,7 +430,7 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
-            drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
+            this.drawImage(new Image(swingOffscreenBuffer.getBufferedImage(), false), 0, 0, 0);
         }
     }
 }

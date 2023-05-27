@@ -484,7 +484,7 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             graphicsProvider.glActions.clear();
         }
         else if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
-            drawImage(new Image(swingOffscreenBuffer.additionalBuffer, false), 0, 0, 0);
+            drawImage(new Image(swingOffscreenBuffer.getBufferedImage(), false), 0, 0, 0);
         }
     }
 }

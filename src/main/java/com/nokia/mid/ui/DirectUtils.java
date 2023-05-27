@@ -25,7 +25,6 @@ import java.io.ByteArrayInputStream;
 
 public class DirectUtils {
     public static DirectGraphics getDirectGraphics(Graphics g) {
-        //return new DirectGraphicsImplementation(g);
         return g.getGraphicsProvider().getDirectGraphics(g);
     }
 

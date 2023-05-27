@@ -25,12 +25,16 @@ import things.utils.microedition.ImageUtils;
 import java.awt.image.BufferedImage;
 
 public class HangarSwingOffscreenBuffer implements HangarOffscreenBuffer {
-    public BufferedImage additionalBuffer;
+    private BufferedImage additionalBuffer;
     private final HangarSwingGraphicsProvider graphicsProvider;
 
     public HangarSwingOffscreenBuffer(int width, int height) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
         this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics(), additionalBuffer);
+    }
+
+    public BufferedImage getBufferedImage() {
+        return additionalBuffer;
     }
 
     @Override
