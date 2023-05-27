@@ -16,19 +16,43 @@
 
 package things.ui.components;
 
+import things.HangarState;
+import things.enums.ScalingModes;
+import things.ui.listeners.events.HangarProfileEvent;
+
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class HangarMainPanel extends JPanel {
     // TODO: replace with profiles menu
     public HangarMainPanel() {
-        super();
+        super(new CardLayout());
 
         var label = new JLabel("Please select a file in the MIDlet menu.");
         label.setHorizontalAlignment(JLabel.CENTER);
         label.setVerticalAlignment(JLabel.CENTER);
-
-        this.setLayout(new CardLayout());
         this.add(label);
+
+        // TODO: the scale can not match with real viewport because of buttons in bottom
+        var profile = HangarState.getProfileManager().getCurrentProfile();
+        profile.addProfileListener(e -> {
+            if (e.getStateChange() == HangarProfileEvent.SCALING_MODE_CHANGED) {
+                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
+                    profile.setResolution(getSize());
+                }
+            }
+        });
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                var profile = HangarState.getProfileManager().getCurrentProfile();
+                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
+                    profile.setResolution(getSize());
+                }
+            }
+        });
     }
 }
