@@ -378,7 +378,8 @@ public class HangarAWTGLGraphicsProvider implements HangarGraphicsProvider {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glScissor(clip.x, clip.y, clip.width, clip.height);
+            // TODO: use it
+            //glScissor(clip.x, clip.y, clip.width, clip.height);
             glDepthMask(true);
 
             glBegin(GL_QUADS);
