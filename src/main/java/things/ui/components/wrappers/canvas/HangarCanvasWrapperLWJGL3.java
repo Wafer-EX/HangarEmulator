@@ -35,6 +35,8 @@ public class HangarCanvasWrapperLWJGL3 extends HangarCanvasWrapper {
         this.awtglCanvas = new HangarAWTGLCanvas(glData);
         this.graphicsProvider = new HangarAWTGLGraphicsProvider(0);
 
+        awtglCanvas.setFocusable(false);
+
         this.add(awtglCanvas);
     }
 
