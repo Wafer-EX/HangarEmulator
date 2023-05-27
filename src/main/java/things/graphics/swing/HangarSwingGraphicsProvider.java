@@ -50,7 +50,7 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
             directGraphics = new DirectGraphics() {
                 @Override
                 public void setARGBColor(int argbColor) {
-                    seGraphics.setColor(new Color(argbColor));
+                    seGraphics.setColor(new Color(argbColor, true));
                 }
 
                 @Override
