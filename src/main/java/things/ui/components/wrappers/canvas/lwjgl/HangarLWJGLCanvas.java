@@ -41,7 +41,7 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
     @Override
     public void initGL() {
         createCapabilities();
-        glClearColor(0.5f, 0.5f, 0.5f, 1f);
+        glClearColor(0, 0, 0, 0);
     }
 
     @Override
