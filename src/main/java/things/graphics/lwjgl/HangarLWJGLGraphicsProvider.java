@@ -35,6 +35,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
+    public static final int CIRCLE_POINTS = 16;
+
     private final ArrayList<HangarLWJGLAction> lwjglActions;
     private int translateX = 0, translateY = 0;
     private Color color;
@@ -115,6 +117,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     setARGBColor(argbColor);
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+
                         glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
                         glColor4ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
@@ -328,7 +331,35 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        // TODO: write method logic
+        int halfWidth = width / 2;
+        int halfHeight = height / 2;
+
+        lwjglActions.add(() -> {
+            // TODO: use startAngle and arcAngle here
+            double deltaAngle = (Math.PI * 2) / CIRCLE_POINTS;
+            double angle = 0;
+
+            double prevX = Math.sin(angle) * halfWidth + x + halfWidth;
+            double prevY = Math.cos(angle) * halfHeight + y + halfHeight;
+
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBufferId);
+            glBegin(GL_TRIANGLES);
+            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+
+            for (int i = 0; i < CIRCLE_POINTS; i++) {
+                angle += deltaAngle;
+                double currX = Math.sin(angle) * halfWidth + x + halfWidth;
+                double currY = Math.cos(angle) * halfHeight + y + halfHeight;
+
+                glVertex2f(x + halfWidth, y + halfHeight);
+                glVertex2d(prevX, prevY);
+                glVertex2d(currX, currY);
+
+                prevX = currX;
+                prevY = currY;
+            }
+            glEnd();
+        });
     }
 
     @Override
