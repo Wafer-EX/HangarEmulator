@@ -24,15 +24,13 @@ import javax.microedition.lcdui.Canvas;
 import java.awt.*;
 
 public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
-    private final GLData glData;
     private final HangarLWJGLCanvas lwjglCanvas;
     private final HangarLWJGLGraphicsProvider graphicsProvider;
 
     public HangarCanvasWrapperLWJGL(Canvas canvas) {
         super(canvas);
-
-        this.glData = new GLData();
-        this.lwjglCanvas = new HangarLWJGLCanvas(glData);
+        
+        this.lwjglCanvas = new HangarLWJGLCanvas(new GLData());
         this.graphicsProvider = new HangarLWJGLGraphicsProvider(0);
 
         lwjglCanvas.setFocusable(false);
