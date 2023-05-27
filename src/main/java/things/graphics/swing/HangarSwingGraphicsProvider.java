@@ -40,7 +40,7 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     private DirectGraphics directGraphics;
 
     public HangarSwingGraphicsProvider(java.awt.Graphics seGraphics, BufferedImage seImage) {
-        this.seGraphics = (Graphics2D) seGraphics;
+        this.seGraphics = HangarState.applyAntiAliasing(seGraphics);
         this.seImage = seImage;
     }
 
