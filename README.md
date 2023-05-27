@@ -1,10 +1,21 @@
 # Hangar Emulator
-This is a simple J2ME emulator which will let you play some old games for feature phones. Hangar Emulator supports main mostly used libraries but at this moment it is at a very early stage of development.
+This is a very raw and simple J2ME-emulator that let you play some old games made for feature phones. It's still a very early stage of development so it has many compatibility problems. It was made only for experiments and self-education so it doesn't pretend to be a cool emulator with very high level of compatibility.
 
 ![image](https://user-images.githubusercontent.com/76843479/175813227-4ab735a1-c493-4cb5-bd08-c7b5df19d6e6.png)
+
+
+
+## Features
+- Anti-aliasing (makes vector graphics smooth)
+- Custom soundbanks
+- Custom resolution (include screen filling)
+- Canvas scaling when stretching the window
+- Unlimited frame rate
+- Experimental OpenGL support using LWJGL 3 (extremely raw and buggy)
+
 ## Requirements
 - Java Development Kit 17
-- ~256 MB free RAM
+- ~512 MB free RAM
 ## Build
 As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
 
