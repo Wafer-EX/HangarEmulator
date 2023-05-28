@@ -151,15 +151,41 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
                         glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-
                         glEnable(GL_BLEND);
-                        glBegin(GL_POLYGON);
-                        glColor4f(r, g, b, a);
+
+                        int buffer = glGenBuffers();
+                        var vertices = new float[nPoints * 8];
+
+                        glBindBuffer(GL_ARRAY_BUFFER, buffer);
                         for (int i = 0; i < nPoints; i++) {
-                            glVertex2f(xPoints[i], yPoints[i]);
+                            int step = i * 8;
+                            vertices[step] = xPoints[i];
+                            vertices[step + 1] = yPoints[i];
+                            vertices[step + 2] = r;
+                            vertices[step + 3] = g;
+                            vertices[step + 4] = b;
+                            vertices[step + 5] = a;
+                            vertices[step + 6] = viewportWidth;
+                            vertices[step + 7] = viewportHeight;
                         }
-                        glEnd();
+                        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+                        glEnableVertexAttribArray(0);
+                        glEnableVertexAttribArray(1);
+                        glEnableVertexAttribArray(2);
+                        glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
+                        glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
+                        glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+
+                        glUseProgram(vectorShaderProgram);
+                        glDrawArrays(GL_POLYGON, 0, nPoints);
+
+                        glDisableVertexAttribArray(0);
+                        glDisableVertexAttribArray(1);
+                        glDisableVertexAttribArray(2);
+                        glUseProgram(0);
                         glDisable(GL_BLEND);
+                        glDeleteBuffers(buffer);
                     });
                 }
 
