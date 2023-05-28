@@ -51,6 +51,7 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
         int height = profile.getResolution().height;
 
         glClear(GL_COLOR_BUFFER_BIT);
+        // TODO: remove when update all methods in graphics provider
         glMatrixMode(GL_PROJECTION_MATRIX);
         glLoadIdentity();
         glOrtho(0, width, height, 0, 1, -1);
