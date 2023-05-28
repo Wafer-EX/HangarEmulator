@@ -46,9 +46,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     private DirectGraphics directGraphics;
     private int viewportX, viewportY, viewportWidth, viewportHeight;
 
-    // SHADER VARIABLES
+    private static int vectorShaderProgram, textureShaderProgram;
     private static boolean shadersArePrepared = false;
-    private static int shaderProgram;
 
     public HangarLWJGLGraphicsProvider() {
         this(0);
@@ -83,6 +82,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             if (!shadersArePrepared) {
+                // Vector shader
                 CharSequence vertexShaderSource = """
                                 #version 330 core
                                 layout (location = 0) in vec2 position;
@@ -119,13 +119,15 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 glShaderSource(fragmentShader, fragmentShaderSource);
                 glCompileShader(fragmentShader);
 
-                shaderProgram = glCreateProgram();
-                glAttachShader(shaderProgram, vertexShader);
-                glAttachShader(shaderProgram, fragmentShader);
-                glLinkProgram(shaderProgram);
+                vectorShaderProgram = glCreateProgram();
+                glAttachShader(vectorShaderProgram, vertexShader);
+                glAttachShader(vectorShaderProgram, fragmentShader);
+                glLinkProgram(vectorShaderProgram);
 
                 glDeleteShader(vertexShader);
                 glDeleteShader(fragmentShader);
+
+                // TODO: write texture shader
 
                 shadersArePrepared = true;
             }
@@ -394,7 +396,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 2 * 4);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 6 * 4);
 
-            glUseProgram(shaderProgram);
+            glUseProgram(vectorShaderProgram);
             glDrawArrays(GL_QUADS, 0, 4);
 
             glDisableVertexAttribArray(0);
