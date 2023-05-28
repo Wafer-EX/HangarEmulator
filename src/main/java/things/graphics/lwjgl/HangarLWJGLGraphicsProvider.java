@@ -377,8 +377,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             float r = color.getRed() / 255f;
             float g = color.getGreen() / 255f;
             float b = color.getBlue() / 255f;
+            
             int buffer = glGenBuffers();
-
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
                     x,         y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
@@ -387,12 +387,12 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     x,         y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
             }, GL_STATIC_DRAW);
 
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
             glEnableVertexAttribArray(0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 2 * 4);
             glEnableVertexAttribArray(1);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 6 * 4);
             glEnableVertexAttribArray(2);
+            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 2 * 4);
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 6 * 4);
 
             glUseProgram(shaderProgram);
             glDrawArrays(GL_QUADS, 0, 4);
