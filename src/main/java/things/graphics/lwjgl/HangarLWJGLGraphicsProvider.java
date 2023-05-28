@@ -153,15 +153,20 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                                 
                                 in vec2 TexCoord;
                                 
-                                uniform sampler2D texture;
+                                uniform sampler2D inputTexture;
                                 
                                 void main() {
-                                    FragColor = vec4(1, 1, 1, 1);
+                                    FragColor = texture(inputTexture, TexCoord);
                                 }
                         """;
                 int textureFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
                 glShaderSource(textureFragmentShader, textureFragmentShaderSource);
                 glCompileShader(textureFragmentShader);
+
+                textureShaderProgram = glCreateProgram();
+                glAttachShader(textureShaderProgram, textureVertexShader);
+                glAttachShader(textureShaderProgram, textureFragmentShader);
+                glLinkProgram(textureShaderProgram);
 
                 glDeleteShader(vectorVertexShader);
                 glDeleteShader(vectorFragmentShader);
@@ -632,22 +637,32 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
                 glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
-                glEnable(GL_TEXTURE_2D);
+                int buffer = glGenBuffers();
+                glBindBuffer(GL_ARRAY_BUFFER, buffer);
+                glBufferData(GL_ARRAY_BUFFER, new float[] {
+                        0,     0,      width, height, 0, 1,
+                        width, 0,      width, height, 1, 1,
+                        width, height, width, height, 1, 0,
+                        0,     height, width, height, 0, 0,
+
+                }, GL_STATIC_DRAW);
+
+                glEnableVertexAttribArray(0);
+                glEnableVertexAttribArray(1);
+                glEnableVertexAttribArray(2);
+                glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
+                glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 2 * 4);
+                glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 4 * 4);
+
+                glUseProgram(textureShaderProgram);
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
+                glDrawArrays(GL_QUADS, 0, 4);
 
-                glBegin(GL_QUADS);
-                glColor3f(1, 1, 1);
-                glTexCoord2f(0, 1);
-                glVertex2f(0, 0);
-                glTexCoord2f(1, 1);
-                glVertex2f(width, 0);
-                glTexCoord2f(1, 0);
-                glVertex2f(width, height);
-                glTexCoord2f(0, 0);
-                glVertex2f(0, height);
-                glEnd();
-
-                glDisable(GL_TEXTURE_2D);
+                glDisableVertexAttribArray(0);
+                glDisableVertexAttribArray(1);
+                glDisableVertexAttribArray(2);
+                glUseProgram(0);
+                glDeleteBuffers(buffer);
             });
             graphicsProvider.lwjglActions.clear();
         }
