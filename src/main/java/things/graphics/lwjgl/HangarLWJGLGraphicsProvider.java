@@ -194,7 +194,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             directGraphics = new DirectGraphics() {
                 @Override
                 public void setARGBColor(int argbColor) {
-                    lwjglActions.add(() -> color = new Color(argbColor, true));
+                    color = new Color(argbColor, true);
                 }
 
                 @Override
@@ -227,13 +227,18 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 @Override
                 public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
                     setARGBColor(argbColor);
+                    float r = color.getRed() / 255f;
+                    float g = color.getGreen() / 255f;
+                    float b = color.getBlue() / 255f;
+                    float a = color.getAlpha() / 255f;
+
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
                         glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
                         glEnable(GL_BLEND);
                         glBegin(GL_POLYGON);
-                        glColor4ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue(), (byte) color.getAlpha());
+                        glColor4f(r, g, b, a);
                         for (int i = 0; i < nPoints; i++) {
                             glVertex2f(xPoints[i], yPoints[i]);
                         }
@@ -332,12 +337,12 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        lwjglActions.add(() -> color = new Color(red, green, blue));
+        color = new Color(red, green, blue);
     }
 
     @Override
     public void setColor(int RGB) {
-        lwjglActions.add(() -> color = new Color(RGB, false));
+        color = new Color(RGB, false);
     }
 
     @Override
@@ -401,12 +406,16 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
         // TODO: fix it (line matching problems)
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glBegin(GL_LINES);
-            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+            glColor3f(r, g, b);
             glVertex2f(x1, y1);
             glVertex2f(x2, y2);
             glEnd();
@@ -415,13 +424,13 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillRect(int x, int y, int width, int height) {
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-
-            float r = color.getRed() / 255f;
-            float g = color.getGreen() / 255f;
-            float b = color.getBlue() / 255f;
 
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
@@ -470,6 +479,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         int halfWidth = width / 2;
         int halfHeight = height / 2;
 
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+
         lwjglActions.add(() -> {
             // TODO: use startAngle and arcAngle here
             double deltaAngle = (Math.PI * 2) / CIRCLE_POINTS;
@@ -482,7 +495,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glBegin(GL_TRIANGLES);
-            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
+            glColor3f(r, g, b);
 
             for (int i = 0; i < CIRCLE_POINTS; i++) {
                 angle += deltaAngle;
@@ -593,13 +606,13 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-
-            float r = color.getRed() / 255f;
-            float g = color.getGreen() / 255f;
-            float b = color.getBlue() / 255f;
 
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
