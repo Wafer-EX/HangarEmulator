@@ -453,6 +453,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
+            // TODO: use different drawing method here
             glBegin(GL_TRIANGLES);
             glColor3f(r, g, b);
 
