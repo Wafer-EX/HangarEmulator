@@ -436,8 +436,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glEnableVertexAttribArray(1);
             glEnableVertexAttribArray(2);
             glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 2 * 4);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 6 * 4);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
 
             glUseProgram(vectorShaderProgram);
             glDrawArrays(GL_QUADS, 0, 4);
@@ -651,8 +651,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 glEnableVertexAttribArray(1);
                 glEnableVertexAttribArray(2);
                 glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
-                glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 2 * 4);
-                glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 4 * 4);
+                glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
+                glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
 
                 glUseProgram(textureShaderProgram);
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
