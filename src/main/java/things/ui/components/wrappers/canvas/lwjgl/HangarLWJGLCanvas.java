@@ -54,7 +54,6 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
         glMatrixMode(GL_PROJECTION_MATRIX);
         glLoadIdentity();
         glOrtho(0, width, height, 0, 1, -1);
-        glMatrixMode(GL_MODELVIEW_MATRIX);
 
         for (var lwjglAction : lwjglActions) {
             lwjglAction.execute();
