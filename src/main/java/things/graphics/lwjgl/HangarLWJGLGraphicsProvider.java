@@ -92,10 +92,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                                 out vec4 vertexColor;
                                 
                                 void main() {
-                                    mat4 ortho = mat4(2.0 / 240.0, 0.0,          0.0, -1.0,
-                                                      0.0,         2.0 / -320.0, 0.0,  1.0,
-                                                      0.0,         0.0,          1.0,  0.0,
-                                                      0.0,         0.0,          0.0,  1.0);
+                                    mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
+                                                      0.0,                2.0 / -resolution.y, 0.0,  1.0,
+                                                      0.0,                0.0,                 1.0,  0.0,
+                                                      0.0,                0.0,                 0.0,  1.0);
                                 
                                     gl_Position = vec4(position.x, position.y, 0.0, 1.0) * ortho;
                                     vertexColor = color;
