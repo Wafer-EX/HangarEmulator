@@ -422,7 +422,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             float r = color.getRed() / 255f;
             float g = color.getGreen() / 255f;
             float b = color.getBlue() / 255f;
-            
+
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
@@ -597,12 +597,33 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
             glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
-            glBegin(GL_TRIANGLES);
-            glColor3ub((byte) color.getRed(), (byte) color.getGreen(), (byte) color.getBlue());
-            glVertex2i(x1, y1);
-            glVertex2i(x2, y2);
-            glVertex2i(x3, y3);
-            glEnd();
+            float r = color.getRed() / 255f;
+            float g = color.getGreen() / 255f;
+            float b = color.getBlue() / 255f;
+
+            int buffer = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER, new float[] {
+                    x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
+            }, GL_STATIC_DRAW);
+
+            glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+
+            glUseProgram(vectorShaderProgram);
+            glDrawArrays(GL_TRIANGLES, 0, 3);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+            glDisableVertexAttribArray(2);
+            glUseProgram(0);
+            glDeleteBuffers(buffer);
         });
     }
 
