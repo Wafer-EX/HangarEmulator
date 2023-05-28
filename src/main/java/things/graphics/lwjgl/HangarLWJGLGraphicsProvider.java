@@ -544,7 +544,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         int height = img.getHeight();
         int alignedX = ImageUtils.alignX(img.getWidth(), x, anchor);
         int alignedY = ImageUtils.alignY(img.getHeight(), y, anchor);
-        var buffer = img.convertToByteBuffer();
+        var imageBuffer = img.convertToByteBuffer();
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
@@ -556,7 +556,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
@@ -565,17 +565,31 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             //glScissor(clip.x, clip.y, clip.width, clip.height);
             glDepthMask(true);
 
-            glBegin(GL_QUADS);
-            glColor3f(1, 1, 1);
-            glTexCoord2f(0, 0);
-            glVertex2f(alignedX, alignedY);
-            glTexCoord2f(1, 0);
-            glVertex2f(alignedX + width, alignedY);
-            glTexCoord2f(1, 1);
-            glVertex2f(alignedX + width, alignedY + height);
-            glTexCoord2f(0, 1);
-            glVertex2f(alignedX, alignedY + height);
-            glEnd();
+            int buffer = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+            glBufferData(GL_ARRAY_BUFFER, new float[] {
+                    alignedX,         alignedY,          viewportWidth, viewportHeight, 0, 0,
+                    alignedX + width, alignedY,          viewportWidth, viewportHeight, 1, 0,
+                    alignedX + width, alignedY + height, viewportWidth, viewportHeight, 1, 1,
+                    alignedX,         alignedY + height, viewportWidth, viewportHeight, 0, 1,
+
+            }, GL_STATIC_DRAW);
+
+            glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+            glEnableVertexAttribArray(2);
+            glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
+
+            glUseProgram(textureShaderProgram);
+            glDrawArrays(GL_QUADS, 0, 4);
+
+            glDisableVertexAttribArray(0);
+            glDisableVertexAttribArray(1);
+            glDisableVertexAttribArray(2);
+            glUseProgram(0);
+            glDeleteBuffers(buffer);
 
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_BLEND);
