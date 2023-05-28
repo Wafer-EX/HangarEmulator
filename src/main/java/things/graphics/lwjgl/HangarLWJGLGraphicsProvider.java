@@ -82,96 +82,12 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             if (!shadersArePrepared) {
-                // Vector shader
-                CharSequence vectorVertexShaderSource = """
-                                #version 330 core
-                                layout (location = 0) in vec2 position;
-                                layout (location = 1) in vec4 color;
-                                layout (location = 2) in vec2 resolution;
-                                
-                                out vec4 vertexColor;
-                                
-                                void main() {
-                                    mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
-                                                      0.0,                2.0 / -resolution.y, 0.0,  1.0,
-                                                      0.0,                0.0,                 1.0,  0.0,
-                                                      0.0,                0.0,                 0.0,  1.0);
-                                
-                                    gl_Position = vec4(position.x, position.y, 0.0, 1.0) * ortho;
-                                    vertexColor = color;
-                                }
-                                """;
-                int vectorVertexShader = glCreateShader(GL_VERTEX_SHADER);
-                glShaderSource(vectorVertexShader, vectorVertexShaderSource);
-                glCompileShader(vectorVertexShader);
+                var vectorShader = new HangarShaderProgram("vector");
+                var textureShader = new HangarShaderProgram("texture");
 
-                CharSequence vectorFragmentShaderSource = """
-                                #version 330 core
-                                out vec4 FragColor;
-                                
-                                in vec4 vertexColor;
-                                
-                                void main() {
-                                    FragColor = vertexColor;
-                                }
-                                """;
-                int vectorFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-                glShaderSource(vectorFragmentShader, vectorFragmentShaderSource);
-                glCompileShader(vectorFragmentShader);
+                vectorShaderProgram = vectorShader.compileShader();
+                textureShaderProgram = textureShader.compileShader();
 
-                vectorShaderProgram = glCreateProgram();
-                glAttachShader(vectorShaderProgram, vectorVertexShader);
-                glAttachShader(vectorShaderProgram, vectorFragmentShader);
-                glLinkProgram(vectorShaderProgram);
-
-                // TODO: write texture shader
-                CharSequence textureVertexShaderSource = """
-                                #version 330 core
-                                layout (location = 0) in vec2 position;
-                                layout (location = 1) in vec2 resolution;
-                                layout (location = 2) in vec2 texCoord;
-                                
-                                out vec2 TexCoord;
-                                
-                                void main() {
-                                    mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
-                                                      0.0,                2.0 / -resolution.y, 0.0,  1.0,
-                                                      0.0,                0.0,                 1.0,  0.0,
-                                                      0.0,                0.0,                 0.0,  1.0);
-                                                      
-                                    gl_Position = vec4(position.x, position.y, 0.0, 1.0) * ortho;
-                                    TexCoord = texCoord;
-                                }
-                        """;
-                int textureVertexShader = glCreateShader(GL_VERTEX_SHADER);
-                glShaderSource(textureVertexShader, textureVertexShaderSource);
-                glCompileShader(textureVertexShader);
-
-                CharSequence textureFragmentShaderSource = """
-                                #version 330 core
-                                out vec4 FragColor;
-                                
-                                in vec2 TexCoord;
-                                
-                                uniform sampler2D inputTexture;
-                                
-                                void main() {
-                                    FragColor = texture(inputTexture, TexCoord);
-                                }
-                        """;
-                int textureFragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-                glShaderSource(textureFragmentShader, textureFragmentShaderSource);
-                glCompileShader(textureFragmentShader);
-
-                textureShaderProgram = glCreateProgram();
-                glAttachShader(textureShaderProgram, textureVertexShader);
-                glAttachShader(textureShaderProgram, textureFragmentShader);
-                glLinkProgram(textureShaderProgram);
-
-                glDeleteShader(vectorVertexShader);
-                glDeleteShader(vectorFragmentShader);
-                glDeleteShader(textureVertexShader);
-                glDeleteShader(textureFragmentShader);
                 shadersArePrepared = true;
             }
         });
