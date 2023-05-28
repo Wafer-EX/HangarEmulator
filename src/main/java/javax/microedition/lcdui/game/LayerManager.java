@@ -58,7 +58,8 @@ public class LayerManager {
             throw new NullPointerException();
         }
         if (layerList.size() > 0) {
-            var graphics = (Graphics2D) g.getSEGraphics();
+            //var graphics = (Graphics2D) g.getSEGraphics();
+            var graphics = (Graphics2D) g.getGraphicsProvider();
             int posX = x - viewWindowPosition.x;
             int posY = y - viewWindowPosition.y;
 

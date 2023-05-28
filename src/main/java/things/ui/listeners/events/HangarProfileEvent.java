@@ -23,12 +23,13 @@ import java.util.EventObject;
 public class HangarProfileEvent extends EventObject {
     public static final int MIDLET_KEYCODES_CHANGED = 0;
     public static final int SCALING_MODE_CHANGED = 1;
-    public static final int RESOLUTION_CHANGED = 2;
-    public static final int FRAME_RATE_CHANGED = 3;
-    public static final int CANVAS_CLEARING_CHANGED = 4;
-    public static final int ANTI_ALIASING_CHANGED = 5;
-    public static final int WINDOW_RESIZING_CHANGED = 6;
-    public static final int SOUNDBANK_CHANGED = 7;
+    public static final int GRAPHICS_ENGINE_CHANGED = 2;
+    public static final int RESOLUTION_CHANGED = 3;
+    public static final int FRAME_RATE_CHANGED = 4;
+    public static final int CANVAS_CLEARING_CHANGED = 5;
+    public static final int ANTI_ALIASING_CHANGED = 6;
+    public static final int WINDOW_RESIZING_CHANGED = 7;
+    public static final int SOUNDBANK_CHANGED = 8;
 
     private final HangarProfile source;
     private final int state;

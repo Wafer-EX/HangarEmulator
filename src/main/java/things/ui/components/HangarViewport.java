@@ -16,9 +16,12 @@
 
 package things.ui.components;
 
+import things.HangarState;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapper;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperLWJGL;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.ui.listeners.events.HangarDisplayableEvent;
 import things.ui.listeners.HangarDisplayableListener;
-import things.ui.components.wrappers.HangarCanvasWrapper;
 import things.ui.components.wrappers.HangarFormWrapper;
 import things.ui.components.wrappers.HangarListWrapper;
 
@@ -57,22 +60,38 @@ public class HangarViewport extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         this.add(scrollPane, BorderLayout.CENTER);
 
-        if (displayable instanceof Canvas canvas) {
-            this.canvasWrapper = new HangarCanvasWrapper(canvas);
-            scrollPane.setViewportView(canvasWrapper);
-            SwingUtilities.invokeLater(canvas::showNotify);
-        }
-        else if (displayable instanceof List list) {
-            var listWrapper = new HangarListWrapper(list);
-            scrollPane.setViewportView(listWrapper);
-        }
-        else if (displayable instanceof Form form) {
-            var formWrapper = new HangarFormWrapper(form);
-            scrollPane.setViewportView(formWrapper);
+        if (displayable != null) {
+            if (displayable instanceof Canvas canvas) {
+                this.canvasWrapper = switch (HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine()) {
+                    case Swing -> new HangarCanvasWrapperSwing(canvas);
+                    case LWJGL -> new HangarCanvasWrapperLWJGL(canvas);
+                };
+                scrollPane.setViewportView(canvasWrapper);
+                SwingUtilities.invokeLater(canvas::showNotify);
+            }
+            else if (displayable instanceof List list) {
+                var listWrapper = new HangarListWrapper(list);
+                scrollPane.setViewportView(listWrapper);
+            }
+            else if (displayable instanceof Form form) {
+                var formWrapper = new HangarFormWrapper(form);
+                scrollPane.setViewportView(formWrapper);
+            }
+            else {
+                // TODO: add more screens support
+                throw new IllegalArgumentException();
+            }
         }
         else {
-            // TODO: add more screens support
-            throw new IllegalArgumentException();
+            int choice = JOptionPane.showConfirmDialog(this, """
+                            The MIDlet just have set null as displayable object,
+                            usually it means that the MIDlet trying to close itself.
+                            Close this Hangar Emulator instance?
+                            """,
+                    "Unusual behavior", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (choice == JOptionPane.YES_OPTION) {
+                System.exit(0);
+            }
         }
 
         if (displayable.getCommands().size() > 0) {

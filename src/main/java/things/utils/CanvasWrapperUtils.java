@@ -16,7 +16,8 @@
 
 package things.utils;
 
-import things.ui.components.wrappers.HangarCanvasWrapper;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapper;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.HangarState;
 import things.enums.ScalingModes;
 import things.utils.microedition.ImageUtils;
@@ -38,7 +39,7 @@ public final class CanvasWrapperUtils {
         }
     }
 
-    public static void fitBufferToResolution(HangarCanvasWrapper canvasWrapper, Dimension resolution) {
+    public static void fitBufferToResolution(HangarCanvasWrapperSwing canvasWrapper, Dimension resolution) {
         if (resolution.width > 0 && resolution.height > 0) {
             if (canvasWrapper != null) {
                 var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
@@ -56,8 +57,8 @@ public final class CanvasWrapperUtils {
 
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
         // TODO: check this method
-        var scaleFactor = canvasWrapper.getBufferScaleFactor();
-        var position = canvasWrapper.getBufferPosition();
+        var scaleFactor = canvasWrapper.getScaleFactor();
+        var position = canvasWrapper.getDisplayedArea();
 
         var point = new Point();
         point.x = position.x + (int) (x * scaleFactor);
@@ -66,8 +67,8 @@ public final class CanvasWrapperUtils {
     }
 
     public static Point panelPointToCanvas(HangarCanvasWrapper canvasWrapper, int x, int y) {
-        var scaleFactor = canvasWrapper.getBufferScaleFactor();
-        var position = canvasWrapper.getBufferPosition();
+        var scaleFactor = canvasWrapper.getScaleFactor();
+        var position = canvasWrapper.getDisplayedArea();
 
         var point = new Point();
         point.x = (int) ((x - position.x) / scaleFactor);

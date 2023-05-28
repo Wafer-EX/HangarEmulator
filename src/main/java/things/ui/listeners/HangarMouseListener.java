@@ -17,7 +17,7 @@
 package things.ui.listeners;
 
 import things.HangarState;
-import things.ui.components.wrappers.HangarCanvasWrapper;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapper;
 import things.utils.CanvasWrapperUtils;
 
 import javax.microedition.lcdui.Canvas;
