@@ -588,12 +588,12 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glDisableVertexAttribArray(0);
             glDisableVertexAttribArray(1);
             glDisableVertexAttribArray(2);
-            glUseProgram(0);
-            glDeleteBuffers(buffer);
-
             glDisable(GL_TEXTURE_2D);
             glDisable(GL_BLEND);
             glDisable(GL_SCISSOR_TEST);
+
+            glUseProgram(0);
+            glDeleteBuffers(buffer);
             glDeleteTextures(textureId);
         });
     }
