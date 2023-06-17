@@ -4,7 +4,7 @@
 <properties>
     <!-- Hangar Emulator properties -->
     <entry key="hangaremulator.version">0.7.0-alpha</entry>
-    <entry key="hangaremulator.github">https://github.com/Lisowolf/HangarEmulator</entry>
+    <entry key="hangaremulator.github">https://github.com/Wafer-EX/HangarEmulator</entry>
     <entry key="hangaremulator.author">Kirill Lomakin (minebuilder445@gmail.com)</entry>
 
     <!-- Java ME properties -->

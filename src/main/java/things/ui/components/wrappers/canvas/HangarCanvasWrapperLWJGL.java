@@ -23,6 +23,7 @@ import things.ui.components.wrappers.canvas.lwjgl.HangarLWJGLCanvas;
 import things.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
+import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -78,6 +79,6 @@ public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
         lwjglCanvas.setLwjglActions(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
-        lwjglCanvas.render();
+        SwingUtilities.invokeLater(lwjglCanvas::render);
     }
 }
