@@ -20,6 +20,7 @@ import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
+import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
@@ -82,8 +83,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             if (!shadersArePrepared) {
-                var vectorShader = new HangarShaderProgram("vector");
-                var textureShader = new HangarShaderProgram("texture");
+                var vectorShader = new ShaderProgram("vector");
+                var textureShader = new ShaderProgram("texture");
 
                 vectorShaderProgram = vectorShader.compileShader();
                 textureShaderProgram = textureShader.compileShader();

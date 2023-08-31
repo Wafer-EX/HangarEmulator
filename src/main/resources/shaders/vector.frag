@@ -19,6 +19,7 @@ out vec4 FragColor;
 
 in vec4 vertexColor;
 
+// TODO: remove this shader
 void main() {
     FragColor = vertexColor;
 }

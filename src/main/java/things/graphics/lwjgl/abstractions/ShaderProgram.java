@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.lwjgl;
+package things.graphics.lwjgl.abstractions;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,12 +22,12 @@ import java.io.InputStreamReader;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL20.glCompileShader;
 
-public class HangarShaderProgram {
+public class ShaderProgram {
     private final CharSequence vertexShaderSource, fragmentShaderSource;
     private boolean isCompiled;
-    private int shaderProgram;
+    private int identifier;
 
-    public HangarShaderProgram(String name) {
+    public ShaderProgram(String name) {
         this.vertexShaderSource = readShaderFile("/shaders/" + name + ".vert");
         this.fragmentShaderSource = readShaderFile("/shaders/" + name + ".frag");
     }
@@ -35,7 +35,7 @@ public class HangarShaderProgram {
     private CharSequence readShaderFile(String name) {
         // TODO: improve code quality?
         try {
-            var resource = HangarShaderProgram.class.getResourceAsStream(name);
+            var resource = ShaderProgram.class.getResourceAsStream(name);
             var bufferedReader = new BufferedReader(new InputStreamReader(resource));
             var stringBuilder = new StringBuilder();
             var line = bufferedReader.readLine();
@@ -63,26 +63,26 @@ public class HangarShaderProgram {
             glShaderSource(fragmentShader, fragmentShaderSource);
             glCompileShader(fragmentShader);
 
-            shaderProgram = glCreateProgram();
-            glAttachShader(shaderProgram, vertexShader);
-            glAttachShader(shaderProgram, fragmentShader);
-            glLinkProgram(shaderProgram);
+            identifier = glCreateProgram();
+            glAttachShader(identifier, vertexShader);
+            glAttachShader(identifier, fragmentShader);
+            glLinkProgram(identifier);
 
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
 
             isCompiled = true;
-            return shaderProgram;
+            return identifier;
         }
         else {
             throw new IllegalStateException();
         }
     }
 
-    public int getShaderProgram() {
+    public int getIdentifier() {
         if (!isCompiled) {
             throw new IllegalStateException();
         }
-        return shaderProgram;
+        return identifier;
     }
 }

@@ -17,11 +17,19 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec2 TexCoord;
+in vec2 UV;
+in vec4 Color;
+in float IsIgnoreSprite;
+in sampler2D Texture;
 
-uniform sampler2D inputTexture;
+uniform sampler2D texture;
 
-// TODO: remove this shader
+// TODO: use this shader in the program
 void main() {
-    FragColor = texture(inputTexture, TexCoord);
+    if (IsIgnoreSprite != 0.0) {
+        FragColor = Color;
+    }
+    else {
+        FragColor = texture(inputTexture, TexCoord);
+    }
 }

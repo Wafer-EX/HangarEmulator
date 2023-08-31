@@ -15,13 +15,22 @@
  */
 
 #version 330 core
-out vec4 FragColor;
+layout (location = 0) in vec2 position;
+layout (location = 1) in vec2 uv;
+layout (location = 2) in vec4 color;
+layout (location = 2) in float isIgnoreSprite;
 
-in vec2 TexCoord;
+uniform mat4 projectionMatrix;
 
-uniform sampler2D inputTexture;
+out vec2 UV;
+out vec4 Color;
+out float IsIgnoreSprite;
 
-// TODO: remove this shader
+// TODO: use this shader in the program
 void main() {
-    FragColor = texture(inputTexture, TexCoord);
+    UV = uv;
+    Color = color;
+    IsIgnoreSprite = isIgnoreSprite;
+
+    gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
 }

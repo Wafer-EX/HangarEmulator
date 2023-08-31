@@ -21,6 +21,7 @@ layout (location = 2) in vec2 resolution;
 
 out vec4 vertexColor;
 
+// TODO: remove this shader
 void main() {
     mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
                       0.0,                2.0 / -resolution.y, 0.0, 1.0,
