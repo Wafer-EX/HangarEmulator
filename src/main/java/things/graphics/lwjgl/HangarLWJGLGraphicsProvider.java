@@ -661,7 +661,9 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         1, -1, 1, 0, 1, 1, 1, 1, 0,
                         1, 1, 1, 1, 1, 1, 1, 1, 0,
                         -1, 1, 0, 1, 1, 1, 1, 1, 0,
-
+                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
+                        1, 1, 1, 1, 1, 1, 1, 1, 0,
+                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
                 });
 
                 var vao = new VertexArrayObject();
@@ -685,7 +687,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         0, 0, 0, 1,
                 });
 
-                glDrawArrays(GL_QUADS, 0, 4);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
                 glUseProgram(0);
             });
             graphicsProvider.lwjglActions.clear();
