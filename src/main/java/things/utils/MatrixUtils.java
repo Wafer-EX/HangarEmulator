@@ -17,11 +17,11 @@
 package things.utils;
 
 public final class MatrixUtils {
-    public static float[] createOrthographic(float left, float right, float bottom, float top, float near, float far) {
+    public static float[] createOrthographic(float left, float right, float bottom, float top, float zNearPlane, float zFarPlane) {
         return new float[] {
                 2.0f / (right - left), 0.0f, 0.0f, -((right + left) / (right - left)),
                 0.0f, 2.0f / (top - bottom), 0.0f, -((top + bottom) / (top - bottom)),
-                0.0f, 0.0f, -2.0f / (far - near), (far + near) / (far - near),
+                0.0f, 0.0f, -2.0f / (zFarPlane - zNearPlane), (zFarPlane + zNearPlane) / (zFarPlane - zNearPlane),
                 0.0f, 0.0f, 0.0f, 1.0f
         };
     }
