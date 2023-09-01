@@ -23,7 +23,6 @@ in float IsIgnoreSprite;
 
 uniform sampler2D sprite;
 
-// TODO: use this shader in the program
 void main() {
     if (IsIgnoreSprite != 0.0) {
         FragColor = Color;

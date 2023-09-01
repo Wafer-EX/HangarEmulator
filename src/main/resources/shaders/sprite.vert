@@ -26,7 +26,6 @@ out vec2 UV;
 out vec4 Color;
 out float IsIgnoreSprite;
 
-// TODO: use this shader in the program
 void main() {
     UV = uv;
     Color = color;
