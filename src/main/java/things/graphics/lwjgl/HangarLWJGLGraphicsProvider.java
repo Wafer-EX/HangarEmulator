@@ -52,8 +52,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     private DirectGraphics directGraphics;
     //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
-    private static ShaderProgram vectorShaderProgram, textureShaderProgram, spriteShaderProgram;
-    private static boolean shadersArePrepared = false;
+    private static ShaderProgram spriteShaderProgram;
+    private static boolean isGraphicsPrepared = false;
 
     public HangarLWJGLGraphicsProvider() {
         this(0);
@@ -87,11 +87,9 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         this.frameBuffer = renderBuffer;
 
         lwjglActions.add(() -> {
-            if (!shadersArePrepared) {
-                vectorShaderProgram = new ShaderProgram("/shaders/vector.vert", "/shaders/vector.frag");
-                textureShaderProgram = new ShaderProgram("/shaders/texture.vert", "/shaders/texture.frag");
+            if (!isGraphicsPrepared) {
                 spriteShaderProgram = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
-                shadersArePrepared = true;
+                isGraphicsPrepared = true;
             }
         });
     }
@@ -349,34 +347,27 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
+
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight
-                    x1, y1, r, g, b, 1.0f, 240, 320,
-                    x2, y2, r, g, b, 1.0f, 240, 320
-            }, GL_STATIC_DRAW);
+            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x1, y1, 0, 0, r, g, b, 1, 1,
+                    x2, y2, 1, 0, r, g, b, 1, 1,
+            });
 
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+            var vao = new VertexArrayObject();
+            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-            glUseProgram(vectorShaderProgram.getIdentifier());
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
             glDrawArrays(GL_LINES, 0, 2);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
         });
     }
 
