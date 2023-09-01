@@ -45,7 +45,7 @@ public abstract class GameCanvas extends Canvas {
 
         offscreenBuffer = switch (profile.getGraphicsEngine()) {
             case Swing -> new HangarSwingOffscreenBuffer(width, height);
-            case LWJGL -> new HangarGLOffscreenBuffer(width, height);
+            case OpenGL -> new HangarGLOffscreenBuffer(width, height);
         };
     }
 
