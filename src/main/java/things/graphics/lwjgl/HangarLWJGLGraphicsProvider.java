@@ -25,6 +25,7 @@ import things.graphics.lwjgl.abstractions.BufferObject;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
+import things.utils.ListUtils;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
@@ -34,6 +35,7 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
@@ -436,8 +438,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        int halfWidth = width / 2;
-        int halfHeight = height / 2;
+        float halfWidth = (float) width / 2;
+        float halfHeight = (float) height / 2;
 
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
@@ -445,32 +447,45 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             // TODO: use startAngle and arcAngle here
-            double deltaAngle = (Math.PI * 2) / CIRCLE_POINTS;
-            double angle = 0;
+            float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
+            float angle = 0;
 
-            double prevX = Math.sin(angle) * halfWidth + x + halfWidth;
-            double prevY = Math.cos(angle) * halfHeight + y + halfHeight;
+            float prevX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+            float prevY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
 
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-
-            // TODO: use different drawing method here
-            glBegin(GL_TRIANGLES);
-            glColor3f(r, g, b);
+            var points = new ArrayList<Float>();
 
             for (int i = 0; i < CIRCLE_POINTS; i++) {
                 angle += deltaAngle;
-                double currX = Math.sin(angle) * halfWidth + x + halfWidth;
-                double currY = Math.cos(angle) * halfHeight + y + halfHeight;
+                float currX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+                float currY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
 
-                glVertex2f(x + halfWidth, y + halfHeight);
-                glVertex2d(prevX, prevY);
-                glVertex2d(currX, currY);
+                points.addAll(List.of(
+                        x + halfWidth, y + halfHeight, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                        prevX, prevY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                        currX, currY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f));
 
                 prevX = currX;
                 prevY = currY;
             }
-            glEnd();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+
+            var vbo = new BufferObject(GL_ARRAY_BUFFER, ListUtils.toArray(points));
+            var vao = new VertexArrayObject();
+            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+            glEnable(GL_BLEND);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
+            glDisable(GL_BLEND);
+            glUseProgram(0);
         });
     }
 
