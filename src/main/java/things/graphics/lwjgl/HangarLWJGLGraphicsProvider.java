@@ -20,6 +20,7 @@ import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
+import things.graphics.lwjgl.abstractions.BufferObject;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
@@ -659,16 +660,14 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             lwjglActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-                int buffer = glGenBuffers();
-                glBindBuffer(GL_ARRAY_BUFFER, buffer);
-                glBufferData(GL_ARRAY_BUFFER, new float[] {
+                var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                         -1, -1, 0, 0, 1, 1, 1, 1, 0,
                         1, -1, 1, 0, 1, 1, 1, 1, 0,
                         1, 1, 1, 1, 1, 1, 1, 1, 0,
                         -1, 1, 0, 1, 1, 1, 1, 1, 0,
 
-                }, GL_DYNAMIC_DRAW);
+                });
 
                 var vao = new VertexArrayObject();
                 vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
@@ -693,7 +692,6 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
                 glDrawArrays(GL_QUADS, 0, 4);
                 glUseProgram(0);
-                glDeleteBuffers(buffer);
             });
             graphicsProvider.lwjglActions.clear();
         }

@@ -18,23 +18,20 @@ package things.graphics.lwjgl.abstractions;
 
 import org.lwjgl.opengl.GL46;
 
-import java.nio.FloatBuffer;
-
-// TODO: check this and use
 public class BufferObject {
-    private int target;
-    private int identifier;
+    private final int target;
+    private final int identifier;
 
-    public BufferObject(int target, FloatBuffer buffer) {
+    public BufferObject(int target, float[] data) {
         this.target = target;
 
         identifier = GL46.glGenBuffers();
-        setBufferData(buffer);
+        setBufferData(data);
     }
 
-    public void setBufferData(FloatBuffer buffer) {
+    public void setBufferData(float[] data) {
         GL46.glBindBuffer(target, identifier);
-        GL46.glBufferData(target, buffer, GL46.GL_DYNAMIC_DRAW);
+        GL46.glBufferData(target, data, GL46.GL_DYNAMIC_DRAW);
     }
 
     public void bind() {
