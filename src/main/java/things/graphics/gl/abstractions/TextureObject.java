@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.lwjgl.abstractions;
+package things.graphics.gl.abstractions;
 
 import java.nio.ByteBuffer;
 

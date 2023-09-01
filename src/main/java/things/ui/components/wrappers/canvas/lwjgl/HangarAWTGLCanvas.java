@@ -18,23 +18,23 @@ package things.ui.components.wrappers.canvas.lwjgl;
 
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
-import things.graphics.lwjgl.HangarLWJGLAction;
+import things.graphics.gl.HangarGLAction;
 
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
-public class HangarLWJGLCanvas extends AWTGLCanvas {
-    private final ArrayList<HangarLWJGLAction> lwjglActions;
+public class HangarAWTGLCanvas extends AWTGLCanvas {
+    private final ArrayList<HangarGLAction> glActions;
 
-    public HangarLWJGLCanvas(GLData glData) {
+    public HangarAWTGLCanvas(GLData glData) {
         super(glData);
-        this.lwjglActions = new ArrayList<>();
+        this.glActions = new ArrayList<>();
     }
 
-    public void setLwjglActions(ArrayList<HangarLWJGLAction> lwjglActions) {
-        this.lwjglActions.addAll(lwjglActions);
+    public void setGLActions(ArrayList<HangarGLAction> glActions) {
+        this.glActions.addAll(glActions);
     }
 
     @Override
@@ -47,10 +47,10 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
     @Override
     public void paintGL() {
         glClear(GL_COLOR_BUFFER_BIT);
-        for (var lwjglAction : lwjglActions) {
-            lwjglAction.execute();
+        for (var glAction : glActions) {
+            glAction.execute();
         }
-        lwjglActions.clear();
+        glActions.clear();
         swapBuffers();
     }
 }

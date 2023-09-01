@@ -18,9 +18,9 @@ package things.ui.components.wrappers.canvas;
 
 import org.lwjgl.opengl.awt.GLData;
 import things.HangarState;
-import things.graphics.lwjgl.HangarLWJGLGraphicsProvider;
-import things.graphics.lwjgl.abstractions.FramebufferObject;
-import things.ui.components.wrappers.canvas.lwjgl.HangarLWJGLCanvas;
+import things.graphics.gl.HangarGLGraphicsProvider;
+import things.graphics.gl.abstractions.FramebufferObject;
+import things.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
 import things.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -29,20 +29,20 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 
-public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
-    private final HangarLWJGLCanvas lwjglCanvas;
-    private final HangarLWJGLGraphicsProvider graphicsProvider;
+public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
+    private final HangarAWTGLCanvas glCanvas;
+    private final HangarGLGraphicsProvider graphicsProvider;
 
-    public HangarCanvasWrapperLWJGL(Canvas canvas) {
+    public HangarCanvasWrapperGL(Canvas canvas) {
         super(canvas);
         
-        this.lwjglCanvas = new HangarLWJGLCanvas(new GLData());
-        this.graphicsProvider = new HangarLWJGLGraphicsProvider(FramebufferObject.getScreen());
+        this.glCanvas = new HangarAWTGLCanvas(new GLData());
+        this.graphicsProvider = new HangarGLGraphicsProvider(FramebufferObject.getScreen());
 
-        lwjglCanvas.setFocusable(false);
-        lwjglCanvas.setPreferredSize(this.getPreferredSize());
+        glCanvas.setFocusable(false);
+        glCanvas.setPreferredSize(this.getPreferredSize());
 
-        this.add(lwjglCanvas);
+        this.add(glCanvas);
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -60,7 +60,7 @@ public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
         });
     }
 
-    public HangarLWJGLGraphicsProvider getGraphicsProvider() {
+    public HangarGLGraphicsProvider getGraphicsProvider() {
         return graphicsProvider;
     }
 
@@ -79,8 +79,8 @@ public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        lwjglCanvas.setLwjglActions(graphicsProvider.getGLActions());
+        glCanvas.setGLActions(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
-        SwingUtilities.invokeLater(lwjglCanvas::render);
+        SwingUtilities.invokeLater(glCanvas::render);
     }
 }
