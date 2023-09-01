@@ -52,8 +52,12 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     private DirectGraphics directGraphics;
     //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
+    private VertexArrayObject vertexArrayObject;
+    private BufferObject bufferObject;
+    private boolean isGraphicsPrepared = false;
+
     private static ShaderProgram spriteShaderProgram;
-    private static boolean isGraphicsPrepared = false;
+    private static boolean isShaderCompiled = false;
 
     public HangarLWJGLGraphicsProvider() {
         this(0);
@@ -87,8 +91,19 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         this.frameBuffer = renderBuffer;
 
         lwjglActions.add(() -> {
-            if (!isGraphicsPrepared) {
+            if (!isShaderCompiled) {
                 spriteShaderProgram = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
+                isShaderCompiled = true;
+            }
+            if (!isGraphicsPrepared) {
+                bufferObject = new BufferObject(GL_ARRAY_BUFFER, null);
+
+                vertexArrayObject = new VertexArrayObject();
+                vertexArrayObject.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+                vertexArrayObject.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+                vertexArrayObject.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+                vertexArrayObject.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+
                 isGraphicsPrepared = true;
             }
         });
@@ -149,35 +164,32 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     float b = color.getBlue() / 255f;
                     float a = color.getAlpha() / 255f;
 
+                    float[] points = new float[nPoints * 9];
+                    for (int i = 0; i < nPoints; i++) {
+                        int index = i * 9;
+                        points[index] = xPoints[i];
+                        points[index + 1] = yPoints[i];
+                        points[index + 2] = 0.0f;
+                        points[index + 3] = 0.0f;
+                        points[index + 4] = r;
+                        points[index + 5] = g;
+                        points[index + 6] = b;
+                        points[index + 7] = a;
+                        points[index + 8] = 1.0f;
+                    }
+
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-                        float[] points = new float[nPoints * 9];
-                        for (int i = 0; i < nPoints; i++) {
-                            int index = i * 9;
-                            points[index] = xPoints[i];
-                            points[index + 1] = yPoints[i];
-                            points[index + 2] = 0.0f;
-                            points[index + 3] = 0.0f;
-                            points[index + 4] = r;
-                            points[index + 5] = g;
-                            points[index + 6] = b;
-                            points[index + 7] = a;
-                            points[index + 8] = 1.0f;
-                        }
-
-                        var vbo = new BufferObject(GL_ARRAY_BUFFER, points);
-                        var vao = new VertexArrayObject();
-                        vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-                        vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-                        vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-                        vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
-
-                        spriteShaderProgram.use();
-                        spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                        bufferObject.setBufferData(points);
 
                         glEnable(GL_BLEND);
                         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+                        vertexArrayObject.Bind();
+                        spriteShaderProgram.use();
+                        spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
                         glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints);
                         glDisable(GL_BLEND);
                         glUseProgram(0);
@@ -347,22 +359,16 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+            bufferObject.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     x1, y1, 0, 0, r, g, b, 1, 1,
                     x2, y2, 1, 0, r, g, b, 1, 1,
             });
 
-            var vao = new VertexArrayObject();
-            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
-
+            vertexArrayObject.Bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -380,7 +386,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+            bufferObject.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     x, y, 0, 0, r, g, b, 1, 1,
                     x + width, y, 1, 0, r, g, b, 1, 1,
@@ -390,12 +396,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     x, y + height, 0, 1, r, g, b, 1, 1,
             });
 
-            var vao = new VertexArrayObject();
-            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
-
+            vertexArrayObject.Bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -428,46 +429,40 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
+        // TODO: use startAngle and arcAngle here
+        float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
+        float angle = 0;
+
+        float prevX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+        float prevY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
+
+        var points = new ArrayList<Float>();
+
+        for (int i = 0; i < CIRCLE_POINTS; i++) {
+            angle += deltaAngle;
+            float currX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+            float currY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
+
+            points.addAll(List.of(
+                    x + halfWidth, y + halfHeight, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                    prevX, prevY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                    currX, currY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f));
+
+            prevX = currX;
+            prevY = currY;
+        }
+
         lwjglActions.add(() -> {
-            // TODO: use startAngle and arcAngle here
-            float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
-            float angle = 0;
-
-            float prevX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
-            float prevY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
-
-            var points = new ArrayList<Float>();
-
-            for (int i = 0; i < CIRCLE_POINTS; i++) {
-                angle += deltaAngle;
-                float currX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
-                float currY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
-
-                points.addAll(List.of(
-                        x + halfWidth, y + halfHeight, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
-                        prevX, prevY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
-                        currX, currY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f));
-
-                prevX = currX;
-                prevY = currY;
-            }
 
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-            var vbo = new BufferObject(GL_ARRAY_BUFFER, ListUtils.toArray(points));
-            var vao = new VertexArrayObject();
-            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+            bufferObject.setBufferData(ListUtils.toArray(points));
 
+            vertexArrayObject.Bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glEnable(GL_BLEND);
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
-            glDisable(GL_BLEND);
             glUseProgram(0);
         });
     }
@@ -508,7 +503,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+            bufferObject.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
                     alignedX + width, alignedY, 1, 0, 1, 1, 1, 1, 0,
@@ -518,12 +513,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     alignedX, alignedY + height, 0, 1, 1, 1, 1, 1, 0,
             });
 
-            var vao = new VertexArrayObject();
-            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
 
+            vertexArrayObject.Bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("sprite", 0);
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
@@ -534,13 +527,11 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
             glBindTexture(GL_TEXTURE_2D, textureId);
             glActiveTexture(GL_TEXTURE0);
 
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
             glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDisable(GL_BLEND);
             glUseProgram(0);
         });
     }
@@ -574,19 +565,14 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+            bufferObject.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     x1, y1, 0, 0, r, g, b, 1, 1,
                     x2, y2, 0, 0, r, g, b, 1, 1,
                     x3, y3, 0, 0, r, g, b, 1, 1,
             });
 
-            var vao = new VertexArrayObject();
-            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
-
+            vertexArrayObject.Bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -622,7 +608,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             lwjglActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
 
-                var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+                bufferObject.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                         -1, -1, 0, 0, 1, 1, 1, 1, 0,
                         1, -1, 1, 0, 1, 1, 1, 1, 0,
@@ -633,12 +619,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         -1, 1, 0, 1, 1, 1, 1, 1, 0,
                 });
 
-                var vao = new VertexArrayObject();
-                vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-                vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-                vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-                vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
-
+                vertexArrayObject.Bind();
                 spriteShaderProgram.use();
                 spriteShaderProgram.setUniform("sprite", 0);
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());

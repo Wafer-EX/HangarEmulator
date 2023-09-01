@@ -32,11 +32,12 @@ public class BufferObject {
     }
 
     public void setBufferData(float[] data) {
-        count = data.length;
-        length = data.length * 4;
+        count = data != null ? data.length : 0;
+        length = data != null ? data.length * 4 : 0;
 
         GL46.glBindBuffer(target, identifier);
-        GL46.glBufferData(target, data, GL46.GL_DYNAMIC_DRAW);
+        // TODO: That's wrong, change it
+        GL46.glBufferData(target, data != null ? data : new float[1], GL46.GL_DYNAMIC_DRAW);
     }
 
     public void bind() {
