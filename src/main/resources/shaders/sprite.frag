@@ -20,9 +20,8 @@ out vec4 FragColor;
 in vec2 UV;
 in vec4 Color;
 in float IsIgnoreSprite;
-in sampler2D Texture;
 
-uniform sampler2D texture;
+uniform sampler2D sprite;
 
 // TODO: use this shader in the program
 void main() {
@@ -30,6 +29,6 @@ void main() {
         FragColor = Color;
     }
     else {
-        FragColor = texture(inputTexture, TexCoord);
+        FragColor = texture(sprite, UV);
     }
 }
