@@ -509,56 +509,41 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
-            glEnable(GL_TEXTURE_2D);
-            glEnable(GL_BLEND);
-            glEnable(GL_SCISSOR_TEST);
+            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY, 1, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
+                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
+                    alignedX, alignedY + height, 0, 1, 1, 1, 1, 1, 0,
+            });
 
+            var vao = new VertexArrayObject();
+            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("sprite", 0);
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+            // TODO: use abstraction
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+            glBindTexture(GL_TEXTURE_2D, textureId);
+            glActiveTexture(GL_TEXTURE0);
+
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            // TODO: use it
-            //glScissor(clip.x, clip.y, clip.width, clip.height);
-            glDepthMask(true);
-
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    //alignedX,         alignedY,          viewportWidth, viewportHeight, 0, 0,
-                    //alignedX + width, alignedY,          viewportWidth, viewportHeight, 1, 0,
-                    //alignedX + width, alignedY + height, viewportWidth, viewportHeight, 1, 1,
-                    //alignedX,         alignedY + height, viewportWidth, viewportHeight, 0, 1,
-                    alignedX,         alignedY,          240, 320, 0, 0,
-                    alignedX + width, alignedY,          240, 320, 1, 0,
-                    alignedX + width, alignedY + height, 240, 320, 1, 1,
-                    alignedX,         alignedY + height, 240, 320, 0, 1,
-            }, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
-
-            glUseProgram(textureShaderProgram.getIdentifier());
-            glDrawArrays(GL_QUADS, 0, 4);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
-            glDisable(GL_TEXTURE_2D);
-            glDisable(GL_BLEND);
-            glDisable(GL_SCISSOR_TEST);
-
+            glEnable(GL_BLEND);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
-            glDeleteTextures(textureId);
         });
     }
 
