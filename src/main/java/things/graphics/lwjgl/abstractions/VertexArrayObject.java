@@ -16,22 +16,22 @@
 
 package things.graphics.lwjgl.abstractions;
 
-import org.lwjgl.opengl.GL46;
+import static org.lwjgl.opengl.GL46.*;
 
 public class VertexArrayObject {
     private final int identifier;
 
     public VertexArrayObject() {
-        identifier = GL46.glGenVertexArrays();
+        identifier = glGenVertexArrays();
         bind();
     }
 
     public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
-        GL46.glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-        GL46.glEnableVertexAttribArray(index);
+        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+        glEnableVertexAttribArray(index);
     }
 
     public void bind() {
-        GL46.glBindVertexArray(identifier);
+        glBindVertexArray(identifier);
     }
 }

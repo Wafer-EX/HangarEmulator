@@ -18,7 +18,6 @@ package things.ui.components.wrappers.canvas.lwjgl;
 
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
-import things.HangarState;
 import things.graphics.lwjgl.HangarLWJGLAction;
 
 import java.util.ArrayList;
@@ -47,16 +46,7 @@ public class HangarLWJGLCanvas extends AWTGLCanvas {
 
     @Override
     public void paintGL() {
-        //var profile = HangarState.getProfileManager().getCurrentProfile();
-        //int width = profile.getResolution().width;
-        //int height = profile.getResolution().height;
-
         glClear(GL_COLOR_BUFFER_BIT);
-        // TODO: remove when update all methods in graphics provider
-        //glMatrixMode(GL_PROJECTION_MATRIX);
-        //glLoadIdentity();
-        //glOrtho(0, width, height, 0, 1, -1);
-
         for (var lwjglAction : lwjglActions) {
             lwjglAction.execute();
         }

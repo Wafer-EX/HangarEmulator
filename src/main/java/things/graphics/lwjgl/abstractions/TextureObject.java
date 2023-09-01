@@ -16,9 +16,9 @@
 
 package things.graphics.lwjgl.abstractions;
 
-import org.lwjgl.opengl.GL46;
-
 import java.nio.ByteBuffer;
+
+import static org.lwjgl.opengl.GL46.*;
 
 // TODO: check this and use
 public class TextureObject {
@@ -29,10 +29,10 @@ public class TextureObject {
     public TextureObject(int width, int height, int internalFormat, int pixelFormat, int pixelType) {
         this.width = width;
         this.height = height;
-        this.identifier = GL46.glGenTextures();
+        this.identifier = glGenTextures();
 
-        GL46.glBindTexture(GL46.GL_TEXTURE_2D, identifier);
-        GL46.glTexImage2D(GL46.GL_TEXTURE_2D, 0, internalFormat, width, height, 0, pixelFormat, pixelType, (ByteBuffer) null);
+        glBindTexture(GL_TEXTURE_2D, identifier);
+        glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, pixelFormat, pixelType, (ByteBuffer) null);
     }
 
     public TextureObject(String path) {
@@ -40,12 +40,12 @@ public class TextureObject {
     }
 
     public void setParameter(int name, int value) {
-        GL46.glTextureParameteri(identifier, name, value);
+        glTextureParameteri(identifier, name, value);
     }
 
     public void bind(int unit) {
-        GL46.glActiveTexture(unit);
-        GL46.glBindTexture(GL46.GL_TEXTURE_2D, identifier);
+        glActiveTexture(unit);
+        glBindTexture(GL_TEXTURE_2D, identifier);
     }
 
     public int getIdentifier() {

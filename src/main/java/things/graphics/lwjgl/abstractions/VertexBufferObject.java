@@ -16,7 +16,7 @@
 
 package things.graphics.lwjgl.abstractions;
 
-import org.lwjgl.opengl.GL46;
+import static org.lwjgl.opengl.GL46.*;
 
 public class VertexBufferObject {
     private final int target;
@@ -27,7 +27,7 @@ public class VertexBufferObject {
     public VertexBufferObject(int target, float[] data) {
         this.target = target;
 
-        identifier = GL46.glGenBuffers();
+        identifier = glGenBuffers();
         setBufferData(data);
     }
 
@@ -35,13 +35,13 @@ public class VertexBufferObject {
         count = data != null ? data.length : 0;
         length = data != null ? data.length * 4 : 0;
 
-        GL46.glBindBuffer(target, identifier);
+        glBindBuffer(target, identifier);
         // TODO: That's wrong, change it
-        GL46.glBufferData(target, data != null ? data : new float[1], GL46.GL_DYNAMIC_DRAW);
+        glBufferData(target, data != null ? data : new float[1], GL_DYNAMIC_DRAW);
     }
 
     public void bind() {
-        GL46.glBindBuffer(target, identifier);
+        glBindBuffer(target, identifier);
     }
 
     public int getIdentifier() {

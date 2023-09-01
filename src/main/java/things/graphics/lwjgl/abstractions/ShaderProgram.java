@@ -17,10 +17,11 @@
 package things.graphics.lwjgl.abstractions;
 
 import org.joml.Matrix4f;
-import org.lwjgl.opengl.GL46;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+
+import static org.lwjgl.opengl.GL46.*;
 
 public class ShaderProgram {
     private final int identifier;
@@ -32,21 +33,21 @@ public class ShaderProgram {
         assert vertexShaderSource != null;
         assert fragmentShaderSource != null;
 
-        int vertexShader = GL46.glCreateShader(GL46.GL_VERTEX_SHADER);
-        GL46.glShaderSource(vertexShader, vertexShaderSource);
-        GL46.glCompileShader(vertexShader);
+        int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+        glShaderSource(vertexShader, vertexShaderSource);
+        glCompileShader(vertexShader);
 
-        int fragmentShader = GL46.glCreateShader(GL46.GL_FRAGMENT_SHADER);
-        GL46.glShaderSource(fragmentShader, fragmentShaderSource);
-        GL46.glCompileShader(fragmentShader);
+        int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+        glShaderSource(fragmentShader, fragmentShaderSource);
+        glCompileShader(fragmentShader);
 
-        identifier = GL46.glCreateProgram();
-        GL46.glAttachShader(identifier, vertexShader);
-        GL46.glAttachShader(identifier, fragmentShader);
-        GL46.glLinkProgram(identifier);
+        identifier = glCreateProgram();
+        glAttachShader(identifier, vertexShader);
+        glAttachShader(identifier, fragmentShader);
+        glLinkProgram(identifier);
 
-        GL46.glDeleteShader(vertexShader);
-        GL46.glDeleteShader(fragmentShader);
+        glDeleteShader(vertexShader);
+        glDeleteShader(fragmentShader);
     }
 
     public int getIdentifier() {
@@ -54,23 +55,23 @@ public class ShaderProgram {
     }
 
     public void use() {
-        GL46.glUseProgram(identifier);
+        glUseProgram(identifier);
     }
 
     public void setUniform(String name, int value) {
         int location = getLocation(name);
-        GL46.glUniform1i(location, value);
+        glUniform1i(location, value);
     }
 
     public void setUniform(String name, float value) {
         int location = getLocation(name);
-        GL46.glUniform1f(location, value);
+        glUniform1f(location, value);
     }
 
     public void setUniform(String name, Matrix4f matrix) {
         int location = getLocation(name);
         float[] data = new float[16];
-        GL46.glUniformMatrix4fv(location, false, matrix.get(data));
+        glUniformMatrix4fv(location, false, matrix.get(data));
     }
 
     private CharSequence readShaderFile(String name) {
@@ -95,7 +96,7 @@ public class ShaderProgram {
     }
 
     private int getLocation(String name) {
-        int location = GL46.glGetUniformLocation(identifier, name);
+        int location = glGetUniformLocation(identifier, name);
         if (location == -1) {
             throw new IllegalStateException();
         }

@@ -35,8 +35,7 @@ import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL46.*;
 
 public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
