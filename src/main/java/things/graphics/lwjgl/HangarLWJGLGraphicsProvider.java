@@ -21,6 +21,7 @@ import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
+import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
@@ -45,9 +46,9 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     protected int frameBuffer;
     protected int frameBufferTexture;
     private DirectGraphics directGraphics;
-    private int viewportX, viewportY, viewportWidth, viewportHeight;
+    //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
-    private static int vectorShaderProgram, textureShaderProgram;
+    private static int vectorShaderProgram, textureShaderProgram, spriteShaderProgram;
     private static boolean shadersArePrepared = false;
 
     public HangarLWJGLGraphicsProvider() {
@@ -68,10 +69,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameBufferTexture, 0);
 
-            this.viewportX = 0;
-            this.viewportY = 0;
-            this.viewportWidth = width;
-            this.viewportHeight = height;
+            //this.viewportX = 0;
+            //this.viewportY = 0;
+            //this.viewportWidth = width;
+            //this.viewportHeight = height;
         });
     }
 
@@ -85,9 +86,11 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             if (!shadersArePrepared) {
                 var vectorShader = new ShaderProgram("vector");
                 var textureShader = new ShaderProgram("texture");
+                var spriteShader = new ShaderProgram("sprite");
 
                 vectorShaderProgram = vectorShader.compileShader();
                 textureShaderProgram = textureShader.compileShader();
+                spriteShaderProgram = spriteShader.compileShader();
 
                 shadersArePrepared = true;
             }
@@ -99,10 +102,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     }
 
     public void setViewportValues(int x, int y, int width, int height) {
-        this.viewportX = x;
-        this.viewportY = y;
-        this.viewportWidth = width;
-        this.viewportHeight = height;
+        //this.viewportX = x;
+        //this.viewportY = y;
+        //this.viewportWidth = width;
+        //this.viewportHeight = height;
     }
 
     @Override
@@ -151,7 +154,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-                        glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+                        //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
                         glEnable(GL_BLEND);
 
                         int buffer = glGenBuffers();
@@ -166,8 +169,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                             vertices[step + 3] = g;
                             vertices[step + 4] = b;
                             vertices[step + 5] = a;
-                            vertices[step + 6] = viewportWidth;
-                            vertices[step + 7] = viewportHeight;
+                            //vertices[step + 6] = viewportWidth;
+                            //vertices[step + 7] = viewportHeight;
+                            vertices[step + 6] = 240;
+                            vertices[step + 7] = 320;
                         }
                         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
@@ -355,13 +360,15 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight
+                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight
+                    x1, y1, r, g, b, 1.0f, 240, 320,
+                    x2, y2, r, g, b, 1.0f, 240, 320
             }, GL_STATIC_DRAW);
 
             glEnableVertexAttribArray(0);
@@ -390,15 +397,19 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x,         y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x + width, y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x + width, y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x,         y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x,         y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x + width, y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x + width, y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x,         y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    x,         y,          r, g, b, 1.0f, 240, 320,
+                    x + width, y,          r, g, b, 1.0f, 240, 320,
+                    x + width, y + height, r, g, b, 1.0f, 240, 320,
+                    x,         y + height, r, g, b, 1.0f, 240, 320,
             }, GL_STATIC_DRAW);
 
             glEnableVertexAttribArray(0);
@@ -452,7 +463,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             double prevY = Math.cos(angle) * halfHeight + y + halfHeight;
 
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             // TODO: use different drawing method here
             glBegin(GL_TRIANGLES);
@@ -509,7 +520,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             glEnable(GL_TEXTURE_2D);
             glEnable(GL_BLEND);
@@ -529,11 +540,14 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    alignedX,         alignedY,          viewportWidth, viewportHeight, 0, 0,
-                    alignedX + width, alignedY,          viewportWidth, viewportHeight, 1, 0,
-                    alignedX + width, alignedY + height, viewportWidth, viewportHeight, 1, 1,
-                    alignedX,         alignedY + height, viewportWidth, viewportHeight, 0, 1,
-
+                    //alignedX,         alignedY,          viewportWidth, viewportHeight, 0, 0,
+                    //alignedX + width, alignedY,          viewportWidth, viewportHeight, 1, 0,
+                    //alignedX + width, alignedY + height, viewportWidth, viewportHeight, 1, 1,
+                    //alignedX,         alignedY + height, viewportWidth, viewportHeight, 0, 1,
+                    alignedX,         alignedY,          240, 320, 0, 0,
+                    alignedX + width, alignedY,          240, 320, 1, 0,
+                    alignedX + width, alignedY + height, 240, 320, 1, 1,
+                    alignedX,         alignedY + height, 240, 320, 0, 1,
             }, GL_STATIC_DRAW);
 
             glEnableVertexAttribArray(0);
@@ -587,14 +601,17 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
             int buffer = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, buffer);
             glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    //x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
+                    x1, y1, r, g, b, 1.0f, 240, 320,
+                    x2, y2, r, g, b, 1.0f, 240, 320,
+                    x3, y3, r, g, b, 1.0f, 240, 320,
             }, GL_STATIC_DRAW);
 
             glEnableVertexAttribArray(0);
@@ -637,39 +654,44 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer instanceof HangarLWJGLOffscreenBuffer lwjglOffscreenBuffer) {
             var graphicsProvider = (HangarLWJGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();
-            var profile = HangarState.getProfileManager().getCurrentProfile();
-            int width = profile.getResolution().width;
-            int height = profile.getResolution().height;
 
             lwjglActions.addAll(graphicsProvider.lwjglActions);
             lwjglActions.add(() -> {
                 glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-                glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
                 int buffer = glGenBuffers();
                 glBindBuffer(GL_ARRAY_BUFFER, buffer);
                 glBufferData(GL_ARRAY_BUFFER, new float[] {
-                        0,     0,      width, height, 0, 1,
-                        width, 0,      width, height, 1, 1,
-                        width, height, width, height, 1, 0,
-                        0,     height, width, height, 0, 0,
+                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
+                        1, -1, 1, 0, 1, 1, 1, 1, 0,
+                        1, 1, 1, 1, 1, 1, 1, 1, 0,
+                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
 
-                }, GL_STATIC_DRAW);
+                }, GL_DYNAMIC_DRAW);
 
-                glEnableVertexAttribArray(0);
-                glEnableVertexAttribArray(1);
-                glEnableVertexAttribArray(2);
-                glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
-                glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
-                glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
+                var vao = new VertexArrayObject();
+                vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+                vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+                vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+                vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-                glUseProgram(textureShaderProgram);
+                glUseProgram(spriteShaderProgram);
+                int spriteUniformLocation = glGetUniformLocation(spriteShaderProgram, "sprite");
+                int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram, "projectionMatrix");
+
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
-                glDrawArrays(GL_QUADS, 0, 4);
+                glActiveTexture(GL_TEXTURE0);
 
-                glDisableVertexAttribArray(0);
-                glDisableVertexAttribArray(1);
-                glDisableVertexAttribArray(2);
+                glUniform1i(spriteUniformLocation, 0);
+                glUniformMatrix4fv(projectionMatrixUniformLocation, false, new float[] {
+                        1, 0, 0, 0,
+                        0, 1, 0, 0,
+                        0, 0, 1, 0,
+                        0, 0, 0, 1,
+                });
+
+                glDrawArrays(GL_QUADS, 0, 4);
                 glUseProgram(0);
                 glDeleteBuffers(buffer);
             });

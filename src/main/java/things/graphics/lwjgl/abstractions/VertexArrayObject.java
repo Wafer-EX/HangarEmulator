@@ -14,21 +14,24 @@
  * limitations under the License.
  */
 
-#version 460 core
-out vec4 FragColor;
+package things.graphics.lwjgl.abstractions;
 
-in vec2 UV;
-in vec4 Color;
-in float IsIgnoreSprite;
+import org.lwjgl.opengl.GL46;
 
-uniform sampler2D sprite;
+public class VertexArrayObject {
+    private final int identifier;
 
-// TODO: use this shader in the program
-void main() {
-    if (IsIgnoreSprite != 0.0) {
-        FragColor = Color;
+    public VertexArrayObject() {
+        identifier = GL46.glGenVertexArrays();
+        Bind();
     }
-    else {
-        FragColor = texture(sprite, UV) * Color;
+
+    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
+        GL46.glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+        GL46.glEnableVertexAttribArray(index);
+    }
+
+    public void Bind() {
+        GL46.glBindVertexArray(identifier);
     }
 }
