@@ -21,6 +21,8 @@ import org.lwjgl.opengl.GL46;
 public class BufferObject {
     private final int target;
     private final int identifier;
+    private int count;
+    private int length;
 
     public BufferObject(int target, float[] data) {
         this.target = target;
@@ -30,6 +32,9 @@ public class BufferObject {
     }
 
     public void setBufferData(float[] data) {
+        count = data.length;
+        length = data.length * 4;
+
         GL46.glBindBuffer(target, identifier);
         GL46.glBufferData(target, data, GL46.GL_DYNAMIC_DRAW);
     }
@@ -38,11 +43,15 @@ public class BufferObject {
         GL46.glBindBuffer(target, identifier);
     }
 
-    public int getTarget() {
-        return target;
-    }
-
     public int getIdentifier() {
         return identifier;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public int getLength() {
+        return length;
     }
 }
