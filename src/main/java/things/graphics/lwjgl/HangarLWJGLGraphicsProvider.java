@@ -49,7 +49,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     private DirectGraphics directGraphics;
     //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
-    private static int vectorShaderProgram, textureShaderProgram, spriteShaderProgram;
+    private static ShaderProgram vectorShaderProgram, textureShaderProgram, spriteShaderProgram;
     private static boolean shadersArePrepared = false;
 
     public HangarLWJGLGraphicsProvider() {
@@ -85,14 +85,9 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             if (!shadersArePrepared) {
-                var vectorShader = new ShaderProgram("/shaders/vector.vert", "/shaders/vector.frag");
-                var textureShader = new ShaderProgram("/shaders/texture.vert", "/shaders/texture.frag");
-                var spriteShader = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
-
-                vectorShaderProgram = vectorShader.getIdentifier();
-                textureShaderProgram = textureShader.getIdentifier();
-                spriteShaderProgram = spriteShader.getIdentifier();
-
+                vectorShaderProgram = new ShaderProgram("/shaders/vector.vert", "/shaders/vector.frag");
+                textureShaderProgram = new ShaderProgram("/shaders/texture.vert", "/shaders/texture.frag");
+                spriteShaderProgram = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
                 shadersArePrepared = true;
             }
         });
@@ -184,7 +179,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
                         glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
 
-                        glUseProgram(vectorShaderProgram);
+                        glUseProgram(vectorShaderProgram.getIdentifier());
                         glDrawArrays(GL_POLYGON, 0, nPoints);
 
                         glDisableVertexAttribArray(0);
@@ -379,7 +374,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
 
-            glUseProgram(vectorShaderProgram);
+            glUseProgram(vectorShaderProgram.getIdentifier());
             glDrawArrays(GL_LINES, 0, 2);
 
             glDisableVertexAttribArray(0);
@@ -420,7 +415,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
 
-            glUseProgram(vectorShaderProgram);
+            glUseProgram(vectorShaderProgram.getIdentifier());
             glDrawArrays(GL_QUADS, 0, 4);
 
             glDisableVertexAttribArray(0);
@@ -558,7 +553,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
 
-            glUseProgram(textureShaderProgram);
+            glUseProgram(textureShaderProgram.getIdentifier());
             glDrawArrays(GL_QUADS, 0, 4);
 
             glDisableVertexAttribArray(0);
@@ -622,7 +617,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
             glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
 
-            glUseProgram(vectorShaderProgram);
+            glUseProgram(vectorShaderProgram.getIdentifier());
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
             glDisableVertexAttribArray(0);
@@ -675,9 +670,9 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
                 vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-                glUseProgram(spriteShaderProgram);
-                int spriteUniformLocation = glGetUniformLocation(spriteShaderProgram, "sprite");
-                int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram, "projectionMatrix");
+                glUseProgram(spriteShaderProgram.getIdentifier());
+                int spriteUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "sprite");
+                int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
 
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
                 glActiveTexture(GL_TEXTURE0);
