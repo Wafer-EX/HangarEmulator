@@ -17,6 +17,7 @@
 package things.graphics.lwjgl;
 
 import com.nokia.mid.ui.DirectGraphics;
+import org.joml.Matrix4f;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
@@ -24,7 +25,6 @@ import things.graphics.lwjgl.abstractions.BufferObject;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
-import things.utils.MatrixUtils;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
@@ -614,7 +614,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
             glUseProgram(spriteShaderProgram.getIdentifier());
             int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
-            glUniformMatrix4fv(projectionMatrixUniformLocation, false, MatrixUtils.createOrthographic(-120, 120, 160, -160, -1, 1));
+
+            float[] matrixArray = new float[16];
+            new Matrix4f().ortho2D(0, 240, 320, 0).get(matrixArray);
+            glUniformMatrix4fv(projectionMatrixUniformLocation, false, matrixArray);
 
             glDrawArrays(GL_TRIANGLES, 0, 3);
             glUseProgram(0);
