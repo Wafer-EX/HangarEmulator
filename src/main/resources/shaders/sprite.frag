@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-#version 330 core
-layout (location = 0) in vec2 position;
-layout (location = 1) in vec4 color;
-layout (location = 2) in vec2 resolution;
+#version 460 core
+out vec4 FragColor;
 
-out vec4 vertexColor;
+in vec2 UV;
+in vec4 Color;
+in float IsIgnoreSprite;
+
+uniform sampler2D sprite;
 
 void main() {
-    mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
-                      0.0,                2.0 / -resolution.y, 0.0, 1.0,
-                      0.0,                0.0,                 1.0, 0.0,
-                      0.0,                0.0,                 0.0, 1.0);
-
-    gl_Position = vec4(position.x, position.y, 0.0, 1.0) * ortho;
-    vertexColor = color;
+    if (IsIgnoreSprite != 0.0) {
+        FragColor = Color;
+    }
+    else {
+        FragColor = texture(sprite, UV) * Color;
+    }
 }

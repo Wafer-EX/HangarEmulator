@@ -14,19 +14,22 @@
  * limitations under the License.
  */
 
-#version 330 core
+#version 460 core
 layout (location = 0) in vec2 position;
-layout (location = 1) in vec2 resolution;
-layout (location = 2) in vec2 texCoord;
+layout (location = 1) in vec2 uv;
+layout (location = 2) in vec4 color;
+layout (location = 3) in float isIgnoreSprite;
 
-out vec2 TexCoord;
+uniform mat4 projectionMatrix;
+
+out vec2 UV;
+out vec4 Color;
+out float IsIgnoreSprite;
 
 void main() {
-    mat4 ortho = mat4(2.0 / resolution.x, 0.0,                 0.0, -1.0,
-                      0.0,                2.0 / -resolution.y, 0.0,  1.0,
-                      0.0,                0.0,                 1.0,  0.0,
-                      0.0,                0.0,                 0.0,  1.0);
+    UV = uv;
+    Color = color;
+    IsIgnoreSprite = isIgnoreSprite;
 
-    gl_Position = vec4(position.x, position.y, 0.0, 1.0) * ortho;
-    TexCoord = texCoord;
+    gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
 }

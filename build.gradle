@@ -4,7 +4,7 @@ plugins {
 }
 
 group = 'org.lisowolf'
-version = '0.7.0-alpha'
+version = '0.0.1-alpha'
 
 jar {
     manifest {
@@ -18,27 +18,16 @@ repositories {
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.5'
-    implementation 'com.formdev:flatlaf:3.1.1'
+    implementation 'com.formdev:flatlaf:3.2'
+    implementation 'org.joml:joml:1.10.5'
 
     implementation platform("org.lwjgl:lwjgl-bom:3.3.2")
     implementation "org.lwjgl:lwjgl"
-    implementation "org.lwjgl:lwjgl-assimp"
-    implementation "org.lwjgl:lwjgl-glfw"
-    implementation "org.lwjgl:lwjgl-openal"
     implementation "org.lwjgl:lwjgl-opengl"
-    implementation "org.lwjgl:lwjgl-stb"
     runtimeOnly "org.lwjgl:lwjgl::natives-windows"
-    runtimeOnly "org.lwjgl:lwjgl-assimp::natives-windows"
-    runtimeOnly "org.lwjgl:lwjgl-glfw::natives-windows"
-    runtimeOnly "org.lwjgl:lwjgl-openal::natives-windows"
     runtimeOnly "org.lwjgl:lwjgl-opengl::natives-windows"
-    runtimeOnly "org.lwjgl:lwjgl-stb::natives-windows"
     runtimeOnly "org.lwjgl:lwjgl::natives-linux"
-    runtimeOnly "org.lwjgl:lwjgl-assimp::natives-linux"
-    runtimeOnly "org.lwjgl:lwjgl-glfw::natives-linux"
-    runtimeOnly "org.lwjgl:lwjgl-openal::natives-linux"
     runtimeOnly "org.lwjgl:lwjgl-opengl::natives-linux"
-    runtimeOnly "org.lwjgl:lwjgl-stb::natives-linux"
     implementation "org.lwjglx:lwjgl3-awt:0.1.8"
 }
 

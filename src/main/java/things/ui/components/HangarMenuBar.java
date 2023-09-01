@@ -130,7 +130,7 @@ public class HangarMenuBar extends JMenuBar {
             antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setAntiAliasing(!HangarState.getProfileManager().getCurrentProfile().getAntiAliasing()));
 
             graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.Swing));
-            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.LWJGL));
+            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.OpenGL));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -195,12 +195,12 @@ public class HangarMenuBar extends JMenuBar {
                 super();
                 this.addItemListener(e -> {
                     HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngine);
-                    if (graphicsEngine == GraphicsEngines.LWJGL && this.isSelected()) {
+                    if (graphicsEngine == GraphicsEngines.OpenGL && this.isSelected()) {
                         JOptionPane.showMessageDialog(this, """
-                                        You've chose the LWJGL graphics engine. It's very raw
-                                        graphics engine that doesn't support many functions.
-                                        If you interested to comfortable game process, please,
-                                        use the Swing graphics engine.
+                                        You've chose the OpenGL graphics engine through LWJGL.
+                                        It's very raw graphics engine that doesn't support
+                                        many functions. If you interested for comfortable
+                                        game process, please, use the Swing graphics engine.
                                         """,
                                 "Warning!", JOptionPane.WARNING_MESSAGE);
                     }

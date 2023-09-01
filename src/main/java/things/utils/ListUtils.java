@@ -14,11 +14,16 @@
  * limitations under the License.
  */
 
-#version 330 core
-out vec4 FragColor;
+package things.utils;
 
-in vec4 vertexColor;
+import java.util.ArrayList;
 
-void main() {
-    FragColor = vertexColor;
+public final class ListUtils {
+    public static float[] toArray(ArrayList<Float> list) {
+        float[] array = new float[list.size()];
+        for (int i = 0; i < array.length; i++) {
+            array[i] = list.get(i);
+        }
+        return array;
+    }
 }

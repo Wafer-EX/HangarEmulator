@@ -14,13 +14,16 @@
  * limitations under the License.
  */
 
-package things.graphics.lwjgl;
+package things.graphics.gl;
 
 import com.nokia.mid.ui.DirectGraphics;
+import org.joml.Matrix4f;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
+import things.graphics.gl.abstractions.*;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
+import things.utils.ListUtils;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
@@ -30,78 +33,74 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.List;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
+import static org.lwjgl.opengl.GL46.*;
 
-public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
+public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
 
-    private final ArrayList<HangarLWJGLAction> lwjglActions;
+    private final ArrayList<HangarGLAction> glActions;
     private int translateX = 0, translateY = 0;
     private Color color;
     private final Rectangle clip;
-    protected int frameBuffer;
-    protected int frameBufferTexture;
     private DirectGraphics directGraphics;
-    private int viewportX, viewportY, viewportWidth, viewportHeight;
 
-    private static int vectorShaderProgram, textureShaderProgram;
-    private static boolean shadersArePrepared = false;
+    protected FramebufferObject frameBuffer;
+    protected TextureObject frameBufferTexture;
 
-    public HangarLWJGLGraphicsProvider() {
-        this(0);
+    private VertexArrayObject vertexArrayObject;
+    private VertexBufferObject bufferObject;
+
+    private boolean isGraphicsPrepared = false;
+
+    private static ShaderProgram spriteShaderProgram;
+    private static boolean isShaderCompiled = false;
+
+    public HangarGLGraphicsProvider() {
+        this(FramebufferObject.getScreen());
         var profile = HangarState.getProfileManager().getCurrentProfile();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
 
-        lwjglActions.add(() -> {
-            frameBuffer = glGenFramebuffers();
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+        glActions.add(() -> {
+            frameBuffer = new FramebufferObject();
 
-            frameBufferTexture = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            frameBufferTexture = new TextureObject(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+            frameBufferTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            frameBufferTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameBufferTexture, 0);
-
-            this.viewportX = 0;
-            this.viewportY = 0;
-            this.viewportWidth = width;
-            this.viewportHeight = height;
+            frameBuffer.attachTexture(frameBufferTexture, GL_COLOR_ATTACHMENT0);
         });
     }
 
-    public HangarLWJGLGraphicsProvider(int renderBuffer) {
-        this.lwjglActions = new ArrayList<>();
+    public HangarGLGraphicsProvider(FramebufferObject frameBuffer) {
+        this.glActions = new ArrayList<>();
         this.color = new Color(0);
         this.clip = new Rectangle(0, 0, 240, 320);
-        this.frameBuffer = renderBuffer;
+        this.frameBuffer = frameBuffer;
 
-        lwjglActions.add(() -> {
-            if (!shadersArePrepared) {
-                var vectorShader = new HangarShaderProgram("vector");
-                var textureShader = new HangarShaderProgram("texture");
+        glActions.add(() -> {
+            if (!isShaderCompiled) {
+                spriteShaderProgram = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
+                isShaderCompiled = true;
+            }
+            if (!isGraphicsPrepared) {
+                bufferObject = new VertexBufferObject(GL_ARRAY_BUFFER, null);
 
-                vectorShaderProgram = vectorShader.compileShader();
-                textureShaderProgram = textureShader.compileShader();
+                vertexArrayObject = new VertexArrayObject();
+                vertexArrayObject.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+                vertexArrayObject.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+                vertexArrayObject.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+                vertexArrayObject.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-                shadersArePrepared = true;
+                isGraphicsPrepared = true;
             }
         });
     }
 
-    public ArrayList<HangarLWJGLAction> getGLActions() {
-        return lwjglActions;
-    }
-
-    public void setViewportValues(int x, int y, int width, int height) {
-        this.viewportX = x;
-        this.viewportY = y;
-        this.viewportWidth = width;
-        this.viewportHeight = height;
+    public ArrayList<HangarGLAction> getGLActions() {
+        return glActions;
     }
 
     @Override
@@ -119,7 +118,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         throw new NullPointerException();
                     }
                     var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
-                    HangarLWJGLGraphicsProvider.this.drawImage(image, x, y, anchor);
+                    HangarGLGraphicsProvider.this.drawImage(image, x, y, anchor);
                 }
 
                 @Override
@@ -148,44 +147,35 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     float b = color.getBlue() / 255f;
                     float a = color.getAlpha() / 255f;
 
-                    lwjglActions.add(() -> {
-                        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-                        glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+                    float[] points = new float[nPoints * 9];
+                    for (int i = 0; i < nPoints; i++) {
+                        int index = i * 9;
+                        points[index] = xPoints[i];
+                        points[index + 1] = yPoints[i];
+                        points[index + 2] = 0.0f;
+                        points[index + 3] = 0.0f;
+                        points[index + 4] = r;
+                        points[index + 5] = g;
+                        points[index + 6] = b;
+                        points[index + 7] = a;
+                        points[index + 8] = 1.0f;
+                    }
+
+                    glActions.add(() -> {
+                        glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
+
+                        bufferObject.setBufferData(points);
+
                         glEnable(GL_BLEND);
+                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                        int buffer = glGenBuffers();
-                        var vertices = new float[nPoints * 8];
+                        vertexArrayObject.bind();
+                        spriteShaderProgram.use();
+                        spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-                        glBindBuffer(GL_ARRAY_BUFFER, buffer);
-                        for (int i = 0; i < nPoints; i++) {
-                            int step = i * 8;
-                            vertices[step] = xPoints[i];
-                            vertices[step + 1] = yPoints[i];
-                            vertices[step + 2] = r;
-                            vertices[step + 3] = g;
-                            vertices[step + 4] = b;
-                            vertices[step + 5] = a;
-                            vertices[step + 6] = viewportWidth;
-                            vertices[step + 7] = viewportHeight;
-                        }
-                        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
-
-                        glEnableVertexAttribArray(0);
-                        glEnableVertexAttribArray(1);
-                        glEnableVertexAttribArray(2);
-                        glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-                        glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-                        glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
-
-                        glUseProgram(vectorShaderProgram);
-                        glDrawArrays(GL_POLYGON, 0, nPoints);
-
-                        glDisableVertexAttribArray(0);
-                        glDisableVertexAttribArray(1);
-                        glDisableVertexAttribArray(2);
-                        glUseProgram(0);
+                        glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints);
                         glDisable(GL_BLEND);
-                        glDeleteBuffers(buffer);
+                        glUseProgram(0);
                     });
                 }
 
@@ -341,43 +331,30 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-        // TODO: fix it
-        //lwjglActions.add(() -> clip.setBounds(x, y, width, height));
+        // TODO: write method logic
     }
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2) {
-        // TODO: fix it (line matching problems)
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        lwjglActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        glActions.add(() -> {
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
 
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight
-            }, GL_STATIC_DRAW);
+            bufferObject.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x1, y1, 0, 0, r, g, b, 1, 1,
+                    x2, y2, 1, 0, r, g, b, 1, 1,
+            });
 
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+            vertexArrayObject.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glUseProgram(vectorShaderProgram);
             glDrawArrays(GL_LINES, 0, 2);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
         });
     }
 
@@ -387,34 +364,25 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        lwjglActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        glActions.add(() -> {
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
 
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x,         y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x + width, y,          r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x + width, y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x,         y + height, r, g, b, 1.0f, viewportWidth, viewportHeight,
-            }, GL_STATIC_DRAW);
+            bufferObject.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x, y, 0, 0, r, g, b, 1, 1,
+                    x + width, y, 1, 0, r, g, b, 1, 1,
+                    x + width, y + height, 1, 1, r, g, b, 1, 1,
+                    x, y, 0, 0, r, g, b, 1, 1,
+                    x + width, y + height, 1, 1, r, g, b, 1, 1,
+                    x, y + height, 0, 1, r, g, b, 1, 1,
+            });
 
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+            vertexArrayObject.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glUseProgram(vectorShaderProgram);
-            glDrawArrays(GL_QUADS, 0, 4);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
         });
     }
 
@@ -435,41 +403,48 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        int halfWidth = width / 2;
-        int halfHeight = height / 2;
+        float halfWidth = (float) width / 2;
+        float halfHeight = (float) height / 2;
 
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        lwjglActions.add(() -> {
-            // TODO: use startAngle and arcAngle here
-            double deltaAngle = (Math.PI * 2) / CIRCLE_POINTS;
-            double angle = 0;
+        // TODO: use startAngle and arcAngle here
+        float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
+        float angle = 0;
 
-            double prevX = Math.sin(angle) * halfWidth + x + halfWidth;
-            double prevY = Math.cos(angle) * halfHeight + y + halfHeight;
+        float prevX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+        float prevY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
 
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        var points = new ArrayList<Float>();
 
-            // TODO: use different drawing method here
-            glBegin(GL_TRIANGLES);
-            glColor3f(r, g, b);
+        for (int i = 0; i < CIRCLE_POINTS; i++) {
+            angle += deltaAngle;
+            float currX = (float) Math.sin(angle) * halfWidth + x + halfWidth;
+            float currY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
 
-            for (int i = 0; i < CIRCLE_POINTS; i++) {
-                angle += deltaAngle;
-                double currX = Math.sin(angle) * halfWidth + x + halfWidth;
-                double currY = Math.cos(angle) * halfHeight + y + halfHeight;
+            points.addAll(List.of(
+                    x + halfWidth, y + halfHeight, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                    prevX, prevY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
+                    currX, currY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f));
 
-                glVertex2f(x + halfWidth, y + halfHeight);
-                glVertex2d(prevX, prevY);
-                glVertex2d(currX, currY);
+            prevX = currX;
+            prevY = currY;
+        }
 
-                prevX = currX;
-                prevY = currY;
-            }
-            glEnd();
+        glActions.add(() -> {
+
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
+
+            bufferObject.setBufferData(ListUtils.toArray(points));
+
+            vertexArrayObject.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+            glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
+            glUseProgram(0);
         });
     }
 
@@ -506,55 +481,39 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         int alignedY = ImageUtils.alignY(img.getHeight(), y, anchor);
         var imageBuffer = img.convertToByteBuffer();
 
-        lwjglActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        glActions.add(() -> {
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
 
-            glEnable(GL_TEXTURE_2D);
+            bufferObject.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY, 1, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
+                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
+                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
+                    alignedX, alignedY + height, 0, 1, 1, 1, 1, 1, 0,
+            });
+
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
-            glEnable(GL_SCISSOR_TEST);
 
+            vertexArrayObject.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("sprite", 0);
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+            // TODO: use abstraction
             int textureId = glGenTextures();
             glBindTexture(GL_TEXTURE_2D, textureId);
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glBindTexture(GL_TEXTURE_2D, textureId);
+            glActiveTexture(GL_TEXTURE0);
 
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            // TODO: use it
-            //glScissor(clip.x, clip.y, clip.width, clip.height);
-            glDepthMask(true);
-
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    alignedX,         alignedY,          viewportWidth, viewportHeight, 0, 0,
-                    alignedX + width, alignedY,          viewportWidth, viewportHeight, 1, 0,
-                    alignedX + width, alignedY + height, viewportWidth, viewportHeight, 1, 1,
-                    alignedX,         alignedY + height, viewportWidth, viewportHeight, 0, 1,
-
-            }, GL_STATIC_DRAW);
-
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
-            glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
-
-            glUseProgram(textureShaderProgram);
-            glDrawArrays(GL_QUADS, 0, 4);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
-            glDisable(GL_TEXTURE_2D);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
             glDisable(GL_BLEND);
-            glDisable(GL_SCISSOR_TEST);
-
             glUseProgram(0);
-            glDeleteBuffers(buffer);
-            glDeleteTextures(textureId);
         });
     }
 
@@ -584,33 +543,22 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        lwjglActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+        glActions.add(() -> {
+            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
 
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
-            }, GL_STATIC_DRAW);
+            bufferObject.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x1, y1, 0, 0, r, g, b, 1, 1,
+                    x2, y2, 0, 0, r, g, b, 1, 1,
+                    x3, y3, 0, 0, r, g, b, 1, 1,
+            });
 
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+            vertexArrayObject.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glUseProgram(vectorShaderProgram);
             glDrawArrays(GL_TRIANGLES, 0, 3);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
         });
     }
 
@@ -634,45 +582,36 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        if (offscreenBuffer instanceof HangarLWJGLOffscreenBuffer lwjglOffscreenBuffer) {
-            var graphicsProvider = (HangarLWJGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();
-            var profile = HangarState.getProfileManager().getCurrentProfile();
-            int width = profile.getResolution().width;
-            int height = profile.getResolution().height;
+        if (offscreenBuffer instanceof HangarGLOffscreenBuffer lwjglOffscreenBuffer) {
+            var graphicsProvider = (HangarGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();
 
-            lwjglActions.addAll(graphicsProvider.lwjglActions);
-            lwjglActions.add(() -> {
-                glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-                glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+            glActions.addAll(graphicsProvider.glActions);
+            glActions.add(() -> {
+                glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer.getIdentifier());
 
-                int buffer = glGenBuffers();
-                glBindBuffer(GL_ARRAY_BUFFER, buffer);
-                glBufferData(GL_ARRAY_BUFFER, new float[] {
-                        0,     0,      width, height, 0, 1,
-                        width, 0,      width, height, 1, 1,
-                        width, height, width, height, 1, 0,
-                        0,     height, width, height, 0, 0,
+                bufferObject.setBufferData(new float[]{
+                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
+                        1, -1, 1, 0, 1, 1, 1, 1, 0,
+                        1, 1, 1, 1, 1, 1, 1, 1, 0,
+                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
+                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
+                        1, 1, 1, 1, 1, 1, 1, 1, 0,
+                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
+                });
 
-                }, GL_STATIC_DRAW);
+                vertexArrayObject.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("sprite", 0);
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());
 
-                glEnableVertexAttribArray(0);
-                glEnableVertexAttribArray(1);
-                glEnableVertexAttribArray(2);
-                glVertexAttribPointer(0, 2, GL_FLOAT, false, 24, 0);
-                glVertexAttribPointer(1, 2, GL_FLOAT, false, 24, 8);
-                glVertexAttribPointer(2, 2, GL_FLOAT, false, 24, 16);
+                glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture.getIdentifier());
+                glActiveTexture(GL_TEXTURE0);
 
-                glUseProgram(textureShaderProgram);
-                glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
-                glDrawArrays(GL_QUADS, 0, 4);
-
-                glDisableVertexAttribArray(0);
-                glDisableVertexAttribArray(1);
-                glDisableVertexAttribArray(2);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
                 glUseProgram(0);
-                glDeleteBuffers(buffer);
             });
-            graphicsProvider.lwjglActions.clear();
+            graphicsProvider.glActions.clear();
         }
         else if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
             drawImage(new Image(swingOffscreenBuffer.getBufferedImage(), false), 0, 0, 0);

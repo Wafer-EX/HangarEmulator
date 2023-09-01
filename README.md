@@ -11,11 +11,12 @@ This is a very raw and simple J2ME-emulator that let you play some old games mad
 - Custom resolution (include screen filling)
 - Canvas scaling when stretching the window
 - Unlimited frame rate
-- Experimental OpenGL support using LWJGL 3 (extremely raw and buggy)
+- Experimental OpenGL support through LWJGL 3 (extremely raw)
 
 ## Requirements
 - Java Development Kit 17
 - ~512 MB free RAM
+- OpenGL 4.6 (if you prefer use OpenGL instead of Swing)
 ## Build
 As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
 

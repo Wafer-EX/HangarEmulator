@@ -14,8 +14,24 @@
  * limitations under the License.
  */
 
-package things.graphics.lwjgl;
+package things.graphics.gl.abstractions;
 
-public interface HangarLWJGLAction {
-    public void execute();
+import static org.lwjgl.opengl.GL46.*;
+
+public class VertexArrayObject {
+    private final int identifier;
+
+    public VertexArrayObject() {
+        identifier = glGenVertexArrays();
+        bind();
+    }
+
+    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
+        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+        glEnableVertexAttribArray(index);
+    }
+
+    public void bind() {
+        glBindVertexArray(identifier);
+    }
 }

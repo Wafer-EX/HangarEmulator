@@ -14,13 +14,8 @@
  * limitations under the License.
  */
 
-#version 330 core
-out vec4 FragColor;
+package things.graphics.gl;
 
-in vec2 TexCoord;
-
-uniform sampler2D inputTexture;
-
-void main() {
-    FragColor = texture(inputTexture, TexCoord);
+public interface HangarGLAction {
+    void execute();
 }
