@@ -16,6 +16,7 @@
 
 package things.graphics.lwjgl.abstractions;
 
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL46;
 
 import java.io.BufferedReader;
@@ -66,9 +67,10 @@ public class ShaderProgram {
         GL46.glUniform1f(location, value);
     }
 
-    public void setUniform(String name, float[] value) {
+    public void setUniform(String name, Matrix4f matrix) {
         int location = getLocation(name);
-        GL46.glUniformMatrix4fv(location, false, value);
+        float[] data = new float[16];
+        GL46.glUniformMatrix4fv(location, false, matrix.get(data));
     }
 
     private CharSequence readShaderFile(String name) {

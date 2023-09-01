@@ -612,12 +612,8 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
             vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-            glUseProgram(spriteShaderProgram.getIdentifier());
-            int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
-
-            float[] matrixArray = new float[16];
-            new Matrix4f().ortho2D(0, 240, 320, 0).get(matrixArray);
-            glUniformMatrix4fv(projectionMatrixUniformLocation, false, matrixArray);
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
             glDrawArrays(GL_TRIANGLES, 0, 3);
             glUseProgram(0);
@@ -670,12 +666,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
                 spriteShaderProgram.use();
                 spriteShaderProgram.setUniform("sprite", 0);
-                spriteShaderProgram.setUniform("projectionMatrix", new float[] {
-                        1, 0, 0, 0,
-                        0, 1, 0, 0,
-                        0, 0, 1, 0,
-                        0, 0, 0, 1,
-                });
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());
 
                 glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
                 glActiveTexture(GL_TEXTURE0);
