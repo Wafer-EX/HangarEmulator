@@ -53,7 +53,8 @@ public class HangarCanvasWrapperLWJGL extends HangarCanvasWrapper {
                 int width = profile.getResolution().width;
                 int height = profile.getResolution().height;
 
-                graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
+                // TODO: what to do with this?
+                //graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
             }
         });
     }

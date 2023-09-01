@@ -33,4 +33,8 @@ public class FramebufferObject {
     public void bind() {
         GL46.glBindFramebuffer(GL46.GL_FRAMEBUFFER, identifier);
     }
+
+    public int getIdentifier() {
+        return identifier;
+    }
 }

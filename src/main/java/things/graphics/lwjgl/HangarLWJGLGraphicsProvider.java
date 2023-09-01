@@ -21,9 +21,7 @@ import org.joml.Matrix4f;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.graphics.lwjgl.abstractions.VertexBufferObject;
-import things.graphics.lwjgl.abstractions.ShaderProgram;
-import things.graphics.lwjgl.abstractions.VertexArrayObject;
+import things.graphics.lwjgl.abstractions.*;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.ListUtils;
 import things.utils.microedition.ImageUtils;
@@ -50,7 +48,6 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     protected int frameBuffer;
     protected int frameBufferTexture;
     private DirectGraphics directGraphics;
-    //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
     private VertexArrayObject vertexArrayObject;
     private VertexBufferObject bufferObject;
@@ -66,21 +63,15 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
         int height = profile.getResolution().height;
 
         lwjglActions.add(() -> {
-            frameBuffer = glGenFramebuffers();
-            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+            var frameBuffer = new FramebufferObject();
+            this.frameBuffer = frameBuffer.getIdentifier();
 
-            frameBufferTexture = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, frameBufferTexture);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            var frameBufferTexture = new TextureObject(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+            this.frameBufferTexture = frameBufferTexture.getIdentifier();
+            frameBufferTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            frameBufferTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, frameBufferTexture, 0);
-
-            //this.viewportX = 0;
-            //this.viewportY = 0;
-            //this.viewportWidth = width;
-            //this.viewportHeight = height;
+            frameBuffer.attachTexture(frameBufferTexture, GL_COLOR_ATTACHMENT0);
         });
     }
 
@@ -111,13 +102,6 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
     public ArrayList<HangarLWJGLAction> getGLActions() {
         return lwjglActions;
-    }
-
-    public void setViewportValues(int x, int y, int width, int height) {
-        //this.viewportX = x;
-        //this.viewportY = y;
-        //this.viewportWidth = width;
-        //this.viewportHeight = height;
     }
 
     @Override
