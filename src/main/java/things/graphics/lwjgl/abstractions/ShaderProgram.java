@@ -16,20 +16,36 @@
 
 package things.graphics.lwjgl.abstractions;
 
+import org.lwjgl.opengl.GL46;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL20.glCompileShader;
-
 public class ShaderProgram {
-    private final CharSequence vertexShaderSource, fragmentShaderSource;
-    private boolean isCompiled;
-    private int identifier;
+    private final int identifier;
 
-    public ShaderProgram(String name) {
-        this.vertexShaderSource = readShaderFile("/shaders/" + name + ".vert");
-        this.fragmentShaderSource = readShaderFile("/shaders/" + name + ".frag");
+    public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
+        CharSequence vertexShaderSource = readShaderFile(vertexShaderPath);
+        CharSequence fragmentShaderSource = readShaderFile(fragmentShaderPath);
+
+        assert vertexShaderSource != null;
+        assert fragmentShaderSource != null;
+
+        int vertexShader = GL46.glCreateShader(GL46.GL_VERTEX_SHADER);
+        GL46.glShaderSource(vertexShader, vertexShaderSource);
+        GL46.glCompileShader(vertexShader);
+
+        int fragmentShader = GL46.glCreateShader(GL46.GL_FRAGMENT_SHADER);
+        GL46.glShaderSource(fragmentShader, fragmentShaderSource);
+        GL46.glCompileShader(fragmentShader);
+
+        identifier = GL46.glCreateProgram();
+        GL46.glAttachShader(identifier, vertexShader);
+        GL46.glAttachShader(identifier, fragmentShader);
+        GL46.glLinkProgram(identifier);
+
+        GL46.glDeleteShader(vertexShader);
+        GL46.glDeleteShader(fragmentShader);
     }
 
     private CharSequence readShaderFile(String name) {
@@ -53,36 +69,7 @@ public class ShaderProgram {
         }
     }
 
-    public int compileShader() {
-        if (!isCompiled) {
-            int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, vertexShaderSource);
-            glCompileShader(vertexShader);
-
-            int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, fragmentShaderSource);
-            glCompileShader(fragmentShader);
-
-            identifier = glCreateProgram();
-            glAttachShader(identifier, vertexShader);
-            glAttachShader(identifier, fragmentShader);
-            glLinkProgram(identifier);
-
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
-
-            isCompiled = true;
-            return identifier;
-        }
-        else {
-            throw new IllegalStateException();
-        }
-    }
-
     public int getIdentifier() {
-        if (!isCompiled) {
-            throw new IllegalStateException();
-        }
         return identifier;
     }
 }

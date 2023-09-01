@@ -85,13 +85,13 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             if (!shadersArePrepared) {
-                var vectorShader = new ShaderProgram("vector");
-                var textureShader = new ShaderProgram("texture");
-                var spriteShader = new ShaderProgram("sprite");
+                var vectorShader = new ShaderProgram("/shaders/vector.vert", "/shaders/vector.frag");
+                var textureShader = new ShaderProgram("/shaders/texture.vert", "/shaders/texture.frag");
+                var spriteShader = new ShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
 
-                vectorShaderProgram = vectorShader.compileShader();
-                textureShaderProgram = textureShader.compileShader();
-                spriteShaderProgram = spriteShader.compileShader();
+                vectorShaderProgram = vectorShader.getIdentifier();
+                textureShaderProgram = textureShader.getIdentifier();
+                spriteShaderProgram = spriteShader.getIdentifier();
 
                 shadersArePrepared = true;
             }
