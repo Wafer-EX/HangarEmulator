@@ -17,7 +17,7 @@
 package things.utils;
 
 public final class MatrixUtils {
-    public static float[] createOrthographicOffCenter(float left, float right, float bottom, float top, float near, float far) {
+    public static float[] createOrthographic(float left, float right, float bottom, float top, float near, float far) {
         return new float[] {
                 2.0f / (right - left), 0.0f, 0.0f, -((right + left) / (right - left)),
                 0.0f, 2.0f / (top - bottom), 0.0f, -((top + bottom) / (top - bottom)),

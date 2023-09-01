@@ -614,41 +614,10 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
             glUseProgram(spriteShaderProgram.getIdentifier());
             int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
-            glUniformMatrix4fv(projectionMatrixUniformLocation, false, MatrixUtils.createOrthographicOffCenter(0, 240, 320, 0, -1, 1));
+            glUniformMatrix4fv(projectionMatrixUniformLocation, false, MatrixUtils.createOrthographic(-120, 120, 160, -160, -1, 1));
 
             glDrawArrays(GL_TRIANGLES, 0, 3);
             glUseProgram(0);
-
-
-//            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-//            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-//
-//            int buffer = glGenBuffers();
-//            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-//            glBufferData(GL_ARRAY_BUFFER, new float[] {
-//                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-//                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
-//                    //x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
-//                    x1, y1, r, g, b, 1.0f, 240, 320,
-//                    x2, y2, r, g, b, 1.0f, 240, 320,
-//                    x3, y3, r, g, b, 1.0f, 240, 320,
-//            }, GL_STATIC_DRAW);
-//
-//            glEnableVertexAttribArray(0);
-//            glEnableVertexAttribArray(1);
-//            glEnableVertexAttribArray(2);
-//            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-//            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-//            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
-//
-//            glUseProgram(vectorShaderProgram.getIdentifier());
-//            glDrawArrays(GL_TRIANGLES, 0, 3);
-//
-//            glDisableVertexAttribArray(0);
-//            glDisableVertexAttribArray(1);
-//            glDisableVertexAttribArray(2);
-//            glUseProgram(0);
-//            glDeleteBuffers(buffer);
         });
     }
 
