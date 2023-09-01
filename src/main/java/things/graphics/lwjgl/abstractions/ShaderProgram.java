@@ -48,6 +48,29 @@ public class ShaderProgram {
         GL46.glDeleteShader(fragmentShader);
     }
 
+    public int getIdentifier() {
+        return identifier;
+    }
+
+    public void use() {
+        GL46.glUseProgram(identifier);
+    }
+
+    public void setUniform(String name, int value) {
+        int location = getLocation(name);
+        GL46.glUniform1i(location, value);
+    }
+
+    public void setUniform(String name, float value) {
+        int location = getLocation(name);
+        GL46.glUniform1f(location, value);
+    }
+
+    public void setUniform(String name, float[] value) {
+        int location = getLocation(name);
+        GL46.glUniformMatrix4fv(location, false, value);
+    }
+
     private CharSequence readShaderFile(String name) {
         // TODO: improve code quality?
         try {
@@ -69,7 +92,11 @@ public class ShaderProgram {
         }
     }
 
-    public int getIdentifier() {
-        return identifier;
+    private int getLocation(String name) {
+        int location = GL46.glGetUniformLocation(identifier, name);
+        if (location == -1) {
+            throw new IllegalStateException();
+        }
+        return location;
     }
 }

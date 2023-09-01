@@ -24,6 +24,7 @@ import things.graphics.lwjgl.abstractions.BufferObject;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
+import things.utils.MatrixUtils;
 import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
@@ -597,34 +598,57 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
         lwjglActions.add(() -> {
             glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
 
-            int buffer = glGenBuffers();
-            glBindBuffer(GL_ARRAY_BUFFER, buffer);
-            glBufferData(GL_ARRAY_BUFFER, new float[] {
-                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    //x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
-                    x1, y1, r, g, b, 1.0f, 240, 320,
-                    x2, y2, r, g, b, 1.0f, 240, 320,
-                    x3, y3, r, g, b, 1.0f, 240, 320,
-            }, GL_STATIC_DRAW);
+            var vbo = new BufferObject(GL_ARRAY_BUFFER, new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x1, y1, 0, 0, r, g, b, 1, 1,
+                    x2, y2, 0, 0, r, g, b, 1, 1,
+                    x3, y3, 0, 0, r, g, b, 1, 1,
+            });
 
-            glEnableVertexAttribArray(0);
-            glEnableVertexAttribArray(1);
-            glEnableVertexAttribArray(2);
-            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+            var vao = new VertexArrayObject();
+            vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+            vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+            vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+            vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-            glUseProgram(vectorShaderProgram.getIdentifier());
+            glUseProgram(spriteShaderProgram.getIdentifier());
+            int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
+            glUniformMatrix4fv(projectionMatrixUniformLocation, false, MatrixUtils.createOrthographicOffCenter(0, 240, 320, 0, -1, 1));
+
             glDrawArrays(GL_TRIANGLES, 0, 3);
-
-            glDisableVertexAttribArray(0);
-            glDisableVertexAttribArray(1);
-            glDisableVertexAttribArray(2);
             glUseProgram(0);
-            glDeleteBuffers(buffer);
+
+
+//            glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
+//            //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
+//
+//            int buffer = glGenBuffers();
+//            glBindBuffer(GL_ARRAY_BUFFER, buffer);
+//            glBufferData(GL_ARRAY_BUFFER, new float[] {
+//                    //x1, y1, r, g, b, 1.0f, viewportWidth, viewportHeight,
+//                    //x2, y2, r, g, b, 1.0f, viewportWidth, viewportHeight,
+//                    //x3, y3, r, g, b, 1.0f, viewportWidth, viewportHeight,
+//                    x1, y1, r, g, b, 1.0f, 240, 320,
+//                    x2, y2, r, g, b, 1.0f, 240, 320,
+//                    x3, y3, r, g, b, 1.0f, 240, 320,
+//            }, GL_STATIC_DRAW);
+//
+//            glEnableVertexAttribArray(0);
+//            glEnableVertexAttribArray(1);
+//            glEnableVertexAttribArray(2);
+//            glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
+//            glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
+//            glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+//
+//            glUseProgram(vectorShaderProgram.getIdentifier());
+//            glDrawArrays(GL_TRIANGLES, 0, 3);
+//
+//            glDisableVertexAttribArray(0);
+//            glDisableVertexAttribArray(1);
+//            glDisableVertexAttribArray(2);
+//            glUseProgram(0);
+//            glDeleteBuffers(buffer);
         });
     }
 
@@ -672,20 +696,17 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
                 vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-                glUseProgram(spriteShaderProgram.getIdentifier());
-                int spriteUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "sprite");
-                int projectionMatrixUniformLocation = glGetUniformLocation(spriteShaderProgram.getIdentifier(), "projectionMatrix");
-
-                glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
-                glActiveTexture(GL_TEXTURE0);
-
-                glUniform1i(spriteUniformLocation, 0);
-                glUniformMatrix4fv(projectionMatrixUniformLocation, false, new float[] {
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("sprite", 0);
+                spriteShaderProgram.setUniform("projectionMatrix", new float[] {
                         1, 0, 0, 0,
                         0, 1, 0, 0,
                         0, 0, 1, 0,
                         0, 0, 0, 1,
                 });
+
+                glBindTexture(GL_TEXTURE_2D, graphicsProvider.frameBufferTexture);
+                glActiveTexture(GL_TEXTURE0);
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
                 glUseProgram(0);
