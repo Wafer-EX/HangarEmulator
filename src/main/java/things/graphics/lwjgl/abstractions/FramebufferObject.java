@@ -18,20 +18,19 @@ package things.graphics.lwjgl.abstractions;
 
 import org.lwjgl.opengl.GL46;
 
-public class VertexArrayObject {
+public class FramebufferObject {
     private final int identifier;
 
-    public VertexArrayObject() {
-        identifier = GL46.glGenVertexArrays();
+    public FramebufferObject() {
+        identifier = GL46.glGenFramebuffers();
         bind();
     }
 
-    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
-        GL46.glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-        GL46.glEnableVertexAttribArray(index);
+    public void attachTexture(TextureObject texture, int attachment) {
+        GL46.glFramebufferTexture2D(GL46.GL_FRAMEBUFFER, attachment, GL46.GL_TEXTURE_2D, texture.getIdentifier(), 0);
     }
 
     public void bind() {
-        GL46.glBindVertexArray(identifier);
+        GL46.glBindFramebuffer(GL46.GL_FRAMEBUFFER, identifier);
     }
 }

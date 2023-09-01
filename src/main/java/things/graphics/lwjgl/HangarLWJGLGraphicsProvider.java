@@ -21,7 +21,7 @@ import org.joml.Matrix4f;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.graphics.lwjgl.abstractions.BufferObject;
+import things.graphics.lwjgl.abstractions.VertexBufferObject;
 import things.graphics.lwjgl.abstractions.ShaderProgram;
 import things.graphics.lwjgl.abstractions.VertexArrayObject;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
@@ -53,7 +53,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
     //private int viewportX, viewportY, viewportWidth, viewportHeight;
 
     private VertexArrayObject vertexArrayObject;
-    private BufferObject bufferObject;
+    private VertexBufferObject bufferObject;
     private boolean isGraphicsPrepared = false;
 
     private static ShaderProgram spriteShaderProgram;
@@ -96,7 +96,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                 isShaderCompiled = true;
             }
             if (!isGraphicsPrepared) {
-                bufferObject = new BufferObject(GL_ARRAY_BUFFER, null);
+                bufferObject = new VertexBufferObject(GL_ARRAY_BUFFER, null);
 
                 vertexArrayObject = new VertexArrayObject();
                 vertexArrayObject.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
@@ -186,7 +186,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         glEnable(GL_BLEND);
                         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-                        vertexArrayObject.Bind();
+                        vertexArrayObject.bind();
                         spriteShaderProgram.use();
                         spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -368,7 +368,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     x2, y2, 1, 0, r, g, b, 1, 1,
             });
 
-            vertexArrayObject.Bind();
+            vertexArrayObject.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -396,7 +396,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     x, y + height, 0, 1, r, g, b, 1, 1,
             });
 
-            vertexArrayObject.Bind();
+            vertexArrayObject.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -458,7 +458,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
             bufferObject.setBufferData(ListUtils.toArray(points));
 
-            vertexArrayObject.Bind();
+            vertexArrayObject.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -516,7 +516,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
 
-            vertexArrayObject.Bind();
+            vertexArrayObject.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("sprite", 0);
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
@@ -572,7 +572,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                     x3, y3, 0, 0, r, g, b, 1, 1,
             });
 
-            vertexArrayObject.Bind();
+            vertexArrayObject.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -619,7 +619,7 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
                         -1, 1, 0, 1, 1, 1, 1, 1, 0,
                 });
 
-                vertexArrayObject.Bind();
+                vertexArrayObject.bind();
                 spriteShaderProgram.use();
                 spriteShaderProgram.setUniform("sprite", 0);
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());
