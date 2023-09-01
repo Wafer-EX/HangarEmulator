@@ -26,6 +26,10 @@ public class FramebufferObject {
         bind();
     }
 
+    private FramebufferObject(int identifier) {
+        this.identifier = identifier;
+    }
+
     public void attachTexture(TextureObject texture, int attachment) {
         GL46.glFramebufferTexture2D(GL46.GL_FRAMEBUFFER, attachment, GL46.GL_TEXTURE_2D, texture.getIdentifier(), 0);
     }
@@ -36,5 +40,9 @@ public class FramebufferObject {
 
     public int getIdentifier() {
         return identifier;
+    }
+
+    public static FramebufferObject getScreen() {
+        return new FramebufferObject(0);
     }
 }
