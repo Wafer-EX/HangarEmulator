@@ -151,44 +151,36 @@ public class HangarLWJGLGraphicsProvider implements HangarGraphicsProvider {
 
                     lwjglActions.add(() -> {
                         glBindFramebuffer(GL_FRAMEBUFFER, frameBuffer);
-                        //glViewport(viewportX, viewportY, viewportWidth, viewportHeight);
-                        glEnable(GL_BLEND);
 
-                        int buffer = glGenBuffers();
-                        var vertices = new float[nPoints * 8];
-
-                        glBindBuffer(GL_ARRAY_BUFFER, buffer);
+                        float[] points = new float[nPoints * 9];
                         for (int i = 0; i < nPoints; i++) {
-                            int step = i * 8;
-                            vertices[step] = xPoints[i];
-                            vertices[step + 1] = yPoints[i];
-                            vertices[step + 2] = r;
-                            vertices[step + 3] = g;
-                            vertices[step + 4] = b;
-                            vertices[step + 5] = a;
-                            //vertices[step + 6] = viewportWidth;
-                            //vertices[step + 7] = viewportHeight;
-                            vertices[step + 6] = 240;
-                            vertices[step + 7] = 320;
+                            int index = i * 9;
+                            points[index] = xPoints[i];
+                            points[index + 1] = yPoints[i];
+                            points[index + 2] = 0.0f;
+                            points[index + 3] = 0.0f;
+                            points[index + 4] = r;
+                            points[index + 5] = g;
+                            points[index + 6] = b;
+                            points[index + 7] = a;
+                            points[index + 8] = 1.0f;
                         }
-                        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
-                        glEnableVertexAttribArray(0);
-                        glEnableVertexAttribArray(1);
-                        glEnableVertexAttribArray(2);
-                        glVertexAttribPointer(0, 2, GL_FLOAT, false, 32, 0);
-                        glVertexAttribPointer(1, 4, GL_FLOAT, false, 32, 8);
-                        glVertexAttribPointer(2, 2, GL_FLOAT, false, 32, 24);
+                        var vbo = new BufferObject(GL_ARRAY_BUFFER, points);
+                        var vao = new VertexArrayObject();
+                        vao.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
+                        vao.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
+                        vao.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
+                        vao.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
 
-                        glUseProgram(vectorShaderProgram.getIdentifier());
-                        glDrawArrays(GL_POLYGON, 0, nPoints);
+                        spriteShaderProgram.use();
+                        spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-                        glDisableVertexAttribArray(0);
-                        glDisableVertexAttribArray(1);
-                        glDisableVertexAttribArray(2);
-                        glUseProgram(0);
+                        glEnable(GL_BLEND);
+                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                        glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints);
                         glDisable(GL_BLEND);
-                        glDeleteBuffers(buffer);
+                        glUseProgram(0);
                     });
                 }
 
