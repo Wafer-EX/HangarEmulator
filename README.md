@@ -28,5 +28,12 @@ Linux:
 ```
 ./gradlew shadowJar build
 ```
+## Used libraries
+| Name | Link |
+| - | - |
+| FlatLaf | [Official page](https://www.formdev.com/flatlaf/) |
+| ASM | [Official page](https://asm.ow2.io/) |
+| LWJGL | [Official page](https://www.lwjgl.org/)
+| JOML | [GitHub](https://github.com/JOML-CI/JOML) |
 ## License
 Copyright 2022-2023 Kirill Lomakin. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
