@@ -94,7 +94,8 @@ public class HangarViewport extends JPanel {
             }
         }
 
-        if (displayable.getCommands().size() > 0) {
+        // TODO: assert displayable, should I move it up?
+        if (!displayable.getCommands().isEmpty()) {
             var displayableCommands = new HangarViewportCommands(displayable);
             this.add(displayableCommands, BorderLayout.SOUTH);
         }

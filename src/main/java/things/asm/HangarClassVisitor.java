@@ -19,6 +19,7 @@ package things.asm;
 import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.MethodVisitor;
 import org.objectweb.asm.Opcodes;
+import org.objectweb.asm.Type;
 import things.HangarState;
 import things.MIDletResources;
 
@@ -35,10 +36,10 @@ public class HangarClassVisitor extends ClassVisitor {
             @Override
             public void visitMethodInsn(int opcode, String owner, String name, String descriptor, boolean isInterface) {
                 if (name.equals("getResourceAsStream")) {
-                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "things/asm/HangarClassVisitor", "getResource", "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", false);
+                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(HangarClassVisitor.class), "getResource", "(Ljava/lang/Class;Ljava/lang/String;)Ljava/io/InputStream;", false);
                 }
                 else if (name.equals("getProperty")) {
-                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, "things/asm/HangarClassVisitor", "getProperty", "(Ljava/lang/String;)Ljava/lang/String;", false);
+                    mv.visitMethodInsn(Opcodes.INVOKESTATIC, Type.getInternalName(HangarClassVisitor.class), "getProperty", "(Ljava/lang/String;)Ljava/lang/String;", false);
                 }
                 else {
                     mv.visitMethodInsn(opcode, owner, name, descriptor, isInterface);
@@ -47,10 +48,12 @@ public class HangarClassVisitor extends ClassVisitor {
         };
     }
 
-    public static InputStream getResource(Class inputClass, String resourcePath) {
+    @SuppressWarnings("unused")
+    public static InputStream getResource(Class<?> inputClass, String resourcePath) {
         return MIDletResources.getResource(resourcePath);
     }
 
+    @SuppressWarnings("unused")
     public static String getProperty(String key) {
         return HangarState.getProperties().getProperty(key);
     }

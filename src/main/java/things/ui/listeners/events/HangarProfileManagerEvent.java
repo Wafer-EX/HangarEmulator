@@ -26,20 +26,13 @@ public class HangarProfileManagerEvent extends EventObject {
     public static final int PROFILE_SET = 1;
     public static final int PROFILE_UNSET = 2;
 
-    private final HangarProfileManager source;
     private final int state;
     private final HangarProfile profile;
 
     public HangarProfileManagerEvent(HangarProfileManager source, int state, HangarProfile profile) {
         super(source);
-        this.source = source;
         this.state = state;
         this.profile = profile;
-    }
-
-    @Override
-    public Object getSource() {
-        return source;
     }
 
     public int getStateChange() {

@@ -34,9 +34,8 @@ public final class CanvasWrapperUtils {
             double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);
         }
-        else {
-            return 1.0;
-        }
+
+        return 1.0;
     }
 
     public static void fitBufferToResolution(HangarCanvasWrapperSwing canvasWrapper, Dimension resolution) {
@@ -60,19 +59,19 @@ public final class CanvasWrapperUtils {
         var scaleFactor = canvasWrapper.getScaleFactor();
         var position = canvasWrapper.getDisplayedArea();
 
-        var point = new Point();
-        point.x = position.x + (int) (x * scaleFactor);
-        point.y = position.y + (int) (y * scaleFactor);
-        return point;
+        return new Point(
+                position.x + (int) (x * scaleFactor),
+                position.y + (int) (y * scaleFactor)
+        );
     }
 
     public static Point panelPointToCanvas(HangarCanvasWrapper canvasWrapper, int x, int y) {
         var scaleFactor = canvasWrapper.getScaleFactor();
         var position = canvasWrapper.getDisplayedArea();
 
-        var point = new Point();
-        point.x = (int) ((x - position.x) / scaleFactor);
-        point.y = (int) ((y - position.y) / scaleFactor);
-        return point;
+        return new Point(
+                (int) ((x - position.x) / scaleFactor),
+                (int) ((y - position.y) / scaleFactor)
+        );
     }
 }

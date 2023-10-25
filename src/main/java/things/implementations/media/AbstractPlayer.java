@@ -22,7 +22,7 @@ import javax.microedition.media.PlayerListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class ExtendedPlayer implements Player {
+public abstract class AbstractPlayer implements Player {
     private int currentState = UNREALIZED;
     private final List<PlayerListener> playerListeners = new ArrayList<>();
 

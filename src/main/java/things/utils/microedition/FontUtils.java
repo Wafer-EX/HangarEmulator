@@ -29,18 +29,20 @@ public final class FontUtils {
     public static int convertSize(int from, int to, int fontSize) {
         if (from != to) {
             if (from == MICRO_EDITION) {
-                switch (fontSize) {
-                    case Font.SIZE_SMALL: return SE_SIZE_SMALL;
-                    case Font.SIZE_MEDIUM: return SE_SIZE_MEDIUM;
-                    case Font.SIZE_LARGE: return SE_SIZE_LARGE;
-                }
+                return switch (fontSize) {
+                    case Font.SIZE_SMALL -> SE_SIZE_SMALL;
+                    case Font.SIZE_MEDIUM -> SE_SIZE_MEDIUM;
+                    case Font.SIZE_LARGE -> SE_SIZE_LARGE;
+                    default -> throw new IllegalArgumentException();
+                };
             }
             else if (from == STANDART_EDITION) {
-                switch (fitSizeToSE(fontSize)) {
-                    case SE_SIZE_SMALL: return Font.SIZE_SMALL;
-                    case SE_SIZE_MEDIUM: return Font.SIZE_MEDIUM;
-                    case SE_SIZE_LARGE: return Font.SIZE_LARGE;
-                }
+                return switch (fitSizeToSE(fontSize)) {
+                    case SE_SIZE_SMALL -> Font.SIZE_SMALL;
+                    case SE_SIZE_MEDIUM -> Font.SIZE_MEDIUM;
+                    case SE_SIZE_LARGE -> Font.SIZE_LARGE;
+                    default -> throw new IllegalArgumentException();
+                };
             }
         }
         return fontSize;
@@ -85,10 +87,10 @@ public final class FontUtils {
 
         int alignedY = y;
         if ((anchor & Graphics.BOTTOM) != 0) {
-            alignedY -= stringSize.getMaxY();
+            alignedY -= (int) stringSize.getMaxY();
         }
         else if (anchor == 0 || (anchor & Graphics.TOP) != 0) {
-            alignedY += stringSize.getMaxY() + (font.getHeight() >> 1);
+            alignedY += (int) (stringSize.getMaxY() + (font.getHeight() >> 1));
         }
         return alignedY;
     }

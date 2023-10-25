@@ -30,11 +30,6 @@ public class HangarDisplayableEvent extends EventObject {
         this.state = state;
     }
 
-    @Override
-    public Object getSource() {
-        return super.getSource();
-    }
-
     public int getStateChange() {
         return state;
     }

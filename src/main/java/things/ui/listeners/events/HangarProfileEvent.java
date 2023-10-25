@@ -31,20 +31,13 @@ public class HangarProfileEvent extends EventObject {
     public static final int WINDOW_RESIZING_CHANGED = 7;
     public static final int SOUNDBANK_CHANGED = 8;
 
-    private final HangarProfile source;
     private final int state;
     private final Object value;
 
     public HangarProfileEvent(HangarProfile source, int state, Object value) {
         super(source);
-        this.source = source;
         this.state = state;
         this.value = value;
-    }
-
-    @Override
-    public Object getSource() {
-        return super.getSource();
     }
 
     public int getStateChange() {
