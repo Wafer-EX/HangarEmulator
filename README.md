@@ -14,7 +14,7 @@ This is a very raw and simple J2ME-emulator that let you play some old games mad
 - Experimental OpenGL support through LWJGL 3 (extremely raw)
 
 ## Requirements
-- Java Development Kit 21
+- Java Development Kit 17
 - ~512 MB free RAM
 - OpenGL 4.6 (if you prefer use OpenGL instead of Swing)
 ## Build
