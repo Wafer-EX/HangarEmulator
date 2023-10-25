@@ -48,10 +48,12 @@ public class HangarClassVisitor extends ClassVisitor {
         };
     }
 
-    public static InputStream getResource(Class inputClass, String resourcePath) {
+    @SuppressWarnings("unused")
+    public static InputStream getResource(Class<?> inputClass, String resourcePath) {
         return MIDletResources.getResource(resourcePath);
     }
 
+    @SuppressWarnings("unused")
     public static String getProperty(String key) {
         return HangarState.getProperties().getProperty(key);
     }
