@@ -24,11 +24,11 @@ public class AudioClip {
     public static final int TYPE_MIDI = 3;
 
     public AudioClip(int type, byte[] audioData, int audioOffset, int audioLength) {
-        // TODO: write method logic
+        // TODO: write constructor logic
     }
 
     public AudioClip(int type, String filename) throws IOException {
-        // TODO: write method logic
+        // TODO: write constructor logic
     }
 
     public void play(int loop, int volume) {

@@ -26,7 +26,7 @@ import javax.sound.sampled.Clip;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class WavPlayer extends ExtendedPlayer {
+public class WavPlayer extends AbstractPlayer {
     private Clip clip;
     private byte[] audioSource;
 

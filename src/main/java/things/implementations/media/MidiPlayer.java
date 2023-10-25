@@ -24,7 +24,7 @@ import javax.sound.midi.Sequencer;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 
-public class MidiPlayer extends ExtendedPlayer {
+public class MidiPlayer extends AbstractPlayer {
     private Sequencer sequencer;
     private byte[] audioSource;
 
