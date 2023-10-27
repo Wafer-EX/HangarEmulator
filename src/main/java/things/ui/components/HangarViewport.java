@@ -25,9 +25,8 @@ import things.ui.listeners.HangarDisplayableListener;
 import things.ui.components.wrappers.HangarFormWrapper;
 import things.ui.components.wrappers.HangarListWrapper;
 
+import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;

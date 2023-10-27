@@ -46,6 +46,10 @@ public class Alert extends Screen {
         return FOREVER;
     }
 
+    public int getTimeout() {
+        return timeout;
+    }
+
     public void setTimeout(int time) throws IllegalArgumentException {
         if (time < 0 && time != FOREVER) {
             throw new IllegalArgumentException();
@@ -99,7 +103,7 @@ public class Alert extends Screen {
     @Override
     public void removeCommand(Command cmd) {
         commandList.remove(cmd);
-        if (commandList.size() == 0) {
+        if (commandList.isEmpty()) {
             commandList.add(DISMISS_COMMAND);
         }
     }
