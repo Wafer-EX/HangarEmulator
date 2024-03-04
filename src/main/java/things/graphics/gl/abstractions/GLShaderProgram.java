@@ -23,6 +23,7 @@ import java.io.InputStreamReader;
 
 import static org.lwjgl.opengl.GL46.*;
 
+// TODO: dispose
 public class GLShaderProgram {
     private final int identifier;
 

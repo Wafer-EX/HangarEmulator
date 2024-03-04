@@ -18,6 +18,7 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
+// TODO: dispose
 public class GLFramebuffer {
     private final int identifier;
 

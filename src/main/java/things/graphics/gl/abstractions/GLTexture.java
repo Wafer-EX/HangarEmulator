@@ -21,6 +21,7 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL46.*;
 
 // TODO: check this and use
+// TODO: dispose
 public class GLTexture {
     private int identifier;
     private int width;
