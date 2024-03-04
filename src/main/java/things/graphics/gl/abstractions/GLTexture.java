@@ -21,12 +21,12 @@ import java.nio.ByteBuffer;
 import static org.lwjgl.opengl.GL46.*;
 
 // TODO: check this and use
-public class TextureObject {
+public class GLTexture {
     private int identifier;
     private int width;
     private int height;
 
-    public TextureObject(int width, int height, int internalFormat, int pixelFormat, int pixelType) {
+    public GLTexture(int width, int height, int internalFormat, int pixelFormat, int pixelType) {
         this.width = width;
         this.height = height;
         this.identifier = glGenTextures();
@@ -35,7 +35,7 @@ public class TextureObject {
         glTexImage2D(GL_TEXTURE_2D, 0, internalFormat, width, height, 0, pixelFormat, pixelType, (ByteBuffer) null);
     }
 
-    public TextureObject(String path) {
+    public GLTexture(String path) {
         // TODO: write method logic
     }
 

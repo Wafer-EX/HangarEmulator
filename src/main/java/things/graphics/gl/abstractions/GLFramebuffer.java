@@ -18,19 +18,19 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class FramebufferObject {
+public class GLFramebuffer {
     private final int identifier;
 
-    public FramebufferObject() {
+    public GLFramebuffer() {
         identifier = glGenFramebuffers();
         bind();
     }
 
-    private FramebufferObject(int identifier) {
+    private GLFramebuffer(int identifier) {
         this.identifier = identifier;
     }
 
-    public void attachTexture(TextureObject texture, int attachment) {
+    public void attachTexture(GLTexture texture, int attachment) {
         glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getIdentifier(), 0);
     }
 
@@ -42,7 +42,7 @@ public class FramebufferObject {
         return identifier;
     }
 
-    public static FramebufferObject getScreen() {
-        return new FramebufferObject(0);
+    public static GLFramebuffer getScreen() {
+        return new GLFramebuffer(0);
     }
 }

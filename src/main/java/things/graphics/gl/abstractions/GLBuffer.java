@@ -18,13 +18,13 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class VertexBufferObject {
+public class GLBuffer {
     private final int target;
     private final int identifier;
     private int count;
     private int length;
 
-    public VertexBufferObject(int target, float[] data) {
+    public GLBuffer(int target, float[] data) {
         this.target = target;
 
         identifier = glGenBuffers();

@@ -19,7 +19,7 @@ package things.ui.components.wrappers.canvas;
 import org.lwjgl.opengl.awt.GLData;
 import things.HangarState;
 import things.graphics.gl.HangarGLGraphicsProvider;
-import things.graphics.gl.abstractions.FramebufferObject;
+import things.graphics.gl.abstractions.GLFramebuffer;
 import things.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
 import things.utils.SystemUtils;
 
@@ -37,7 +37,7 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
         super(canvas);
         
         this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider(FramebufferObject.getScreen());
+        this.graphicsProvider = new HangarGLGraphicsProvider(GLFramebuffer.getScreen());
 
         glCanvas.setFocusable(false);
         glCanvas.setPreferredSize(this.getPreferredSize());

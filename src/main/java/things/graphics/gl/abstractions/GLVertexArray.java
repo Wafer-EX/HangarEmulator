@@ -18,10 +18,10 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class VertexArrayObject {
+public class GLVertexArray {
     private final int identifier;
 
-    public VertexArrayObject() {
+    public GLVertexArray() {
         identifier = glGenVertexArrays();
         bind();
     }

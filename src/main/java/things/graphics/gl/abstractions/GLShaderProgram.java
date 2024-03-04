@@ -23,10 +23,10 @@ import java.io.InputStreamReader;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class ShaderProgram {
+public class GLShaderProgram {
     private final int identifier;
 
-    public ShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
+    public GLShaderProgram(String vertexShaderPath, String fragmentShaderPath) {
         CharSequence vertexShaderSource = readShaderFile(vertexShaderPath);
         CharSequence fragmentShaderSource = readShaderFile(fragmentShaderPath);
 
@@ -77,7 +77,7 @@ public class ShaderProgram {
     private CharSequence readShaderFile(String name) {
         // TODO: improve code quality?
         try {
-            var resource = ShaderProgram.class.getResourceAsStream(name);
+            var resource = GLShaderProgram.class.getResourceAsStream(name);
             var bufferedReader = new BufferedReader(new InputStreamReader(resource));
             var stringBuilder = new StringBuilder();
             var line = bufferedReader.readLine();
