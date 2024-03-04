@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,10 +18,11 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class VertexArrayObject {
+// TODO: dispose
+public class GLVertexArray {
     private final int identifier;
 
-    public VertexArrayObject() {
+    public GLVertexArray() {
         identifier = glGenVertexArrays();
         bind();
     }

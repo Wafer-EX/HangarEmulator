@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Kirill Lomakin
+ * Copyright 2022-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,10 @@ public class Alert extends Screen {
 
     public int getDefaultTimeout() {
         return FOREVER;
+    }
+
+    public int getTimeout() {
+        return timeout;
     }
 
     public void setTimeout(int time) throws IllegalArgumentException {
@@ -99,7 +103,7 @@ public class Alert extends Screen {
     @Override
     public void removeCommand(Command cmd) {
         commandList.remove(cmd);
-        if (commandList.size() == 0) {
+        if (commandList.isEmpty()) {
             commandList.add(DISMISS_COMMAND);
         }
     }

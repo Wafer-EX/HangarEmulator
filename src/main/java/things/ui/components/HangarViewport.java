@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Kirill Lomakin
+ * Copyright 2022-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,8 @@ import things.ui.listeners.HangarDisplayableListener;
 import things.ui.components.wrappers.HangarFormWrapper;
 import things.ui.components.wrappers.HangarListWrapper;
 
+import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
-import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;

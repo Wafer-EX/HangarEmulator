@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Kirill Lomakin
+ * Copyright 2022-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,9 @@
 package javax.microedition.rms;
 
 public interface RecordListener {
-    void recordAdded(RecordStore recordStore, int recordId);
+    public void recordAdded(RecordStore recordStore, int recordId);
 
-    void recordChanged(RecordStore recordStore, int recordId);
+    public void recordChanged(RecordStore recordStore, int recordId);
 
-    void recordDeleted(RecordStore recordStore, int recordId);
+    public void recordDeleted(RecordStore recordStore, int recordId);
 }

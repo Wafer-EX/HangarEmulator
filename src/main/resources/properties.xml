@@ -5,7 +5,7 @@
     <!-- Hangar Emulator properties -->
     <entry key="hangaremulator.version">0.0.1-alpha</entry>
     <entry key="hangaremulator.github">https://github.com/Wafer-EX/HangarEmulator</entry>
-    <entry key="hangaremulator.author">Kirill Lomakin (minebuilder445@gmail.com)</entry>
+    <entry key="hangaremulator.author">Wafer EX</entry>
 
     <!-- Java ME properties -->
     <entry key="microedition.profiles">MIDP-2.0</entry>

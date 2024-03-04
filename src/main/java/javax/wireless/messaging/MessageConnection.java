@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Kirill Lomakin
+ * Copyright 2022-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.io.InterruptedIOException;
 
 public interface MessageConnection extends Connection {
-    public static final String TEXT_MESSAGE = "text";
+    static final String TEXT_MESSAGE = "text";
     public static final String BINARY_MESSAGE = "binary";
 
     public Message newMessage(String type);

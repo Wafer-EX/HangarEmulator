@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,41 +18,32 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class VertexBufferObject {
-    private final int target;
+// TODO: dispose
+public class GLFramebuffer {
     private final int identifier;
-    private int count;
-    private int length;
 
-    public VertexBufferObject(int target, float[] data) {
-        this.target = target;
-
-        identifier = glGenBuffers();
-        setBufferData(data);
+    public GLFramebuffer() {
+        identifier = glGenFramebuffers();
+        bind();
     }
 
-    public void setBufferData(float[] data) {
-        count = data != null ? data.length : 0;
-        length = data != null ? data.length * 4 : 0;
+    private GLFramebuffer(int identifier) {
+        this.identifier = identifier;
+    }
 
-        glBindBuffer(target, identifier);
-        // TODO: That's wrong, change it
-        glBufferData(target, data != null ? data : new float[1], GL_DYNAMIC_DRAW);
+    public void attachTexture(GLTexture texture, int attachment) {
+        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getIdentifier(), 0);
     }
 
     public void bind() {
-        glBindBuffer(target, identifier);
+        glBindFramebuffer(GL_FRAMEBUFFER, identifier);
     }
 
     public int getIdentifier() {
         return identifier;
     }
 
-    public int getCount() {
-        return count;
-    }
-
-    public int getLength() {
-        return length;
+    public static GLFramebuffer getScreen() {
+        return new GLFramebuffer(0);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,31 +18,42 @@ package things.graphics.gl.abstractions;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class FramebufferObject {
+// TODO: dispose
+public class GLBuffer {
+    private final int target;
     private final int identifier;
+    private int count;
+    private int length;
 
-    public FramebufferObject() {
-        identifier = glGenFramebuffers();
-        bind();
+    public GLBuffer(int target, float[] data) {
+        this.target = target;
+
+        identifier = glGenBuffers();
+        setBufferData(data);
     }
 
-    private FramebufferObject(int identifier) {
-        this.identifier = identifier;
-    }
+    public void setBufferData(float[] data) {
+        count = data != null ? data.length : 0;
+        length = data != null ? data.length * 4 : 0;
 
-    public void attachTexture(TextureObject texture, int attachment) {
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getIdentifier(), 0);
+        glBindBuffer(target, identifier);
+        // TODO: That's wrong, change it
+        glBufferData(target, data != null ? data : new float[1], GL_DYNAMIC_DRAW);
     }
 
     public void bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, identifier);
+        glBindBuffer(target, identifier);
     }
 
     public int getIdentifier() {
         return identifier;
     }
 
-    public static FramebufferObject getScreen() {
-        return new FramebufferObject(0);
+    public int getCount() {
+        return count;
+    }
+
+    public int getLength() {
+        return length;
     }
 }
