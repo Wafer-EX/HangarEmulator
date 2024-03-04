@@ -3,7 +3,7 @@ plugins {
     id 'java'
 }
 
-group = 'org.lisowolf'
+group = 'org.wafer-ex'
 version = '0.0.1-alpha'
 
 jar {
