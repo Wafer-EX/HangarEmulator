@@ -37,13 +37,17 @@ public class RenderTarget {
         glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
     }
 
+    public GLTexture getTexture() {
+        return glTexture;
+    }
+
     public void use() {
         glFramebuffer.bind();
         glViewport(0, 0, width, height);
     }
 
-    public static void useDefault(int width, int height) {
+    public static void bindDefault(int screenWidth, int screenHeight) {
         glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, width, height);
+        glViewport(0, 0, screenWidth, screenHeight);
     }
 }

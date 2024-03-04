@@ -46,8 +46,7 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
     private final Rectangle clip;
     private DirectGraphics directGraphics;
 
-    protected GLFramebuffer glFramebuffer;
-    protected GLTexture glTextureFramebuffer;
+    protected RenderTarget renderTarget;
 
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
@@ -58,27 +57,21 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
     private static boolean isShaderCompiled = false;
 
     public HangarGLGraphicsProvider() {
-        this(GLFramebuffer.getScreen());
+        this(null);
         var profile = HangarState.getProfileManager().getCurrentProfile();
         int width = profile.getResolution().width;
         int height = profile.getResolution().height;
 
         glActions.add(() -> {
-            glFramebuffer = new GLFramebuffer();
-
-            glTextureFramebuffer = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-            glTextureFramebuffer.setParameter(GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTextureFramebuffer.setParameter(GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            glFramebuffer.attachTexture(glTextureFramebuffer, GL_COLOR_ATTACHMENT0);
+            renderTarget = new RenderTarget(width, height);
         });
     }
 
-    public HangarGLGraphicsProvider(GLFramebuffer frameBuffer) {
+    public HangarGLGraphicsProvider(RenderTarget renderTarget) {
         this.glActions = new ArrayList<>();
         this.color = new Color(0);
         this.clip = new Rectangle(0, 0, 240, 320);
-        this.glFramebuffer = frameBuffer;
+        this.renderTarget = renderTarget;
 
         glActions.add(() -> {
             if (!isShaderCompiled) {
@@ -162,7 +155,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
                     }
 
                     glActions.add(() -> {
-                        glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+                        if (renderTarget != null) {
+                            renderTarget.use();
+                        }
+                        else {
+                            RenderTarget.bindDefault(240, 320);
+                        }
 
                         glBuffer.setBufferData(points);
 
@@ -341,7 +339,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
 
         glActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+            if (renderTarget != null) {
+                renderTarget.use();
+            }
+            else {
+                RenderTarget.bindDefault(240, 320);
+            }
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -365,7 +368,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
 
         glActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+            if (renderTarget != null) {
+                renderTarget.use();
+            }
+            else {
+                RenderTarget.bindDefault(240, 320);
+            }
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -434,8 +442,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
         }
 
         glActions.add(() -> {
-
-            glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+            if (renderTarget != null) {
+                renderTarget.use();
+            }
+            else {
+                RenderTarget.bindDefault(240, 320);
+            }
 
             glBuffer.setBufferData(ListUtils.toArray(points));
 
@@ -482,7 +494,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
         var imageBuffer = img.convertToByteBuffer();
 
         glActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+            if (renderTarget != null) {
+                renderTarget.use();
+            }
+            else {
+                RenderTarget.bindDefault(240, 320);
+            }
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -544,7 +561,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
 
         glActions.add(() -> {
-            glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+            if (renderTarget != null) {
+                renderTarget.use();
+            }
+            else {
+                RenderTarget.bindDefault(240, 320);
+            }
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -587,7 +609,12 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
 
             glActions.addAll(graphicsProvider.glActions);
             glActions.add(() -> {
-                glBindFramebuffer(GL_FRAMEBUFFER, glFramebuffer.getIdentifier());
+                if (renderTarget != null) {
+                    renderTarget.use();
+                }
+                else {
+                    RenderTarget.bindDefault(240, 320);
+                }
 
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -605,7 +632,7 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
                 spriteShaderProgram.setUniform("sprite", 0);
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());
 
-                glBindTexture(GL_TEXTURE_2D, graphicsProvider.glTextureFramebuffer.getIdentifier());
+                glBindTexture(GL_TEXTURE_2D, graphicsProvider.renderTarget.getTexture().getIdentifier());
                 glActiveTexture(GL_TEXTURE0);
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
