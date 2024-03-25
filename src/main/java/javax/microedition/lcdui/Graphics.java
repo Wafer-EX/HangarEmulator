@@ -18,6 +18,8 @@ package javax.microedition.lcdui;
 
 import things.graphics.HangarGraphicsProvider;
 
+import java.awt.*;
+
 public class Graphics {
     public static final int HCENTER = 1;
     public static final int VCENTER = 2;
@@ -52,19 +54,19 @@ public class Graphics {
     }
 
     public int getColor() {
-        return graphicsProvider.getColor();
+        return graphicsProvider.getColor().getRGB();
     }
 
     public int getRedComponent() {
-        return graphicsProvider.getRedComponent();
+        return graphicsProvider.getColor().getRed();
     }
 
     public int getGreenComponent() {
-        return graphicsProvider.getGreenComponent();
+        return graphicsProvider.getColor().getGreen();
     }
 
     public int getBlueComponent() {
-        return graphicsProvider.getBlueComponent();
+        return graphicsProvider.getColor().getBlue();
     }
 
     public int getGrayScale() {
@@ -72,11 +74,11 @@ public class Graphics {
     }
 
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        graphicsProvider.setColor(red, green, blue);
+        graphicsProvider.setColor(new Color(red, green, blue));
     }
 
     public void setColor(int RGB) {
-        graphicsProvider.setColor(RGB);
+        graphicsProvider.setColor(new Color(RGB));
     }
 
     public void setGrayScale(int value) throws IllegalArgumentException {

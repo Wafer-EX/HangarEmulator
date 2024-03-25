@@ -154,42 +154,15 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getColor() {
-        return seGraphics.getColor().getRGB();
-    }
-
-    @Override
-    public int getRedComponent() {
-        return seGraphics.getColor().getRed();
-    }
-
-    @Override
-    public int getGreenComponent() {
-        return seGraphics.getColor().getGreen();
-    }
-
-    @Override
-    public int getBlueComponent() {
-        return seGraphics.getColor().getBlue();
-    }
-
-    @Override
     public int getGrayScale() {
         // TODO: write method logic
         return 0;
     }
 
     @Override
-    public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            throw new IllegalArgumentException();
-        }
-        seGraphics.setColor(new Color(red, green, blue));
-    }
-
-    @Override
-    public void setColor(int RGB) {
-        seGraphics.setColor(new Color(RGB, false));
+    public void setColor(Color color) {
+        super.setColor(color);
+        seGraphics.setColor(color);
     }
 
     @Override

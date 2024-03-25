@@ -21,12 +21,14 @@ import com.nokia.mid.ui.DirectGraphics;
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.*;
 
 public abstract class HangarGraphicsProvider {
     // TODO: simplify
     public abstract DirectGraphics getDirectGraphics(Graphics graphics);
 
     private int translateX = 0, translateY = 0;
+    private Color color = Color.BLACK;
 
     public void translate(int x, int y) {
         translateX += x;
@@ -41,19 +43,15 @@ public abstract class HangarGraphicsProvider {
         return translateY;
     }
 
-    public abstract int getColor();
+    public Color getColor() {
+        return color;
+    }
 
-    public abstract int getRedComponent();
-
-    public abstract int getGreenComponent();
-
-    public abstract int getBlueComponent();
+    public void setColor(Color color) {
+        this.color = color;
+    }
 
     public abstract int getGrayScale();
-
-    public abstract void setColor(int red, int green, int blue) throws IllegalArgumentException;
-
-    public abstract void setColor(int RGB);
 
     public abstract void setGrayScale(int value) throws IllegalArgumentException;
 

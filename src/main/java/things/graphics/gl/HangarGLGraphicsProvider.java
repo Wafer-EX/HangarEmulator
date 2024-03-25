@@ -222,39 +222,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getColor() {
-        return color.getRGB();
-    }
-
-    @Override
-    public int getRedComponent() {
-        return color.getRed();
-    }
-
-    @Override
-    public int getGreenComponent() {
-        return color.getGreen();
-    }
-
-    @Override
-    public int getBlueComponent() {
-        return color.getBlue();
-    }
-
-    @Override
     public int getGrayScale() {
         // TODO: write method logic
         return 0;
-    }
-
-    @Override
-    public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        color = new Color(red, green, blue);
-    }
-
-    @Override
-    public void setColor(int RGB) {
-        color = new Color(RGB, false);
     }
 
     @Override
