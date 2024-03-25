@@ -41,7 +41,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
 
     private final ArrayList<HangarGLAction> glActions;
-    private Color color;
     private final Rectangle clip;
     private DirectGraphics directGraphics;
 
@@ -68,7 +67,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     public HangarGLGraphicsProvider(RenderTarget renderTarget) {
         this.glActions = new ArrayList<>();
-        this.color = new Color(0);
         this.clip = new Rectangle(0, 0, 240, 320);
         this.renderTarget = renderTarget;
 
@@ -99,6 +97,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public DirectGraphics getDirectGraphics(Graphics graphics) {
         if (directGraphics == null) {
             directGraphics = new DirectGraphics() {
+                // TODO: remove this from here
+                private Color color;
+
                 @Override
                 public void setARGBColor(int argbColor) {
                     color = new Color(argbColor, true);
@@ -285,7 +286,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2) {
+    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
@@ -314,7 +315,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean isFilled) {
+    public void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled) {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
@@ -352,12 +353,12 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, boolean isFilled) {
+    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled) {
         // TODO: write method logic
     }
 
     @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, boolean isFilled) {
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
         float halfWidth = (float) width / 2;
         float halfHeight = (float) height / 2;
 
@@ -412,22 +413,22 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
+    public void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor, Color color) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
         // TODO: write method logic
     }
 
     @Override
-    public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
+    public void drawChar(char character, int x, int y, int anchor, Color color) throws IllegalArgumentException {
         // TODO: write method logic
     }
 
     @Override
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor, Color color) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
         // TODO: write method logic
     }
 
@@ -501,7 +502,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color) {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;

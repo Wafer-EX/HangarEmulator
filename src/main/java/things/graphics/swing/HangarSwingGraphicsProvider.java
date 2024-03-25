@@ -159,12 +159,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void setColor(Color color) {
-        super.setColor(color);
-        seGraphics.setColor(color);
-    }
-
-    @Override
     public void setGrayScale(int value) throws IllegalArgumentException {
         if (value < 0 || value > 255) {
             throw new IllegalArgumentException();
@@ -251,12 +245,14 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2) {
+    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
+        seGraphics.setColor(color);
         seGraphics.drawLine(x1, y1, x2, y2);
     }
 
     @Override
-    public void drawRectangle(int x, int y, int width, int height, boolean isFilled) {
+    public void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
         if (isFilled) {
             seGraphics.fillRect(x, y, width, height);
         }
@@ -266,7 +262,8 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, boolean isFilled) {
+    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
         if (isFilled) {
             seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
@@ -276,7 +273,8 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, boolean isFilled) {
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
         if (isFilled) {
             seGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
         }
@@ -286,7 +284,8 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
+    public void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException {
+        seGraphics.setColor(color);
         if (str == null) {
             throw new NullPointerException();
         }
@@ -298,7 +297,8 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor, Color color) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        seGraphics.setColor(color);
         if (str == null) {
             throw new NullPointerException();
         }
@@ -307,21 +307,23 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
                 len = str.length() - offset;
             }
             String substring = str.substring(offset, offset + len);
-            drawString(substring, x, y, anchor);
+            drawString(substring, x, y, anchor, color);
         }
     }
 
     @Override
-    public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
-        drawString(String.valueOf(character), x, y, anchor);
+    public void drawChar(char character, int x, int y, int anchor, Color color) throws IllegalArgumentException {
+        seGraphics.setColor(color);
+        drawString(String.valueOf(character), x, y, anchor, color);
     }
 
     @Override
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor, Color color) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
+        seGraphics.setColor(color);
         if (data == null) {
             throw new NullPointerException();
         }
-        drawSubstring(new String(data), offset, length, x, y, anchor);
+        drawSubstring(new String(data), offset, length, x, y, anchor, color);
     }
 
     @Override
@@ -356,7 +358,8 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
+    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color) {
+        seGraphics.setColor(color);
         int[] xPoints = new int[] { x1, x2, x3 };
         int[] yPoints = new int[] { y1, y2, y3 };
         seGraphics.fillPolygon(xPoints, yPoints, 3);
