@@ -130,27 +130,35 @@ public class Graphics {
     }
 
     public void fillRect(int x, int y, int width, int height) {
-        graphicsProvider.fillRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRectangle(x, y, width, height, true);
+        }
     }
 
     public void drawRect(int x, int y, int width, int height) {
-        graphicsProvider.drawRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRectangle(x, y, width, height, false);
+        }
     }
 
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        graphicsProvider.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, false);
+        }
     }
 
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        graphicsProvider.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, true);
+        }
     }
 
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.fillArc(x, y, width, height, startAngle, arcAngle);
+        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, true);
     }
 
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle);
+        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, false);
     }
 
     public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {

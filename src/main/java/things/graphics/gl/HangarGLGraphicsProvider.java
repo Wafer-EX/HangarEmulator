@@ -314,12 +314,13 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void fillRect(int x, int y, int width, int height) {
+    public void drawRectangle(int x, int y, int width, int height, boolean isFilled) {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        glActions.add(() -> {
+        if (isFilled) {
+            glActions.add(() -> {
             if (renderTarget != null) {
                 renderTarget.use();
             }
@@ -343,26 +344,20 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             glUseProgram(0);
-        });
+            });
+        }
+        else {
+            // TODO: implement it
+        }
     }
 
     @Override
-    public void drawRect(int x, int y, int width, int height) {
+    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, boolean isFilled) {
         // TODO: write method logic
     }
 
     @Override
-    public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        // TODO: write method logic
-    }
-
-    @Override
-    public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        // TODO: write method logic
-    }
-
-    @Override
-    public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, boolean isFilled) {
         float halfWidth = (float) width / 2;
         float halfHeight = (float) height / 2;
 
@@ -370,7 +365,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
-        // TODO: use startAngle and arcAngle here
         float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
         float angle = 0;
 
@@ -393,7 +387,8 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             prevY = currY;
         }
 
-        glActions.add(() -> {
+        if (isFilled) {
+            glActions.add(() -> {
             if (renderTarget != null) {
                 renderTarget.use();
             }
@@ -409,12 +404,11 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
             glUseProgram(0);
-        });
-    }
-
-    @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        // TODO: write method logic
+            });
+        }
+        else {
+            // TODO: implement it
+        }
     }
 
     @Override

@@ -35,7 +35,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     private final Graphics2D seGraphics;
     private final BufferedImage seImage;
     private java.awt.Font seFont;
-    private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
     private DirectGraphics directGraphics;
 
@@ -257,41 +256,33 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void fillRect(int x, int y, int width, int height) {
-        if (width > 0 && height > 0) {
+    public void drawRectangle(int x, int y, int width, int height, boolean isFilled) {
+        if (isFilled) {
             seGraphics.fillRect(x, y, width, height);
         }
-    }
-
-    @Override
-    public void drawRect(int x, int y, int width, int height) {
-        if (width > 0 && height > 0) {
+        else {
             seGraphics.drawRect(x, y, width, height);
         }
     }
 
     @Override
-    public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        if (width > 0 && height > 0) {
+    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, boolean isFilled) {
+        if (isFilled) {
+            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
+        else {
             seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
     }
 
     @Override
-    public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        if (width > 0 && height > 0) {
-            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, boolean isFilled) {
+        if (isFilled) {
+            seGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
         }
-    }
-
-    @Override
-    public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        seGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
-    }
-
-    @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        seGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
+        else {
+            seGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
+        }
     }
 
     @Override

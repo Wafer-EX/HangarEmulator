@@ -77,17 +77,11 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawLine(int x1, int y1, int x2, int y2);
 
-    public abstract void fillRect(int x, int y, int width, int height);
+    public abstract void drawRectangle(int x, int y, int width, int height, boolean isFilled);
 
-    public abstract void drawRect(int x, int y, int width, int height);
+    public abstract void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, boolean isFilled);
 
-    public abstract void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
-
-    public abstract void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
-
-    public abstract void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle);
-
-    public abstract void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle);
+    public abstract void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, boolean isFilled);
 
     public abstract void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException;
 
