@@ -19,7 +19,7 @@ package things.graphics.gl;
 import things.graphics.gl.abstractions.GLFramebuffer;
 import things.graphics.gl.abstractions.GLTexture;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL33.*;
 
 // TODO: dispose
 public class RenderTarget {

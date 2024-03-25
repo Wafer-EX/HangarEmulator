@@ -28,7 +28,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL33.*;
 
 public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;

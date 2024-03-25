@@ -22,8 +22,8 @@ import things.graphics.gl.HangarGLAction;
 
 import java.util.ArrayList;
 
-import static org.lwjgl.opengl.GL.*;
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL.createCapabilities;
+import static org.lwjgl.opengl.GL33.*;
 
 public class HangarAWTGLCanvas extends AWTGLCanvas {
     private final ArrayList<HangarGLAction> glActionList;

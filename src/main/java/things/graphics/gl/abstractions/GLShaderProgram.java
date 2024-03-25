@@ -21,7 +21,7 @@ import org.joml.Matrix4f;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL33.*;
 
 // TODO: dispose
 public class GLShaderProgram {

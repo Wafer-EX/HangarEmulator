@@ -18,7 +18,7 @@ package things.graphics.gl.abstractions;
 
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL33.*;
 
 // TODO: check this and use
 // TODO: dispose
@@ -41,7 +41,9 @@ public class GLTexture {
     }
 
     public void setParameter(int name, int value) {
-        glTextureParameteri(identifier, name, value);
+        // TODO: check
+        glBindTexture(GL_TEXTURE_2D, identifier);
+        glTexParameteri(GL_TEXTURE_2D, name, value);
     }
 
     public void bind(int unit) {
