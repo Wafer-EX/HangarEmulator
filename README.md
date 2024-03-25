@@ -36,4 +36,4 @@ Linux:
 | LWJGL   | [Official page](https://www.lwjgl.org/)           |
 | JOML    | [GitHub](https://github.com/JOML-CI/JOML)         |
 ## License
-Copyright 2022-2023 Kirill Lomakin. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
+Copyright 2022-2024 Wafer EX. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
