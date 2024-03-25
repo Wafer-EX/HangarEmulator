@@ -16,7 +16,6 @@
 
 package things.graphics.gl;
 
-import com.nokia.mid.ui.DirectGraphics;
 import org.joml.Matrix4f;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
@@ -25,10 +24,8 @@ import things.graphics.gl.abstractions.*;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.ListUtils;
 import things.utils.microedition.ImageUtils;
-import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -42,7 +39,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     private final ArrayList<HangarGLAction> glActions;
     private final Rectangle clip;
-    private DirectGraphics directGraphics;
 
     protected RenderTarget renderTarget;
 
@@ -91,135 +87,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     public ArrayList<HangarGLAction> getGLActions() {
         return glActions;
-    }
-
-    @Override
-    public DirectGraphics getDirectGraphics(Graphics graphics) {
-        if (directGraphics == null) {
-            directGraphics = new DirectGraphics() {
-                // TODO: remove this from here
-                private Color color;
-
-                @Override
-                public void setARGBColor(int argbColor) {
-                    color = new Color(argbColor, true);
-                }
-
-                @Override
-                public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
-                    if (img == null) {
-                        throw new NullPointerException();
-                    }
-                    var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
-                    HangarGLGraphicsProvider.this.drawImage(image, x, y, anchor);
-                }
-
-                @Override
-                public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                    setARGBColor(argbColor);
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                    setARGBColor(argbColor);
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                    setARGBColor(argbColor);
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                    setARGBColor(argbColor);
-                    float r = color.getRed() / 255f;
-                    float g = color.getGreen() / 255f;
-                    float b = color.getBlue() / 255f;
-                    float a = color.getAlpha() / 255f;
-
-                    float[] points = new float[nPoints * 9];
-                    for (int i = 0; i < nPoints; i++) {
-                        int index = i * 9;
-                        points[index] = xPoints[i];
-                        points[index + 1] = yPoints[i];
-                        points[index + 2] = 0.0f;
-                        points[index + 3] = 0.0f;
-                        points[index + 4] = r;
-                        points[index + 5] = g;
-                        points[index + 6] = b;
-                        points[index + 7] = a;
-                        points[index + 8] = 1.0f;
-                    }
-
-                    glActions.add(() -> {
-                        if (renderTarget != null) {
-                            renderTarget.use();
-                        }
-                        else {
-                            RenderTarget.bindDefault(240, 320);
-                        }
-
-                        glBuffer.setBufferData(points);
-
-                        glEnable(GL_BLEND);
-                        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-                        glVertexArray.bind();
-                        spriteShaderProgram.use();
-                        spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
-
-                        glDrawArrays(GL_TRIANGLE_FAN, 0, nPoints);
-                        glDisable(GL_BLEND);
-                        glUseProgram(0);
-                    });
-                }
-
-                @Override
-                public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public int getNativePixelFormat() {
-                    // TODO: write method logic
-                    return 0;
-                }
-
-                @Override
-                public int getAlphaComponent() {
-                    return color.getAlpha();
-                }
-            };
-        }
-        return directGraphics;
     }
 
     @Override
@@ -443,6 +310,10 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         else {
             // TODO: implement it
         }
+    }
+
+    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, Color color, boolean isFilled) {
+        // TODO: write method logic
     }
 
     @Override

@@ -16,16 +16,11 @@
 
 package things.graphics;
 
-import com.nokia.mid.ui.DirectGraphics;
-
 import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 public abstract class HangarGraphicsProvider {
-    // TODO: simplify
-    public abstract DirectGraphics getDirectGraphics(Graphics graphics);
 
     private int translateX = 0, translateY = 0;
 
@@ -75,6 +70,8 @@ public abstract class HangarGraphicsProvider {
     public abstract void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled);
 
     public abstract void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled);
+
+    public abstract void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, Color color, boolean isFilled);
 
     public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 

@@ -16,6 +16,8 @@
 
 package com.nokia.mid.ui;
 
+import things.utils.nokia.DirectGraphicsUtils;
+
 import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -25,7 +27,98 @@ import java.io.ByteArrayInputStream;
 
 public class DirectUtils {
     public static DirectGraphics getDirectGraphics(Graphics g) {
-        return g.getGraphicsProvider().getDirectGraphics(g);
+        if (g == null || g.getGraphicsProvider() == null) {
+            throw new NullPointerException();
+        }
+        return new DirectGraphics() {
+            private Color argbColor;
+
+            @Override
+            public void setARGBColor(int argbColor) {
+                this.argbColor = new Color(argbColor, true);
+            }
+
+            @Override
+            public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
+                if (img == null) {
+                    throw new NullPointerException();
+                }
+                var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
+                g.getGraphicsProvider().drawImage(image, x, y, anchor);
+            }
+
+            @Override
+            public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+                setARGBColor(argbColor);
+                g.getGraphicsProvider().drawTriangle(x1, y1, x2, y2, x3, y3, this.argbColor, false);
+            }
+
+            @Override
+            public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
+                setARGBColor(argbColor);
+                g.getGraphicsProvider().drawTriangle(x1, y1, x2, y2, x3, y3, this.argbColor, true);
+            }
+
+            @Override
+            public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+                setARGBColor(argbColor);
+                g.getGraphicsProvider().drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints, this.argbColor, false);
+            }
+
+            @Override
+            public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
+                setARGBColor(argbColor);
+                g.getGraphicsProvider().drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints, this.argbColor, true);
+            }
+
+            @Override
+            public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                if (pixels == null) {
+                    throw new NullPointerException();
+                }
+                var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
+                image.setRGB(0, 0, width, height, pixels, offset, scanlength);
+                image = DirectGraphicsUtils.manipulateImage(image, manipulation);
+                g.getGraphicsProvider().drawImage(new Image(image, true), x, y, 0);
+            }
+
+            @Override
+            public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
+                // TODO: write method logic
+            }
+
+            @Override
+            public int getNativePixelFormat() {
+                // TODO: write method logic
+                return 0;
+            }
+
+            @Override
+            public int getAlphaComponent() {
+                // TODO: check it
+                return argbColor.getAlpha();
+            }
+        };
     }
 
     public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws ArrayIndexOutOfBoundsException, NullPointerException, IllegalArgumentException {
