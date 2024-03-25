@@ -18,6 +18,8 @@ package javax.microedition.lcdui;
 
 import things.graphics.HangarGraphicsProvider;
 
+import java.awt.*;
+
 public class Graphics {
     public static final int HCENTER = 1;
     public static final int VCENTER = 2;
@@ -30,9 +32,11 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final HangarGraphicsProvider graphicsProvider;
+    private Color color;
 
     public Graphics(HangarGraphicsProvider graphicsProvider) {
         this.graphicsProvider = graphicsProvider;
+        this.color = Color.BLACK;
     }
 
     public HangarGraphicsProvider getGraphicsProvider() {
@@ -52,19 +56,19 @@ public class Graphics {
     }
 
     public int getColor() {
-        return graphicsProvider.getColor();
+        return color.getRGB();
     }
 
     public int getRedComponent() {
-        return graphicsProvider.getRedComponent();
+        return color.getRed();
     }
 
     public int getGreenComponent() {
-        return graphicsProvider.getGreenComponent();
+        return color.getGreen();
     }
 
     public int getBlueComponent() {
-        return graphicsProvider.getBlueComponent();
+        return color.getBlue();
     }
 
     public int getGrayScale() {
@@ -72,11 +76,11 @@ public class Graphics {
     }
 
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        graphicsProvider.setColor(red, green, blue);
+        color = new Color(red, green, blue);
     }
 
     public void setColor(int RGB) {
-        graphicsProvider.setColor(RGB);
+        color = new Color(RGB);
     }
 
     public void setGrayScale(int value) throws IllegalArgumentException {
@@ -124,47 +128,67 @@ public class Graphics {
     }
 
     public void drawLine(int x1, int y1, int x2, int y2) {
-        graphicsProvider.drawLine(x1, y1, x2, y2);
+        graphicsProvider.drawLine(x1, y1, x2, y2, color);
     }
 
     public void fillRect(int x, int y, int width, int height) {
-        graphicsProvider.fillRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRectangle(x, y, width, height, color, true);
+        }
     }
 
     public void drawRect(int x, int y, int width, int height) {
-        graphicsProvider.drawRect(x, y, width, height);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRectangle(x, y, width, height, color, false);
+        }
     }
 
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        graphicsProvider.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, color, false);
+        }
     }
 
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        graphicsProvider.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, color, true);
+        }
     }
 
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.fillArc(x, y, width, height, startAngle, arcAngle);
+        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, color, true);
     }
 
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle);
+        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, color, false);
     }
 
     public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
-        graphicsProvider.drawString(str, x, y, anchor);
+        graphicsProvider.drawString(str, x, y, anchor, color);
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawSubstring(str, offset, len, x, y, anchor);
+        if (str == null) {
+            throw new NullPointerException();
+        }
+        if (offset < str.length()) {
+            if (offset + len > str.length()) {
+                len = str.length() - offset;
+            }
+            String substring = str.substring(offset, offset + len);
+            drawString(substring, x, y, anchor);
+        }
     }
 
     public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
-        graphicsProvider.drawChar(character, x, y, anchor);
+        drawString(String.valueOf(character), x, y, anchor);
     }
 
     public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawChars(data, offset, length, x, y, anchor);
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
@@ -180,7 +204,7 @@ public class Graphics {
     }
 
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-        graphicsProvider.fillTriangle(x1, y1, x2, y2, x3, y3);
+        graphicsProvider.drawTriangle(x1, y1, x2, y2, x3, y3, color, true);
     }
 
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
@@ -188,6 +212,7 @@ public class Graphics {
     }
 
     public int getDisplayColor(int color) {
-        return graphicsProvider.getDisplayColor(color);
+        // TODO: check it
+        return color;
     }
 }

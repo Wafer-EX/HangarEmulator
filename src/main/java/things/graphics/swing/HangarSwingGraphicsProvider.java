@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +16,11 @@
 
 package things.graphics.swing;
 
-import com.nokia.mid.ui.DirectGraphics;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.utils.microedition.FontUtils;
 import things.utils.microedition.ImageUtils;
-import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.microedition.lcdui.Image;
 import java.awt.*;
@@ -31,13 +29,11 @@ import java.awt.image.BufferedImage;
 import static javax.microedition.lcdui.Graphics.DOTTED;
 import static javax.microedition.lcdui.Graphics.SOLID;
 
-public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
+public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     private final Graphics2D seGraphics;
     private final BufferedImage seImage;
     private java.awt.Font seFont;
-    private int translateX = 0, translateY = 0;
     private int selectedStroke = SOLID;
-    private DirectGraphics directGraphics;
 
     public HangarSwingGraphicsProvider(java.awt.Graphics seGraphics, BufferedImage seImage) {
         this.seGraphics = HangarState.applyAntiAliasing(seGraphics);
@@ -45,162 +41,15 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     }
 
     @Override
-    public DirectGraphics getDirectGraphics(javax.microedition.lcdui.Graphics graphics) {
-        if (directGraphics == null) {
-            directGraphics = new DirectGraphics() {
-                @Override
-                public void setARGBColor(int argbColor) {
-                    seGraphics.setColor(new Color(argbColor, true));
-                }
-
-                @Override
-                public void drawImage(Image img, int x, int y, int anchor, int manipulation) throws IllegalArgumentException, NullPointerException {
-                    if (img == null) {
-                        throw new NullPointerException();
-                    }
-                    var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
-                    HangarSwingGraphicsProvider.this.drawImage(image, x, y, anchor);
-                }
-
-                @Override
-                public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                    var xPoints = new int[]{x1, x2, x3};
-                    var yPoints = new int[]{y1, y2, y3};
-                    setARGBColor(argbColor);
-                    seGraphics.drawPolygon(xPoints, yPoints, 3);
-                }
-
-                @Override
-                public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                    var xPoints = new int[]{x1, x2, x3};
-                    var yPoints = new int[]{y1, y2, y3};
-                    setARGBColor(argbColor);
-                    seGraphics.fillPolygon(xPoints, yPoints, 3);
-                }
-
-                @Override
-                public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                    if (xPoints == null || yPoints == null) {
-                        throw new NullPointerException();
-                    }
-                    setARGBColor(argbColor);
-                    seGraphics.drawPolygon(xPoints, yPoints, argbColor);
-                }
-
-                @Override
-                public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                    if (xPoints == null || yPoints == null) {
-                        throw new NullPointerException();
-                    }
-                    setARGBColor(argbColor);
-                    seGraphics.fillPolygon(xPoints, yPoints, nPoints);
-                }
-
-                @Override
-                public void drawPixels(int[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    if (pixels == null) {
-                        throw new NullPointerException();
-                    }
-                    var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
-                    image.setRGB(0, 0, width, height, pixels, offset, scanlength);
-                    image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                    HangarSwingGraphicsProvider.this.drawImage(new Image(image, true), x, y, 0);
-                }
-
-                @Override
-                public void drawPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void drawPixels(short[] pixels, boolean transparency, int offset, int scanlength, int x, int y, int width, int height, int manipulation, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(int[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(byte[] pixels, byte[] transparencyMask, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public void getPixels(short[] pixels, int offset, int scanlength, int x, int y, int width, int height, int format) throws NullPointerException, ArrayIndexOutOfBoundsException, IllegalArgumentException {
-                    // TODO: write method logic
-                }
-
-                @Override
-                public int getNativePixelFormat() {
-                    // TODO: write method logic
-                    return 0;
-                }
-
-                @Override
-                public int getAlphaComponent() {
-                    return HangarSwingGraphicsProvider.this.seGraphics.getColor().getAlpha();
-                }
-            };
-        }
-        return directGraphics;
-    }
-
-    @Override
     public void translate(int x, int y) {
         seGraphics.translate(x, y);
-        translateX += x;
-        translateY += y;
-    }
-
-    @Override
-    public int getTranslateX() {
-        return translateX;
-    }
-
-    @Override
-    public int getTranslateY() {
-        return translateY;
-    }
-
-    @Override
-    public int getColor() {
-        return seGraphics.getColor().getRGB();
-    }
-
-    @Override
-    public int getRedComponent() {
-        return seGraphics.getColor().getRed();
-    }
-
-    @Override
-    public int getGreenComponent() {
-        return seGraphics.getColor().getGreen();
-    }
-
-    @Override
-    public int getBlueComponent() {
-        return seGraphics.getColor().getBlue();
+        super.translate(x, y);
     }
 
     @Override
     public int getGrayScale() {
         // TODO: write method logic
         return 0;
-    }
-
-    @Override
-    public void setColor(int red, int green, int blue) throws IllegalArgumentException {
-        if (red < 0 || red > 255 || green < 0 || green > 255 || blue < 0 || blue > 255) {
-            throw new IllegalArgumentException();
-        }
-        seGraphics.setColor(new Color(red, green, blue));
-    }
-
-    @Override
-    public void setColor(int RGB) {
-        seGraphics.setColor(new Color(RGB, false));
     }
 
     @Override
@@ -290,50 +139,71 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     }
 
     @Override
-    public void drawLine(int x1, int y1, int x2, int y2) {
+    public void drawLine(int x1, int y1, int x2, int y2, Color color) {
+        seGraphics.setColor(color);
         seGraphics.drawLine(x1, y1, x2, y2);
     }
 
     @Override
-    public void fillRect(int x, int y, int width, int height) {
-        if (width > 0 && height > 0) {
-            seGraphics.fillRect(x, y, width, height);
+    public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        int[] xPoints = new int[] { x1, x2, x3 };
+        int[] yPoints = new int[] { y1, y2, y3 };
+        if (isFilled) {
+            seGraphics.fillPolygon(xPoints, yPoints, 3);
+        }
+        else {
+            seGraphics.drawPolygon(xPoints, yPoints, 3);
         }
     }
 
     @Override
-    public void drawRect(int x, int y, int width, int height) {
-        if (width > 0 && height > 0) {
+    public void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        if (isFilled) {
+            seGraphics.fillRect(x, y, width, height);
+        }
+        else {
             seGraphics.drawRect(x, y, width, height);
         }
     }
 
     @Override
-    public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        if (width > 0 && height > 0) {
+    public void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        if (isFilled) {
+            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+        }
+        else {
             seGraphics.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
     }
 
     @Override
-    public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
-        if (width > 0 && height > 0) {
-            seGraphics.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
+    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        if (isFilled) {
+            seGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
+        }
+        else {
+            seGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
         }
     }
 
     @Override
-    public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        seGraphics.fillArc(x, y, width, height, startAngle, arcAngle);
+    public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        if (isFilled) {
+            seGraphics.fillPolygon(xPoints, yPoints, nPoints);
+        }
+        else {
+            seGraphics.drawPolygon(xPoints, yPoints, nPoints);
+        }
     }
 
     @Override
-    public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        seGraphics.drawArc(x, y, width, height, startAngle, arcAngle);
-    }
-
-    @Override
-    public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
+    public void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException {
+        seGraphics.setColor(color);
         if (str == null) {
             throw new NullPointerException();
         }
@@ -342,33 +212,6 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
         y = FontUtils.alignY(meFont, str, y, anchor);
         seGraphics.setFont(seFont);
         seGraphics.drawString(str, x, y);
-    }
-
-    @Override
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        if (str == null) {
-            throw new NullPointerException();
-        }
-        if (offset < str.length()) {
-            if (offset + len > str.length()) {
-                len = str.length() - offset;
-            }
-            String substring = str.substring(offset, offset + len);
-            drawString(substring, x, y, anchor);
-        }
-    }
-
-    @Override
-    public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
-        drawString(String.valueOf(character), x, y, anchor);
-    }
-
-    @Override
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        if (data == null) {
-            throw new NullPointerException();
-        }
-        drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 
     @Override
@@ -403,13 +246,6 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     }
 
     @Override
-    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-        int[] xPoints = new int[] { x1, x2, x3 };
-        int[] yPoints = new int[] { y1, y2, y3 };
-        seGraphics.fillPolygon(xPoints, yPoints, 3);
-    }
-
-    @Override
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
         if (rgbData == null) {
             throw new NullPointerException();
@@ -419,12 +255,6 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
             image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
             seGraphics.drawImage(image, x, y, null);
         }
-    }
-
-    @Override
-    public int getDisplayColor(int color) {
-        // TODO: check it
-        return color;
     }
 
     @Override

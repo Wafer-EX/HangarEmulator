@@ -57,11 +57,10 @@ public class LayerManager {
         if (g == null) {
             throw new NullPointerException();
         }
-        if (layerList.size() > 0) {
-            //var graphics = (Graphics2D) g.getSEGraphics();
-            var graphics = (Graphics2D) g.getGraphicsProvider();
-            int posX = x - viewWindowPosition.x;
+        if (!layerList.isEmpty()) {
+            var graphics = g.getGraphicsProvider();
             int posY = y - viewWindowPosition.y;
+            int posX = x - viewWindowPosition.x;
 
             graphics.translate(posX, posY);
             for (int i = layerList.size() - 1; i >= 0; i--) {

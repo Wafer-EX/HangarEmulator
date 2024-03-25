@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,91 +16,72 @@
 
 package things.graphics;
 
-import com.nokia.mid.ui.DirectGraphics;
-
 import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
+import java.awt.*;
 
-public interface HangarGraphicsProvider {
-    // TODO: simplify
-    DirectGraphics getDirectGraphics(Graphics graphics);
+public abstract class HangarGraphicsProvider {
 
-    void translate(int x, int y);
+    private int translateX = 0, translateY = 0;
 
-    int getTranslateX();
+    public void translate(int x, int y) {
+        translateX += x;
+        translateY += y;
+    }
 
-    int getTranslateY();
+    public int getTranslateX() {
+        return translateX;
+    }
 
-    int getColor();
+    public int getTranslateY() {
+        return translateY;
+    }
 
-    int getRedComponent();
+    public abstract int getGrayScale();
 
-    int getGreenComponent();
+    public abstract void setGrayScale(int value) throws IllegalArgumentException;
 
-    int getBlueComponent();
+    public abstract Font getFont();
 
-    int getGrayScale();
+    public abstract void setStrokeStyle(int style) throws IllegalArgumentException;
 
-    void setColor(int red, int green, int blue) throws IllegalArgumentException;
+    public abstract int getStrokeStyle();
 
-    void setColor(int RGB);
+    public abstract void setFont(Font font);
 
-    void setGrayScale(int value) throws IllegalArgumentException;
+    public abstract int getClipX();
 
-    Font getFont();
+    public abstract int getClipY();
 
-    void setStrokeStyle(int style) throws IllegalArgumentException;
+    public abstract int getClipWidth();
 
-    int getStrokeStyle();
+    public abstract int getClipHeight();
 
-    void setFont(Font font);
+    public abstract void clipRect(int x, int y, int width, int height);
 
-    int getClipX();
+    public abstract void setClip(int x, int y, int width, int height);
 
-    int getClipY();
+    public abstract void drawLine(int x1, int y1, int x2, int y2, Color color);
 
-    int getClipWidth();
+    public abstract void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color, boolean isFilled);
 
-    int getClipHeight();
+    public abstract void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled);
 
-    void clipRect(int x, int y, int width, int height);
+    public abstract void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled);
 
-    void setClip(int x, int y, int width, int height);
+    public abstract void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled);
 
-    void drawLine(int x1, int y1, int x2, int y2);
+    public abstract void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, Color color, boolean isFilled);
 
-    void fillRect(int x, int y, int width, int height);
+    public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 
-    void drawRect(int x, int y, int width, int height);
+    public abstract void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
 
-    void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
+    public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 
-    void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
+    public abstract void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
 
-    void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle);
+    public abstract void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
 
-    void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle);
-
-    void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException;
-
-    void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
-
-    void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException;
-
-    void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
-
-    void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
-
-    void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
-
-    void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
-
-    void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
-
-    void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
-
-    int getDisplayColor(int color);
-
-    void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
+    public abstract void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
 }
