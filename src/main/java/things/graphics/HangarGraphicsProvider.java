@@ -86,7 +86,5 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
 
-    public abstract int getDisplayColor(int color);
-
     public abstract void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
 }

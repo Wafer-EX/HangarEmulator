@@ -529,12 +529,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getDisplayColor(int color) {
-        // TODO: write method logic?
-        return color;
-    }
-
-    @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer instanceof HangarGLOffscreenBuffer lwjglOffscreenBuffer) {
             var graphicsProvider = (HangarGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();

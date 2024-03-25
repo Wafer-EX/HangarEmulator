@@ -212,6 +212,7 @@ public class Graphics {
     }
 
     public int getDisplayColor(int color) {
-        return graphicsProvider.getDisplayColor(color);
+        // TODO: check it
+        return color;
     }
 }
