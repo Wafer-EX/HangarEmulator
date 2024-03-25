@@ -297,36 +297,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor, Color color) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        seGraphics.setColor(color);
-        if (str == null) {
-            throw new NullPointerException();
-        }
-        if (offset < str.length()) {
-            if (offset + len > str.length()) {
-                len = str.length() - offset;
-            }
-            String substring = str.substring(offset, offset + len);
-            drawString(substring, x, y, anchor, color);
-        }
-    }
-
-    @Override
-    public void drawChar(char character, int x, int y, int anchor, Color color) throws IllegalArgumentException {
-        seGraphics.setColor(color);
-        drawString(String.valueOf(character), x, y, anchor, color);
-    }
-
-    @Override
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor, Color color) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        seGraphics.setColor(color);
-        if (data == null) {
-            throw new NullPointerException();
-        }
-        drawSubstring(new String(data), offset, length, x, y, anchor, color);
-    }
-
-    @Override
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
         if (img == null) {
             throw new NullPointerException();

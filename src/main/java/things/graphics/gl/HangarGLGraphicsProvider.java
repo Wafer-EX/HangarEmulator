@@ -418,21 +418,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawSubstring(String str, int offset, int len, int x, int y, int anchor, Color color) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        // TODO: write method logic
-    }
-
-    @Override
-    public void drawChar(char character, int x, int y, int anchor, Color color) throws IllegalArgumentException {
-        // TODO: write method logic
-    }
-
-    @Override
-    public void drawChars(char[] data, int offset, int length, int x, int y, int anchor, Color color) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        // TODO: write method logic
-    }
-
-    @Override
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
         int width = img.getWidth();
         int height = img.getHeight();

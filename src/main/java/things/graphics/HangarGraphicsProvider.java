@@ -76,12 +76,6 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 
-    public abstract void drawSubstring(String str, int offset, int len, int x, int y, int anchor, Color color) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
-
-    public abstract void drawChar(char character, int x, int y, int anchor, Color color) throws IllegalArgumentException;
-
-    public abstract void drawChars(char[] data, int offset, int length, int x, int y, int anchor, Color color) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
-
     public abstract void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
 
     public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;

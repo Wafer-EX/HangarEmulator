@@ -168,15 +168,27 @@ public class Graphics {
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawSubstring(str, offset, len, x, y, anchor, color);
+        if (str == null) {
+            throw new NullPointerException();
+        }
+        if (offset < str.length()) {
+            if (offset + len > str.length()) {
+                len = str.length() - offset;
+            }
+            String substring = str.substring(offset, offset + len);
+            drawString(substring, x, y, anchor);
+        }
     }
 
     public void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException {
-        graphicsProvider.drawChar(character, x, y, anchor, color);
+        drawString(String.valueOf(character), x, y, anchor);
     }
 
     public void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawChars(data, offset, length, x, y, anchor, color);
+        if (data == null) {
+            throw new NullPointerException();
+        }
+        drawSubstring(new String(data), offset, length, x, y, anchor);
     }
 
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
