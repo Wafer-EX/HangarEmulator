@@ -68,6 +68,8 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawLine(int x1, int y1, int x2, int y2, Color color);
 
+    public abstract void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color, boolean isFilled);
+
     public abstract void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled);
 
     public abstract void drawRoundRectangle(int x, int y, int width, int height, int arcWidth, int arcHeight, Color color, boolean isFilled);
@@ -81,8 +83,6 @@ public abstract class HangarGraphicsProvider {
     public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 
     public abstract void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
-
-    public abstract void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color);
 
     public abstract void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
 

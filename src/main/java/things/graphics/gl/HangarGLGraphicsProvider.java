@@ -314,6 +314,39 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         });
     }
 
+    public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color, boolean isFilled) {
+        float r = color.getRed() / 255f;
+        float g = color.getGreen() / 255f;
+        float b = color.getBlue() / 255f;
+
+        if (isFilled) {
+            glActions.add(() -> {
+                if (renderTarget != null) {
+                    renderTarget.use();
+                } else {
+                    RenderTarget.bindDefault(240, 320);
+                }
+
+                glBuffer.setBufferData(new float[]{
+                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                        x1, y1, 0, 0, r, g, b, 1, 1,
+                        x2, y2, 0, 0, r, g, b, 1, 1,
+                        x3, y3, 0, 0, r, g, b, 1, 1,
+                });
+
+                glVertexArray.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+                glDrawArrays(GL_TRIANGLES, 0, 3);
+                glUseProgram(0);
+            });
+        }
+        else {
+            // TODO: implement it
+        }
+    }
+
     @Override
     public void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled) {
         float r = color.getRed() / 255f;
@@ -484,36 +517,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     @Override
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {
         // TODO: write method logic
-    }
-
-    @Override
-    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color) {
-        float r = color.getRed() / 255f;
-        float g = color.getGreen() / 255f;
-        float b = color.getBlue() / 255f;
-
-        glActions.add(() -> {
-            if (renderTarget != null) {
-                renderTarget.use();
-            }
-            else {
-                RenderTarget.bindDefault(240, 320);
-            }
-
-            glBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x1, y1, 0, 0, r, g, b, 1, 1,
-                    x2, y2, 0, 0, r, g, b, 1, 1,
-                    x3, y3, 0, 0, r, g, b, 1, 1,
-            });
-
-            glVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
-
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-            glUseProgram(0);
-        });
     }
 
     @Override

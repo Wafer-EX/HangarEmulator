@@ -251,6 +251,19 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
+    public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color, boolean isFilled) {
+        seGraphics.setColor(color);
+        int[] xPoints = new int[] { x1, x2, x3 };
+        int[] yPoints = new int[] { y1, y2, y3 };
+        if (isFilled) {
+            seGraphics.fillPolygon(xPoints, yPoints, 3);
+        }
+        else {
+            seGraphics.drawPolygon(xPoints, yPoints, 3);
+        }
+    }
+
+    @Override
     public void drawRectangle(int x, int y, int width, int height, Color color, boolean isFilled) {
         seGraphics.setColor(color);
         if (isFilled) {
@@ -325,14 +338,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
         x_dest = ImageUtils.alignX(width, x_dest, anchor);
         y_dest = ImageUtils.alignY(height, y_dest, anchor);
         seGraphics.copyArea(x_src, y_src, width, height, x_dest, y_dest);
-    }
-
-    @Override
-    public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, Color color) {
-        seGraphics.setColor(color);
-        int[] xPoints = new int[] { x1, x2, x3 };
-        int[] yPoints = new int[] { y1, y2, y3 };
-        seGraphics.fillPolygon(xPoints, yPoints, 3);
     }
 
     @Override
