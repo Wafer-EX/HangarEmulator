@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,85 +22,94 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 
-public interface HangarGraphicsProvider {
+public abstract class HangarGraphicsProvider {
     // TODO: simplify
-    DirectGraphics getDirectGraphics(Graphics graphics);
+    public abstract DirectGraphics getDirectGraphics(Graphics graphics);
 
-    void translate(int x, int y);
+    private int translateX = 0, translateY = 0;
 
-    int getTranslateX();
+    public void translate(int x, int y) {
+        translateX += x;
+        translateY += y;
+    }
 
-    int getTranslateY();
+    public int getTranslateX() {
+        return translateX;
+    }
 
-    int getColor();
+    public int getTranslateY() {
+        return translateY;
+    }
 
-    int getRedComponent();
+    public abstract int getColor();
 
-    int getGreenComponent();
+    public abstract int getRedComponent();
 
-    int getBlueComponent();
+    public abstract int getGreenComponent();
 
-    int getGrayScale();
+    public abstract int getBlueComponent();
 
-    void setColor(int red, int green, int blue) throws IllegalArgumentException;
+    public abstract int getGrayScale();
 
-    void setColor(int RGB);
+    public abstract void setColor(int red, int green, int blue) throws IllegalArgumentException;
 
-    void setGrayScale(int value) throws IllegalArgumentException;
+    public abstract void setColor(int RGB);
 
-    Font getFont();
+    public abstract void setGrayScale(int value) throws IllegalArgumentException;
 
-    void setStrokeStyle(int style) throws IllegalArgumentException;
+    public abstract Font getFont();
 
-    int getStrokeStyle();
+    public abstract void setStrokeStyle(int style) throws IllegalArgumentException;
 
-    void setFont(Font font);
+    public abstract int getStrokeStyle();
 
-    int getClipX();
+    public abstract void setFont(Font font);
 
-    int getClipY();
+    public abstract int getClipX();
 
-    int getClipWidth();
+    public abstract int getClipY();
 
-    int getClipHeight();
+    public abstract int getClipWidth();
 
-    void clipRect(int x, int y, int width, int height);
+    public abstract int getClipHeight();
 
-    void setClip(int x, int y, int width, int height);
+    public abstract void clipRect(int x, int y, int width, int height);
 
-    void drawLine(int x1, int y1, int x2, int y2);
+    public abstract void setClip(int x, int y, int width, int height);
 
-    void fillRect(int x, int y, int width, int height);
+    public abstract void drawLine(int x1, int y1, int x2, int y2);
 
-    void drawRect(int x, int y, int width, int height);
+    public abstract void fillRect(int x, int y, int width, int height);
 
-    void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
+    public abstract void drawRect(int x, int y, int width, int height);
 
-    void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
+    public abstract void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
 
-    void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle);
+    public abstract void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight);
 
-    void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle);
+    public abstract void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle);
 
-    void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException;
+    public abstract void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle);
 
-    void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
+    public abstract void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException;
 
-    void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException;
+    public abstract void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
 
-    void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
+    public abstract void drawChar(char character, int x, int y, int anchor) throws IllegalArgumentException;
 
-    void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawChars(char[] data, int offset, int length, int x, int y, int anchor) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException;
 
-    void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
 
-    void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
+    public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 
-    void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
+    public abstract void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
 
-    void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
+    public abstract void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3);
 
-    int getDisplayColor(int color);
+    public abstract void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException;
 
-    void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
+    public abstract int getDisplayColor(int color);
+
+    public abstract void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.awt.image.BufferedImage;
 import static javax.microedition.lcdui.Graphics.DOTTED;
 import static javax.microedition.lcdui.Graphics.SOLID;
 
-public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
+public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     private final Graphics2D seGraphics;
     private final BufferedImage seImage;
     private java.awt.Font seFont;
@@ -150,18 +150,7 @@ public class HangarSwingGraphicsProvider implements HangarGraphicsProvider {
     @Override
     public void translate(int x, int y) {
         seGraphics.translate(x, y);
-        translateX += x;
-        translateY += y;
-    }
-
-    @Override
-    public int getTranslateX() {
-        return translateX;
-    }
-
-    @Override
-    public int getTranslateY() {
-        return translateY;
+        super.translate(x, y);
     }
 
     @Override

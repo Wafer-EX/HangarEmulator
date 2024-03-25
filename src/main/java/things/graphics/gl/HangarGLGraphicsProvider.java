@@ -37,11 +37,10 @@ import java.util.List;
 
 import static org.lwjgl.opengl.GL46.*;
 
-public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
+public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
 
     private final ArrayList<HangarGLAction> glActions;
-    private int translateX = 0, translateY = 0;
     private Color color;
     private final Rectangle clip;
     private DirectGraphics directGraphics;
@@ -220,23 +219,6 @@ public class HangarGLGraphicsProvider implements HangarGraphicsProvider {
             };
         }
         return directGraphics;
-    }
-
-    @Override
-    public void translate(int x, int y) {
-        // TODO: add translation to actions
-        translateX += x;
-        translateY += y;
-    }
-
-    @Override
-    public int getTranslateX() {
-        return translateX;
-    }
-
-    @Override
-    public int getTranslateY() {
-        return translateY;
     }
 
     @Override
