@@ -36,7 +36,7 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
         super(canvas);
         
         this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider(null);
+        this.graphicsProvider = new HangarGLGraphicsProvider();
 
         glCanvas.setFocusable(false);
         glCanvas.setPreferredSize(this.getPreferredSize());
@@ -78,7 +78,7 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        glCanvas.setGLActions(graphicsProvider.getGLActions());
+        glCanvas.setGLActionList(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
         SwingUtilities.invokeLater(glCanvas::render);
     }

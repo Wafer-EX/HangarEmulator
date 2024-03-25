@@ -17,18 +17,14 @@
 package things.graphics.gl;
 
 import org.joml.Matrix4f;
-import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
 import things.graphics.gl.abstractions.*;
-import things.graphics.swing.HangarSwingOffscreenBuffer;
 import things.utils.ListUtils;
-import things.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,8 +36,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private final ArrayList<HangarGLAction> glActions;
     private final Rectangle clip;
 
-    protected RenderTarget renderTarget;
-
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
 
@@ -51,26 +45,15 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private static boolean isShaderCompiled = false;
 
     public HangarGLGraphicsProvider() {
-        this(null);
-        var profile = HangarState.getProfileManager().getCurrentProfile();
-        int width = profile.getResolution().width;
-        int height = profile.getResolution().height;
-
-        glActions.add(() -> {
-            renderTarget = new RenderTarget(width, height);
-        });
-    }
-
-    public HangarGLGraphicsProvider(RenderTarget renderTarget) {
         this.glActions = new ArrayList<>();
         this.clip = new Rectangle(0, 0, 240, 320);
-        this.renderTarget = renderTarget;
 
         glActions.add(() -> {
             if (!isShaderCompiled) {
                 spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
                 isShaderCompiled = true;
             }
+
             if (!isGraphicsPrepared) {
                 glBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
 
@@ -159,12 +142,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
 
         glActions.add(() -> {
-            if (renderTarget != null) {
-                renderTarget.use();
-            }
-            else {
-                RenderTarget.bindDefault(240, 320);
-            }
+            RenderTarget.bindDefault(240, 320);
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -188,11 +166,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                if (renderTarget != null) {
-                    renderTarget.use();
-                } else {
-                    RenderTarget.bindDefault(240, 320);
-                }
+                RenderTarget.bindDefault(240, 320);
 
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -222,14 +196,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-            if (renderTarget != null) {
-                renderTarget.use();
-            }
-            else {
                 RenderTarget.bindDefault(240, 320);
-            }
 
-            glBuffer.setBufferData(new float[]{
+                glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     x, y, 0, 0, r, g, b, 1, 1,
                     x + width, y, 1, 0, r, g, b, 1, 1,
@@ -237,14 +206,14 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                     x, y, 0, 0, r, g, b, 1, 1,
                     x + width, y + height, 1, 1, r, g, b, 1, 1,
                     x, y + height, 0, 1, r, g, b, 1, 1,
-            });
+                });
 
-            glVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                glVertexArray.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            glUseProgram(0);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+                glUseProgram(0);
             });
         }
         else {
@@ -290,21 +259,16 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-            if (renderTarget != null) {
-                renderTarget.use();
-            }
-            else {
                 RenderTarget.bindDefault(240, 320);
-            }
 
-            glBuffer.setBufferData(ListUtils.toArray(points));
+                glBuffer.setBufferData(ListUtils.toArray(points));
 
-            glVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                glVertexArray.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-            glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
-            glUseProgram(0);
+                glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
+                glUseProgram(0);
             });
         }
         else {
@@ -323,66 +287,12 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
-        int width = img.getWidth();
-        int height = img.getHeight();
-        int alignedX = ImageUtils.alignX(img.getWidth(), x, anchor);
-        int alignedY = ImageUtils.alignY(img.getHeight(), y, anchor);
-        var imageBuffer = img.convertToByteBuffer();
-
-        glActions.add(() -> {
-            if (renderTarget != null) {
-                renderTarget.use();
-            }
-            else {
-                RenderTarget.bindDefault(240, 320);
-            }
-
-            glBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
-                    alignedX + width, alignedY, 1, 0, 1, 1, 1, 1, 0,
-                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
-                    alignedX, alignedY, 0, 0, 1, 1, 1, 1, 0,
-                    alignedX + width, alignedY + height, 1, 1, 1, 1, 1, 1, 0,
-                    alignedX, alignedY + height, 0, 1, 1, 1, 1, 1, 0,
-            });
-
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
-
-            glVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("sprite", 0);
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
-
-            // TODO: use abstraction
-            int textureId = glGenTextures();
-            glBindTexture(GL_TEXTURE_2D, textureId);
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, imageBuffer);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glBindTexture(GL_TEXTURE_2D, textureId);
-            glActiveTexture(GL_TEXTURE0);
-
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            glDisable(GL_BLEND);
-            glUseProgram(0);
-        });
+        // TODO: write method logic
     }
 
     @Override
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
-        if (src == null) {
-            throw new NullPointerException();
-        }
-        if (width > 0 && height > 0) {
-            var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
-            var transformedImage = ImageUtils.transformImage(imageRegion, transform);
-            x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
-            y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
-
-            drawImage(new Image(transformedImage, false), x_dest, y_dest, anchor);
-        }
+        // TODO: write method logic
     }
 
     @Override
@@ -392,56 +302,11 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
-        if (rgbData == null) {
-            throw new NullPointerException();
-        }
-        if (width > 0 && height > 0) {
-            var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
-            image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
-            drawImage(new Image(image, false), x, y, 0);
-        }
+        // TODO: write method logic
     }
 
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        if (offscreenBuffer instanceof HangarGLOffscreenBuffer lwjglOffscreenBuffer) {
-            var graphicsProvider = (HangarGLGraphicsProvider) lwjglOffscreenBuffer.getGraphicsProvider();
-
-            glActions.addAll(graphicsProvider.glActions);
-            glActions.add(() -> {
-                if (renderTarget != null) {
-                    renderTarget.use();
-                }
-                else {
-                    RenderTarget.bindDefault(240, 320);
-                }
-
-                glBuffer.setBufferData(new float[]{
-                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
-                        1, -1, 1, 0, 1, 1, 1, 1, 0,
-                        1, 1, 1, 1, 1, 1, 1, 1, 0,
-                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
-                        -1, -1, 0, 0, 1, 1, 1, 1, 0,
-                        1, 1, 1, 1, 1, 1, 1, 1, 0,
-                        -1, 1, 0, 1, 1, 1, 1, 1, 0,
-                });
-
-                glVertexArray.bind();
-                spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("sprite", 0);
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f());
-
-                glBindTexture(GL_TEXTURE_2D, graphicsProvider.renderTarget.getTexture().getIdentifier());
-                glActiveTexture(GL_TEXTURE0);
-
-                glDrawArrays(GL_TRIANGLES, 0, 6);
-                glUseProgram(0);
-            });
-            graphicsProvider.glActions.clear();
-        }
-        else if (offscreenBuffer instanceof HangarSwingOffscreenBuffer swingOffscreenBuffer) {
-            drawImage(new Image(swingOffscreenBuffer.getBufferedImage(), false), 0, 0, 0);
-        }
+        // TODO: write method logic
     }
 }

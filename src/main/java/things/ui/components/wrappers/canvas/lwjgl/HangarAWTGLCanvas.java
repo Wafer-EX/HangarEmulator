@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Kirill Lomakin
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,31 +26,31 @@ import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.opengl.GL11.*;
 
 public class HangarAWTGLCanvas extends AWTGLCanvas {
-    private final ArrayList<HangarGLAction> glActions;
+    private final ArrayList<HangarGLAction> glActionList;
 
     public HangarAWTGLCanvas(GLData glData) {
         super(glData);
-        this.glActions = new ArrayList<>();
+        this.glActionList = new ArrayList<>();
     }
 
-    public void setGLActions(ArrayList<HangarGLAction> glActions) {
-        this.glActions.addAll(glActions);
+    public void setGLActionList(ArrayList<HangarGLAction> glActions) {
+        this.glActionList.addAll(glActions);
     }
 
     @Override
     public void initGL() {
         createCapabilities();
         glViewport(0, 0, 240, 320);
-        glClearColor(0, 0, 0, 0);
+        glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
     }
 
     @Override
     public void paintGL() {
         glClear(GL_COLOR_BUFFER_BIT);
-        for (var glAction : glActions) {
+        for (var glAction : glActionList) {
             glAction.execute();
         }
-        glActions.clear();
+        glActionList.clear();
         swapBuffers();
     }
 }
