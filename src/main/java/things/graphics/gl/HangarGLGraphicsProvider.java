@@ -125,7 +125,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         final int y2f = y2 + getTranslateY();
 
         glActions.add(() -> {
-            RenderTarget.bindDefault(240, 320);
+            RenderTarget.getDefault(240, 320).use();
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -156,7 +156,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                RenderTarget.getDefault(240, 320).use();
 
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -189,7 +189,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                RenderTarget.getDefault(240, 320).use();
 
                 glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -255,7 +255,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                RenderTarget.getDefault(240, 320).use();
 
                 glBuffer.setBufferData(ListUtils.toArray(points));
 
@@ -297,7 +297,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         }
 
         glActions.add(() -> {
-            RenderTarget.bindDefault(240, 320);
+            RenderTarget.getDefault(240, 320).use();
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
