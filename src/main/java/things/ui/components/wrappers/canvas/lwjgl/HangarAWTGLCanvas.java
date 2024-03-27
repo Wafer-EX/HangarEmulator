@@ -42,6 +42,8 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         createCapabilities();
         glViewport(0, 0, 240, 320);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+        glEnable(GL_SCISSOR_TEST);
+        glScissor(0, 0, 240, 320);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
             glAction.execute();
         }
         glActionList.clear();
+        glScissor(0, 0, 240, 320);
         swapBuffers();
     }
 }
