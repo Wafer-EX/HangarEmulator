@@ -39,14 +39,20 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
+    private RenderTarget renderTarget;
 
     private boolean isGraphicsPrepared = false;
 
     private static GLShaderProgram spriteShaderProgram;
     private static boolean isShaderCompiled = false;
 
-    public HangarGLGraphicsProvider() {
+    public HangarGLGraphicsProvider(RenderTarget renderTarget) {
         glActions.add(() -> {
+            this.renderTarget = renderTarget;
+            if (!renderTarget.isInitialized()) {
+                renderTarget.initialize();
+            }
+
             if (!isShaderCompiled) {
                 spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
                 isShaderCompiled = true;
@@ -125,7 +131,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         final int y2f = y2 + getTranslateY();
 
         glActions.add(() -> {
-            RenderTarget.getDefault(240, 320).use();
+            renderTarget.use();
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -156,7 +162,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.getDefault(240, 320).use();
+                renderTarget.use();
 
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -189,7 +195,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.getDefault(240, 320).use();
+                renderTarget.use();
 
                 glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
@@ -255,7 +261,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.getDefault(240, 320).use();
+                renderTarget.use();
 
                 glBuffer.setBufferData(ListUtils.toArray(points));
 
@@ -297,7 +303,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         }
 
         glActions.add(() -> {
-            RenderTarget.getDefault(240, 320).use();
+            renderTarget.use();
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);

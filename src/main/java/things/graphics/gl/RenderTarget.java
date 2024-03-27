@@ -26,6 +26,7 @@ public class RenderTarget {
     private GLFramebuffer glFramebuffer;
     private GLTexture glTexture;
     private int width, height;
+    private boolean isInitialized;
     private final boolean isDefault;
 
     private static final RenderTarget defaultRenderTarget = new RenderTarget();
@@ -34,12 +35,14 @@ public class RenderTarget {
         this.width = width;
         this.height = height;
         this.isDefault = false;
+        this.isInitialized = false;
     }
 
     public RenderTarget() {
         this.width = 240;
         this.height = 320;
         this.isDefault = true;
+        this.isInitialized = true;
     }
 
     public void initialize() {
@@ -48,6 +51,11 @@ public class RenderTarget {
             glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
             glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
         }
+        isInitialized = true;
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     public GLTexture getTexture() {
@@ -55,6 +63,14 @@ public class RenderTarget {
             throw new IllegalStateException();
         }
         return glTexture;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public void use() {

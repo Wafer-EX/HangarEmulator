@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Kirill Lomakin
+ * Copyright 2023-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package things.ui.components.wrappers.canvas;
 import org.lwjgl.opengl.awt.GLData;
 import things.HangarState;
 import things.graphics.gl.HangarGLGraphicsProvider;
+import things.graphics.gl.RenderTarget;
 import things.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
 import things.utils.SystemUtils;
 
@@ -36,27 +37,28 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
         super(canvas);
         
         this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider();
+        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(240, 320));
 
         glCanvas.setFocusable(false);
         glCanvas.setPreferredSize(this.getPreferredSize());
 
         this.add(glCanvas);
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                var profile = HangarState.getProfileManager().getCurrentProfile();
-                float scaling = SystemUtils.getScalingInUnits();
-
-                int centerX = (int) ((getWidth() / 2) * scaling);
-                int centerY = (int) ((getHeight() / 2) * scaling);
-                int width = profile.getResolution().width;
-                int height = profile.getResolution().height;
-
-                // TODO: what to do with this?
-                //graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
-            }
-        });
+        // TODO: write logic
+//        this.addComponentListener(new ComponentAdapter() {
+//            @Override
+//            public void componentResized(ComponentEvent e) {
+//                var profile = HangarState.getProfileManager().getCurrentProfile();
+//                float scaling = SystemUtils.getScalingInUnits();
+//
+//                int centerX = (int) ((getWidth() / 2) * scaling);
+//                int centerY = (int) ((getHeight() / 2) * scaling);
+//                int width = profile.getResolution().width;
+//                int height = profile.getResolution().height;
+//
+//                // TODO: what to do with this?
+//                //graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
+//            }
+//        });
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {
