@@ -64,10 +64,8 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 glSpriteBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
 
                 glSpriteVertexArray = new GLVertexArray();
-                glSpriteVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-                glSpriteVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-                glSpriteVertexArray.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-                glSpriteVertexArray.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+                glSpriteVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+                glSpriteVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
 
                 glShapeBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
                 glShapeVertexArray = new GLVertexArray();
@@ -346,13 +344,13 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             glEnable(GL_BLEND);
 
             glSpriteBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    xf, yf, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                    xf + width, yf, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                    xf + width, yf + height, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                    xf, yf, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                    xf + width, yf + height, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                    xf, yf + height, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+                    // 2x POSITION | 2x UV
+                    xf, yf, 0.0f, 0.0f,
+                    xf + width, yf, 1.0f, 0.0f,
+                    xf + width, yf + height, 1.0f, 1.0f,
+                    xf, yf, 0.0f, 0.0f,
+                    xf + width, yf + height, 1.0f, 1.0f,
+                    xf, yf + height, 0.0f, 1.0f,
             });
 
             glSpriteVertexArray.bind();
@@ -397,13 +395,13 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             glActions.add(() -> {
                 renderTarget.use();
                 glSpriteBuffer.setBufferData(new float[]{
-                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                        0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                        240.0f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                        240.0f, 320.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                        0.0f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                        240.0f, 320.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-                        0.0f, 320.0f, 0.0f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+                        // 2x POSITION | 2x UV
+                        0.0f, 0.0f, 0.0f, 0.0f,
+                        240.0f, 0.0f, 1.0f, 0.0f,
+                        240.0f, 320.0f, 1.0f, 1.0f,
+                        0.0f, 0.0f, 0.0f, 0.0f,
+                        240.0f, 320.0f, 1.0f, 1.0f,
+                        0.0f, 320.0f, 0.0f, 1.0f,
                 });
 
                 glSpriteVertexArray.bind();

@@ -18,16 +18,9 @@
 out vec4 FragColor;
 
 in vec2 UV;
-in vec4 Color;
-in float IsIgnoreSprite;
 
 uniform sampler2D sprite;
 
 void main() {
-    if (IsIgnoreSprite != 0.0) {
-        FragColor = Color;
-    }
-    else {
-        FragColor = texture(sprite, UV) * Color;
-    }
+    FragColor = texture(sprite, UV);
 }
