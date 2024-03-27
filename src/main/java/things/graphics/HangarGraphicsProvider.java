@@ -49,14 +49,6 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void setFont(Font font);
 
-    public abstract int getClipX();
-
-    public abstract int getClipY();
-
-    public abstract int getClipWidth();
-
-    public abstract int getClipHeight();
-
     public abstract void clipRect(int x, int y, int width, int height);
 
     public abstract void setClip(int x, int y, int width, int height);

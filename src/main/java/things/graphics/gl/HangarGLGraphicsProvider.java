@@ -36,7 +36,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     private final ArrayList<HangarGLAction> glActions = new ArrayList<>();
     private final HashMap<Image, GLTexture> generatedTextures = new HashMap<>();
-    private final Rectangle clip = new Rectangle(0, 0, 240, 320);
 
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
@@ -105,37 +104,12 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getClipX() {
-        return clip.x;
-    }
-
-    @Override
-    public int getClipY() {
-        return clip.y;
-    }
-
-    @Override
-    public int getClipWidth() {
-        return clip.width;
-    }
-
-    @Override
-    public int getClipHeight() {
-        return clip.height;
-    }
-
-    @Override
     public void clipRect(int x, int y, int width, int height) {
         // TODO: write method logic
     }
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-        clip.x = x;
-        clip.y = y;
-        clip.width = width;
-        clip.height = height;
-
         glActions.add(() -> glScissor(x, y, width,  height));
     }
 

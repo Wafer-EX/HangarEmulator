@@ -101,34 +101,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getClipX() {
-        var clipBounds = seGraphics.getClipBounds();
-        return clipBounds == null ? 0 : clipBounds.x;
-    }
-
-    @Override
-    public int getClipY() {
-        var clipBounds = seGraphics.getClipBounds();
-        return clipBounds == null ? 0 : clipBounds.y;
-    }
-
-    @Override
-    public int getClipWidth() {
-        var profile = HangarState.getProfileManager().getCurrentProfile();
-        var clipBounds = seGraphics.getClipBounds();
-        var resolution = profile.getResolution();
-        return clipBounds == null ? resolution.width : clipBounds.width;
-    }
-
-    @Override
-    public int getClipHeight() {
-        var profile = HangarState.getProfileManager().getCurrentProfile();
-        var clipBounds = seGraphics.getClipBounds();
-        var resolution = profile.getResolution();
-        return clipBounds == null ? resolution.height : clipBounds.height;
-    }
-
-    @Override
     public void clipRect(int x, int y, int width, int height) {
         seGraphics.clipRect(x, y, width, height);
     }
