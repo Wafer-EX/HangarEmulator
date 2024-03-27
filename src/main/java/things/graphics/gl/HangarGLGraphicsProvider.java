@@ -368,7 +368,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glVertexArray.bind();
                 spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 0, 320));
 
                 offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
