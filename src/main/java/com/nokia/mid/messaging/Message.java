@@ -14,18 +14,14 @@
  * limitations under the License.
  */
 
-package com.motorola.funlight;
+package com.nokia.mid.messaging;
 
-public interface Region {
-    public int getColor();
+import java.util.Date;
 
-    public int getControl();
+public interface Message {
+    public String getAddress();
 
-    public int getID();
+    public void setAddress(String addr);
 
-    public void releaseControl();
-
-    public int setColor(int color);
-
-    public int setColor(byte red, byte green, byte blue);
+    public Date getTimestamp();
 }

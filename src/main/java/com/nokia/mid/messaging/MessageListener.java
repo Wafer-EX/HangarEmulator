@@ -14,18 +14,8 @@
  * limitations under the License.
  */
 
-package com.motorola.funlight;
+package com.nokia.mid.messaging;
 
-public interface Region {
-    public int getColor();
-
-    public int getControl();
-
-    public int getID();
-
-    public void releaseControl();
-
-    public int setColor(int color);
-
-    public int setColor(byte red, byte green, byte blue);
+public interface MessageListener {
+    public void notifyIncomingMessage(MessageConnection conn);
 }

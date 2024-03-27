@@ -14,18 +14,10 @@
  * limitations under the License.
  */
 
-package com.motorola.funlight;
+package com.nokia.mid.messaging;
 
-public interface Region {
-    public int getColor();
+public interface TextMessage extends Message {
+    public String getPayloadText();
 
-    public int getControl();
-
-    public int getID();
-
-    public void releaseControl();
-
-    public int setColor(int color);
-
-    public int setColor(byte red, byte green, byte blue);
+    public void setPayloadText(String data);
 }
