@@ -119,13 +119,18 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
+        final int x1f = x1 + getTranslateX();
+        final int y1f = y1 + getTranslateY();
+        final int x2f = x2 + getTranslateX();
+        final int y2f = y2 + getTranslateY();
+
         glActions.add(() -> {
             RenderTarget.bindDefault(240, 320);
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x1, y1, 0, 0, r, g, b, 1, 1,
-                    x2, y2, 1, 0, r, g, b, 1, 1,
+                    x1f, y1f, 0, 0, r, g, b, 1, 1,
+                    x2f, y2f, 1, 0, r, g, b, 1, 1,
             });
 
             glVertexArray.bind();
@@ -142,15 +147,22 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
+        final int x1f = x1 + getTranslateX();
+        final int y1f = y1 + getTranslateY();
+        final int x2f = x2 + getTranslateX();
+        final int y2f = y2 + getTranslateY();
+        final int x3f = x3 + getTranslateX();
+        final int y3f = y3 + getTranslateY();
+
         if (isFilled) {
             glActions.add(() -> {
                 RenderTarget.bindDefault(240, 320);
 
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                        x1, y1, 0, 0, r, g, b, 1, 1,
-                        x2, y2, 0, 0, r, g, b, 1, 1,
-                        x3, y3, 0, 0, r, g, b, 1, 1,
+                        x1f, y1f, 0, 0, r, g, b, 1, 1,
+                        x2f, y2f, 0, 0, r, g, b, 1, 1,
+                        x3f, y3f, 0, 0, r, g, b, 1, 1,
                 });
 
                 glVertexArray.bind();
@@ -172,18 +184,21 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
 
+        final int xf = x + getTranslateX();
+        final int yf = y + getTranslateY();
+
         if (isFilled) {
             glActions.add(() -> {
                 RenderTarget.bindDefault(240, 320);
 
                 glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x, y, 0, 0, r, g, b, 1, 1,
-                    x + width, y, 1, 0, r, g, b, 1, 1,
-                    x + width, y + height, 1, 1, r, g, b, 1, 1,
-                    x, y, 0, 0, r, g, b, 1, 1,
-                    x + width, y + height, 1, 1, r, g, b, 1, 1,
-                    x, y + height, 0, 1, r, g, b, 1, 1,
+                    xf, yf, 0, 0, r, g, b, 1, 1,
+                    xf + width, yf, 1, 0, r, g, b, 1, 1,
+                    xf + width, yf + height, 1, 1, r, g, b, 1, 1,
+                    xf, yf, 0, 0, r, g, b, 1, 1,
+                    xf + width, yf + height, 1, 1, r, g, b, 1, 1,
+                    xf, yf + height, 0, 1, r, g, b, 1, 1,
                 });
 
                 glVertexArray.bind();
@@ -206,6 +221,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
+        x += getTranslateX();
+        y += getTranslateY();
+
         float halfWidth = (float) width / 2;
         float halfHeight = (float) height / 2;
 
@@ -268,6 +286,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         int width = img.getWidth();
         int height = img.getHeight();
 
+        final int xf = x + getTranslateX();
+        final int yf = y + getTranslateY();
+
         if (!generatedTextures.containsKey(img)) {
             glActions.add(() -> {
                 var texture = new GLTexture(img.convertToByteBuffer(), width, height);
@@ -283,12 +304,12 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x, y, 0, 0, 1, 1, 1, 1, 0,
-                    x + width, y, 1, 0, 1, 1, 1, 1, 0,
-                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
-                    x, y, 0, 0, 1, 1, 1, 1, 0,
-                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
-                    x, y + height, 0, 1, 1, 1, 1, 1, 0,
+                    xf, yf, 0, 0, 1, 1, 1, 1, 0,
+                    xf + width, yf, 1, 0, 1, 1, 1, 1, 0,
+                    xf + width, yf + height, 1, 1, 1, 1, 1, 1, 0,
+                    xf, yf, 0, 0, 1, 1, 1, 1, 0,
+                    xf + width, yf + height, 1, 1, 1, 1, 1, 1, 0,
+                    xf, yf + height, 0, 1, 1, 1, 1, 1, 0,
             });
 
             glVertexArray.bind();
