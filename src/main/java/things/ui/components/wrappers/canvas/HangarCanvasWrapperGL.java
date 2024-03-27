@@ -17,17 +17,13 @@
 package things.ui.components.wrappers.canvas;
 
 import org.lwjgl.opengl.awt.GLData;
-import things.HangarState;
 import things.graphics.gl.HangarGLGraphicsProvider;
 import things.graphics.gl.RenderTarget;
 import things.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
-import things.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 
 public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
     private final HangarAWTGLCanvas glCanvas;
@@ -77,6 +73,7 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
         return 1.0;
     }
 
+    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
