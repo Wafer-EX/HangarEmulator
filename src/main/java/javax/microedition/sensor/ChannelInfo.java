@@ -17,9 +17,9 @@
 package javax.microedition.sensor;
 
 public interface ChannelInfo {
-    static final int TYPE_OBJECT = 0;
-    static final int TYPE_INT = 0;
-    static final int TYPE_DOUBLE = 0;
+    static final int TYPE_OBJECT = 4;
+    static final int TYPE_INT = 2;
+    static final int TYPE_DOUBLE = 1;
 
     float getAccuracy();
 

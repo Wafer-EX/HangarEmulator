@@ -20,9 +20,9 @@ import javax.microedition.io.Connection;
 import java.io.IOException;
 
 public interface SensorConnection extends Connection {
-    static final int STATE_OPENED = 0;
-    static final int STATE_LISTENING = 0;
-    static final int STATE_CLOSED = 0;
+    static final int STATE_OPENED = 1;
+    static final int STATE_LISTENING = 2;
+    static final int STATE_CLOSED = 4;
 
     Channel getChannel(ChannelInfo channelInfo);
 

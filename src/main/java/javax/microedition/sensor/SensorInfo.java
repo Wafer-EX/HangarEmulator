@@ -17,23 +17,23 @@
 package javax.microedition.sensor;
 
 public interface SensorInfo {
-    static final int CONN_EMBEDDED = 0;
-    static final int CONN_REMOTE = 0;
-    static final int CONN_SHORT_RANGE_WIRELESS = 0;
-    static final int CONN_WIRED = 0;
-    static final String CONTEXT_TYPE_AMBIENT = "";
-    static final String CONTEXT_TYPE_VEHICLE = "";
-    static final String CONTEXT_TYPE_DEVICE = "";
-    static final String CONTEXT_TYPE_USER = "";
-    static final String PROP_IS_CONTROLLABLE = "";
-    static final String PROP_IS_REPORTING_ERRORS = "";
-    static final String PROP_LATITUDE = "";
-    static final String PROP_LOCATION = "";
-    static final String PROP_LONGITUDE = "";
-    static final String PROP_MAX_RATE = "";
-    static final String PROP_PERMISSION = "";
-    static final String PROP_VENDOR = "";
-    static final String PROP_VERSION = "";
+    static final int CONN_EMBEDDED = 1;
+    static final int CONN_REMOTE = 2;
+    static final int CONN_SHORT_RANGE_WIRELESS = 4;
+    static final int CONN_WIRED = 8;
+    static final String CONTEXT_TYPE_AMBIENT = "ambient";
+    static final String CONTEXT_TYPE_VEHICLE = "vehicle";
+    static final String CONTEXT_TYPE_DEVICE = "device";
+    static final String CONTEXT_TYPE_USER = "user";
+    static final String PROP_IS_CONTROLLABLE = "controllable";
+    static final String PROP_IS_REPORTING_ERRORS = "errorsReported";
+    static final String PROP_LATITUDE = "latitude";
+    static final String PROP_LOCATION = "location";
+    static final String PROP_LONGITUDE = "longitude";
+    static final String PROP_MAX_RATE = "maxSamplingRate";
+    static final String PROP_PERMISSION = "permission";
+    static final String PROP_VENDOR = "vendor";
+    static final String PROP_VERSION = "version";
 
     ChannelInfo[] getChannelInfos();
 
