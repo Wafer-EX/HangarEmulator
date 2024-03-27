@@ -14,8 +14,8 @@
  * limitations under the License.
 */
 
-import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.MIDletLoader;
+package aq.waferex.hangaremulator;
+
 import com.formdev.flatlaf.FlatDarkLaf;
 import aq.waferex.hangaremulator.profiles.HangarProfileManager;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
