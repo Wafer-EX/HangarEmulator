@@ -14,11 +14,12 @@
  * limitations under the License.
 */
 
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.MIDletLoader;
 import com.formdev.flatlaf.FlatDarkLaf;
-import things.*;
-import things.profiles.HangarProfileManager;
-import things.ui.frames.HangarMainFrame;
-import things.utils.SystemUtils;
+import aq.waferex.hangaremulator.profiles.HangarProfileManager;
+import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
+import aq.waferex.hangaremulator.utils.SystemUtils;
 
 import java.io.File;
 

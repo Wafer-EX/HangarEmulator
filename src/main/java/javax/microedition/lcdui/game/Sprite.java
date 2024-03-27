@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui.game;
 
-import things.utils.microedition.ImageUtils;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;

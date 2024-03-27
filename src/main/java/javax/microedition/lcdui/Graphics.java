@@ -16,8 +16,8 @@
 
 package javax.microedition.lcdui;
 
-import things.graphics.HangarGraphicsProvider;
-import things.utils.microedition.ImageUtils;
+import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.*;
 

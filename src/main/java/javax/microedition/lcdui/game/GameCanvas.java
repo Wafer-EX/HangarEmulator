@@ -16,10 +16,10 @@
 
 package javax.microedition.lcdui.game;
 
-import things.HangarState;
-import things.graphics.HangarOffscreenBuffer;
-import things.graphics.opengl.HangarGLOffscreenBuffer;
-import things.graphics.swing.HangarSwingOffscreenBuffer;
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
+import aq.waferex.hangaremulator.graphics.opengl.HangarGLOffscreenBuffer;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingOffscreenBuffer;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;

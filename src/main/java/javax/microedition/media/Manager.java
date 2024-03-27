@@ -16,8 +16,8 @@
 
 package javax.microedition.media;
 
-import things.implementations.media.MidiPlayer;
-import things.implementations.media.WavPlayer;
+import aq.waferex.hangaremulator.implementations.media.MidiPlayer;
+import aq.waferex.hangaremulator.implementations.media.WavPlayer;
 
 import java.io.IOException;
 import java.io.InputStream;

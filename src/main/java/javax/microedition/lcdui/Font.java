@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.utils.microedition.FontUtils;
+import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 
 import java.util.Arrays;
 
