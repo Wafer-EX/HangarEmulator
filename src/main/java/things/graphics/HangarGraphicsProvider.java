@@ -49,8 +49,6 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void setFont(Font font);
 
-    public abstract void clipRect(int x, int y, int width, int height);
-
     public abstract void setClip(int x, int y, int width, int height);
 
     public abstract void drawLine(int x1, int y1, int x2, int y2, Color color);

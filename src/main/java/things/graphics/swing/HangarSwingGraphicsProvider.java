@@ -99,11 +99,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void clipRect(int x, int y, int width, int height) {
-        seGraphics.clipRect(x, y, width, height);
-    }
-
-    @Override
     public void setClip(int x, int y, int width, int height) {
         seGraphics.setClip(x, y, width, height);
     }

@@ -33,7 +33,7 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final HangarGraphicsProvider graphicsProvider;
-    private final Rectangle clip = new Rectangle(0, 0, 240, 320);
+    private Rectangle clip = new Rectangle(0, 0, 240, 320);
     private Color color;
 
     public Graphics(HangarGraphicsProvider graphicsProvider) {
@@ -122,15 +122,12 @@ public class Graphics {
     }
 
     public void clipRect(int x, int y, int width, int height) {
-        graphicsProvider.clipRect(x, y, width, height);
+        clip = (Rectangle) clip.createIntersection(new Rectangle(x, y, width, height));
+        setClip(clip.x, clip.y, clip.width, clip.height);
     }
 
     public void setClip(int x, int y, int width, int height) {
-        clip.x = x;
-        clip.y = y;
-        clip.width = width;
-        clip.height = height;
-
+        clip = new Rectangle(x, y, width, height);
         graphicsProvider.setClip(x, y, width, height);
     }
 
