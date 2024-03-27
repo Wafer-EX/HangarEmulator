@@ -21,7 +21,6 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 public abstract class HangarGraphicsProvider {
-    // TODO: add image registry, generate and store image specific to the provider
     private int translateX = 0, translateY = 0;
 
     public void translate(int x, int y) {
