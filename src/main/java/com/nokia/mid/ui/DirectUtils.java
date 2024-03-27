@@ -16,8 +16,8 @@
 
 package com.nokia.mid.ui;
 
-import things.utils.microedition.ImageUtils;
-import things.utils.nokia.DirectGraphicsUtils;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
+import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
 import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;

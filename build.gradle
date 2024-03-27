@@ -8,7 +8,7 @@ version = '0.0.1-alpha'
 
 jar {
     manifest {
-        from 'src/main/java/META-INF/MANIFEST.MF'
+        attributes 'Main-Class': 'aq.waferex.hangaremulator.HangarEmulator'
     }
 }
 

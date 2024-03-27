@@ -16,7 +16,7 @@
 
 package javax.microedition.midlet;
 
-import things.HangarState;
+import aq.waferex.hangaremulator.HangarState;
 
 public abstract class MIDlet {
     private boolean blockExit;

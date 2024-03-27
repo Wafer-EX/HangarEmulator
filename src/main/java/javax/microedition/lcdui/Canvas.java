@@ -16,9 +16,9 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarState;
-import things.utils.microedition.CanvasUtils;
-import things.utils.CanvasWrapperUtils;
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
+import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;

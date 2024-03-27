@@ -16,10 +16,10 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarState;
-import things.MIDletResources;
-import things.graphics.swing.HangarSwingGraphicsProvider;
-import things.utils.microedition.ImageUtils;
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.MIDletResources;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;

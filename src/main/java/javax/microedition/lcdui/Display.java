@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import things.HangarState;
+import aq.waferex.hangaremulator.HangarState;
 
 import javax.microedition.midlet.MIDlet;
 

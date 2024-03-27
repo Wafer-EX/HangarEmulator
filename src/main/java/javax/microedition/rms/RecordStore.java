@@ -16,7 +16,7 @@
 
 package javax.microedition.rms;
 
-import things.implementations.rms.RecordEnumerator;
+import aq.waferex.hangaremulator.implementations.rms.RecordEnumerator;
 
 import javax.swing.filechooser.FileSystemView;
 import java.io.*;
@@ -25,7 +25,7 @@ import java.util.Arrays;
 import java.util.Hashtable;
 import java.util.List;
 
-import static things.utils.microedition.RecordStoreUtils.*;
+import static aq.waferex.hangaremulator.utils.microedition.RecordStoreUtils.*;
 
 public class RecordStore implements Serializable {
     public static final int AUTHMODE_PRIVATE = 0;
