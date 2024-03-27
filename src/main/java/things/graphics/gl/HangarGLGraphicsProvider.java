@@ -39,7 +39,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
-    private RenderTarget renderTarget;
+    private final RenderTarget renderTarget;
 
     private boolean isGraphicsPrepared = false;
 
@@ -47,12 +47,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private static boolean isShaderCompiled = false;
 
     public HangarGLGraphicsProvider(RenderTarget renderTarget) {
-        glActions.add(() -> {
-            this.renderTarget = renderTarget;
-            if (!renderTarget.isInitialized()) {
-                renderTarget.initialize();
-            }
+        this.renderTarget = renderTarget;
 
+        glActions.add(() -> {
             if (!isShaderCompiled) {
                 spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
                 isShaderCompiled = true;
@@ -347,13 +344,18 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
         if (offscreenBuffer instanceof HangarGLOffscreenBuffer glOffscreenBuffer) {
-            glActions.add(() -> {
-                var renderTarget = glOffscreenBuffer.getRenderTarget();
-                if (!renderTarget.isInitialized()) {
-                    renderTarget.initialize();
-                }
-                RenderTarget.getDefault().use();
+            var offscreenRenderTarget = glOffscreenBuffer.getRenderTarget();
+            if (!offscreenRenderTarget.isInitialized()) {
+                glActions.add(offscreenRenderTarget::initialize);
+            }
 
+            if (offscreenBuffer.getGraphicsProvider() instanceof HangarGLGraphicsProvider glOffscreenGraphicsProvider) {
+                glActions.addAll(glOffscreenGraphicsProvider.glActions);
+                glOffscreenGraphicsProvider.glActions.clear();
+            }
+
+            glActions.add(() -> {
+                renderTarget.use();
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                         0, 0, 0, 0, 1, 1, 1, 1, 0,
@@ -368,7 +370,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 spriteShaderProgram.use();
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
-                renderTarget.getTexture().bind(GL_TEXTURE0);
+                offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
                 glDisable(GL_BLEND);
                 glUseProgram(0);
