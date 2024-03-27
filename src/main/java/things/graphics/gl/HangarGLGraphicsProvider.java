@@ -26,6 +26,7 @@ import javax.microedition.lcdui.Font;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import static org.lwjgl.opengl.GL33.*;
@@ -33,8 +34,9 @@ import static org.lwjgl.opengl.GL33.*;
 public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
 
-    private final ArrayList<HangarGLAction> glActions;
-    private final Rectangle clip;
+    private final ArrayList<HangarGLAction> glActions = new ArrayList<>();
+    private final HashMap<Image, GLTexture> generatedTextures = new HashMap<>();
+    private final Rectangle clip = new Rectangle(0, 0, 240, 320);
 
     private GLVertexArray glVertexArray;
     private GLBuffer glBuffer;
@@ -45,9 +47,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private static boolean isShaderCompiled = false;
 
     public HangarGLGraphicsProvider() {
-        this.glActions = new ArrayList<>();
-        this.clip = new Rectangle(0, 0, 240, 320);
-
         glActions.add(() -> {
             if (!isShaderCompiled) {
                 spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
@@ -287,7 +286,41 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
-        // TODO: write method logic
+        int width = img.getWidth();
+        int height = img.getHeight();
+
+        if (!generatedTextures.containsKey(img)) {
+            glActions.add(() -> {
+                var texture = new GLTexture(img.convertToByteBuffer(), width, height);
+                generatedTextures.put(img, texture);
+            });
+        }
+
+        glActions.add(() -> {
+            RenderTarget.bindDefault(240, 320);
+
+            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+            glEnable(GL_BLEND);
+
+            glBuffer.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
+                    x, y, 0, 0, 1, 1, 1, 1, 0,
+                    x + width, y, 1, 0, 1, 1, 1, 1, 0,
+                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
+                    x, y, 0, 0, 1, 1, 1, 1, 0,
+                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
+                    x, y + height, 0, 1, 1, 1, 1, 1, 0,
+            });
+
+            glVertexArray.bind();
+            spriteShaderProgram.use();
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+
+            generatedTextures.get(img).bind(GL_TEXTURE0);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDisable(GL_BLEND);
+            glUseProgram(0);
+        });
     }
 
     @Override
