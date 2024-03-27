@@ -25,11 +25,11 @@ import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
+public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     private final HangarAWTGLCanvas glCanvas;
     private final HangarGLGraphicsProvider graphicsProvider;
 
-    public HangarCanvasWrapperGL(Canvas canvas) {
+    public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
         
         this.glCanvas = new HangarAWTGLCanvas(new GLData());
@@ -39,22 +39,7 @@ public class HangarCanvasWrapperGL extends HangarCanvasWrapper {
         glCanvas.setPreferredSize(this.getPreferredSize());
 
         this.add(glCanvas);
-        // TODO: write logic
-//        this.addComponentListener(new ComponentAdapter() {
-//            @Override
-//            public void componentResized(ComponentEvent e) {
-//                var profile = HangarState.getProfileManager().getCurrentProfile();
-//                float scaling = SystemUtils.getScalingInUnits();
-//
-//                int centerX = (int) ((getWidth() / 2) * scaling);
-//                int centerY = (int) ((getHeight() / 2) * scaling);
-//                int width = profile.getResolution().width;
-//                int height = profile.getResolution().height;
-//
-//                // TODO: what to do with this?
-//                //graphicsProvider.setViewportValues(centerX - width / 2, centerY - height / 2, width, height);
-//            }
-//        });
+        // TODO: react when resize
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {

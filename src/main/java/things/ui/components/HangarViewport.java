@@ -18,7 +18,7 @@ package things.ui.components;
 
 import things.HangarState;
 import things.ui.components.wrappers.canvas.HangarCanvasWrapper;
-import things.ui.components.wrappers.canvas.HangarCanvasWrapperGL;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperOpenGL;
 import things.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import things.ui.listeners.events.HangarDisplayableEvent;
 import things.ui.listeners.HangarDisplayableListener;
@@ -63,7 +63,7 @@ public class HangarViewport extends JPanel {
             if (displayable instanceof Canvas canvas) {
                 this.canvasWrapper = switch (HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine()) {
                     case Swing -> new HangarCanvasWrapperSwing(canvas);
-                    case OpenGL -> new HangarCanvasWrapperGL(canvas);
+                    case OpenGL -> new HangarCanvasWrapperOpenGL(canvas);
                 };
                 scrollPane.setViewportView(canvasWrapper);
                 SwingUtilities.invokeLater(canvas::showNotify);

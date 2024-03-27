@@ -19,7 +19,7 @@ package things.graphics.opengl;
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.ui.components.wrappers.canvas.HangarCanvasWrapperGL;
+import things.ui.components.wrappers.canvas.HangarCanvasWrapperOpenGL;
 
 public class HangarGLOffscreenBuffer implements HangarOffscreenBuffer {
     private final HangarGLGraphicsProvider graphicsProvider;
@@ -42,8 +42,8 @@ public class HangarGLOffscreenBuffer implements HangarOffscreenBuffer {
     @Override
     public void flushToCanvasWrapper(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper instanceof HangarCanvasWrapperGL canvasWrapperLWJGL) {
-            canvasWrapperLWJGL.getGraphicsProvider().paintOffscreenBuffer(this);
+        if (canvasWrapper instanceof HangarCanvasWrapperOpenGL canvasWrapperOpenGL) {
+            canvasWrapperOpenGL.getGraphicsProvider().paintOffscreenBuffer(this);
         }
     }
 
