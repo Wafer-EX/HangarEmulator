@@ -38,7 +38,7 @@ public class RenderTarget {
         this.isInitialized = false;
     }
 
-    public RenderTarget() {
+    private RenderTarget() {
         this.width = 240;
         this.height = 320;
         this.isDefault = true;
@@ -50,8 +50,8 @@ public class RenderTarget {
             glFramebuffer = new GLFramebuffer();
             glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
             glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
+            isInitialized = true;
         }
-        isInitialized = true;
     }
 
     public boolean isInitialized() {
@@ -59,7 +59,7 @@ public class RenderTarget {
     }
 
     public GLTexture getTexture() {
-        if (glTexture == null) {
+        if (isDefault) {
             throw new IllegalStateException();
         }
         return glTexture;
@@ -78,12 +78,13 @@ public class RenderTarget {
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
         }
         else {
-            if (glFramebuffer == null) {
-                throw new IllegalStateException();
-            }
             glFramebuffer.bind();
         }
         glViewport(0, 0, width, height);
+    }
+
+    public static RenderTarget getDefault() {
+        return defaultRenderTarget;
     }
 
     public static RenderTarget getDefault(int screenWidth, int screenHeight) {

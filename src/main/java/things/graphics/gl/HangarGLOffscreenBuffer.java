@@ -30,6 +30,10 @@ public class HangarGLOffscreenBuffer implements HangarOffscreenBuffer {
         this.graphicsProvider = new HangarGLGraphicsProvider(renderTarget);
     }
 
+    public RenderTarget getRenderTarget() {
+        return renderTarget;
+    }
+
     @Override
     public HangarGraphicsProvider getGraphicsProvider() {
         return graphicsProvider;
