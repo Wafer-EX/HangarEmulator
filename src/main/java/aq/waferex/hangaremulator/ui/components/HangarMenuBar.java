@@ -197,10 +197,10 @@ public class HangarMenuBar extends JMenuBar {
                     HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngine);
                     if (graphicsEngine == GraphicsEngines.OpenGL && this.isSelected()) {
                         JOptionPane.showMessageDialog(this, """
-                                        You've chose the OpenGL graphics engine through LWJGL.
-                                        It's very raw graphics engine that doesn't support
-                                        many functions. If you interested for comfortable
-                                        game process, please, use the Swing graphics engine.
+                                        I don't recommended to use OpenGL graphics engine because
+                                        it's on a early stage of development and can't display anything
+                                        correctly. If you interested in comfortable game process,
+                                        please use Swing graphics engine.
                                         """,
                                 "Warning!", JOptionPane.WARNING_MESSAGE);
                     }
