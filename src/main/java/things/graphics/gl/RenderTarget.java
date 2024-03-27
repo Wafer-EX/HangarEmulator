@@ -47,8 +47,8 @@ public class RenderTarget {
 
     public void initialize() {
         if (!isDefault) {
-            glFramebuffer = new GLFramebuffer();
             glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+            glFramebuffer = new GLFramebuffer();
             glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
             isInitialized = true;
         }
