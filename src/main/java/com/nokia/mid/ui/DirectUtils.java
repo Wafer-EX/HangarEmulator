@@ -16,6 +16,7 @@
 
 package com.nokia.mid.ui;
 
+import things.utils.microedition.ImageUtils;
 import things.utils.nokia.DirectGraphicsUtils;
 
 import javax.imageio.ImageIO;
@@ -44,7 +45,9 @@ public class DirectUtils {
                     throw new NullPointerException();
                 }
                 var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
-                g.getGraphicsProvider().drawImage(image, x, y, anchor);
+                x = ImageUtils.alignX(img.getWidth(), x, anchor);
+                y = ImageUtils.alignY(img.getHeight(), y, anchor);
+                g.getGraphicsProvider().drawImage(image, x, y);
             }
 
             @Override
@@ -79,7 +82,7 @@ public class DirectUtils {
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                g.getGraphicsProvider().drawImage(new Image(image, true), x, y, 0);
+                g.getGraphicsProvider().drawImage(new Image(image, true), x, y);
             }
 
             @Override

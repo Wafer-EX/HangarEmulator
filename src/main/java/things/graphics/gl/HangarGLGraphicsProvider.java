@@ -286,7 +286,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
+    public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
         // TODO: write method logic
     }
 

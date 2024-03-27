@@ -111,7 +111,7 @@ public class Sprite extends Layer {
     public void paint(Graphics g) throws NullPointerException {
         var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
         var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
-        g.getGraphicsProvider().drawImage(new Image(transformedImage, false), position.x, position.y, 0);
+        g.getGraphicsProvider().drawImage(new Image(transformedImage, false), position.x, position.y);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {

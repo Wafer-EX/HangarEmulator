@@ -215,12 +215,7 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
-        if (img == null) {
-            throw new NullPointerException();
-        }
-        x = ImageUtils.alignX(img.getWidth(), x, anchor);
-        y = ImageUtils.alignY(img.getHeight(), y, anchor);
+    public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
         seGraphics.drawImage(img.getSEImage(), x, y, null);
     }
 

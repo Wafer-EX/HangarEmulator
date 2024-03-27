@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.graphics.HangarGraphicsProvider;
+import things.utils.microedition.ImageUtils;
 
 import java.awt.*;
 
@@ -192,7 +193,12 @@ public class Graphics {
     }
 
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawImage(img, x, y, anchor);
+        if (img == null) {
+            throw new NullPointerException();
+        }
+        x = ImageUtils.alignX(img.getWidth(), x, anchor);
+        y = ImageUtils.alignY(img.getHeight(), y, anchor);
+        graphicsProvider.drawImage(img, x, y);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
