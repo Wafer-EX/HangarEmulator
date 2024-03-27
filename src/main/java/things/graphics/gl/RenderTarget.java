@@ -48,6 +48,11 @@ public class RenderTarget {
     public void initialize() {
         if (!isDefault) {
             glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+            glTexture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
             glFramebuffer = new GLFramebuffer();
             glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
             isInitialized = true;
