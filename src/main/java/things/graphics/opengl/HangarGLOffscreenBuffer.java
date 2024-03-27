@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.gl;
+package things.graphics.opengl;
 
 import things.HangarState;
 import things.graphics.HangarGraphicsProvider;

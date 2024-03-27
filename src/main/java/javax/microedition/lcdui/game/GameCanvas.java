@@ -18,7 +18,7 @@ package javax.microedition.lcdui.game;
 
 import things.HangarState;
 import things.graphics.HangarOffscreenBuffer;
-import things.graphics.gl.HangarGLOffscreenBuffer;
+import things.graphics.opengl.HangarGLOffscreenBuffer;
 import things.graphics.swing.HangarSwingOffscreenBuffer;
 
 import javax.microedition.lcdui.Canvas;

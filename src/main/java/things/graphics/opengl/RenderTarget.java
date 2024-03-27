@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package things.graphics.gl;
+package things.graphics.opengl;
 
-import things.graphics.gl.abstractions.GLFramebuffer;
-import things.graphics.gl.abstractions.GLTexture;
+import things.graphics.opengl.abstractions.GLFramebuffer;
+import things.graphics.opengl.abstractions.GLTexture;
 
 import static org.lwjgl.opengl.GL33.*;
 

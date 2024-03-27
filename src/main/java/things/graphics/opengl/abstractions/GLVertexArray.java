@@ -14,28 +14,25 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package things.graphics.opengl.abstractions;
 
 import static org.lwjgl.opengl.GL33.*;
 
 // TODO: dispose
-public class GLFramebuffer {
+public class GLVertexArray {
     private final int identifier;
 
-    public GLFramebuffer() {
-        identifier = glGenFramebuffers();
+    public GLVertexArray() {
+        identifier = glGenVertexArrays();
         bind();
     }
 
-    public int getIdentifier() {
-        return identifier;
-    }
-
-    public void attachTexture(GLTexture texture, int attachment) {
-        glFramebufferTexture2D(GL_FRAMEBUFFER, attachment, GL_TEXTURE_2D, texture.getIdentifier(), 0);
+    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
+        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
+        glEnableVertexAttribArray(index);
     }
 
     public void bind() {
-        glBindFramebuffer(GL_FRAMEBUFFER, identifier);
+        glBindVertexArray(identifier);
     }
 }

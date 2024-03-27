@@ -14,25 +14,8 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package things.graphics.opengl;
 
-import static org.lwjgl.opengl.GL33.*;
-
-// TODO: dispose
-public class GLVertexArray {
-    private final int identifier;
-
-    public GLVertexArray() {
-        identifier = glGenVertexArrays();
-        bind();
-    }
-
-    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
-        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-        glEnableVertexAttribArray(index);
-    }
-
-    public void bind() {
-        glBindVertexArray(identifier);
-    }
+public interface HangarGLAction {
+    void execute();
 }

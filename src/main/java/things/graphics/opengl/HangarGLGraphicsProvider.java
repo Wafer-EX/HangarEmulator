@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package things.graphics.gl;
+package things.graphics.opengl;
 
 import org.joml.Matrix4f;
 import things.graphics.HangarGraphicsProvider;
 import things.graphics.HangarOffscreenBuffer;
-import things.graphics.gl.abstractions.*;
+import things.graphics.opengl.abstractions.*;
 import things.utils.ListUtils;
 
 import javax.microedition.lcdui.Font;

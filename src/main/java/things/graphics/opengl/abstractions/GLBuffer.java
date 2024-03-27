@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package things.graphics.opengl.abstractions;
 
 import static org.lwjgl.opengl.GL33.*;
 

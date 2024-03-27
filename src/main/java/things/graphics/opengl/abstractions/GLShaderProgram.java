@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package things.graphics.opengl.abstractions;
 
 import org.joml.Matrix4f;
 

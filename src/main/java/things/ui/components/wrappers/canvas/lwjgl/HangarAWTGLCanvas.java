@@ -18,7 +18,7 @@ package things.ui.components.wrappers.canvas.lwjgl;
 
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
-import things.graphics.gl.HangarGLAction;
+import things.graphics.opengl.HangarGLAction;
 
 import java.util.ArrayList;
 
