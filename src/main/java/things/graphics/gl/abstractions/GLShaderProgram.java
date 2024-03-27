@@ -59,16 +59,6 @@ public class GLShaderProgram {
         glUseProgram(identifier);
     }
 
-    public void setUniform(String name, int value) {
-        int location = getLocation(name);
-        glUniform1i(location, value);
-    }
-
-    public void setUniform(String name, float value) {
-        int location = getLocation(name);
-        glUniform1f(location, value);
-    }
-
     public void setUniform(String name, Matrix4f matrix) {
         int location = getLocation(name);
         float[] data = new float[16];
