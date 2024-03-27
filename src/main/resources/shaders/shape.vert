@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,14 @@
  */
 
 #version 330 core
-out vec4 FragColor;
+layout (location = 0) in vec2 position;
+layout (location = 1) in vec4 color;
 
-in vec2 UV;
+uniform mat4 projectionMatrix;
 
-uniform sampler2D sprite;
+out vec4 Color;
 
 void main() {
-    FragColor = texture(sprite, UV);
+    Color = color;
+    gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
 }

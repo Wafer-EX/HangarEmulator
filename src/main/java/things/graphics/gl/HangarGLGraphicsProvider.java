@@ -37,29 +37,40 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private final ArrayList<HangarGLAction> glActions = new ArrayList<>();
     private final HashMap<Image, GLTexture> generatedTextures = new HashMap<>();
 
-    private GLVertexArray glVertexArray;
-    private GLBuffer glBuffer;
-
-    private boolean isGraphicsPrepared = false;
+    private final RenderTarget renderTarget;
 
     private static GLShaderProgram spriteShaderProgram;
-    private static boolean isShaderCompiled = false;
+    private GLVertexArray glSpriteVertexArray;
+    private GLBuffer glSpriteBuffer;
 
-    public HangarGLGraphicsProvider() {
+    private static GLShaderProgram shapeShaderProgram;
+    private GLVertexArray glShapeVertexArray;
+    private GLBuffer glShapeBuffer;
+
+    private static boolean areShadersCompiled = false;
+    private boolean isGraphicsPrepared = false;
+
+    public HangarGLGraphicsProvider(RenderTarget renderTarget) {
+        this.renderTarget = renderTarget;
+
         glActions.add(() -> {
-            if (!isShaderCompiled) {
+            if (!areShadersCompiled) {
                 spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
-                isShaderCompiled = true;
+                shapeShaderProgram = new GLShaderProgram("/shaders/shape.vert", "/shaders/shape.frag");
+                areShadersCompiled = true;
             }
 
             if (!isGraphicsPrepared) {
-                glBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
+                glSpriteBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
 
-                glVertexArray = new GLVertexArray();
-                glVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 9 * 4, 0);
-                glVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 9 * 4, 2 * 4);
-                glVertexArray.VertexAttribPointer(2, 4, GL_FLOAT, false, 9 * 4, 4 * 4);
-                glVertexArray.VertexAttribPointer(3, 1, GL_FLOAT, false, 9 * 4, 8 * 4);
+                glSpriteVertexArray = new GLVertexArray();
+                glSpriteVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+                glSpriteVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
+
+                glShapeBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
+                glShapeVertexArray = new GLVertexArray();
+                glSpriteVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 6 * 4, 0);
+                glSpriteVertexArray.VertexAttribPointer(1, 4, GL_FLOAT, false, 6 * 4, 2 * 4);
 
                 isGraphicsPrepared = true;
             }
@@ -104,33 +115,35 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void clipRect(int x, int y, int width, int height) {
-        // TODO: write method logic
-    }
-
-    @Override
     public void setClip(int x, int y, int width, int height) {
-        glActions.add(() -> glScissor(x, y, width,  height));
+        glActions.add(() -> glScissor(x, 320 - y - height, width,  height));
     }
 
     @Override
     public void drawLine(int x1, int y1, int x2, int y2, Color color) {
+        // TODO: check it
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
+
+        final int x1f = x1 + getTranslateX();
+        final int y1f = y1 + getTranslateY();
+        final int x2f = x2 + getTranslateX();
+        final int y2f = y2 + getTranslateY();
 
         glActions.add(() -> {
-            RenderTarget.bindDefault(240, 320);
+            renderTarget.use();
 
-            glBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x1, y1, 0, 0, r, g, b, 1, 1,
-                    x2, y2, 1, 0, r, g, b, 1, 1,
+            glShapeBuffer.setBufferData(new float[]{
+                    // 2x POSITION | 4x COLOR
+                    x1f, y1f, r, g, b, a,
+                    x2f, y2f, r, g, b, a,
             });
 
-            glVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+            glShapeVertexArray.bind();
+            shapeShaderProgram.use();
+            shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
             glDrawArrays(GL_LINES, 0, 2);
             glUseProgram(0);
@@ -141,23 +154,35 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
+
+        final int x1f = x1 + getTranslateX();
+        final int y1f = y1 + getTranslateY();
+        final int x2f = x2 + getTranslateX();
+        final int y2f = y2 + getTranslateY();
+        final int x3f = x3 + getTranslateX();
+        final int y3f = y3 + getTranslateY();
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                renderTarget.use();
 
-                glBuffer.setBufferData(new float[]{
-                        // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                        x1, y1, 0, 0, r, g, b, 1, 1,
-                        x2, y2, 0, 0, r, g, b, 1, 1,
-                        x3, y3, 0, 0, r, g, b, 1, 1,
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+
+                glShapeBuffer.setBufferData(new float[]{
+                        // 2x POSITION | 4x COLOR
+                        x1f, y1f, r, g, b, a,
+                        x2f, y2f, r, g, b, a,
+                        x3f, y3f, r, g, b, a,
                 });
 
-                glVertexArray.bind();
-                spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                glShapeVertexArray.bind();
+                shapeShaderProgram.use();
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 3);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
@@ -171,26 +196,34 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
+
+        final int xf = x + getTranslateX();
+        final int yf = y + getTranslateY();
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                renderTarget.use();
 
-                glBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x, y, 0, 0, r, g, b, 1, 1,
-                    x + width, y, 1, 0, r, g, b, 1, 1,
-                    x + width, y + height, 1, 1, r, g, b, 1, 1,
-                    x, y, 0, 0, r, g, b, 1, 1,
-                    x + width, y + height, 1, 1, r, g, b, 1, 1,
-                    x, y + height, 0, 1, r, g, b, 1, 1,
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+
+                glShapeBuffer.setBufferData(new float[]{
+                        // 2x POSITION | 4x COLOR
+                        xf, yf, r, g, b, a,
+                        xf + width, yf, r, g, b, a,
+                        xf + width, yf + height, r, g, b, a,
+                        xf, yf, r, g, b, a,
+                        xf + width, yf + height, r, g, b, a,
+                        xf, yf + height, r, g, b, a,
                 });
 
-                glVertexArray.bind();
-                spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                glShapeVertexArray.bind();
+                shapeShaderProgram.use();
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
@@ -206,12 +239,16 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
+        x += getTranslateX();
+        y += getTranslateY();
+
         float halfWidth = (float) width / 2;
         float halfHeight = (float) height / 2;
 
         float r = color.getRed() / 255f;
         float g = color.getGreen() / 255f;
         float b = color.getBlue() / 255f;
+        float a = color.getAlpha() / 255f;
 
         float deltaAngle = ((float) Math.PI * 2) / CIRCLE_POINTS;
         float angle = 0;
@@ -227,9 +264,11 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             float currY = (float) Math.cos(angle) * halfHeight + y + halfHeight;
 
             points.addAll(List.of(
-                    x + halfWidth, y + halfHeight, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
-                    prevX, prevY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f,
-                    currX, currY, 0.0f, 0.0f, r, g, b, 1.0f, 1.0f));
+                    // 2x POSITION | 4x COLOR
+                    x + halfWidth, y + halfHeight, r, g, b, a,
+                    prevX, prevY, r, g, b, a,
+                    currX, currY, r, g, b, a
+            ));
 
             prevX = currX;
             prevY = currY;
@@ -237,15 +276,19 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
         if (isFilled) {
             glActions.add(() -> {
-                RenderTarget.bindDefault(240, 320);
+                renderTarget.use();
 
-                glBuffer.setBufferData(ListUtils.toArray(points));
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
 
-                glVertexArray.bind();
-                spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                glShapeBuffer.setBufferData(ListUtils.toArray(points));
+
+                glShapeVertexArray.bind();
+                shapeShaderProgram.use();
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
@@ -255,7 +298,18 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, Color color, boolean isFilled) {
-        // TODO: write method logic
+        switch (nPoints) {
+            case 3 -> drawTriangle(xPoints[0], yPoints[0], xPoints[1], yPoints[1], xPoints[2], yPoints[2], color, isFilled);
+            case 4 -> {
+                // TODO: optimize it
+                drawTriangle(xPoints[0], yPoints[0], xPoints[1], yPoints[1], xPoints[2], yPoints[2], color, isFilled);
+                drawTriangle(xPoints[0], yPoints[0], xPoints[2], yPoints[2], xPoints[3], yPoints[3], color, isFilled);
+            }
+            default -> {
+                // TODO: triangulate polygon
+            }
+        }
+
     }
 
     @Override
@@ -268,6 +322,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         int width = img.getWidth();
         int height = img.getHeight();
 
+        final int xf = x + getTranslateX();
+        final int yf = y + getTranslateY();
+
         if (!generatedTextures.containsKey(img)) {
             glActions.add(() -> {
                 var texture = new GLTexture(img.convertToByteBuffer(), width, height);
@@ -276,22 +333,22 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         }
 
         glActions.add(() -> {
-            RenderTarget.bindDefault(240, 320);
+            renderTarget.use();
 
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
             glEnable(GL_BLEND);
 
-            glBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
-                    x, y, 0, 0, 1, 1, 1, 1, 0,
-                    x + width, y, 1, 0, 1, 1, 1, 1, 0,
-                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
-                    x, y, 0, 0, 1, 1, 1, 1, 0,
-                    x + width, y + height, 1, 1, 1, 1, 1, 1, 0,
-                    x, y + height, 0, 1, 1, 1, 1, 1, 0,
+            glSpriteBuffer.setBufferData(new float[]{
+                    // 2x POSITION | 2x UV
+                    xf, yf, 0.0f, 0.0f,
+                    xf + width, yf, 1.0f, 0.0f,
+                    xf + width, yf + height, 1.0f, 1.0f,
+                    xf, yf, 0.0f, 0.0f,
+                    xf + width, yf + height, 1.0f, 1.0f,
+                    xf, yf + height, 0.0f, 1.0f,
             });
 
-            glVertexArray.bind();
+            glSpriteVertexArray.bind();
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
@@ -319,6 +376,38 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        // TODO: write method logic
+        if (offscreenBuffer instanceof HangarGLOffscreenBuffer glOffscreenBuffer) {
+            var offscreenRenderTarget = glOffscreenBuffer.getRenderTarget();
+            if (!offscreenRenderTarget.isInitialized()) {
+                glActions.add(offscreenRenderTarget::initialize);
+            }
+
+            if (offscreenBuffer.getGraphicsProvider() instanceof HangarGLGraphicsProvider glOffscreenGraphicsProvider) {
+                glActions.addAll(glOffscreenGraphicsProvider.glActions);
+                glOffscreenGraphicsProvider.glActions.clear();
+            }
+
+            glActions.add(() -> {
+                renderTarget.use();
+                glSpriteBuffer.setBufferData(new float[]{
+                        // 2x POSITION | 2x UV
+                        0.0f, 0.0f, 0.0f, 0.0f,
+                        240.0f, 0.0f, 1.0f, 0.0f,
+                        240.0f, 320.0f, 1.0f, 1.0f,
+                        0.0f, 0.0f, 0.0f, 0.0f,
+                        240.0f, 320.0f, 1.0f, 1.0f,
+                        0.0f, 320.0f, 0.0f, 1.0f,
+                });
+
+                glSpriteVertexArray.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 0, 320));
+
+                offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+                glDisable(GL_BLEND);
+                glUseProgram(0);
+            });
+        }
     }
 }

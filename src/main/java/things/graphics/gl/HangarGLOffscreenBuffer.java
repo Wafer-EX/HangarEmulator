@@ -22,13 +22,16 @@ import things.graphics.HangarOffscreenBuffer;
 import things.ui.components.wrappers.canvas.HangarCanvasWrapperGL;
 
 public class HangarGLOffscreenBuffer implements HangarOffscreenBuffer {
-    private int width, height;
     private final HangarGLGraphicsProvider graphicsProvider;
+    private final RenderTarget renderTarget;
 
     public HangarGLOffscreenBuffer(int width, int height) {
-        this.width = width;
-        this.height = height;
-        this.graphicsProvider = new HangarGLGraphicsProvider();
+        this.renderTarget = new RenderTarget(width, height);
+        this.graphicsProvider = new HangarGLGraphicsProvider(renderTarget);
+    }
+
+    public RenderTarget getRenderTarget() {
+        return renderTarget;
     }
 
     @Override
@@ -46,17 +49,16 @@ public class HangarGLOffscreenBuffer implements HangarOffscreenBuffer {
 
     @Override
     public int getWidth() {
-        return width;
+        return renderTarget.getWidth();
     }
 
     @Override
     public int getHeight() {
-        return height;
+        return renderTarget.getHeight();
     }
 
     @Override
     public void refreshResolution(int width, int height) {
-        this.width = width;
-        this.height = height;
+        // TODO: replace with new render target
     }
 }

@@ -121,7 +121,7 @@ public class Image {
         if (isMutable()) {
             var graphics = seImage.getGraphics();
             HangarState.applyAntiAliasing(graphics);
-            return new Graphics(new HangarSwingGraphicsProvider(graphics, this.getSEImage()));
+            return new Graphics(new HangarSwingGraphicsProvider(graphics));
         }
         else {
             throw new IllegalStateException();

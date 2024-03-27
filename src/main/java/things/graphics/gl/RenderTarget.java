@@ -23,31 +23,78 @@ import static org.lwjgl.opengl.GL33.*;
 
 // TODO: dispose
 public class RenderTarget {
-    private final GLFramebuffer glFramebuffer;
-    private final GLTexture glTexture;
-    private final int width, height;
+    private GLFramebuffer glFramebuffer;
+    private GLTexture glTexture;
+    private int width, height;
+    private boolean isInitialized;
+    private final boolean isDefault;
+
+    private static final RenderTarget defaultRenderTarget = new RenderTarget();
 
     public RenderTarget(int width, int height) {
         this.width = width;
         this.height = height;
+        this.isDefault = false;
+        this.isInitialized = false;
+    }
 
-        glFramebuffer = new GLFramebuffer();
-        glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+    private RenderTarget() {
+        this.width = 240;
+        this.height = 320;
+        this.isDefault = true;
+        this.isInitialized = true;
+    }
 
-        glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
+    public void initialize() {
+        if (!isDefault) {
+            glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+            glTexture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+            glTexture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+            glTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+            glTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+
+            glFramebuffer = new GLFramebuffer();
+            glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
+            isInitialized = true;
+        }
+    }
+
+    public boolean isInitialized() {
+        return isInitialized;
     }
 
     public GLTexture getTexture() {
+        if (isDefault) {
+            throw new IllegalStateException();
+        }
         return glTexture;
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
     public void use() {
-        glFramebuffer.bind();
+        if (isDefault) {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        }
+        else {
+            glFramebuffer.bind();
+        }
         glViewport(0, 0, width, height);
     }
 
-    public static void bindDefault(int screenWidth, int screenHeight) {
-        glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        glViewport(0, 0, screenWidth, screenHeight);
+    public static RenderTarget getDefault() {
+        return defaultRenderTarget;
+    }
+
+    public static RenderTarget getDefault(int screenWidth, int screenHeight) {
+        defaultRenderTarget.width = screenWidth;
+        defaultRenderTarget.height = screenHeight;
+        return defaultRenderTarget;
     }
 }

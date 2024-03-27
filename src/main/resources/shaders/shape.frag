@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,8 @@
 #version 330 core
 out vec4 FragColor;
 
-in vec2 UV;
-
-uniform sampler2D sprite;
+in vec4 Color;
 
 void main() {
-    FragColor = texture(sprite, UV);
+    FragColor = Color;
 }

@@ -27,8 +27,8 @@ public class GLFramebuffer {
         bind();
     }
 
-    private GLFramebuffer(int identifier) {
-        this.identifier = identifier;
+    public int getIdentifier() {
+        return identifier;
     }
 
     public void attachTexture(GLTexture texture, int attachment) {
@@ -37,13 +37,5 @@ public class GLFramebuffer {
 
     public void bind() {
         glBindFramebuffer(GL_FRAMEBUFFER, identifier);
-    }
-
-    public int getIdentifier() {
-        return identifier;
-    }
-
-    public static GLFramebuffer getScreen() {
-        return new GLFramebuffer(0);
     }
 }
