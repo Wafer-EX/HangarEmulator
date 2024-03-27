@@ -31,13 +31,11 @@ import static javax.microedition.lcdui.Graphics.SOLID;
 
 public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     private final Graphics2D seGraphics;
-    private final BufferedImage seImage;
     private java.awt.Font seFont;
     private int selectedStroke = SOLID;
 
-    public HangarSwingGraphicsProvider(java.awt.Graphics seGraphics, BufferedImage seImage) {
+    public HangarSwingGraphicsProvider(java.awt.Graphics seGraphics) {
         this.seGraphics = HangarState.applyAntiAliasing(seGraphics);
-        this.seImage = seImage;
     }
 
     @Override

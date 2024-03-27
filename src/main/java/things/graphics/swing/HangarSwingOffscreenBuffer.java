@@ -62,6 +62,6 @@ public class HangarSwingOffscreenBuffer implements HangarOffscreenBuffer {
     @Override
     public void refreshResolution(int width, int height) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
-        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics(), additionalBuffer);
+        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics());
     }
 }
