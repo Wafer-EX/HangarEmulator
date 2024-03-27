@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import things.graphics.HangarGraphicsProvider;
+import things.utils.microedition.ImageUtils;
 
 import java.awt.*;
 
@@ -32,6 +33,7 @@ public class Graphics {
     public static final int DOTTED = 1;
 
     private final HangarGraphicsProvider graphicsProvider;
+    private final Rectangle clip = new Rectangle(0, 0, 240, 320);
     private Color color;
 
     public Graphics(HangarGraphicsProvider graphicsProvider) {
@@ -104,19 +106,19 @@ public class Graphics {
     }
 
     public int getClipX() {
-        return graphicsProvider.getClipX();
+        return clip.x;
     }
 
     public int getClipY() {
-        return graphicsProvider.getClipY();
+        return clip.y;
     }
 
     public int getClipWidth() {
-        return graphicsProvider.getClipWidth();
+        return clip.width;
     }
 
     public int getClipHeight() {
-        return graphicsProvider.getClipHeight();
+        return clip.height;
     }
 
     public void clipRect(int x, int y, int width, int height) {
@@ -124,6 +126,11 @@ public class Graphics {
     }
 
     public void setClip(int x, int y, int width, int height) {
+        clip.x = x;
+        clip.y = y;
+        clip.width = width;
+        clip.height = height;
+
         graphicsProvider.setClip(x, y, width, height);
     }
 
@@ -192,7 +199,12 @@ public class Graphics {
     }
 
     public void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawImage(img, x, y, anchor);
+        if (img == null) {
+            throw new NullPointerException();
+        }
+        x = ImageUtils.alignX(img.getWidth(), x, anchor);
+        y = ImageUtils.alignY(img.getHeight(), y, anchor);
+        graphicsProvider.drawImage(img, x, y);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {

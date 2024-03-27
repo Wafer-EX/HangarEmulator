@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,30 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package javax.microedition.sensor;
 
-import static org.lwjgl.opengl.GL33.*;
+import java.util.HashMap;
 
-// TODO: dispose
-public class GLVertexArray {
-    private final int identifier;
+public class Unit {
+    private static final HashMap<String, Unit> unitList = new HashMap<>();
+    private final String symbol;
 
-    public GLVertexArray() {
-        identifier = glGenVertexArrays();
-        bind();
+    private Unit(String symbol) {
+        this.symbol = symbol;
     }
 
-    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
-        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-        glEnableVertexAttribArray(index);
+    public static Unit getUnit(String symbol) {
+        if (unitList.containsKey(symbol)) {
+            return unitList.get(symbol);
+        }
+
+        var unit = new Unit(symbol);
+        unitList.put(symbol, unit);
+        return unit;
     }
 
-    public void bind() {
-        glBindVertexArray(identifier);
+    @Override
+    public String toString() {
+        return symbol;
     }
 }

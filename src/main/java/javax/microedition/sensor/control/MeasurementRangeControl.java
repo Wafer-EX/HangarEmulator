@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,13 @@
  * limitations under the License.
  */
 
-#version 330 core
-out vec4 FragColor;
+package javax.microedition.sensor.control;
 
-in vec2 UV;
-in vec4 Color;
-in float IsIgnoreSprite;
+import javax.microedition.sensor.ChannelInfo;
+import javax.microedition.sensor.MeasurementRange;
 
-uniform sampler2D sprite;
+public interface MeasurementRangeControl extends Control {
+    MeasurementRange getMeasurementRange(ChannelInfo channelInfo);
 
-void main() {
-    if (IsIgnoreSprite != 0.0) {
-        FragColor = Color;
-    }
-    else {
-        FragColor = texture(sprite, UV) * Color;
-    }
+    void setMeasurementRange(ChannelInfo channelInfo, MeasurementRange measurementRange);
 }

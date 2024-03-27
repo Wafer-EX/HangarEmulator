@@ -16,7 +16,7 @@
 
 package things.graphics.gl.abstractions;
 
-import static org.lwjgl.opengl.GL46.*;
+import static org.lwjgl.opengl.GL33.*;
 
 // TODO: dispose
 public class GLBuffer {

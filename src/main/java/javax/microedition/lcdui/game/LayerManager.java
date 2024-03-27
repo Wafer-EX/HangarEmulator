@@ -58,16 +58,15 @@ public class LayerManager {
             throw new NullPointerException();
         }
         if (!layerList.isEmpty()) {
-            var graphics = g.getGraphicsProvider();
-            int posY = y - viewWindowPosition.y;
-            int posX = x - viewWindowPosition.x;
+            int offsetX = x - viewWindowPosition.x;
+            int offsetY = y - viewWindowPosition.y;
 
-            graphics.translate(posX, posY);
             for (int i = layerList.size() - 1; i >= 0; i--) {
                 var layer = layerList.get(i);
+                layer.move(offsetX, offsetY);
                 layer.paint(g);
+                layer.move(-offsetX, -offsetY);
             }
-            graphics.translate(-posX, -posY);
         }
     }
 

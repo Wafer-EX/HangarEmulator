@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,26 @@
  * limitations under the License.
  */
 
-#version 330 core
-out vec4 FragColor;
+package javax.microedition.sensor;
 
-in vec2 UV;
-in vec4 Color;
-in float IsIgnoreSprite;
+public final class ObjectCondition implements Condition {
+    private final Object limit;
 
-uniform sampler2D sprite;
-
-void main() {
-    if (IsIgnoreSprite != 0.0) {
-        FragColor = Color;
+    public ObjectCondition(Object limit) {
+        this.limit = limit;
     }
-    else {
-        FragColor = texture(sprite, UV) * Color;
+
+    public final Object getLimit() {
+        return limit;
+    }
+
+    public boolean isMet(double value) {
+        // TODO: write method logic
+        return false;
+    }
+
+    public boolean isMet(Object value) {
+        // TODO: write method logic
+        return false;
     }
 }

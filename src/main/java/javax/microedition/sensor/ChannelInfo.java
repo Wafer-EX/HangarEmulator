@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,22 @@
  * limitations under the License.
  */
 
-#version 330 core
-out vec4 FragColor;
+package javax.microedition.sensor;
 
-in vec2 UV;
-in vec4 Color;
-in float IsIgnoreSprite;
+public interface ChannelInfo {
+    static final int TYPE_OBJECT = 4;
+    static final int TYPE_INT = 2;
+    static final int TYPE_DOUBLE = 1;
 
-uniform sampler2D sprite;
+    float getAccuracy();
 
-void main() {
-    if (IsIgnoreSprite != 0.0) {
-        FragColor = Color;
-    }
-    else {
-        FragColor = texture(sprite, UV) * Color;
-    }
+    int getDataType();
+
+    MeasurementRange[] getMeasurementRanges();
+
+    String getName();
+
+    int getScale();
+
+    Unit getUnit();
 }

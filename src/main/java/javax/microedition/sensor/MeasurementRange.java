@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,25 +14,28 @@
  * limitations under the License.
  */
 
-package things.graphics.gl.abstractions;
+package javax.microedition.sensor;
 
-import static org.lwjgl.opengl.GL33.*;
+public class MeasurementRange {
+    private final double smallest;
+    private final double largest;
+    private final double resolution;
 
-// TODO: dispose
-public class GLVertexArray {
-    private final int identifier;
-
-    public GLVertexArray() {
-        identifier = glGenVertexArrays();
-        bind();
+    public MeasurementRange(double smallest, double largest, double resolution) {
+        this.smallest = smallest;
+        this.largest = largest;
+        this.resolution = resolution;
     }
 
-    public void VertexAttribPointer(int index, int size, int type, boolean normalized, int stride, int pointer) {
-        glVertexAttribPointer(index, size, type, normalized, stride, pointer);
-        glEnableVertexAttribArray(index);
+    public double getLargestValue() {
+        return largest;
     }
 
-    public void bind() {
-        glBindVertexArray(identifier);
+    public double getResolution() {
+        return resolution;
+    }
+
+    public double getSmallestValue() {
+        return smallest;
     }
 }

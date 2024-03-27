@@ -6,7 +6,7 @@ This is a very raw and simple J2ME-emulator that let you play some old games mad
 
 
 ## Features
-- Antialiasing (makes vector graphics smooth)
+- Anti-Aliasing (makes vector graphics smooth)
 - Custom soundbanks
 - Custom resolution (include screen filling)
 - Canvas scaling when stretching the window
@@ -16,7 +16,7 @@ This is a very raw and simple J2ME-emulator that let you play some old games mad
 ## Requirements
 - Java Development Kit 17
 - ~512 MB free RAM
-- OpenGL 4.6 (if you prefer use OpenGL instead of Swing)
+- OpenGL 3.3 (if you prefer using OpenGL instead of Swing)
 ## Build
 As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
 

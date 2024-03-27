@@ -21,7 +21,7 @@ import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 public abstract class HangarGraphicsProvider {
-
+    // TODO: add image registry, generate and store image specific to the provider
     private int translateX = 0, translateY = 0;
 
     public void translate(int x, int y) {
@@ -49,14 +49,6 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void setFont(Font font);
 
-    public abstract int getClipX();
-
-    public abstract int getClipY();
-
-    public abstract int getClipWidth();
-
-    public abstract int getClipHeight();
-
     public abstract void clipRect(int x, int y, int width, int height);
 
     public abstract void setClip(int x, int y, int width, int height);
@@ -75,7 +67,7 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 
-    public abstract void drawImage(Image img, int x, int y, int anchor) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException;
 
     public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 

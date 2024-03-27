@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-#version 460 core
+#version 330 core
 layout (location = 0) in vec2 position;
 layout (location = 1) in vec2 uv;
 layout (location = 2) in vec4 color;
