@@ -163,6 +163,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             glActions.add(() -> {
                 renderTarget.use();
 
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+
                 glBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                         x1f, y1f, 0.0f, 0.0f, r, g, b, a, 1.0f,
@@ -175,6 +178,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 3);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
@@ -197,6 +201,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             glActions.add(() -> {
                 renderTarget.use();
 
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+
                 glBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV | 4x COLOR | 1x isIgnoreSprite
                     xf, yf, 0, 0, r, g, b, a, 1,
@@ -212,6 +219,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
@@ -264,6 +272,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             glActions.add(() -> {
                 renderTarget.use();
 
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
+
                 glBuffer.setBufferData(ListUtils.toArray(points));
 
                 glVertexArray.bind();
@@ -271,6 +282,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
 
                 glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
+                glDisable(GL_BLEND);
                 glUseProgram(0);
             });
         }
