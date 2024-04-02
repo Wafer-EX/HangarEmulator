@@ -24,34 +24,34 @@ import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public final class CanvasWrapperUtils {
-    public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
+    public static double getBufferScaleFactor(JPanel panel, int width, int height) {
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Contain) {
             float scalingInUnits = SystemUtils.getScalingInUnits();
-            double scaleFactorHorizontal = ((double) panel.getWidth() / buffer.getWidth()) * scalingInUnits;
-            double scaleFactorVertical = ((double) panel.getHeight() / buffer.getHeight()) * scalingInUnits;
+            double scaleFactorHorizontal = ((double) panel.getWidth() / width) * scalingInUnits;
+            double scaleFactorVertical = ((double) panel.getHeight() / height) * scalingInUnits;
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);
         }
         return 1.0;
     }
 
-    public static void fitBufferToResolution(HangarCanvasWrapperSwing canvasWrapper, Dimension resolution) {
-        if (resolution.width > 0 && resolution.height > 0) {
-            if (canvasWrapper != null) {
-                var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-                var displayable = HangarState.getMainFrame().getViewport().getDisplayable();
-
-                canvasWrapper.setBuffer(changedBuffer);
-                canvasWrapper.updateBufferTransformations();
-
-                if (displayable != null) {
-                    displayable.sizeChanged(resolution.width, resolution.height);
-                }
-            }
-        }
-    }
+    // TODO: or use it, or remove
+//    public static void fitBufferToResolution(HangarCanvasWrapperSwing canvasWrapper, Dimension resolution) {
+//        if (resolution.width > 0 && resolution.height > 0) {
+//            if (canvasWrapper != null) {
+//                var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
+//                var displayable = HangarState.getMainFrame().getViewport().getDisplayable();
+//
+//                canvasWrapper.setBuffer(changedBuffer);
+//                canvasWrapper.updateBufferTransformations();
+//
+//                if (displayable != null) {
+//                    displayable.sizeChanged(resolution.width, resolution.height);
+//                }
+//            }
+//        }
+//    }
 
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
         // TODO: check this method

@@ -17,30 +17,38 @@
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
+import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.opengl.RenderTarget;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+
+import static org.lwjgl.opengl.GL.createCapabilities;
+import static org.lwjgl.opengl.GL33.*;
 
 public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
-    private final HangarAWTGLCanvas glCanvas;
-    private final HangarGLGraphicsProvider graphicsProvider;
+    private static final HangarGLGraphicsProvider graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault());
+    private final HangarOpenGLCanvas openGLCanvas;
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
 
-        this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height));
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        var resolution = graphicsSettings.getResolution();
 
-        glCanvas.setFocusable(false);
-        glCanvas.setPreferredSize(this.getPreferredSize());
+        graphicsSettings.setResolution(resolution);
+        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
 
-        this.add(glCanvas);
-        // TODO: react when resize
+        openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
+        openGLCanvas.setFocusable(false);
+        openGLCanvas.setPreferredSize(this.getPreferredSize());
+
+        this.add(openGLCanvas);
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {
@@ -48,23 +56,51 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     }
 
     @Override
-    public Rectangle getDisplayedArea() {
-        // TODO: write method logic
-        return new Rectangle(0, 0, 240, 320);
-    }
-
-    @Override
-    public double getScaleFactor() {
-        // TODO: write method logic
-        return 1.0;
-    }
-
-    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        glCanvas.setGLActionList(graphicsProvider.getGLActions());
+        openGLCanvas.setGLActionList(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
-        SwingUtilities.invokeLater(glCanvas::render);
+        SwingUtilities.invokeLater(openGLCanvas::render);
+    }
+
+    private static final class HangarOpenGLCanvas extends AWTGLCanvas {
+        private final ArrayList<HangarGLAction> glActionList;
+        private final Dimension viewportResolution = new Dimension(240, 320);
+
+        public HangarOpenGLCanvas(GLData glData) {
+            super(glData);
+            this.glActionList = new ArrayList<>();
+        }
+
+        public void setGLActionList(ArrayList<HangarGLAction> glActions) {
+            this.glActionList.addAll(glActions);
+        }
+
+        public void setViewportResolution(int width, int height) {
+            viewportResolution.width = width;
+            viewportResolution.height = height;
+        }
+
+        @Override
+        public void initGL() {
+            createCapabilities();
+            glViewport(0, 0, viewportResolution.width, viewportResolution.height);
+            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glEnable(GL_SCISSOR_TEST);
+            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+        }
+
+        @Override
+        public void paintGL() {
+            // TODO: render into separated render target, not default
+            glClear(GL_COLOR_BUFFER_BIT);
+            for (var glAction : glActionList) {
+                glAction.execute();
+            }
+            glActionList.clear();
+            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+            swapBuffers();
+        }
     }
 }

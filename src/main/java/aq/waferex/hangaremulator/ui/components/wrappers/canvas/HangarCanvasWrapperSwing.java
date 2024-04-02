@@ -20,47 +20,25 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
-import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
-import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
-    private BufferedImage buffer = null;
-    private Dimension bufferScale;
-    private double bufferScaleFactor = 1.0;
-    private final Point bufferPosition = new Point(0, 0);
+    private BufferedImage buffer;
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
 
-        this.bufferScale = HangarState.getGraphicsSettings().getResolution();
+        var resolution = HangarState.getGraphicsSettings().getResolution();
+        this.buffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
 
         var mouseListener = new HangarMouseListener(this);
-        var resolution = HangarState.getGraphicsSettings().getResolution();
-
-        this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                var graphicsSettings = HangarState.getGraphicsSettings();
-                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
-                    float scalingInUnits = SystemUtils.getScalingInUnits();
-                    int realWidth = (int) (getWidth() * scalingInUnits);
-                    int realHeight = (int) (getHeight() * scalingInUnits);
-                    graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
-                }
-                HangarCanvasWrapperSwing.this.updateBufferTransformations();
-            }
-        });
 
         // TODO: remove?
 //        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
@@ -90,36 +68,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         return buffer;
     }
 
-    public void setBuffer(BufferedImage buffer) {
-        this.buffer = buffer;
-    }
-
-    @Override
-    public double getScaleFactor() {
-        return bufferScaleFactor;
-    }
-
-    public void updateBufferTransformations() {
-        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, buffer);
-        float scalingInUnits = SystemUtils.getScalingInUnits();
-
-        int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
-        int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);
-        bufferScale = new Dimension(newWidth, newHeight);
-
-        bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
-        bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
-        // TODO: buffer is offseted when remove this line, check it
-        this.repaint();
-    }
-
-    @Override
-    public Rectangle getDisplayedArea() {
-        int width = (int) (buffer.getWidth() * bufferScaleFactor);
-        int height = (int) (buffer.getWidth() * bufferScaleFactor);
-        return new Rectangle(bufferPosition.x, bufferPosition.y, width, height);
-    }
-
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
@@ -135,6 +83,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
             // TODO: clear "canvas" if enabled
             canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
         }
+        // TODO: return back to this code I guess, don't render into canvas, render into texture
         else if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
             if (graphicsSettings.getCanvasClearing()) {
