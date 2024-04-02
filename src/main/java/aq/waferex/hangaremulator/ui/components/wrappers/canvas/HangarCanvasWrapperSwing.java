@@ -58,20 +58,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         });
 
         // TODO: replace
-//        HangarState.getProfileManager().addProfileManagerListener(e -> {
-//            switch (e.getStateChange()) {
-//                case HangarProfileManagerEvent.PROFILE_SET -> {
-//                    // TODO: write code here
-//                }
-//                case HangarProfileManagerEvent.PROFILE_UNSET -> {
-//                    for (var profileListener : e.getProfile().getProfileListeners()) {
-//                        e.getProfile().removeProfileListener(profileListener);
-//                    }
-//                }
-//            }
-//        });
-
-        // TODO: replace
 //        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
 //            switch (e.getStateChange()) {
 //                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
