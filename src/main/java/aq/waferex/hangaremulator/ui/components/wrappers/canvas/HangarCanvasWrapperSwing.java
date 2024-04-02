@@ -109,6 +109,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
 
         bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
         bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
+        // TODO: buffer is offseted when remove this line, check it
         this.repaint();
     }
 
