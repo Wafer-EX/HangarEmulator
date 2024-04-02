@@ -28,15 +28,15 @@ import java.awt.image.BufferedImage;
 
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
-    private BufferedImage buffer = null;
+    private BufferedImage buffer;
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
 
-        var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getGraphicsSettings().getResolution();
+        this.buffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
 
-        this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
+        var mouseListener = new HangarMouseListener(this);
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
 
@@ -66,10 +66,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
 
     public BufferedImage getBuffer() {
         return buffer;
-    }
-
-    public void setBuffer(BufferedImage buffer) {
-        this.buffer = buffer;
     }
 
     @Override

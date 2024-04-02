@@ -32,8 +32,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL33.*;
 
 public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
+    private static final HangarGLGraphicsProvider graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault());
     private final HangarOpenGLCanvas openGLCanvas;
-    private final HangarGLGraphicsProvider graphicsProvider;
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
@@ -41,7 +41,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         var graphicsSettings = HangarState.getGraphicsSettings();
         var resolution = graphicsSettings.getResolution();
 
-        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(resolution.width, resolution.height));
+        graphicsSettings.setResolution(resolution);
         this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
 
         openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
@@ -49,7 +49,6 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         openGLCanvas.setPreferredSize(this.getPreferredSize());
 
         this.add(openGLCanvas);
-        // TODO: react when resize
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {
