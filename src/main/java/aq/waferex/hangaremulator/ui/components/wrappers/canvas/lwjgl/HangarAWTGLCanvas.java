@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas.lwjgl;
 
+import aq.waferex.hangaremulator.HangarState;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
@@ -40,10 +41,10 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
     @Override
     public void initGL() {
         createCapabilities();
-        glViewport(0, 0, 240, 320);
+        glViewport(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glEnable(GL_SCISSOR_TEST);
-        glScissor(0, 0, 240, 320);
+        glScissor(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
     }
 
     @Override
@@ -53,7 +54,7 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
             glAction.execute();
         }
         glActionList.clear();
-        glScissor(0, 0, 240, 320);
+        glScissor(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
         swapBuffers();
     }
 }

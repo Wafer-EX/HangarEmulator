@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
+import aq.waferex.hangaremulator.HangarState;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.opengl.RenderTarget;
@@ -31,9 +32,9 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
-        
+
         this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(240, 320));
+        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height));
 
         glCanvas.setFocusable(false);
         glCanvas.setPreferredSize(this.getPreferredSize());

@@ -116,7 +116,8 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-        glActions.add(() -> glScissor(x, 320 - y - height, width,  height));
+        // TODO: check it
+        glActions.add(() -> glScissor(x, renderTarget.getHeight() - y - height, width,  height));
     }
 
     @Override
@@ -143,7 +144,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glShapeVertexArray.bind();
             shapeShaderProgram.use();
-            shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+            shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0));
 
             glDrawArrays(GL_LINES, 0, 2);
             glUseProgram(0);
@@ -179,7 +180,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glDisable(GL_BLEND);
@@ -220,7 +221,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0));
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
                 glDisable(GL_BLEND);
@@ -285,7 +286,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+                shapeShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0));
 
                 glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
                 glDisable(GL_BLEND);
@@ -350,7 +351,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glSpriteVertexArray.bind();
             spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 320, 0));
+            spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0));
 
             generatedTextures.get(img).bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -392,16 +393,16 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 glSpriteBuffer.setBufferData(new float[]{
                         // 2x POSITION | 2x UV
                         0.0f, 0.0f, 0.0f, 0.0f,
-                        240.0f, 0.0f, 1.0f, 0.0f,
-                        240.0f, 320.0f, 1.0f, 1.0f,
+                        renderTarget.getWidth(), 0.0f, 1.0f, 0.0f,
+                        renderTarget.getWidth(), renderTarget.getHeight(), 1.0f, 1.0f,
                         0.0f, 0.0f, 0.0f, 0.0f,
-                        240.0f, 320.0f, 1.0f, 1.0f,
-                        0.0f, 320.0f, 0.0f, 1.0f,
+                        renderTarget.getWidth(), renderTarget.getHeight(), 1.0f, 1.0f,
+                        0.0f, renderTarget.getHeight(), 0.0f, 1.0f,
                 });
 
                 glSpriteVertexArray.bind();
                 spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 0, 320));
+                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), 0, renderTarget.getHeight()));
 
                 offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
