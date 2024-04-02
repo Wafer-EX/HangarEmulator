@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.graphics.opengl;
 
+import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLFramebuffer;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLTexture;
 
@@ -39,8 +40,6 @@ public class RenderTarget {
     }
 
     private RenderTarget() {
-        this.width = 240;
-        this.height = 320;
         this.isDefault = true;
         this.isInitialized = true;
     }
@@ -71,10 +70,16 @@ public class RenderTarget {
     }
 
     public int getWidth() {
+        if (isDefault) {
+            width = HangarState.getGraphicsSettings().getResolution().width;
+        }
         return width;
     }
 
     public int getHeight() {
+        if (isDefault) {
+            height = HangarState.getGraphicsSettings().getResolution().height;
+        }
         return height;
     }
 
@@ -89,12 +94,6 @@ public class RenderTarget {
     }
 
     public static RenderTarget getDefault() {
-        return defaultRenderTarget;
-    }
-
-    public static RenderTarget getDefault(int screenWidth, int screenHeight) {
-        defaultRenderTarget.width = screenWidth;
-        defaultRenderTarget.height = screenHeight;
         return defaultRenderTarget;
     }
 }
