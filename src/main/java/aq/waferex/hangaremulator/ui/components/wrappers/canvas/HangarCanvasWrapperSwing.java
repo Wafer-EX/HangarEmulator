@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2023 Kirill Lomakin
+ * Copyright 2022-2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,11 @@ package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
-import aq.waferex.hangaremulator.profiles.HangarProfile;
-import aq.waferex.hangaremulator.ui.listeners.HangarKeyListener;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
-import aq.waferex.hangaremulator.ui.listeners.events.HangarProfileEvent;
-import aq.waferex.hangaremulator.ui.listeners.events.HangarProfileManagerEvent;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
@@ -39,14 +34,13 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     private BufferedImage buffer;
     private final Point bufferPosition = new Point(0, 0);
     private double bufferScaleFactor = 1.0;
-    private Dimension bufferScale = HangarState.getProfileManager().getCurrentProfile().getResolution();
+    private Dimension bufferScale = HangarState.getGraphicsSettings().getResolution();
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
 
-        var profile = HangarState.getProfileManager().getCurrentProfile();
         var mouseListener = new HangarMouseListener(this);
-        var resolution = profile.getResolution();
+        var resolution = HangarState.getGraphicsSettings().getResolution();
 
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         this.addMouseListener(mouseListener);
@@ -54,49 +48,51 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var profile = HangarState.getProfileManager().getCurrentProfile();
-                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(HangarCanvasWrapperSwing.this.getSize());
+                var graphicsSettings = HangarState.getGraphicsSettings();
+                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
+                    graphicsSettings.setResolution(HangarCanvasWrapperSwing.this.getSize());
                     CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, getSize());
                 }
                 HangarCanvasWrapperSwing.this.updateBufferTransformations();
             }
         });
 
-        HangarState.getProfileManager().addProfileManagerListener(e -> {
-            switch (e.getStateChange()) {
-                case HangarProfileManagerEvent.PROFILE_SET -> {
-                    // TODO: write code here
-                }
-                case HangarProfileManagerEvent.PROFILE_UNSET -> {
-                    for (var profileListener : e.getProfile().getProfileListeners()) {
-                        e.getProfile().removeProfileListener(profileListener);
-                    }
-                }
-            }
-        });
+        // TODO: replace
+//        HangarState.getProfileManager().addProfileManagerListener(e -> {
+//            switch (e.getStateChange()) {
+//                case HangarProfileManagerEvent.PROFILE_SET -> {
+//                    // TODO: write code here
+//                }
+//                case HangarProfileManagerEvent.PROFILE_UNSET -> {
+//                    for (var profileListener : e.getProfile().getProfileListeners()) {
+//                        e.getProfile().removeProfileListener(profileListener);
+//                    }
+//                }
+//            }
+//        });
 
-        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
-            switch (e.getStateChange()) {
-                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
-                    for (var keyListener : getKeyListeners()) {
-                        if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-                            hangarKeyListener.getPressedKeys().clear();
-                        }
-                    }
-                }
-                case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
-                    if (e.getValue() == ScalingModes.ChangeResolution) {
-                        var contentPane = HangarState.getMainFrame().getContentPane();
-                        var source = (HangarProfile) e.getSource();
-                        source.setResolution(contentPane.getSize());
-                    }
-                    updateBufferTransformations();
-                });
-                case HangarProfileEvent.RESOLUTION_CHANGED -> SwingUtilities.invokeLater(() -> CanvasWrapperUtils.fitBufferToResolution(this, (Dimension) e.getValue()));
-                case HangarProfileEvent.FRAME_RATE_CHANGED -> refreshSerialCallTimer();
-            }
-        });
+        // TODO: replace
+//        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
+//            switch (e.getStateChange()) {
+//                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
+//                    for (var keyListener : getKeyListeners()) {
+//                        if (keyListener instanceof HangarKeyListener hangarKeyListener) {
+//                            hangarKeyListener.getPressedKeys().clear();
+//                        }
+//                    }
+//                }
+//                case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
+//                    if (e.getValue() == ScalingModes.ChangeResolution) {
+//                        var contentPane = HangarState.getMainFrame().getContentPane();
+//                        var source = (HangarProfile) e.getSource();
+//                        source.setResolution(contentPane.getSize());
+//                    }
+//                    updateBufferTransformations();
+//                });
+//                case HangarProfileEvent.RESOLUTION_CHANGED -> SwingUtilities.invokeLater(() -> CanvasWrapperUtils.fitBufferToResolution(this, (Dimension) e.getValue()));
+//                case HangarProfileEvent.FRAME_RATE_CHANGED -> refreshSerialCallTimer();
+//            }
+//        });
     }
 
     public BufferedImage getBuffer() {
@@ -138,9 +134,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         var graphics2d = (Graphics2D) graphics;
         if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
-            var profile = HangarState.getProfileManager().getCurrentProfile();
-
-            if (profile.getCanvasClearing()) {
+            if (HangarState.getGraphicsSettings().getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));

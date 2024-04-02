@@ -18,7 +18,6 @@ package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
-import aq.waferex.hangaremulator.ui.listeners.events.HangarProfileEvent;
 
 import javax.swing.*;
 import java.awt.*;
@@ -36,21 +35,22 @@ public class HangarMainPanel extends JPanel {
         this.add(label);
 
         // TODO: the scale can not match with real viewport because of buttons in bottom
-        var profile = HangarState.getProfileManager().getCurrentProfile();
-        profile.addProfileListener(e -> {
-            if (e.getStateChange() == HangarProfileEvent.SCALING_MODE_CHANGED) {
-                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(getSize());
-                }
-            }
-        });
+        // TODO: replace
+//        var profile = HangarState.getProfileManager().getCurrentProfile();
+//        profile.addProfileListener(e -> {
+//            if (e.getStateChange() == HangarProfileEvent.SCALING_MODE_CHANGED) {
+//                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
+//                    profile.setResolution(getSize());
+//                }
+//            }
+//        });
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var profile = HangarState.getProfileManager().getCurrentProfile();
-                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-                    profile.setResolution(getSize());
+                var graphicsSettings = HangarState.getGraphicsSettings();
+                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
+                    graphicsSettings.setResolution(getSize());
                 }
             }
         });

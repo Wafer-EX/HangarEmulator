@@ -17,7 +17,6 @@
 package aq.waferex.hangaremulator;
 
 import com.formdev.flatlaf.FlatDarkLaf;
-import aq.waferex.hangaremulator.profiles.HangarProfileManager;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 
@@ -25,12 +24,11 @@ import java.io.File;
 
 public class HangarEmulator {
     public static void main(String[] args) {
-        // TODO: add args parsing
         try {
             System.setProperty("sun.java2d.opengl", "true");
             FlatDarkLaf.setup();
 
-            HangarState.setProfileManager(new HangarProfileManager(null));
+            // TODO: set settings from command line arguments
             HangarState.setProperties(SystemUtils.getAppProperties());
 
             if (args.length > 0 && new File(args[0]).isFile()) {
