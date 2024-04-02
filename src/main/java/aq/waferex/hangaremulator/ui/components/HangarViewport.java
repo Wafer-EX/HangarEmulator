@@ -61,7 +61,7 @@ public class HangarViewport extends JPanel {
 
         if (displayable != null) {
             if (displayable instanceof Canvas canvas) {
-                this.canvasWrapper = switch (HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine()) {
+                this.canvasWrapper = switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
                     case Swing -> new HangarCanvasWrapperSwing(canvas);
                     case OpenGL -> new HangarCanvasWrapperOpenGL(canvas);
                 };

@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-package aq.waferex.hangaremulator.ui.listeners;
+package aq.waferex.hangaremulator.settings;
 
-import aq.waferex.hangaremulator.ui.listeners.events.HangarProfileManagerEvent;
+import aq.waferex.hangaremulator.HangarKeyCodes;
 
-import java.util.EventListener;
+public class HangarKeyboardSettings {
+    private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
 
-public interface HangarProfileManagerListener extends EventListener {
-    void profileManagerStateChanged(HangarProfileManagerEvent e);
+    public HangarKeyCodes getMidletKeyCodes() {
+        return midletKeyCodes;
+    }
+
+    public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
+        this.midletKeyCodes = keyCodes;
+    }
 }

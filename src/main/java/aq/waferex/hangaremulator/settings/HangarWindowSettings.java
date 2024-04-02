@@ -1,5 +1,5 @@
 /*
- * Copyright 2022-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,19 @@
  * limitations under the License.
  */
 
-package aq.waferex.hangaremulator.ui.listeners;
+package aq.waferex.hangaremulator.settings;
 
-import aq.waferex.hangaremulator.ui.listeners.events.HangarProfileEvent;
+import aq.waferex.hangaremulator.HangarState;
 
-import java.util.EventListener;
+public class HangarWindowSettings {
+    private boolean isWindowResizingEnabled = false;
 
-public interface HangarProfileListener extends EventListener {
-    void profileStateChanged(HangarProfileEvent e);
+    public boolean getWindowResizing() {
+        return isWindowResizingEnabled;
+    }
+
+    public void setWindowResizing(boolean isWindowResizingEnabled) {
+        this.isWindowResizingEnabled = isWindowResizingEnabled;
+        HangarState.getMainFrame().setResizable(isWindowResizingEnabled);
+    }
 }

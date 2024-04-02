@@ -123,11 +123,11 @@ public class HangarMenuBar extends JMenuBar {
 
         public HangarOptionsMenu() {
             super("Options");
-            canvasClearingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getCanvasClearing());
-            canvasClearingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setCanvasClearing(!HangarState.getProfileManager().getCurrentProfile().getCanvasClearing()));
+            canvasClearingCheckBox.setSelected(HangarState.getGraphicsSettings().getCanvasClearing());
+            canvasClearingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setCanvasClearing(!HangarState.getGraphicsSettings().getCanvasClearing()));
 
-            antiAliasingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getAntiAliasing());
-            antiAliasingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setAntiAliasing(!HangarState.getProfileManager().getCurrentProfile().getAntiAliasing()));
+            antiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getAntiAliasing());
+            antiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setAntiAliasing(!HangarState.getGraphicsSettings().getAntiAliasing()));
 
             graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.Swing));
             graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.OpenGL));
@@ -154,7 +154,7 @@ public class HangarMenuBar extends JMenuBar {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
                         try {
-                            HangarState.getProfileManager().getCurrentProfile().setSoundbankFile(selectedFile);
+                            HangarState.getAudioSettings().setSoundbankFile(selectedFile);
                         }
                         catch (IOException | InvalidMidiDataException exception) {
                             exception.printStackTrace();
@@ -169,8 +169,8 @@ public class HangarMenuBar extends JMenuBar {
 
             clearSoundBankItem.addActionListener(e -> AudioUtils.setSoundbank(null));
 
-            allowResizingCheckBox.setSelected(HangarState.getProfileManager().getCurrentProfile().getWindowResizing());
-            allowResizingCheckBox.addActionListener(e -> HangarState.getProfileManager().getCurrentProfile().setWindowResizing(allowResizingCheckBox.getState()));
+            allowResizingCheckBox.setSelected(HangarState.getWindowSettings().getWindowResizing());
+            allowResizingCheckBox.addActionListener(e -> HangarState.getWindowSettings().setWindowResizing(allowResizingCheckBox.getState()));
 
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
@@ -194,7 +194,7 @@ public class HangarMenuBar extends JMenuBar {
             public HangarGraphicsEngineRadio(GraphicsEngines graphicsEngine) {
                 super();
                 this.addItemListener(e -> {
-                    HangarState.getProfileManager().getCurrentProfile().setGraphicsEngine(graphicsEngine);
+                    HangarState.getGraphicsSettings().setGraphicsEngine(graphicsEngine);
                     if (graphicsEngine == GraphicsEngines.OpenGL && this.isSelected()) {
                         JOptionPane.showMessageDialog(this, """
                                         I don't recommended to use OpenGL graphics engine because
@@ -207,7 +207,7 @@ public class HangarMenuBar extends JMenuBar {
                 });
 
                 this.setText(graphicsEngine.toString());
-                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getGraphicsEngine() == graphicsEngine);
+                this.setSelected(HangarState.getGraphicsSettings().getGraphicsEngine() == graphicsEngine);
                 graphicsEngineRadioGroup.add(this);
             }
         }
@@ -215,9 +215,9 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarFrameRateRadio extends JRadioButtonMenuItem {
             public HangarFrameRateRadio(int frameRate) {
                 super();
-                this.addItemListener(e -> HangarState.getProfileManager().getCurrentProfile().setFrameRate(frameRate));
+                this.addItemListener(e -> HangarState.getGraphicsSettings().setFrameRate(frameRate));
                 this.setText(frameRate > -1 ? frameRate + " FPS" : "Unlimited");
-                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getFrameRate() == frameRate);
+                this.setSelected(HangarState.getGraphicsSettings().getFrameRate() == frameRate);
                 frameRateRadioGroup.add(this);
             }
         }
@@ -226,9 +226,9 @@ public class HangarMenuBar extends JMenuBar {
             public HangarScalingModeRadio(ScalingModes scalingMode) {
                 super();
                 this.setText(scalingMode.toString());
-                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getScalingMode() == scalingMode);
+                this.setSelected(HangarState.getGraphicsSettings().getScalingMode() == scalingMode);
                 this.addItemListener(e -> {
-                    HangarState.getProfileManager().getCurrentProfile().setScalingMode(scalingMode);
+                    HangarState.getGraphicsSettings().setScalingMode(scalingMode);
                     resolutionPopupMenu.setEnabled(scalingMode != ScalingModes.ChangeResolution);
                     if (scalingMode == ScalingModes.ChangeResolution) {
                         resolutionRadioGroup.clearSelection();
@@ -241,13 +241,13 @@ public class HangarMenuBar extends JMenuBar {
         private class HangarResolutionRadio extends JRadioButtonMenuItem {
             public HangarResolutionRadio(Dimension resolution) {
                 super();
-                var profileResolution = HangarState.getProfileManager().getCurrentProfile().getResolution();
+                var profileResolution = HangarState.getGraphicsSettings().getResolution();
 
                 this.setText(resolution.width + "x" + resolution.height);
                 this.setSelected(profileResolution.width == resolution.width && profileResolution.height == resolution.height);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfileManager().getCurrentProfile().setResolution(resolution);
+                        HangarState.getGraphicsSettings().setResolution(resolution);
                     }
                 });
                 resolutionRadioGroup.add(this);
@@ -261,10 +261,10 @@ public class HangarMenuBar extends JMenuBar {
                 super();
                 // TODO: rewrite text setting
                 this.setText(keyboardName);
-                this.setSelected(HangarState.getProfileManager().getCurrentProfile().getMidletKeyCodes() == keyCodes);
+                this.setSelected(HangarState.getKeyboardSettings().getMidletKeyCodes() == keyCodes);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getProfileManager().getCurrentProfile().setMidletKeyCodes(keyCodes);
+                        HangarState.getKeyboardSettings().setMidletKeyCodes(keyCodes);
                     }
                 });
                 keyboardRadioGroup.add(this);

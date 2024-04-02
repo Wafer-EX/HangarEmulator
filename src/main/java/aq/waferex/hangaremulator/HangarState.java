@@ -16,7 +16,7 @@
 
 package aq.waferex.hangaremulator;
 
-import aq.waferex.hangaremulator.profiles.HangarProfileManager;
+import aq.waferex.hangaremulator.settings.*;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 
 import java.awt.*;
@@ -26,7 +26,11 @@ public class HangarState {
     private static HangarMainFrame mainFrame;
     private static Properties properties;
     private static MIDletLoader midletLoader;
-    private static HangarProfileManager profileManager;
+
+    private static final HangarGraphicsSettings graphicsSettings = new HangarGraphicsSettings();
+    private static final HangarAudioSettings audioSettings = new HangarAudioSettings();
+    private static final HangarKeyboardSettings keyboardSettings = new HangarKeyboardSettings();
+    private static final HangarWindowSettings windowSettings = new HangarWindowSettings();
 
     public static HangarMainFrame getMainFrame() {
         return mainFrame;
@@ -52,16 +56,24 @@ public class HangarState {
         midletLoader = loader;
     }
 
-    public static HangarProfileManager getProfileManager() {
-        return profileManager;
+    public static HangarGraphicsSettings getGraphicsSettings() {
+        return graphicsSettings;
     }
 
-    public static void setProfileManager(HangarProfileManager manager) {
-        profileManager = manager;
+    public static HangarAudioSettings getAudioSettings() {
+        return audioSettings;
+    }
+
+    public static HangarWindowSettings getWindowSettings() {
+        return windowSettings;
+    }
+
+    public static HangarKeyboardSettings getKeyboardSettings() {
+        return keyboardSettings;
     }
 
     public static void syncWithFrameRate() {
-        if (profileManager.getCurrentProfile().getFrameRate() != -1) {
+        if (graphicsSettings.getFrameRate() != -1) {
             try {
                 Thread.sleep(frameRateInMilliseconds());
             }
@@ -72,12 +84,12 @@ public class HangarState {
     }
 
     public static int frameRateInMilliseconds() {
-        return 1000 / profileManager.getCurrentProfile().getFrameRate();
+        return 1000 / graphicsSettings.getFrameRate();
     }
 
     public static Graphics2D applyAntiAliasing(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        var hintValue = profileManager.getCurrentProfile().getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
+        var hintValue = graphicsSettings.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
     }
