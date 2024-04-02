@@ -21,6 +21,7 @@ import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
+import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -31,13 +32,15 @@ import java.awt.image.BufferedImage;
 
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
-    private BufferedImage buffer;
-    private final Point bufferPosition = new Point(0, 0);
+    private BufferedImage buffer = null;
+    private Dimension bufferScale;
     private double bufferScaleFactor = 1.0;
-    private Dimension bufferScale = HangarState.getGraphicsSettings().getResolution();
+    private final Point bufferPosition = new Point(0, 0);
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
+
+        this.bufferScale = HangarState.getGraphicsSettings().getResolution();
 
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getGraphicsSettings().getResolution();
@@ -50,14 +53,16 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
             public void componentResized(ComponentEvent e) {
                 var graphicsSettings = HangarState.getGraphicsSettings();
                 if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
-                    graphicsSettings.setResolution(HangarCanvasWrapperSwing.this.getSize());
-                    CanvasWrapperUtils.fitBufferToResolution(HangarCanvasWrapperSwing.this, getSize());
+                    float scalingInUnits = SystemUtils.getScalingInUnits();
+                    int realWidth = (int) (getWidth() * scalingInUnits);
+                    int realHeight = (int) (getHeight() * scalingInUnits);
+                    graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
                 }
                 HangarCanvasWrapperSwing.this.updateBufferTransformations();
             }
         });
 
-        // TODO: replace
+        // TODO: remove?
 //        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
 //            switch (e.getStateChange()) {
 //                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
@@ -96,13 +101,14 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
 
     public void updateBufferTransformations() {
         bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, buffer);
+        float scalingInUnits = SystemUtils.getScalingInUnits();
 
         int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
         int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);
         bufferScale = new Dimension(newWidth, newHeight);
 
-        bufferPosition.x = getWidth() / 2 - bufferScale.width / 2;
-        bufferPosition.y = getHeight() / 2 - bufferScale.height / 2;
+        bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
+        bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
         this.repaint();
     }
 
@@ -118,13 +124,22 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         super.paintComponent(graphics);
 
         var graphics2d = (Graphics2D) graphics;
-        if (buffer != null) {
+        var transform = graphics2d.getTransform();
+        transform.setToScale(1.0, 1.0);
+        graphics2d.setTransform(transform);
+
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
+            var graphicsWithHints = HangarState.applyAntiAliasing(graphics);
+            // TODO: clear "canvas" if enabled
+            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
+        }
+        else if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
-            if (HangarState.getGraphicsSettings().getCanvasClearing()) {
+            if (graphicsSettings.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());
             }
             canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
-            graphics2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
             graphics2d.drawImage(buffer, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }

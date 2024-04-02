@@ -29,11 +29,11 @@ import java.awt.image.BufferedImage;
 public final class CanvasWrapperUtils {
     public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Contain) {
-            double scaleFactorHorizontal = (double) panel.getWidth() / buffer.getWidth();
-            double scaleFactorVertical = (double) panel.getHeight() / buffer.getHeight();
+            float scalingInUnits = SystemUtils.getScalingInUnits();
+            double scaleFactorHorizontal = ((double) panel.getWidth() / buffer.getWidth()) * scalingInUnits;
+            double scaleFactorVertical = ((double) panel.getHeight() / buffer.getHeight()) * scalingInUnits;
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);
         }
-
         return 1.0;
     }
 
