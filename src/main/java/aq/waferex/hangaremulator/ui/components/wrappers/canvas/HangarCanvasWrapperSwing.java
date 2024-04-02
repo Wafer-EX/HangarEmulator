@@ -20,14 +20,10 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
-import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
-import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
 
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
@@ -43,19 +39,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         this.setBuffer(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                var graphicsSettings = HangarState.getGraphicsSettings();
-                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
-                    float scalingInUnits = SystemUtils.getScalingInUnits();
-                    int realWidth = (int) (getWidth() * scalingInUnits);
-                    int realHeight = (int) (getHeight() * scalingInUnits);
-                    graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
-                }
-                updateBufferTransformations();
-            }
-        });
 
         // TODO: remove?
 //        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {

@@ -17,12 +17,15 @@
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -38,6 +41,21 @@ public abstract class HangarCanvasWrapper extends JPanel {
     protected HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
         this.canvas = canvas;
+
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                var graphicsSettings = HangarState.getGraphicsSettings();
+                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
+                    float scalingInUnits = SystemUtils.getScalingInUnits();
+                    int realWidth = (int) (getWidth() * scalingInUnits);
+                    int realHeight = (int) (getHeight() * scalingInUnits);
+                    graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
+                }
+                updateBufferTransformations();
+            }
+        });
+
         this.updateBufferTransformations();
         this.refreshSerialCallTimer();
     }
