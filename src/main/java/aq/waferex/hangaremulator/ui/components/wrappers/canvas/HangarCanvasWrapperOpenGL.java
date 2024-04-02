@@ -93,6 +93,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
         @Override
         public void paintGL() {
+            // TODO: render into separated render target, not default
             glClear(GL_COLOR_BUFFER_BIT);
             for (var glAction : glActionList) {
                 glAction.execute();

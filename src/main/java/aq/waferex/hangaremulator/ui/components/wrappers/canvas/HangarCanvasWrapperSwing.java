@@ -83,6 +83,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
             // TODO: clear "canvas" if enabled
             canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
         }
+        // TODO: return back to this code I guess, don't render into canvas, render into texture
         else if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
             if (graphicsSettings.getCanvasClearing()) {
