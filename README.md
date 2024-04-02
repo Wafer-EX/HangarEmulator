@@ -1,24 +1,23 @@
 # Hangar Emulator
-This is a very raw and simple J2ME-emulator that let you play some old games made for feature phones. It's still a very early stage of development, so it has many compatibility problems. It was made only for experiments and self-education, so it doesn't pretend to be a cool emulator with very high level of compatibility.
+This is an experimental J2ME-emulator that let you play some old game fade for feature phones. It's still on a early stage of the development so it has compatibility problems. It's a perosonal project and was made only as experiment and for self-education, so it doesn't pretend to be better than other emulators and to have high level of compatibility.
 
-![image](https://user-images.githubusercontent.com/76843479/175813227-4ab735a1-c493-4cb5-bd08-c7b5df19d6e6.png)
-
+![image](https://github.com/Wafer-EX/HangarEmulator/assets/76843479/551cb966-a0d7-4294-b67e-dfa95a0dbe87)
 
 
 ## Features
 - Anti-Aliasing (makes vector graphics smooth)
 - Custom soundbanks
-- Custom resolution (include screen filling)
-- Canvas scaling when stretching the window
+- Custom resolution (you can even strength the game to window size!)
 - Unlimited frame rate
 - Experimental OpenGL support through LWJGL 3 (extremely raw)
+- And more...
 
 ## Requirements
-- Java Development Kit 17
+- Java 17
 - ~512 MB free RAM
-- OpenGL 3.3 (if you prefer using OpenGL instead of Swing)
-## Build
-As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries.
+- OpenGL 3.3 (if you prefer using OpenGL backend instead of Swing)
+## How to build
+You need Java Development Kit 17 installed on your PC. Go to the root folder of the project (where is gradle script located) using terminal and run building by one of these command below. As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries, it's the builded Hangar Emulator.
 
 Windows:
 ```
@@ -28,12 +27,12 @@ Linux:
 ```
 ./gradlew shadowJar build
 ```
-## Used libraries
-| Name    | Link                                              |
-|---------|---------------------------------------------------|
-| FlatLaf | [Official page](https://www.formdev.com/flatlaf/) |
-| ASM     | [Official page](https://asm.ow2.io/)              |
-| LWJGL   | [Official page](https://www.lwjgl.org/)           |
-| JOML    | [GitHub](https://github.com/JOML-CI/JOML)         |
+## Third-party libraries
+| Name    |                                          |
+|---------|------------------------------------------|
+| FlatLaf | [Link (external resource)](https://www.formdev.com/flatlaf/) |
+| ASM     | [Link (external resource)](https://asm.ow2.io/)              |
+| LWJGL   | [Link (external resource)](https://www.lwjgl.org/)           |
+| JOML    | [Link](https://github.com/JOML-CI/JOML)  |
 ## License
 Copyright 2022-2024 Wafer EX. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.
