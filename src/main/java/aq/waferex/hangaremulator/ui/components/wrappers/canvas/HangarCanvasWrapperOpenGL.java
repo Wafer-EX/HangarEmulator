@@ -20,26 +20,30 @@ import aq.waferex.hangaremulator.HangarState;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.opengl.RenderTarget;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.lwjgl.HangarAWTGLCanvas;
+import aq.waferex.hangaremulator.ui.components.wrappers.canvas.lwjgl.HangarOpenGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
 
 public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
-    private final HangarAWTGLCanvas glCanvas;
+    private final HangarOpenGLCanvas openGLCanvas;
     private final HangarGLGraphicsProvider graphicsProvider;
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
 
-        this.glCanvas = new HangarAWTGLCanvas(new GLData());
-        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height));
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        var resolution = graphicsSettings.getResolution();
 
-        glCanvas.setFocusable(false);
-        glCanvas.setPreferredSize(this.getPreferredSize());
+        this.graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault(resolution.width, resolution.height));
+        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
 
-        this.add(glCanvas);
+        openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
+        openGLCanvas.setFocusable(false);
+        openGLCanvas.setPreferredSize(this.getPreferredSize());
+
+        this.add(openGLCanvas);
         // TODO: react when resize
     }
 
@@ -48,23 +52,11 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     }
 
     @Override
-    public Rectangle getDisplayedArea() {
-        // TODO: write method logic
-        return new Rectangle(0, 0, 240, 320);
-    }
-
-    @Override
-    public double getScaleFactor() {
-        // TODO: write method logic
-        return 1.0;
-    }
-
-    @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
         canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        glCanvas.setGLActionList(graphicsProvider.getGLActions());
+        openGLCanvas.setGLActionList(graphicsProvider.getGLActions());
         graphicsProvider.getGLActions().clear();
-        SwingUtilities.invokeLater(glCanvas::render);
+        SwingUtilities.invokeLater(openGLCanvas::render);
     }
 }

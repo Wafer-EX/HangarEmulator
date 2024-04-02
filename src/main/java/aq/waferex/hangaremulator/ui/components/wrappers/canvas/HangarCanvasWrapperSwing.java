@@ -33,14 +33,9 @@ import java.awt.image.BufferedImage;
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
     private BufferedImage buffer = null;
-    private Dimension bufferScale;
-    private double bufferScaleFactor = 1.0;
-    private final Point bufferPosition = new Point(0, 0);
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
-
-        this.bufferScale = HangarState.getGraphicsSettings().getResolution();
 
         var mouseListener = new HangarMouseListener(this);
         var resolution = HangarState.getGraphicsSettings().getResolution();
@@ -58,7 +53,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
                     int realHeight = (int) (getHeight() * scalingInUnits);
                     graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
                 }
-                HangarCanvasWrapperSwing.this.updateBufferTransformations();
+                updateBufferTransformations();
             }
         });
 
@@ -92,32 +87,6 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
 
     public void setBuffer(BufferedImage buffer) {
         this.buffer = buffer;
-    }
-
-    @Override
-    public double getScaleFactor() {
-        return bufferScaleFactor;
-    }
-
-    public void updateBufferTransformations() {
-        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, buffer);
-        float scalingInUnits = SystemUtils.getScalingInUnits();
-
-        int newWidth = (int) (buffer.getWidth() * bufferScaleFactor);
-        int newHeight = (int) (buffer.getHeight() * bufferScaleFactor);
-        bufferScale = new Dimension(newWidth, newHeight);
-
-        bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
-        bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
-        // TODO: buffer is offseted when remove this line, check it
-        this.repaint();
-    }
-
-    @Override
-    public Rectangle getDisplayedArea() {
-        int width = (int) (buffer.getWidth() * bufferScaleFactor);
-        int height = (int) (buffer.getWidth() * bufferScaleFactor);
-        return new Rectangle(bufferPosition.x, bufferPosition.y, width, height);
     }
 
     @Override

@@ -16,20 +16,21 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas.lwjgl;
 
-import aq.waferex.hangaremulator.HangarState;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
 
+import java.awt.*;
 import java.util.ArrayList;
 
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL33.*;
 
-public class HangarAWTGLCanvas extends AWTGLCanvas {
+public class HangarOpenGLCanvas extends AWTGLCanvas {
     private final ArrayList<HangarGLAction> glActionList;
+    private final Dimension viewportResolution = new Dimension(240, 320);
 
-    public HangarAWTGLCanvas(GLData glData) {
+    public HangarOpenGLCanvas(GLData glData) {
         super(glData);
         this.glActionList = new ArrayList<>();
     }
@@ -38,13 +39,18 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
         this.glActionList.addAll(glActions);
     }
 
+    public void setViewportResolution(int width, int height) {
+        viewportResolution.width = width;
+        viewportResolution.height = height;
+    }
+
     @Override
     public void initGL() {
         createCapabilities();
-        glViewport(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
+        glViewport(0, 0, viewportResolution.width, viewportResolution.height);
         glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
         glEnable(GL_SCISSOR_TEST);
-        glScissor(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
+        glScissor(0, 0, viewportResolution.width, viewportResolution.height);
     }
 
     @Override
@@ -54,7 +60,7 @@ public class HangarAWTGLCanvas extends AWTGLCanvas {
             glAction.execute();
         }
         glActionList.clear();
-        glScissor(0, 0, HangarState.getGraphicsSettings().getResolution().width, HangarState.getGraphicsSettings().getResolution().height);
+        glScissor(0, 0, viewportResolution.width, viewportResolution.height);
         swapBuffers();
     }
 }

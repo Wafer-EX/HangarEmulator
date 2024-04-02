@@ -17,6 +17,8 @@
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
+import aq.waferex.hangaremulator.utils.SystemUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
@@ -29,9 +31,14 @@ public abstract class HangarCanvasWrapper extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
+    protected Dimension bufferScale;
+    protected double bufferScaleFactor = 1.0;
+    protected Point bufferPosition = new Point(0, 0);
+
     protected HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
         this.canvas = canvas;
+        this.updateBufferTransformations();
         this.refreshSerialCallTimer();
     }
 
@@ -57,7 +64,31 @@ public abstract class HangarCanvasWrapper extends JPanel {
         }
     }
 
-    public abstract Rectangle getDisplayedArea();
+    public Rectangle getDisplayedArea() {
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        var resolution = graphicsSettings.getResolution();
 
-    public abstract double getScaleFactor();
+        int width = (int) (resolution.width * bufferScaleFactor);
+        int height = (int) (resolution.height * bufferScaleFactor);
+        return new Rectangle(bufferPosition.x, bufferPosition.y, width, height);
+    }
+
+    public double getScaleFactor() {
+        return bufferScaleFactor;
+    }
+
+    public void updateBufferTransformations() {
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        var resolution = graphicsSettings.getResolution();
+
+        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, resolution.width, resolution.height);
+        float scalingInUnits = SystemUtils.getScalingInUnits();
+
+        int newWidth = (int) (resolution.width * bufferScaleFactor);
+        int newHeight = (int) (resolution.height * bufferScaleFactor);
+        bufferScale = new Dimension(newWidth, newHeight);
+
+        bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
+        bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
+    }
 }

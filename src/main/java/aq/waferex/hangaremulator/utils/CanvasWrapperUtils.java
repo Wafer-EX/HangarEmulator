@@ -24,14 +24,13 @@ import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public final class CanvasWrapperUtils {
-    public static double getBufferScaleFactor(JPanel panel, BufferedImage buffer) {
+    public static double getBufferScaleFactor(JPanel panel, int width, int height) {
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Contain) {
             float scalingInUnits = SystemUtils.getScalingInUnits();
-            double scaleFactorHorizontal = ((double) panel.getWidth() / buffer.getWidth()) * scalingInUnits;
-            double scaleFactorVertical = ((double) panel.getHeight() / buffer.getHeight()) * scalingInUnits;
+            double scaleFactorHorizontal = ((double) panel.getWidth() / width) * scalingInUnits;
+            double scaleFactorVertical = ((double) panel.getHeight() / height) * scalingInUnits;
             return Math.min(scaleFactorHorizontal, scaleFactorVertical);
         }
         return 1.0;
