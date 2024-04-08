@@ -84,10 +84,8 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         @Override
         public void initGL() {
             createCapabilities();
-            glViewport(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glEnable(GL_SCISSOR_TEST);
-            glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
 
             glOffscreenTextureBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
             glOffscreenTextureVertexArray = new GLVertexArray();
@@ -102,26 +100,31 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
                     0.0f, offscreenRenderTarget.getHeight(), 0.0f, 1.0f,
             });
 
-            offscreenRenderTarget.initialize();
             if (!HangarGLGraphicsProvider.getShadersAreCompiled()) {
                 HangarGLGraphicsProvider.compileShaders();
             }
+            offscreenRenderTarget.initialize();
         }
 
         @Override
         public void paintGL() {
+            // perform collected actions
             for (var glAction : glActionList) {
                 glAction.execute();
             }
             glActionList.clear();
 
+            // prepare "canvas"
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
             glClear(GL_COLOR_BUFFER_BIT);
 
+            // render offscreen framebuffer
+            var shaderProgram = HangarGLGraphicsProvider.getSpriteShaderProgram();
+
             glOffscreenTextureVertexArray.bind();
-            HangarGLGraphicsProvider.getSpriteShaderProgram().use();
-            HangarGLGraphicsProvider.getSpriteShaderProgram().setUniform("projectionMatrix", new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), 0, offscreenRenderTarget.getHeight()));
+            shaderProgram.use();
+            shaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), 0, offscreenRenderTarget.getHeight()));
 
             offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
