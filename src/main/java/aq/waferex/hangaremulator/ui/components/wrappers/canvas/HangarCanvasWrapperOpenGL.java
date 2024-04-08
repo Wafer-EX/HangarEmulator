@@ -86,7 +86,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         @Override
         public void initGL() {
             createCapabilities();
-            glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
+            glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
             glEnable(GL_SCISSOR_TEST);
 
             glOffscreenTextureBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
