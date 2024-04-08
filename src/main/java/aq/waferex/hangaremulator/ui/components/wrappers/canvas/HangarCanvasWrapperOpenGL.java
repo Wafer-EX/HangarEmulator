@@ -17,9 +17,11 @@
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLBuffer;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLVertexArray;
+import aq.waferex.hangaremulator.utils.SystemUtils;
 import org.joml.Matrix4f;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
@@ -115,8 +117,13 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             glActionList.clear();
 
             // prepare "canvas"
+            float scalingInUnits = SystemUtils.getScalingInUnits();
+            int realWidth = (int) (getWidth() * scalingInUnits);
+            int realHeight = (int) (getHeight() * scalingInUnits);
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
+            glScissor(0, 0, realWidth, realHeight);
+            glViewport(0, 0, realWidth, realHeight);
             glClear(GL_COLOR_BUFFER_BIT);
 
             // render offscreen framebuffer
@@ -124,7 +131,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
             glOffscreenTextureVertexArray.bind();
             shaderProgram.use();
-            shaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+            shaderProgram.setUniform("projectionMatrix", getProjectionMatrix(realWidth, realHeight));
 
             offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -132,8 +139,17 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             swapBuffers();
         }
 
-        private Matrix4f getProjectionMatrix() {
-            return new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 0);
+        private Matrix4f getProjectionMatrix(int realWidth, int realHeight) {
+            float scaleFactor = 1.0f;
+            if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Contain) {
+                scaleFactor = (float) Math.min((double) realWidth / offscreenRenderTarget.getWidth(), (double) realHeight / offscreenRenderTarget.getHeight());
+            }
+            float x = realWidth / 2.0f - (offscreenRenderTarget.getWidth() * scaleFactor) / 2.0f;
+            float y = realHeight / 2.0f - (offscreenRenderTarget.getHeight() * scaleFactor) / 2.0f;
+
+            return new Matrix4f().ortho2D(0, realWidth, realHeight, 0)
+                    .mul(new Matrix4f().translate(x, y, 0.0f))
+                    .mul(new Matrix4f().scale(scaleFactor));
         }
     }
 }
