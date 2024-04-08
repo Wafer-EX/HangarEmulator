@@ -47,19 +47,13 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     private GLVertexArray glShapeVertexArray;
     private GLBuffer glShapeBuffer;
 
-    private static boolean areShadersCompiled = false;
+    private static boolean shadersAreCompiled = false;
     private boolean isGraphicsPrepared = false;
 
     public HangarGLGraphicsProvider(RenderTarget renderTarget) {
         this.renderTarget = renderTarget;
 
         glActions.add(() -> {
-            if (!areShadersCompiled) {
-                spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
-                shapeShaderProgram = new GLShaderProgram("/shaders/shape.vert", "/shaders/shape.frag");
-                areShadersCompiled = true;
-            }
-
             if (!isGraphicsPrepared) {
                 glSpriteBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
 
@@ -75,6 +69,20 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 isGraphicsPrepared = true;
             }
         });
+    }
+
+    public static boolean getShadersAreCompiled() {
+        return shadersAreCompiled;
+    }
+
+    public static void compileShaders() {
+        if (shadersAreCompiled) {
+            throw new IllegalStateException();
+        }
+
+        spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
+        shapeShaderProgram = new GLShaderProgram("/shaders/shape.vert", "/shaders/shape.frag");
+        shadersAreCompiled = true;
     }
 
     private Matrix4f getProjectionMatrix() {

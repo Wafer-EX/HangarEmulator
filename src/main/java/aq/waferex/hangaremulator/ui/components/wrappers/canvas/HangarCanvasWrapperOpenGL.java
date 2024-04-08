@@ -89,6 +89,10 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glEnable(GL_SCISSOR_TEST);
             glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+
+            if (!HangarGLGraphicsProvider.getShadersAreCompiled()) {
+                HangarGLGraphicsProvider.compileShaders();
+            }
         }
 
         @Override
