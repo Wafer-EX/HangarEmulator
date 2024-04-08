@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
+import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLBuffer;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLVertexArray;
@@ -41,7 +42,10 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
 
-        offscreenRenderTarget = new RenderTarget(240, 320);
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        var resolution = graphicsSettings.getResolution();
+
+        offscreenRenderTarget = new RenderTarget(resolution.width, resolution.height);
         offscreenGraphicsProvider = new HangarGLGraphicsProvider(offscreenRenderTarget);
 
         this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
@@ -98,11 +102,11 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             glOffscreenTextureVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
             glOffscreenTextureBuffer.setBufferData(new float[]{
                     0.0f, 0.0f, 0.0f, 0.0f,
-                    240, 0.0f, 1.0f, 0.0f,
-                    240, 320, 1.0f, 1.0f,
+                    offscreenRenderTarget.getWidth(), 0.0f, 1.0f, 0.0f,
+                    offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 1.0f, 1.0f,
                     0.0f, 0.0f, 0.0f, 0.0f,
-                    240, 320, 1.0f, 1.0f,
-                    0.0f, 320, 0.0f, 1.0f,
+                    offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 1.0f, 1.0f,
+                    0.0f, offscreenRenderTarget.getHeight(), 0.0f, 1.0f,
             });
 
             offscreenRenderTarget.initialize();
@@ -124,7 +128,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
             glOffscreenTextureVertexArray.bind();
             HangarGLGraphicsProvider.getSpriteShaderProgram().use();
-            HangarGLGraphicsProvider.getSpriteShaderProgram().setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 0, 320));
+            HangarGLGraphicsProvider.getSpriteShaderProgram().setUniform("projectionMatrix", new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), 0, offscreenRenderTarget.getHeight()));
 
             offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
