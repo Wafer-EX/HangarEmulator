@@ -16,7 +16,6 @@
 
 package aq.waferex.hangaremulator.graphics.opengl;
 
-import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLFramebuffer;
 import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLTexture;
 
@@ -26,36 +25,26 @@ import static org.lwjgl.opengl.GL33.*;
 public class RenderTarget {
     private GLFramebuffer glFramebuffer;
     private GLTexture glTexture;
-    private int width, height;
+    private final int width;
+    private final int height;
     private boolean isInitialized;
-    private final boolean isDefault;
-
-    private static final RenderTarget defaultRenderTarget = new RenderTarget();
 
     public RenderTarget(int width, int height) {
         this.width = width;
         this.height = height;
-        this.isDefault = false;
         this.isInitialized = false;
     }
 
-    private RenderTarget() {
-        this.isDefault = true;
-        this.isInitialized = true;
-    }
-
     public void initialize() {
-        if (!isDefault) {
-            glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
-            glTexture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-            glTexture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-            glTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-            glTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+        glTexture = new GLTexture(width, height, GL_RGB, GL_RGB, GL_UNSIGNED_BYTE);
+        glTexture.setParameter(GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexture.setParameter(GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+        glTexture.setParameter(GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+        glTexture.setParameter(GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 
-            glFramebuffer = new GLFramebuffer();
-            glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
-            isInitialized = true;
-        }
+        glFramebuffer = new GLFramebuffer();
+        glFramebuffer.attachTexture(glTexture, GL_COLOR_ATTACHMENT0);
+        isInitialized = true;
     }
 
     public boolean isInitialized() {
@@ -63,37 +52,19 @@ public class RenderTarget {
     }
 
     public GLTexture getTexture() {
-        if (isDefault) {
-            throw new IllegalStateException();
-        }
         return glTexture;
     }
 
     public int getWidth() {
-        if (isDefault) {
-            width = HangarState.getGraphicsSettings().getResolution().width;
-        }
         return width;
     }
 
     public int getHeight() {
-        if (isDefault) {
-            height = HangarState.getGraphicsSettings().getResolution().height;
-        }
         return height;
     }
 
     public void use() {
-        if (isDefault) {
-            glBindFramebuffer(GL_FRAMEBUFFER, 0);
-        }
-        else {
-            glFramebuffer.bind();
-        }
+        glFramebuffer.bind();
         glViewport(0, 0, width, height);
-    }
-
-    public static RenderTarget getDefault() {
-        return defaultRenderTarget;
     }
 }

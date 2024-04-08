@@ -17,7 +17,6 @@
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
@@ -28,7 +27,7 @@ import java.awt.image.BufferedImage;
 
 public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
     // TODO: add quality support
-    private BufferedImage buffer;
+    private final BufferedImage buffer;
 
     public HangarCanvasWrapperSwing(Canvas canvas) {
         super(canvas);
@@ -40,28 +39,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         this.addMouseListener(mouseListener);
         this.addMouseMotionListener(mouseListener);
 
-        // TODO: remove?
-//        HangarState.getProfileManager().getCurrentProfile().addProfileListener(e -> {
-//            switch (e.getStateChange()) {
-//                case HangarProfileEvent.MIDLET_KEYCODES_CHANGED -> {
-//                    for (var keyListener : getKeyListeners()) {
-//                        if (keyListener instanceof HangarKeyListener hangarKeyListener) {
-//                            hangarKeyListener.getPressedKeys().clear();
-//                        }
-//                    }
-//                }
-//                case HangarProfileEvent.SCALING_MODE_CHANGED -> SwingUtilities.invokeLater(() -> {
-//                    if (e.getValue() == ScalingModes.ChangeResolution) {
-//                        var contentPane = HangarState.getMainFrame().getContentPane();
-//                        var source = (HangarProfile) e.getSource();
-//                        source.setResolution(contentPane.getSize());
-//                    }
-//                    updateBufferTransformations();
-//                });
-//                case HangarProfileEvent.RESOLUTION_CHANGED -> SwingUtilities.invokeLater(() -> CanvasWrapperUtils.fitBufferToResolution(this, (Dimension) e.getValue()));
-//                case HangarProfileEvent.FRAME_RATE_CHANGED -> refreshSerialCallTimer();
-//            }
-//        });
+        // TODO: update buffer size when resolution changed
     }
 
     public BufferedImage getBuffer() {
@@ -78,13 +56,7 @@ public class HangarCanvasWrapperSwing extends HangarCanvasWrapper {
         graphics2d.setTransform(transform);
 
         var graphicsSettings = HangarState.getGraphicsSettings();
-        if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
-            var graphicsWithHints = HangarState.applyAntiAliasing(graphics);
-            // TODO: clear "canvas" if enabled
-            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
-        }
-        // TODO: return back to this code I guess, don't render into canvas, render into texture
-        else if (buffer != null) {
+        if (buffer != null) {
             var graphicsWithHints = HangarState.applyAntiAliasing(buffer.getGraphics());
             if (graphicsSettings.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, buffer.getWidth(), buffer.getHeight());

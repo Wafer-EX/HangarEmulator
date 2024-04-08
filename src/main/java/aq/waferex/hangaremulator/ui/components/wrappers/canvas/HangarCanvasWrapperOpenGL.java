@@ -18,6 +18,9 @@ package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
+import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLBuffer;
+import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLVertexArray;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
@@ -32,7 +35,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL33.*;
 
 public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
-    private static final HangarGLGraphicsProvider graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault());
+    private static RenderTarget offscreenRenderTarget;
+    private static HangarGLGraphicsProvider offscreenGraphicsProvider;
     private final HangarOpenGLCanvas openGLCanvas;
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
@@ -41,32 +45,32 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         var graphicsSettings = HangarState.getGraphicsSettings();
         var resolution = graphicsSettings.getResolution();
 
-        graphicsSettings.setResolution(resolution);
-        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
+        offscreenRenderTarget = new RenderTarget(resolution.width, resolution.height);
+        offscreenGraphicsProvider = new HangarGLGraphicsProvider(offscreenRenderTarget);
 
-        openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
+        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
-
         this.add(openGLCanvas);
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {
-        return graphicsProvider;
+        return offscreenGraphicsProvider;
     }
 
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        openGLCanvas.setGLActionList(graphicsProvider.getGLActions());
-        graphicsProvider.getGLActions().clear();
+        canvas.paint(new javax.microedition.lcdui.Graphics(offscreenGraphicsProvider));
+        openGLCanvas.setGLActionList(offscreenGraphicsProvider.getGLActions());
+        offscreenGraphicsProvider.getGLActions().clear();
         SwingUtilities.invokeLater(openGLCanvas::render);
     }
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
         private final ArrayList<HangarGLAction> glActionList;
-        private final Dimension viewportResolution = new Dimension(240, 320);
+        private GLVertexArray glOffscreenTextureVertexArray;
+        private GLBuffer glOffscreenTextureBuffer;
 
         public HangarOpenGLCanvas(GLData glData) {
             super(glData);
@@ -77,29 +81,54 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             this.glActionList.addAll(glActions);
         }
 
-        public void setViewportResolution(int width, int height) {
-            viewportResolution.width = width;
-            viewportResolution.height = height;
-        }
-
         @Override
         public void initGL() {
             createCapabilities();
-            glViewport(0, 0, viewportResolution.width, viewportResolution.height);
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glEnable(GL_SCISSOR_TEST);
-            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+
+            glOffscreenTextureBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
+            glOffscreenTextureVertexArray = new GLVertexArray();
+            glOffscreenTextureVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+            glOffscreenTextureVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
+            glOffscreenTextureBuffer.setBufferData(new float[]{
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    offscreenRenderTarget.getWidth(), 0.0f, 1.0f, 0.0f,
+                    offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 1.0f, 1.0f,
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 1.0f, 1.0f,
+                    0.0f, offscreenRenderTarget.getHeight(), 0.0f, 1.0f,
+            });
+
+            if (!HangarGLGraphicsProvider.getShadersAreCompiled()) {
+                HangarGLGraphicsProvider.compileShaders();
+            }
+            offscreenRenderTarget.initialize();
         }
 
         @Override
         public void paintGL() {
-            // TODO: render into separated render target, not default
-            glClear(GL_COLOR_BUFFER_BIT);
+            // perform collected actions
             for (var glAction : glActionList) {
                 glAction.execute();
             }
             glActionList.clear();
-            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+
+            // prepare "canvas"
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // render offscreen framebuffer
+            var shaderProgram = HangarGLGraphicsProvider.getSpriteShaderProgram();
+
+            glOffscreenTextureVertexArray.bind();
+            shaderProgram.use();
+            shaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), 0, offscreenRenderTarget.getHeight()));
+
+            offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
             swapBuffers();
         }
     }
