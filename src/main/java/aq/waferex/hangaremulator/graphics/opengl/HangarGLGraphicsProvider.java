@@ -56,7 +56,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         glActions.add(() -> {
             if (!isGraphicsPrepared) {
                 glSpriteBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
-
                 glSpriteVertexArray = new GLVertexArray();
                 glSpriteVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
                 glSpriteVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
@@ -83,6 +82,10 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         spriteShaderProgram = new GLShaderProgram("/shaders/sprite.vert", "/shaders/sprite.frag");
         shapeShaderProgram = new GLShaderProgram("/shaders/shape.vert", "/shaders/shape.frag");
         shadersAreCompiled = true;
+    }
+
+    public static GLShaderProgram getSpriteShaderProgram() {
+        return spriteShaderProgram;
     }
 
     private Matrix4f getProjectionMatrix() {

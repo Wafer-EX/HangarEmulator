@@ -16,8 +16,10 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
 
-import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLAction;
+import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLBuffer;
+import aq.waferex.hangaremulator.graphics.opengl.abstractions.GLVertexArray;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 import org.lwjgl.opengl.awt.GLData;
 import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
@@ -39,10 +41,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
         super(canvas);
 
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        var resolution = graphicsSettings.getResolution();
-
-        offscreenRenderTarget = RenderTarget.getDefault();
+        offscreenRenderTarget = new RenderTarget(240, 320);
         offscreenGraphicsProvider = new HangarGLGraphicsProvider(offscreenRenderTarget);
 
         this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
@@ -68,6 +67,8 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
         private final ArrayList<HangarGLAction> glActionList;
         private final Dimension viewportResolution = new Dimension(240, 320);
+        private GLVertexArray glOffscreenTextureVertexArray;
+        private GLBuffer glOffscreenTextureBuffer;
 
         public HangarOpenGLCanvas(GLData glData) {
             super(glData);
@@ -91,6 +92,20 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             glEnable(GL_SCISSOR_TEST);
             glScissor(0, 0, viewportResolution.width, viewportResolution.height);
 
+            glOffscreenTextureBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
+            glOffscreenTextureVertexArray = new GLVertexArray();
+            glOffscreenTextureVertexArray.VertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+            glOffscreenTextureVertexArray.VertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
+            glOffscreenTextureBuffer.setBufferData(new float[]{
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    240, 0.0f, 1.0f, 0.0f,
+                    240, 320, 1.0f, 1.0f,
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    240, 320, 1.0f, 1.0f,
+                    0.0f, 320, 0.0f, 1.0f,
+            });
+
+            offscreenRenderTarget.initialize();
             if (!HangarGLGraphicsProvider.getShadersAreCompiled()) {
                 HangarGLGraphicsProvider.compileShaders();
             }
@@ -98,13 +113,22 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
         @Override
         public void paintGL() {
-            // TODO: render into separated render target, not default
-            glClear(GL_COLOR_BUFFER_BIT);
             for (var glAction : glActionList) {
                 glAction.execute();
             }
             glActionList.clear();
+
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
             glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            glOffscreenTextureVertexArray.bind();
+            HangarGLGraphicsProvider.getSpriteShaderProgram().use();
+            HangarGLGraphicsProvider.getSpriteShaderProgram().setUniform("projectionMatrix", new Matrix4f().ortho2D(0, 240, 0, 320));
+
+            offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
             swapBuffers();
         }
     }
