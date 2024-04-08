@@ -124,12 +124,16 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
             glOffscreenTextureVertexArray.bind();
             shaderProgram.use();
-            shaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), 0, offscreenRenderTarget.getHeight()));
+            shaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
 
             offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
 
             swapBuffers();
+        }
+
+        private Matrix4f getProjectionMatrix() {
+            return new Matrix4f().ortho2D(0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight(), 0);
         }
     }
 }
