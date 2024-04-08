@@ -32,7 +32,8 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL33.*;
 
 public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
-    private static final HangarGLGraphicsProvider graphicsProvider = new HangarGLGraphicsProvider(RenderTarget.getDefault());
+    private static RenderTarget offscreenRenderTarget;
+    private static HangarGLGraphicsProvider offscreenGraphicsProvider;
     private final HangarOpenGLCanvas openGLCanvas;
 
     public HangarCanvasWrapperOpenGL(Canvas canvas) {
@@ -41,26 +42,26 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         var graphicsSettings = HangarState.getGraphicsSettings();
         var resolution = graphicsSettings.getResolution();
 
-        graphicsSettings.setResolution(resolution);
-        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
+        offscreenRenderTarget = RenderTarget.getDefault();
+        offscreenGraphicsProvider = new HangarGLGraphicsProvider(offscreenRenderTarget);
 
+        this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
         openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
-
         this.add(openGLCanvas);
     }
 
     public HangarGLGraphicsProvider getGraphicsProvider() {
-        return graphicsProvider;
+        return offscreenGraphicsProvider;
     }
 
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        canvas.paint(new javax.microedition.lcdui.Graphics(graphicsProvider));
-        openGLCanvas.setGLActionList(graphicsProvider.getGLActions());
-        graphicsProvider.getGLActions().clear();
+        canvas.paint(new javax.microedition.lcdui.Graphics(offscreenGraphicsProvider));
+        openGLCanvas.setGLActionList(offscreenGraphicsProvider.getGLActions());
+        offscreenGraphicsProvider.getGLActions().clear();
         SwingUtilities.invokeLater(openGLCanvas::render);
     }
 
