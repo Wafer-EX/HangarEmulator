@@ -89,7 +89,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     private Matrix4f getProjectionMatrix() {
-        return new Matrix4f().ortho2D(0, renderTarget.getWidth(), renderTarget.getHeight(), 0);
+        return new Matrix4f().ortho2D(0, renderTarget.getWidth(), 0, renderTarget.getHeight());
     }
 
     public ArrayList<HangarGLAction> getGLActions() {
@@ -131,8 +131,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-        // TODO: check it
-        glActions.add(() -> glScissor(x, renderTarget.getHeight() - y - height, width,  height));
+        glActions.add(() -> glScissor(x, y, width,  height));
     }
 
     @Override
@@ -417,7 +416,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glSpriteVertexArray.bind();
                 spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", new Matrix4f().ortho2D(0, renderTarget.getWidth(), 0, renderTarget.getHeight()));
+                spriteShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
 
                 offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
