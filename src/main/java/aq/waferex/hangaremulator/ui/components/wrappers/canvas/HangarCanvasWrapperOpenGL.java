@@ -49,7 +49,6 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
         offscreenGraphicsProvider = new HangarGLGraphicsProvider(offscreenRenderTarget);
 
         this.openGLCanvas = new HangarOpenGLCanvas(new GLData());
-        openGLCanvas.setViewportResolution(bufferScale.width, bufferScale.height);
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
@@ -70,7 +69,6 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
         private final ArrayList<HangarGLAction> glActionList;
-        private final Dimension viewportResolution = new Dimension(240, 320);
         private GLVertexArray glOffscreenTextureVertexArray;
         private GLBuffer glOffscreenTextureBuffer;
 
@@ -83,18 +81,13 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             this.glActionList.addAll(glActions);
         }
 
-        public void setViewportResolution(int width, int height) {
-            viewportResolution.width = width;
-            viewportResolution.height = height;
-        }
-
         @Override
         public void initGL() {
             createCapabilities();
-            glViewport(0, 0, viewportResolution.width, viewportResolution.height);
+            glViewport(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
             glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
             glEnable(GL_SCISSOR_TEST);
-            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+            glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
 
             glOffscreenTextureBuffer = new GLBuffer(GL_ARRAY_BUFFER, null);
             glOffscreenTextureVertexArray = new GLVertexArray();
@@ -123,7 +116,7 @@ public class HangarCanvasWrapperOpenGL extends HangarCanvasWrapper {
             glActionList.clear();
 
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glScissor(0, 0, viewportResolution.width, viewportResolution.height);
+            glScissor(0, 0, offscreenRenderTarget.getWidth(), offscreenRenderTarget.getHeight());
             glClear(GL_COLOR_BUFFER_BIT);
 
             glOffscreenTextureVertexArray.bind();
