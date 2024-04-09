@@ -48,7 +48,7 @@ public class DirectUtils {
                 var image = new Image(new HangarSwingImage(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                g.getGraphicsProvider().drawImage(image, x, y);
+                g.getGraphicsProvider().drawImage(image.getHangarImage(), x, y);
             }
 
             @Override
@@ -83,8 +83,7 @@ public class DirectUtils {
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                // TODO: draw HangarImage instead of this
-                g.getGraphicsProvider().drawImage(new Image(new HangarSwingImage(image), true), x, y);
+                g.getGraphicsProvider().drawImage(new HangarSwingImage(image), x, y);
             }
 
             @Override
@@ -132,8 +131,6 @@ public class DirectUtils {
         }
         try {
             var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            //var image = ImageIO.read(byteArrayInputStream);
-            //return new Image(new HangarSwingImage(image), true);
             return new Image(new HangarSwingImage(byteArrayInputStream), true);
         }
         catch (Exception exception) {
@@ -145,11 +142,6 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-//        var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-//        var graphics2d = (Graphics2D) image.getGraphics();
-//        graphics2d.setColor(new Color(ARGBcolor, true));
-//        graphics2d.fillRect(0, 0, image.getWidth(), image.getHeight());
-//        return new Image(new HangarSwingImage(image), true);
         return new Image(new HangarSwingImage(width, height, ARGBcolor, true), true);
     }
 }

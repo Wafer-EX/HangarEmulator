@@ -16,6 +16,8 @@
 
 package aq.waferex.hangaremulator.graphics.opengl;
 
+import aq.waferex.hangaremulator.graphics.HangarImage;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
 import org.joml.Matrix4f;
 import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
@@ -23,7 +25,6 @@ import aq.waferex.hangaremulator.graphics.opengl.abstractions.*;
 import aq.waferex.hangaremulator.utils.ListUtils;
 
 import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,7 +36,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public static final int CIRCLE_POINTS = 16;
 
     private final ArrayList<HangarGLAction> glActions = new ArrayList<>();
-    private final HashMap<Image, GLTexture> generatedTextures = new HashMap<>();
+    private final HashMap<HangarImage, GLTexture> generatedTextures = new HashMap<>();
 
     private final RenderTarget renderTarget;
 
@@ -314,46 +315,49 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
+    public void drawImage(HangarImage img, int x, int y) throws IllegalArgumentException, NullPointerException {
         int width = img.getWidth();
         int height = img.getHeight();
         final Matrix4f projectionMatrix = getProjectionMatrix(true);
 
-        glActions.add(() -> {
-            renderTarget.use();
+        // TODO: render HangarGLImage instead of this
+        if (img instanceof HangarSwingImage swingImage) {
+            glActions.add(() -> {
+                renderTarget.use();
 
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-            glEnable(GL_BLEND);
+                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+                glEnable(GL_BLEND);
 
-            glSpriteBuffer.setBufferData(new float[]{
-                    // 2x POSITION | 2x UV
-                    x, y, 0.0f, 0.0f,
-                    x + width, y, 1.0f, 0.0f,
-                    x + width, y + height, 1.0f, 1.0f,
-                    x, y, 0.0f, 0.0f,
-                    x + width, y + height, 1.0f, 1.0f,
-                    x, y + height, 0.0f, 1.0f,
+                glSpriteBuffer.setBufferData(new float[]{
+                        // 2x POSITION | 2x UV
+                        x, y, 0.0f, 0.0f,
+                        x + width, y, 1.0f, 0.0f,
+                        x + width, y + height, 1.0f, 1.0f,
+                        x, y, 0.0f, 0.0f,
+                        x + width, y + height, 1.0f, 1.0f,
+                        x, y + height, 0.0f, 1.0f,
+                });
+
+                glSpriteVertexArray.bind();
+                spriteShaderProgram.use();
+                spriteShaderProgram.setUniform("projectionMatrix", projectionMatrix);
+
+                var texture = generatedTextures.get(img);
+                if (texture == null) {
+                    texture = new GLTexture(swingImage.convertToByteBuffer(), width, height);
+                    generatedTextures.put(img, texture);
+                }
+
+                texture.bind(GL_TEXTURE0);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+                glDisable(GL_BLEND);
+                glUseProgram(0);
             });
-
-            glSpriteVertexArray.bind();
-            spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", projectionMatrix);
-
-            var texture = generatedTextures.get(img);
-            if (texture == null) {
-                texture = new GLTexture(img.convertToByteBuffer(), width, height);
-                generatedTextures.put(img, texture);
-            }
-
-            texture.bind(GL_TEXTURE0);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
-            glDisable(GL_BLEND);
-            glUseProgram(0);
-        });
+        }
     }
 
     @Override
-    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
+    public void drawRegion(HangarImage src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
         // TODO: write method logic
     }
 

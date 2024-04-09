@@ -113,7 +113,7 @@ public class Sprite extends Layer {
         var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
         // TODO: transform HangarImage instead of this
         var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
-        g.getGraphicsProvider().drawImage(new Image(new HangarSwingImage(transformedImage), false), position.x, position.y);
+        g.getGraphicsProvider().drawImage(new HangarSwingImage(transformedImage), position.x, position.y);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {

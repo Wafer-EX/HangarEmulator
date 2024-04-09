@@ -48,17 +48,8 @@ public class Image {
         throw new IllegalStateException();
     }
 
-    public ByteBuffer convertToByteBuffer() {
-        int[] pixels = getSEImage().getRGB(0, 0, getSEImage().getData().getWidth(), getSEImage().getData().getHeight(), null, 0, getSEImage().getData().getWidth());
-        ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
-        for (int pixel : pixels) {
-            buffer.put((byte) ((pixel >> 16) & 0xFF));
-            buffer.put((byte) ((pixel >> 8) & 0xFF));
-            buffer.put((byte) (pixel & 0xFF));
-            buffer.put((byte) ((pixel >> 24) & 0xFF));
-        }
-        buffer.flip();
-        return buffer;
+    public HangarImage getHangarImage() {
+        return image;
     }
 
     public static Image createImage(int width, int height) throws IllegalArgumentException {

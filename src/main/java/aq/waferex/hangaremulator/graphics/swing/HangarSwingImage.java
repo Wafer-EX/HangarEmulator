@@ -1,3 +1,19 @@
+/*
+ * Copyright 2024 Wafer EX
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package aq.waferex.hangaremulator.graphics.swing;
 
 import aq.waferex.hangaremulator.graphics.HangarImage;
@@ -7,6 +23,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 
 public class HangarSwingImage extends HangarImage {
     private final BufferedImage bufferedImage;
@@ -48,5 +65,19 @@ public class HangarSwingImage extends HangarImage {
 
     public BufferedImage getBufferedImage() {
         return bufferedImage;
+    }
+
+    // TODO: remove it
+    public ByteBuffer convertToByteBuffer() {
+        int[] pixels = bufferedImage.getRGB(0, 0, bufferedImage.getData().getWidth(), bufferedImage.getData().getHeight(), null, 0, bufferedImage.getData().getWidth());
+        ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
+        for (int pixel : pixels) {
+            buffer.put((byte) ((pixel >> 16) & 0xFF));
+            buffer.put((byte) ((pixel >> 8) & 0xFF));
+            buffer.put((byte) (pixel & 0xFF));
+            buffer.put((byte) ((pixel >> 24) & 0xFF));
+        }
+        buffer.flip();
+        return buffer;
     }
 }
