@@ -29,7 +29,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 
-// TODO: remove BufferedImage using, store and return raw image
+// TODO: remove BufferedImage using
 public class Image {
     private final BufferedImage seImage;
     private final boolean isMutable;
