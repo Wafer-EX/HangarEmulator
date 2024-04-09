@@ -36,6 +36,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     private final HangarOffscreenBuffer offscreenBuffer;
+    private final Graphics graphics;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -47,11 +48,11 @@ public abstract class GameCanvas extends Canvas {
             case Swing -> new HangarSwingOffscreenBuffer(width, height);
             case OpenGL -> new HangarGLOffscreenBuffer(width, height);
         };
+        graphics = new Graphics(offscreenBuffer.getGraphicsProvider());
     }
 
     protected Graphics getGraphics() {
-        // TODO: use anti-aliasing support
-        return new Graphics(offscreenBuffer.getGraphicsProvider());
+        return graphics;
     }
 
     public int getKeyStates() {
