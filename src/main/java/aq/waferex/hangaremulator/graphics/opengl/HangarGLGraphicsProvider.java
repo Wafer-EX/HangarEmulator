@@ -88,8 +88,12 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         return spriteShaderProgram;
     }
 
-    private Matrix4f getProjectionMatrix() {
-        return new Matrix4f().ortho2D(0, renderTarget.getWidth(), 0, renderTarget.getHeight());
+    private Matrix4f getProjectionMatrix(boolean translate) {
+        var matrix = new Matrix4f().ortho2D(0, renderTarget.getWidth(), 0, renderTarget.getHeight());
+        if (translate) {
+            matrix = matrix.mul(new Matrix4f().translate(getTranslateX(), getTranslateY(), 0.0f));
+        }
+        return matrix;
     }
 
     public ArrayList<HangarGLAction> getGLActions() {
@@ -131,23 +135,19 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
         float a = color.getAlpha() / 255f;
 
-        final int x1f = x1 + getTranslateX();
-        final int y1f = y1 + getTranslateY();
-        final int x2f = x2 + getTranslateX();
-        final int y2f = y2 + getTranslateY();
-
+        final Matrix4f projectionMatrix = getProjectionMatrix(true);
         glActions.add(() -> {
             renderTarget.use();
 
             glShapeBuffer.setBufferData(new float[]{
                     // 2x POSITION | 4x COLOR
-                    x1f, y1f, r, g, b, a,
-                    x2f, y2f, r, g, b, a,
+                    x1, y1, r, g, b, a,
+                    x2, y2, r, g, b, a,
             });
 
             glShapeVertexArray.bind();
             shapeShaderProgram.use();
-            shapeShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+            shapeShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
             glDrawArrays(GL_LINES, 0, 2);
             glUseProgram(0);
@@ -160,13 +160,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
         float a = color.getAlpha() / 255f;
 
-        final int x1f = x1 + getTranslateX();
-        final int y1f = y1 + getTranslateY();
-        final int x2f = x2 + getTranslateX();
-        final int y2f = y2 + getTranslateY();
-        final int x3f = x3 + getTranslateX();
-        final int y3f = y3 + getTranslateY();
-
+        final Matrix4f projectionMatrix = getProjectionMatrix(true);
         if (isFilled) {
             glActions.add(() -> {
                 renderTarget.use();
@@ -176,14 +170,14 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeBuffer.setBufferData(new float[]{
                         // 2x POSITION | 4x COLOR
-                        x1f, y1f, r, g, b, a,
-                        x2f, y2f, r, g, b, a,
-                        x3f, y3f, r, g, b, a,
+                        x1, y1, r, g, b, a,
+                        x2, y2, r, g, b, a,
+                        x3, y3, r, g, b, a,
                 });
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+                shapeShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
                 glDrawArrays(GL_TRIANGLES, 0, 3);
                 glDisable(GL_BLEND);
@@ -202,9 +196,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         float b = color.getBlue() / 255f;
         float a = color.getAlpha() / 255f;
 
-        final int xf = x + getTranslateX();
-        final int yf = y + getTranslateY();
-
+        final Matrix4f projectionMatrix = getProjectionMatrix(true);
         if (isFilled) {
             glActions.add(() -> {
                 renderTarget.use();
@@ -214,17 +206,17 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeBuffer.setBufferData(new float[]{
                         // 2x POSITION | 4x COLOR
-                        xf, yf, r, g, b, a,
-                        xf + width, yf, r, g, b, a,
-                        xf + width, yf + height, r, g, b, a,
-                        xf, yf, r, g, b, a,
-                        xf + width, yf + height, r, g, b, a,
-                        xf, yf + height, r, g, b, a,
+                        x, y, r, g, b, a,
+                        x + width, y, r, g, b, a,
+                        x + width, y + height, r, g, b, a,
+                        x, y, r, g, b, a,
+                        x + width, y + height, r, g, b, a,
+                        x, y + height, r, g, b, a,
                 });
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+                shapeShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
                 glDrawArrays(GL_TRIANGLES, 0, 6);
                 glDisable(GL_BLEND);
@@ -243,9 +235,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle, Color color, boolean isFilled) {
-        x += getTranslateX();
-        y += getTranslateY();
-
         float halfWidth = (float) width / 2;
         float halfHeight = (float) height / 2;
 
@@ -278,6 +267,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             prevY = currY;
         }
 
+        final Matrix4f projectionMatrix = getProjectionMatrix(true);
         if (isFilled) {
             glActions.add(() -> {
                 renderTarget.use();
@@ -289,7 +279,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glShapeVertexArray.bind();
                 shapeShaderProgram.use();
-                shapeShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+                shapeShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
                 glDrawArrays(GL_TRIANGLE_FAN, 0, CIRCLE_POINTS * 3);
                 glDisable(GL_BLEND);
@@ -326,9 +316,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
         int width = img.getWidth();
         int height = img.getHeight();
 
-        final int xf = x + getTranslateX();
-        final int yf = y + getTranslateY();
-
         if (!generatedTextures.containsKey(img)) {
             glActions.add(() -> {
                 var texture = new GLTexture(img.convertToByteBuffer(), width, height);
@@ -336,6 +323,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             });
         }
 
+        final Matrix4f projectionMatrix = getProjectionMatrix(true);
         glActions.add(() -> {
             renderTarget.use();
 
@@ -344,17 +332,17 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
             glSpriteBuffer.setBufferData(new float[]{
                     // 2x POSITION | 2x UV
-                    xf, yf, 0.0f, 0.0f,
-                    xf + width, yf, 1.0f, 0.0f,
-                    xf + width, yf + height, 1.0f, 1.0f,
-                    xf, yf, 0.0f, 0.0f,
-                    xf + width, yf + height, 1.0f, 1.0f,
-                    xf, yf + height, 0.0f, 1.0f,
+                    x, y, 0.0f, 0.0f,
+                    x + width, y, 1.0f, 0.0f,
+                    x + width, y + height, 1.0f, 1.0f,
+                    x, y, 0.0f, 0.0f,
+                    x + width, y + height, 1.0f, 1.0f,
+                    x, y + height, 0.0f, 1.0f,
             });
 
             glSpriteVertexArray.bind();
             spriteShaderProgram.use();
-            spriteShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+            spriteShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
             generatedTextures.get(img).bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
@@ -405,7 +393,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
                 glSpriteVertexArray.bind();
                 spriteShaderProgram.use();
-                spriteShaderProgram.setUniform("projectionMatrix", getProjectionMatrix());
+                spriteShaderProgram.setUniform("projectionMatrix", getProjectionMatrix(false));
 
                 offscreenRenderTarget.getTexture().bind(GL_TEXTURE0);
                 glDrawArrays(GL_TRIANGLES, 0, 6);
