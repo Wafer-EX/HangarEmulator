@@ -16,7 +16,7 @@
 
 package com.nokia.mid.ui;
 
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
+import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
@@ -45,7 +45,7 @@ public class DirectUtils {
                     throw new NullPointerException();
                 }
                 // TODO: manipulate HangarImage instead of this
-                var image = new Image(new HangarSwingImage(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
+                var image = new Image(HangarImage.create(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
                 g.getGraphicsProvider().drawImage(image.getHangarImage(), x, y);
@@ -83,7 +83,7 @@ public class DirectUtils {
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                g.getGraphicsProvider().drawImage(new HangarSwingImage(image), x, y);
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y);
             }
 
             @Override
@@ -131,7 +131,7 @@ public class DirectUtils {
         }
         try {
             var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            return new Image(new HangarSwingImage(byteArrayInputStream), true);
+            return Image.createImage(byteArrayInputStream);
         }
         catch (Exception exception) {
             throw new IllegalArgumentException();
@@ -142,6 +142,6 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        return new Image(new HangarSwingImage(width, height, ARGBcolor, true), true);
+        return new Image(HangarImage.create(width, height, ARGBcolor, true), true);
     }
 }

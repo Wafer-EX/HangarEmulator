@@ -29,7 +29,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 // TODO: remove BufferedImage using
 public class Image {
@@ -56,7 +55,7 @@ public class Image {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        return new Image(new HangarSwingImage(width, height, Color.WHITE.getRGB(), false), true);
+        return new Image(HangarImage.create(width, height, Color.WHITE.getRGB(), false), true);
     }
 
     public static Image createImage(Image source) throws NullPointerException {
@@ -69,7 +68,7 @@ public class Image {
             var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
             var writableRaster = bufferedImage.copyData(null);
             var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
-            return new Image(new HangarSwingImage(bufferedImageClone), false);
+            return new Image(HangarImage.create(bufferedImageClone), false);
         }
         else {
             return source;
@@ -84,7 +83,7 @@ public class Image {
         if (stream == null) {
             throw new IOException();
         }
-        return new Image(new HangarSwingImage(stream), false);
+        return new Image(HangarImage.create(stream), false);
     }
 
     public static Image createImage(byte[] imageData, int imageOffset, int imageLength) throws ArrayIndexOutOfBoundsException, NullPointerException, IllegalArgumentException {
@@ -106,7 +105,7 @@ public class Image {
         }
         var imageRegion = image.getSEImage().getSubimage(x, y, width, height);
         var transformedImage = ImageUtils.transformImage(imageRegion, transform);
-        return new Image(new HangarSwingImage(transformedImage), false);
+        return new Image(HangarImage.create(transformedImage), false);
     }
 
     public Graphics getGraphics() throws IllegalStateException {
@@ -140,7 +139,7 @@ public class Image {
         if (bufferedImage == null) {
             throw new IOException();
         }
-        return new Image(new HangarSwingImage(bufferedImage), false);
+        return new Image(HangarImage.create(bufferedImage), false);
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {
@@ -150,7 +149,7 @@ public class Image {
         else if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        return new Image(new HangarSwingImage(rgb, width, height, processAlpha), false);
+        return new Image(HangarImage.create(rgb, width, height, processAlpha), false);
     }
 
     public void getRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height) throws ArrayIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {

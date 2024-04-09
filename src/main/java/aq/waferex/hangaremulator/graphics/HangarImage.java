@@ -16,10 +16,45 @@
 
 package aq.waferex.hangaremulator.graphics;
 
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
+
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStream;
+
 public abstract class HangarImage {
     public abstract int getWidth();
 
     public abstract int getHeight();
 
     public abstract void getRGB(int startX, int startY, int w, int h, int[] rgbArray, int offset, int scansize);
+
+    public static HangarImage create(int width, int height, int color, boolean hasAlpha) {
+        return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
+            case Swing -> new HangarSwingImage(width, height, color, hasAlpha);
+            case OpenGL -> throw new IllegalStateException();
+        };
+    }
+
+    public static HangarImage create(InputStream stream) throws IOException {
+        return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
+            case Swing -> new HangarSwingImage(stream);
+            case OpenGL -> throw new IllegalStateException();
+        };
+    }
+
+    public static HangarImage create(int[] rgb, int width, int height, boolean processAlpha) {
+        return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
+            case Swing -> new HangarSwingImage(rgb, width, height, processAlpha);
+            case OpenGL -> throw new IllegalStateException();
+        };
+    }
+
+    public static HangarImage create(BufferedImage bufferedImage) {
+        return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
+            case Swing -> new HangarSwingImage(bufferedImage);
+            case OpenGL -> throw new IllegalStateException();
+        };
+    };
 }
