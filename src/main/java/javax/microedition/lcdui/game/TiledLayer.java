@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui.game;
 
+import aq.waferex.hangaremulator.graphics.HangarSwingImage;
+
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.image.BufferedImage;
@@ -107,7 +109,8 @@ public class TiledLayer extends Layer {
             for (int x = 0; x < columns; x++) {
                 if (cellGrid[x][y] != 0) {
                     var tile = tileList.get(cellGrid[x][y] - 1);
-                    g.getGraphicsProvider().drawImage(new Image((BufferedImage) tile, false), position.x + tileWidth * x, position.y + tileHeight * y);
+                    // TODO: draw HangarImage instead of this
+                    g.getGraphicsProvider().drawImage(new Image(new HangarSwingImage((BufferedImage) tile), false), position.x + tileWidth * x, position.y + tileHeight * y);
                 }
             }
         }

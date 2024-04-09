@@ -16,6 +16,7 @@
 
 package javax.microedition.lcdui.game;
 
+import aq.waferex.hangaremulator.graphics.HangarSwingImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Graphics;
@@ -110,8 +111,9 @@ public class Sprite extends Layer {
     @Override
     public void paint(Graphics g) throws NullPointerException {
         var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
+        // TODO: transform HangarImage instead of this
         var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
-        g.getGraphicsProvider().drawImage(new Image(transformedImage, false), position.x, position.y);
+        g.getGraphicsProvider().drawImage(new Image(new HangarSwingImage(transformedImage), false), position.x, position.y);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
