@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
+// TODO: add image transformation
 public abstract class HangarImage implements Cloneable {
     public abstract int getWidth();
 
