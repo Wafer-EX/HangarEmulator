@@ -342,6 +342,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 spriteShaderProgram.use();
                 spriteShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
+                // TODO: something is wrong here because not all textures are rendered,
+                //  if i'll delete putting it works normal, but it's wrong way, so
+                //  it's needed to replace HangarSwingImage to HangarGLImage
                 var texture = generatedTextures.get(img);
                 if (texture == null) {
                     texture = new GLTexture(swingImage.convertToByteBuffer(), width, height);
