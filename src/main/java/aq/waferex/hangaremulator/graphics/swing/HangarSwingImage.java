@@ -63,6 +63,15 @@ public class HangarSwingImage extends HangarImage {
         bufferedImage.getRGB(startX, startY, w, h, rgbArray, offset, scansize);
     }
 
+    @Override
+    public HangarImage clone() {
+        var colorModel = bufferedImage.getColorModel();
+        var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
+        var writableRaster = bufferedImage.copyData(null);
+        var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
+        return new HangarSwingImage(bufferedImageClone);
+    }
+
     public BufferedImage getBufferedImage() {
         return bufferedImage;
     }

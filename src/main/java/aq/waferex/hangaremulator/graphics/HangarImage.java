@@ -23,7 +23,10 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-public abstract class HangarImage {
+public abstract class HangarImage implements Cloneable {
+    @Override
+    public abstract HangarImage clone();
+
     public abstract int getWidth();
 
     public abstract int getHeight();
@@ -56,5 +59,5 @@ public abstract class HangarImage {
             case Swing -> new HangarSwingImage(bufferedImage);
             case OpenGL -> throw new IllegalStateException();
         };
-    };
+    }
 }

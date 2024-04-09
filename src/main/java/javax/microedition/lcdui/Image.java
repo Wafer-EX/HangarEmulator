@@ -62,17 +62,7 @@ public class Image {
         if (source == null) {
             throw new NullPointerException();
         }
-        if (source.isMutable()) {
-            var bufferedImage = (BufferedImage) source.getSEImage();
-            var colorModel = bufferedImage.getColorModel();
-            var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
-            var writableRaster = bufferedImage.copyData(null);
-            var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
-            return new Image(HangarImage.create(bufferedImageClone), false);
-        }
-        else {
-            return source;
-        }
+        return source.isMutable ? new Image(source.getHangarImage().clone(), false) : source;
     }
 
     public static Image createImage(String name) throws NullPointerException, IOException {
