@@ -317,15 +317,8 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
         int width = img.getWidth();
         int height = img.getHeight();
-
-        if (!generatedTextures.containsKey(img)) {
-            glActions.add(() -> {
-                var texture = new GLTexture(img.convertToByteBuffer(), width, height);
-                generatedTextures.put(img, texture);
-            });
-        }
-
         final Matrix4f projectionMatrix = getProjectionMatrix(true);
+
         glActions.add(() -> {
             renderTarget.use();
 
@@ -346,7 +339,13 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
             spriteShaderProgram.use();
             spriteShaderProgram.setUniform("projectionMatrix", projectionMatrix);
 
-            generatedTextures.get(img).bind(GL_TEXTURE0);
+            var texture = generatedTextures.get(img);
+            if (texture == null) {
+                texture = new GLTexture(img.convertToByteBuffer(), width, height);
+                generatedTextures.put(img, texture);
+            }
+
+            texture.bind(GL_TEXTURE0);
             glDrawArrays(GL_TRIANGLES, 0, 6);
             glDisable(GL_BLEND);
             glUseProgram(0);
