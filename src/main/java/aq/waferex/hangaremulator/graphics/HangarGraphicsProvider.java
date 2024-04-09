@@ -60,9 +60,9 @@ public abstract class HangarGraphicsProvider {
 
     public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 
-    public abstract void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawImage(HangarImage img, int x, int y) throws IllegalArgumentException, NullPointerException;
 
-    public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawRegion(HangarImage src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 
     public abstract void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
 

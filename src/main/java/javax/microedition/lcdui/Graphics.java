@@ -206,11 +206,16 @@ public class Graphics {
         }
         x = ImageUtils.alignX(img.getWidth(), x, anchor);
         y = ImageUtils.alignY(img.getHeight(), y, anchor);
-        graphicsProvider.drawImage(img, x, y);
+        graphicsProvider.drawImage(img.getHangarImage(), x, y);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
-        graphicsProvider.drawRegion(src, x_src, y_src, width, height, transform, x_dest, y_dest, anchor);
+        if (src == null) {
+            throw new NullPointerException();
+        }
+        if (width > 0 && height > 0) {
+            graphicsProvider.drawRegion(src.getHangarImage(), x_src, y_src, width, height, transform, x_dest, y_dest, anchor);
+        }
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {

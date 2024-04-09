@@ -18,6 +18,7 @@ package aq.waferex.hangaremulator.graphics.swing;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
+import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
 import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
@@ -166,17 +167,16 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(Image img, int x, int y) throws IllegalArgumentException, NullPointerException {
-        seGraphics.drawImage(img.getSEImage(), x, y, null);
+    public void drawImage(HangarImage img, int x, int y) throws IllegalArgumentException, NullPointerException {
+        if (img instanceof HangarSwingImage swingImage) {
+            seGraphics.drawImage(swingImage.getBufferedImage(), x, y, null);
+        }
     }
 
     @Override
-    public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
-        if (src == null) {
-            throw new NullPointerException();
-        }
-        if (width > 0 && height > 0) {
-            var imageRegion = src.getSEImage().getSubimage(x_src, y_src, width, height);
+    public void drawRegion(HangarImage src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
+        if (src instanceof HangarSwingImage swingImage) {
+            var imageRegion = swingImage.getBufferedImage().getSubimage(x_src, y_src, width, height);
             var transformedImage = ImageUtils.transformImage(imageRegion, transform);
             x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
             y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);

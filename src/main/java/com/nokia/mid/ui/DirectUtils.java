@@ -16,10 +16,10 @@
 
 package com.nokia.mid.ui;
 
+import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
-import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
@@ -44,10 +44,11 @@ public class DirectUtils {
                 if (img == null) {
                     throw new NullPointerException();
                 }
-                var image = new Image(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation), true);
+                // TODO: manipulate HangarImage instead of this
+                var image = new Image(HangarImage.create(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                g.getGraphicsProvider().drawImage(image, x, y);
+                g.getGraphicsProvider().drawImage(image.getHangarImage(), x, y);
             }
 
             @Override
@@ -82,7 +83,7 @@ public class DirectUtils {
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                g.getGraphicsProvider().drawImage(new Image(image, true), x, y);
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y);
             }
 
             @Override
@@ -130,8 +131,7 @@ public class DirectUtils {
         }
         try {
             var byteArrayInputStream = new ByteArrayInputStream(imageData, imageOffset, imageLength);
-            var image = ImageIO.read(byteArrayInputStream);
-            return new Image(image, true);
+            return Image.createImage(byteArrayInputStream);
         }
         catch (Exception exception) {
             throw new IllegalArgumentException();
@@ -142,10 +142,6 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        var image = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        var graphics2d = (Graphics2D) image.getGraphics();
-        graphics2d.setColor(new Color(ARGBcolor, true));
-        graphics2d.fillRect(0, 0, image.getWidth(), image.getHeight());
-        return new Image(image, true);
+        return new Image(HangarImage.create(width, height, ARGBcolor, true), true);
     }
 }
