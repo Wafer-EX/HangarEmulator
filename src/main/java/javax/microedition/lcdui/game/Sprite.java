@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.graphics.HangarSwingImage;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Graphics;

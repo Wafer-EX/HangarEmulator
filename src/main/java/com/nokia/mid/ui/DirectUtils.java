@@ -16,11 +16,10 @@
 
 package com.nokia.mid.ui;
 
-import aq.waferex.hangaremulator.graphics.HangarSwingImage;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
-import javax.imageio.ImageIO;
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;

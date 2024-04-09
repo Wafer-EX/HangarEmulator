@@ -1,4 +1,6 @@
-package aq.waferex.hangaremulator.graphics;
+package aq.waferex.hangaremulator.graphics.swing;
+
+import aq.waferex.hangaremulator.graphics.HangarImage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
