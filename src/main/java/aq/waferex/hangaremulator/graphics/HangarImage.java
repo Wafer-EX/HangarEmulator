@@ -24,14 +24,13 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public abstract class HangarImage implements Cloneable {
-    @Override
-    public abstract HangarImage clone();
-
     public abstract int getWidth();
 
     public abstract int getHeight();
 
     public abstract void getRGB(int startX, int startY, int w, int h, int[] rgbArray, int offset, int scansize);
+
+    public abstract HangarGraphicsProvider getGraphicsProvider();
 
     public static HangarImage create(int width, int height, int color, boolean hasAlpha) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
@@ -60,4 +59,7 @@ public abstract class HangarImage implements Cloneable {
             case OpenGL -> throw new IllegalStateException();
         };
     }
+
+    @Override
+    public abstract HangarImage clone();
 }
