@@ -36,28 +36,32 @@ public abstract class HangarImage implements Cloneable {
     public static HangarImage create(int width, int height, int color, boolean hasAlpha) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
             case Swing -> new HangarSwingImage(width, height, color, hasAlpha);
-            case OpenGL -> throw new IllegalStateException();
+            // TODO: use HangarGLImage
+            case OpenGL -> new HangarSwingImage(width, height, color, hasAlpha);
         };
     }
 
     public static HangarImage create(InputStream stream) throws IOException {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
             case Swing -> new HangarSwingImage(stream);
-            case OpenGL -> throw new IllegalStateException();
+            // TODO: use HangarGLImage
+            case OpenGL -> new HangarSwingImage(stream);
         };
     }
 
     public static HangarImage create(int[] rgb, int width, int height, boolean processAlpha) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
             case Swing -> new HangarSwingImage(rgb, width, height, processAlpha);
-            case OpenGL -> throw new IllegalStateException();
+            // TODO: use HangarGLImage
+            case OpenGL -> new HangarSwingImage(rgb, width, height, processAlpha);
         };
     }
 
     public static HangarImage create(BufferedImage bufferedImage) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
             case Swing -> new HangarSwingImage(bufferedImage);
-            case OpenGL -> throw new IllegalStateException();
+            // TODO: use HangarGLImage
+            case OpenGL -> new HangarSwingImage(bufferedImage);
         };
     }
 
