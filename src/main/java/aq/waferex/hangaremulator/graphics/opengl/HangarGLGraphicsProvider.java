@@ -124,7 +124,9 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void setClip(int x, int y, int width, int height) {
-        glActions.add(() -> glScissor(x, y, width,  height));
+        final int translateX = getTranslateX();
+        final int translateY = getTranslateY();
+        glActions.add(() -> glScissor(x + translateX, y + translateY, width,  height));
     }
 
     @Override
