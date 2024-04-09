@@ -74,7 +74,8 @@ public class Graphics {
     }
 
     public int getGrayScale() {
-        return graphicsProvider.getGrayScale();
+        // TODO: check it
+        return (color.getRed() + color.getGreen() + color.getBlue()) / 3;
     }
 
     public void setColor(int red, int green, int blue) throws IllegalArgumentException {
@@ -86,7 +87,11 @@ public class Graphics {
     }
 
     public void setGrayScale(int value) throws IllegalArgumentException {
-        graphicsProvider.setGrayScale(value);
+        if (value < 0 || value > 255) {
+            throw new IllegalArgumentException();
+        }
+        // TODO: check it
+        color = new Color(value);
     }
 
     public Font getFont() {

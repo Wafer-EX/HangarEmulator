@@ -36,10 +36,6 @@ public abstract class HangarGraphicsProvider {
         return translateY;
     }
 
-    public abstract int getGrayScale();
-
-    public abstract void setGrayScale(int value) throws IllegalArgumentException;
-
     public abstract Font getFont();
 
     public abstract void setStrokeStyle(int style) throws IllegalArgumentException;

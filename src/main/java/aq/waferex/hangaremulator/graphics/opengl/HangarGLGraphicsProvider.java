@@ -97,17 +97,6 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getGrayScale() {
-        // TODO: write method logic
-        return 0;
-    }
-
-    @Override
-    public void setGrayScale(int value) throws IllegalArgumentException {
-        // TODO: write method logic
-    }
-
-    @Override
     public Font getFont() {
         // TODO: write method logic
         return Font.getDefaultFont();

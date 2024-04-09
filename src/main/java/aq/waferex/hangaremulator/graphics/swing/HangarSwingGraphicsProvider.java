@@ -45,20 +45,6 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public int getGrayScale() {
-        // TODO: write method logic
-        return 0;
-    }
-
-    @Override
-    public void setGrayScale(int value) throws IllegalArgumentException {
-        if (value < 0 || value > 255) {
-            throw new IllegalArgumentException();
-        }
-        // TODO: write method logic
-    }
-
-    @Override
     public javax.microedition.lcdui.Font getFont() {
         if (seFont == null) {
             return javax.microedition.lcdui.Font.getDefaultFont();
