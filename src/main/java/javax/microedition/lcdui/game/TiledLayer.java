@@ -28,7 +28,7 @@ public class TiledLayer extends Layer {
     private final int tileWidth;
     private final int tileHeight;
     private final int[][] cellGrid;
-    private final ArrayList<HangarImage> tileList = new ArrayList<>();
+    private final ArrayList<HangarImage> tileImages = new ArrayList<>();
 
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
         this.columns = columns;
@@ -40,8 +40,8 @@ public class TiledLayer extends Layer {
 
         for (int y = 0; y < image.getHeight() / tileHeight; y++) {
             for (int x = 0; x < image.getWidth() / tileWidth; x++) {
-                var hangarImage = image.getHangarImage().getCopy(tileWidth * x, tileHeight * y, tileWidth, tileHeight, 0);
-                tileList.add(hangarImage);
+                var tileImage = image.getHangarImage().getCopy(tileWidth * x, tileHeight * y, tileWidth, tileHeight, 0);
+                tileImages.add(tileImage);
             }
         }
     }
@@ -104,8 +104,8 @@ public class TiledLayer extends Layer {
         for (int y = 0; y < rows; y++) {
             for (int x = 0; x < columns; x++) {
                 if (cellGrid[x][y] != 0) {
-                    var tile = tileList.get(cellGrid[x][y] - 1);
-                    g.getGraphicsProvider().drawImage(tile, position.x + tileWidth * x, position.y + tileHeight * y);
+                    var tileImage = tileImages.get(cellGrid[x][y] - 1);
+                    g.getGraphicsProvider().drawImage(tileImage, position.x + tileWidth * x, position.y + tileHeight * y);
                 }
             }
         }
