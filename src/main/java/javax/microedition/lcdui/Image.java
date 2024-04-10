@@ -18,16 +18,13 @@ package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.MIDletResources;
 import aq.waferex.hangaremulator.graphics.HangarImage;
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-// TODO: remove BufferedImage using
 public class Image {
     private final HangarImage image;
     private final boolean isMutable;
@@ -35,13 +32,6 @@ public class Image {
     public Image(HangarImage image, boolean isMutable) {
         this.image = image;
         this.isMutable = isMutable;
-    }
-
-    public BufferedImage getSEImage() {
-        if (image instanceof HangarSwingImage hangarSwingImage) {
-            return hangarSwingImage.getBufferedImage();
-        }
-        throw new IllegalStateException();
     }
 
     public HangarImage getHangarImage() {
