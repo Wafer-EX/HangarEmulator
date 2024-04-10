@@ -19,7 +19,6 @@ package javax.microedition.lcdui;
 import aq.waferex.hangaremulator.MIDletResources;
 import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
-import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -60,7 +59,7 @@ public class Image {
         if (source == null) {
             throw new NullPointerException();
         }
-        return source.isMutable ? new Image(source.getHangarImage().clone(), false) : source;
+        return source.isMutable ? new Image(source.getHangarImage().getCopy(), false) : source;
     }
 
     public static Image createImage(String name) throws NullPointerException, IOException {
@@ -91,10 +90,7 @@ public class Image {
         if (image == null) {
             throw new NullPointerException();
         }
-        // TODO: use HangarImage methods
-        var imageRegion = image.getSEImage().getSubimage(x, y, width, height);
-        var transformedImage = ImageUtils.transformImage(imageRegion, transform);
-        return new Image(HangarImage.create(transformedImage), false);
+        return new Image(image.getHangarImage().getCopy(x, y, width, height, transform), false);
     }
 
     public Graphics getGraphics() throws IllegalStateException {

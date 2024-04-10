@@ -24,7 +24,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 // TODO: add image transformation
-public abstract class HangarImage implements Cloneable {
+public abstract class HangarImage {
     public abstract int getWidth();
 
     public abstract int getHeight();
@@ -65,6 +65,7 @@ public abstract class HangarImage implements Cloneable {
         };
     }
 
-    @Override
-    public abstract HangarImage clone();
+    public abstract HangarImage getCopy();
+
+    public abstract HangarImage getCopy(int x, int y, int width, int height, int transform);
 }

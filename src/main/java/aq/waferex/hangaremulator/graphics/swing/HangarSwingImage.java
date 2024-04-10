@@ -18,6 +18,7 @@ package aq.waferex.hangaremulator.graphics.swing;
 
 import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.HangarImage;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -89,11 +90,18 @@ public class HangarSwingImage extends HangarImage {
     }
 
     @Override
-    public HangarImage clone() {
+    public HangarImage getCopy() {
         var colorModel = bufferedImage.getColorModel();
         var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
         var writableRaster = bufferedImage.copyData(null);
         var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
         return new HangarSwingImage(bufferedImageClone);
+    }
+
+    @Override
+    public HangarImage getCopy(int x, int y, int width, int height, int transform) {
+        var imageRegion = bufferedImage.getSubimage(x, y, width, height);
+        var transformedImage = ImageUtils.transformImage(imageRegion, transform);
+        return new HangarSwingImage(transformedImage);
     }
 }
