@@ -44,11 +44,9 @@ public class DirectUtils {
                 if (img == null) {
                     throw new NullPointerException();
                 }
-                // TODO: manipulate HangarImage instead of this
-                var image = new Image(HangarImage.create(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                g.getGraphicsProvider().drawImage(image.getHangarImage(), x, y);
+                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y);
             }
 
             @Override

@@ -67,5 +67,9 @@ public abstract class HangarImage {
 
     public abstract HangarImage getCopy();
 
+    // TODO: replace transform and manipulation with normal methods
+    //  (put transformation into graphics provider when render image?)
     public abstract HangarImage getCopy(int x, int y, int width, int height, int transform);
+
+    public abstract HangarImage getCopy(int manipulation);
 }
