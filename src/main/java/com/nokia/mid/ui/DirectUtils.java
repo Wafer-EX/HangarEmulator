@@ -46,7 +46,8 @@ public class DirectUtils {
                 }
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y);
+                // TODO: set manipulation in parameter
+                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y, false, false, 0.0f);
             }
 
             @Override
@@ -81,7 +82,8 @@ public class DirectUtils {
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y);
+                // TODO: set manipulation in parameters
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, false, false, 0.0f);
             }
 
             @Override
