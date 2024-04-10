@@ -22,6 +22,7 @@ import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import java.awt.image.BufferedImage;
 
 public class DirectGraphicsUtils {
+    // TODO: remove this method
     public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
         if ((manipulation & DirectGraphics.ROTATE_90) == DirectGraphics.ROTATE_90) {
             image = ImageUtils.rotateImage(image, -Math.PI / 2, true);
