@@ -20,7 +20,6 @@ import aq.waferex.hangaremulator.graphics.HangarImage;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class TiledLayer extends Layer {
@@ -29,7 +28,7 @@ public class TiledLayer extends Layer {
     private final int tileWidth;
     private final int tileHeight;
     private final int[][] cellGrid;
-    private final ArrayList<java.awt.Image> tileList = new ArrayList<>();
+    private final ArrayList<HangarImage> tileList = new ArrayList<>();
 
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
         this.columns = columns;
@@ -41,11 +40,8 @@ public class TiledLayer extends Layer {
 
         for (int y = 0; y < image.getHeight() / tileHeight; y++) {
             for (int x = 0; x < image.getWidth() / tileWidth; x++) {
-                var bufferedImage = new BufferedImage(tileWidth, tileHeight, BufferedImage.TYPE_INT_ARGB);
-                var subImage = image.getSEImage().getSubimage(tileWidth * x, tileHeight * y, tileWidth, tileHeight);
-
-                bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
-                tileList.add(bufferedImage);
+                var hangarImage = image.getHangarImage().getCopy(tileWidth * x, tileHeight * y, tileWidth, tileHeight, 0);
+                tileList.add(hangarImage);
             }
         }
     }
@@ -109,7 +105,7 @@ public class TiledLayer extends Layer {
             for (int x = 0; x < columns; x++) {
                 if (cellGrid[x][y] != 0) {
                     var tile = tileList.get(cellGrid[x][y] - 1);
-                    g.getGraphicsProvider().drawImage(HangarImage.create((BufferedImage) tile), position.x + tileWidth * x, position.y + tileHeight * y);
+                    g.getGraphicsProvider().drawImage(tile, position.x + tileWidth * x, position.y + tileHeight * y);
                 }
             }
         }
