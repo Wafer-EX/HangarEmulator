@@ -316,12 +316,11 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
 
     @Override
     public void drawImage(HangarImage img, int x, int y, float rotationDegree, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
-        int width = img.getWidth();
-        int height = img.getHeight();
-        final Matrix4f projectionMatrix = getProjectionMatrix(true);
-
-        // TODO: render HangarGLImage instead of this
         if (img instanceof HangarSwingImage swingImage) {
+            int width = img.getWidth();
+            int height = img.getHeight();
+            final Matrix4f projectionMatrix = getProjectionMatrix(true);
+
             glActions.add(() -> {
                 renderTarget.use();
 
@@ -356,6 +355,10 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
                 glDisable(GL_BLEND);
                 glUseProgram(0);
             });
+        }
+        else {
+            // TODO: render HangarGLImage
+            throw new IllegalArgumentException();
         }
     }
 

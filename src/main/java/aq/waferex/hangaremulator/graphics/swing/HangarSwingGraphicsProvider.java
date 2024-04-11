@@ -171,6 +171,9 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
         if (img instanceof HangarSwingImage swingImage) {
             seGraphics.drawImage(swingImage.getBufferedImage(), x, y, null);
         }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
