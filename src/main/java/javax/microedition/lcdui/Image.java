@@ -27,10 +27,12 @@ import java.io.InputStream;
 public class Image {
     private final HangarImage image;
     private final boolean isMutable;
+    private final Graphics graphics;
 
     public Image(HangarImage image, boolean isMutable) {
         this.image = image;
         this.isMutable = isMutable;
+        this.graphics = new Graphics(image.getGraphicsProvider());
     }
 
     public HangarImage getHangarImage() {
@@ -86,8 +88,7 @@ public class Image {
         if (!isMutable) {
             throw new IllegalStateException();
         }
-        // TODO: cache it?
-        return new Graphics(image.getGraphicsProvider());
+        return graphics;
     }
 
     public int getWidth() {
