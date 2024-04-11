@@ -18,23 +18,22 @@ package aq.waferex.hangaremulator.utils.nokia;
 
 import com.nokia.mid.ui.DirectGraphics;
 
-public record ImageManipulationInfo(boolean flipX, boolean flipY, boolean dimensionFlipIsNeeded, float rotationDegree) {
+public record ImageManipulationInfo(boolean flipX, boolean flipY, int rotateTimes) {
     public static ImageManipulationInfo getInfo(int manipulation, int imageWidth, int imageHeight) {
         boolean flipX = (manipulation & DirectGraphics.FLIP_HORIZONTAL) == DirectGraphics.FLIP_HORIZONTAL;
         boolean flipY = (manipulation & DirectGraphics.FLIP_VERTICAL) == DirectGraphics.FLIP_VERTICAL;
-        boolean dimensionFlipIsNeeded = imageWidth != imageHeight;
-        float degree = 0.0f;
+        int rotateTimes = 0;
 
         if ((manipulation & DirectGraphics.ROTATE_90) == DirectGraphics.ROTATE_90) {
-            degree = (float) (-Math.PI / 2);
+            rotateTimes = -1;
         }
         if ((manipulation & DirectGraphics.ROTATE_180) == DirectGraphics.ROTATE_180) {
-            degree = (float) -Math.PI;
+            rotateTimes = -2;
         }
         if ((manipulation & DirectGraphics.ROTATE_270) == DirectGraphics.ROTATE_270) {
-            degree = (float) (-Math.PI / 2 * 3);
+            rotateTimes = -3;
         }
 
-        return new ImageManipulationInfo(flipX, flipY, dimensionFlipIsNeeded, degree);
+        return new ImageManipulationInfo(flipX, flipY, rotateTimes);
     }
 }

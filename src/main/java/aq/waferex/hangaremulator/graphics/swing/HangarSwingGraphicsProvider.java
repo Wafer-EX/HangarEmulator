@@ -23,7 +23,6 @@ import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
 import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
-import javax.microedition.lcdui.Image;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -167,9 +166,18 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(HangarImage img, int x, int y, float rotationDegree, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
+    public void drawImage(HangarImage img, int x, int y, int rotateTimes, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
         if (img instanceof HangarSwingImage swingImage) {
-            seGraphics.drawImage(swingImage.getBufferedImage(), x, y, null);
+            // TODO: change graphics, not image
+            var bufferedImage = swingImage.getBufferedImage();
+            bufferedImage = ImageUtils.rotateImage(bufferedImage, rotateTimes);
+            if (flipY) {
+                bufferedImage = ImageUtils.mirrorImageVertical(bufferedImage);
+            }
+            if (flipX) {
+                bufferedImage = ImageUtils.mirrorImageHorizontal(bufferedImage);
+            }
+            seGraphics.drawImage(bufferedImage, x, y, null);
         }
         else {
             throw new IllegalArgumentException();

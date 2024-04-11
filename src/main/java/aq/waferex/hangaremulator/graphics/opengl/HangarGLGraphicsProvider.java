@@ -315,7 +315,7 @@ public class HangarGLGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(HangarImage img, int x, int y, float rotationDegree, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
+    public void drawImage(HangarImage img, int x, int y, int rotateTimes, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
         if (img instanceof HangarSwingImage swingImage) {
             int width = img.getWidth();
             int height = img.getHeight();

@@ -19,6 +19,7 @@ package com.nokia.mid.ui;
 import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
+import aq.waferex.hangaremulator.utils.nokia.ImageManipulationInfo;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -46,8 +47,9 @@ public class DirectUtils {
                 }
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                // TODO: set manipulation in parameter
-                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y, 0.0f,false, false);
+
+                var transform = ImageManipulationInfo.getInfo(manipulation, img.getWidth(), img.getHeight());
+                g.getGraphicsProvider().drawImage(img.getHangarImage(), x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
             }
 
             @Override
@@ -83,7 +85,7 @@ public class DirectUtils {
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
                 // TODO: set manipulation in parameters
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, 0.0f, false, false);
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, 0, false, false);
             }
 
             @Override
