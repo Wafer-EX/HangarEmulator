@@ -185,6 +185,9 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
             y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
             seGraphics.drawImage(transformedImage, x_dest, y_dest, width, height, null);
         }
+        else {
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override
