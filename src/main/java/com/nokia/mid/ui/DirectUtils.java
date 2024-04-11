@@ -81,11 +81,11 @@ public class DirectUtils {
                 if (pixels == null) {
                     throw new NullPointerException();
                 }
+                var transform = ImageManipulationInfo.getInfo(manipulation, width, height);
+                // TODO: add method to graphics provider that draws pixels
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
-                image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                // TODO: set manipulation in parameters
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, 0, false, false);
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
             }
 
             @Override
