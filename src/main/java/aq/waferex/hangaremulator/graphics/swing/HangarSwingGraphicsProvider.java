@@ -167,7 +167,7 @@ public class HangarSwingGraphicsProvider extends HangarGraphicsProvider {
     }
 
     @Override
-    public void drawImage(HangarImage img, int x, int y, boolean flipX, boolean flipY, float rotationDegree) throws IllegalArgumentException, NullPointerException {
+    public void drawImage(HangarImage img, int x, int y, float rotationDegree, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException {
         if (img instanceof HangarSwingImage swingImage) {
             seGraphics.drawImage(swingImage.getBufferedImage(), x, y, null);
         }

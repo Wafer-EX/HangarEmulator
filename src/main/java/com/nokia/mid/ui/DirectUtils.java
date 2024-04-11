@@ -47,7 +47,7 @@ public class DirectUtils {
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
                 // TODO: set manipulation in parameter
-                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y, false, false, 0.0f);
+                g.getGraphicsProvider().drawImage(img.getHangarImage().getCopy(manipulation), x, y, 0.0f,false, false);
             }
 
             @Override
@@ -83,7 +83,7 @@ public class DirectUtils {
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
                 image = DirectGraphicsUtils.manipulateImage(image, manipulation);
                 // TODO: set manipulation in parameters
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, false, false, 0.0f);
+                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, 0.0f, false, false);
             }
 
             @Override

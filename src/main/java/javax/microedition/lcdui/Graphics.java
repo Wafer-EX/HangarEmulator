@@ -206,7 +206,7 @@ public class Graphics {
         }
         x = ImageUtils.alignX(img.getWidth(), x, anchor);
         y = ImageUtils.alignY(img.getHeight(), y, anchor);
-        graphicsProvider.drawImage(img.getHangarImage(), x, y, false, false, 0.0f);
+        graphicsProvider.drawImage(img.getHangarImage(), x, y, 0.0f, false, false);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
