@@ -19,7 +19,6 @@ package javax.microedition.lcdui;
 import aq.waferex.hangaremulator.MIDletResources;
 import aq.waferex.hangaremulator.graphics.HangarImage;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -107,11 +106,7 @@ public class Image {
         if (stream == null) {
             throw new NullPointerException();
         }
-        var bufferedImage = ImageIO.read(stream);
-        if (bufferedImage == null) {
-            throw new IOException();
-        }
-        return new Image(HangarImage.create(bufferedImage), false);
+        return new Image(HangarImage.create(stream), false);
     }
 
     public static Image createRGBImage(int[] rgb, int width, int height, boolean processAlpha) throws NullPointerException, IllegalArgumentException, ArrayIndexOutOfBoundsException {
