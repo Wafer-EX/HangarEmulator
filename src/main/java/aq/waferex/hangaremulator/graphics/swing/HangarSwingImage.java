@@ -19,7 +19,6 @@ package aq.waferex.hangaremulator.graphics.swing;
 import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
-import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -104,11 +103,5 @@ public class HangarSwingImage extends HangarImage {
         var imageRegion = bufferedImage.getSubimage(x, y, width, height);
         var transformedImage = ImageUtils.transformImage(imageRegion, transform);
         return new HangarSwingImage(transformedImage);
-    }
-
-    @Override
-    public HangarImage getCopy(int manipulation) {
-        var manipulatedImage = DirectGraphicsUtils.manipulateImage(bufferedImage, manipulation);
-        return new HangarSwingImage(manipulatedImage);
     }
 }
