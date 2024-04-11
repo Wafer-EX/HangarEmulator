@@ -25,13 +25,13 @@ public class DirectGraphicsUtils {
     // TODO: remove this method
     public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
         if ((manipulation & DirectGraphics.ROTATE_90) == DirectGraphics.ROTATE_90) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2, true);
+            image = ImageUtils.rotateImage(image, -1);
         }
         if ((manipulation & DirectGraphics.ROTATE_180) == DirectGraphics.ROTATE_180) {
-            image = ImageUtils.rotateImage(image, -Math.PI, false);
+            image = ImageUtils.rotateImage(image, -2);
         }
         if ((manipulation & DirectGraphics.ROTATE_270) == DirectGraphics.ROTATE_270) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2 * 3, true);
+            image = ImageUtils.rotateImage(image, -3);
         }
         if ((manipulation & DirectGraphics.FLIP_VERTICAL) == DirectGraphics.FLIP_VERTICAL) {
             image = ImageUtils.mirrorImageVertical(image);

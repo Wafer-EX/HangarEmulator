@@ -44,9 +44,11 @@ public final class ImageUtils {
         return alignedY;
     }
 
-    public static BufferedImage rotateImage(BufferedImage originalImage, double theta, boolean flipDimensions) {
+    public static BufferedImage rotateImage(BufferedImage originalImage, int rotateTimes) {
+        boolean flipDimensions = originalImage.getWidth() != originalImage.getHeight() && rotateTimes % 2 != 0;
         int width = flipDimensions ? originalImage.getHeight() : originalImage.getWidth();
         int height = flipDimensions ? originalImage.getWidth() : originalImage.getHeight();
+        double theta = (Math.PI / 2) * rotateTimes;
 
         var rotatedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
         var graphics2D = rotatedImage.createGraphics();
@@ -82,16 +84,16 @@ public final class ImageUtils {
     public static BufferedImage transformImage(BufferedImage image, int spriteTransformConst) throws IllegalArgumentException {
         switch (spriteTransformConst) {
             case Sprite.TRANS_NONE -> { }
-            case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
-            case Sprite.TRANS_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI, false);
-            case Sprite.TRANS_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3, true);
+            case Sprite.TRANS_ROT90 -> image = ImageUtils.rotateImage(image, 1);
+            case Sprite.TRANS_ROT180 -> image = ImageUtils.rotateImage(image, 2);
+            case Sprite.TRANS_ROT270 -> image = ImageUtils.rotateImage(image, 3);
             default -> {
                 image = ImageUtils.mirrorImageHorizontal(image);
                 switch (spriteTransformConst) {
                     case Sprite.TRANS_MIRROR -> { }
-                    case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, Math.PI / 2, true);
-                    case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, Math.PI, false);
-                    case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, Math.PI / 2 * 3, true);
+                    case Sprite.TRANS_MIRROR_ROT90 -> image = ImageUtils.rotateImage(image, 1);
+                    case Sprite.TRANS_MIRROR_ROT180 -> image = ImageUtils.rotateImage(image, 2);
+                    case Sprite.TRANS_MIRROR_ROT270 -> image = ImageUtils.rotateImage(image, 3);
                     default -> throw new IllegalArgumentException();
                 }
             }
