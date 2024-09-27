@@ -18,7 +18,7 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
+import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
@@ -142,7 +142,7 @@ public class HangarCanvasWrapper extends JPanel {
             if (graphicsSettings.getCanvasClearing()) {
                 graphicsWithHints.clearRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
             }
-            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
+            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarGraphicsProvider(graphicsWithHints)));
             graphics2d.drawImage(bufferedImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }

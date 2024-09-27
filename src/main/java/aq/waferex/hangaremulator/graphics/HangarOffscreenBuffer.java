@@ -17,14 +17,13 @@
 package aq.waferex.hangaremulator.graphics;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.image.BufferedImage;
 
 public class HangarOffscreenBuffer {
     private BufferedImage additionalBuffer;
-    private HangarSwingGraphicsProvider graphicsProvider;
+    private HangarGraphicsProvider graphicsProvider;
 
     public HangarOffscreenBuffer(int width, int height) {
         refreshResolution(width, height);
@@ -53,6 +52,6 @@ public class HangarOffscreenBuffer {
 
     public void refreshResolution(int width, int height) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
-        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics());
+        this.graphicsProvider = new HangarGraphicsProvider(additionalBuffer.getGraphics());
     }
 }

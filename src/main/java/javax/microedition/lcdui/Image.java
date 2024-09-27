@@ -17,7 +17,7 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.MIDletResources;
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
+import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
@@ -109,7 +109,7 @@ public class Image {
             throw new IllegalStateException();
         }
         // TODO: store one graphics
-        return new Graphics(new HangarSwingGraphicsProvider(bufferedImage.getGraphics()));
+        return new Graphics(new HangarGraphicsProvider(bufferedImage.getGraphics()));
     }
 
     public int getWidth() {
