@@ -16,8 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components;
 
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
 import aq.waferex.hangaremulator.ui.listeners.HangarDisplayableListener;
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarFormWrapper;
@@ -59,7 +58,7 @@ public class HangarViewport extends JPanel {
 
         if (displayable != null) {
             if (displayable instanceof Canvas canvas) {
-                this.canvasWrapper = new HangarCanvasWrapperSwing(canvas);
+                this.canvasWrapper = new HangarCanvasWrapper(canvas);
                 scrollPane.setViewportView(canvasWrapper);
                 SwingUtilities.invokeLater(canvas::showNotify);
             }

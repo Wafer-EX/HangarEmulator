@@ -17,7 +17,7 @@
 package aq.waferex.hangaremulator.ui.listeners;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapper;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 
 import javax.microedition.lcdui.Canvas;

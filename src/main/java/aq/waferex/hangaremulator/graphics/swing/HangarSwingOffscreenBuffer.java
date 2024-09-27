@@ -19,7 +19,6 @@ package aq.waferex.hangaremulator.graphics.swing;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.image.BufferedImage;
@@ -44,9 +43,7 @@ public class HangarSwingOffscreenBuffer implements HangarOffscreenBuffer {
     @Override
     public void flushToCanvasWrapper(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper instanceof HangarCanvasWrapperSwing canvasWrapperSwing) {
-            canvasWrapperSwing.getBuffer().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
-        }
+        canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
     }
 
     @Override

@@ -14,33 +14,46 @@
  * limitations under the License.
  */
 
-package aq.waferex.hangaremulator.ui.components.wrappers.canvas;
+package aq.waferex.hangaremulator.ui.components.wrappers;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
+import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public abstract class HangarCanvasWrapper extends JPanel {
+public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
+
+    private final BufferedImage bufferedImage;
 
     protected Dimension bufferScale;
     protected double bufferScaleFactor = 1.0;
     protected Point bufferPosition = new Point(0, 0);
 
-    protected HangarCanvasWrapper(Canvas canvas) {
+    public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
         this.canvas = canvas;
+
+        var resolution = HangarState.getGraphicsSettings().getResolution();
+        this.bufferedImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
+
+        var mouseListener = new HangarMouseListener(this);
+        this.addMouseListener(mouseListener);
+        this.addMouseMotionListener(mouseListener);
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -82,6 +95,10 @@ public abstract class HangarCanvasWrapper extends JPanel {
         }
     }
 
+    public BufferedImage getBufferedImage() {
+        return bufferedImage;
+    }
+
     public Rectangle getDisplayedArea() {
         var graphicsSettings = HangarState.getGraphicsSettings();
         var resolution = graphicsSettings.getResolution();
@@ -108,5 +125,25 @@ public abstract class HangarCanvasWrapper extends JPanel {
 
         bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
         bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
+    }
+
+    @Override
+    public void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+
+        var graphics2d = (Graphics2D) graphics;
+        var transform = graphics2d.getTransform();
+        transform.setToScale(1.0, 1.0);
+        graphics2d.setTransform(transform);
+
+        var graphicsSettings = HangarState.getGraphicsSettings();
+        if (bufferedImage != null) {
+            var graphicsWithHints = HangarState.applyAntiAliasing(bufferedImage.getGraphics());
+            if (graphicsSettings.getCanvasClearing()) {
+                graphicsWithHints.clearRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+            }
+            canvas.paint(new javax.microedition.lcdui.Graphics(new HangarSwingGraphicsProvider(graphicsWithHints)));
+            graphics2d.drawImage(bufferedImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+        }
     }
 }
