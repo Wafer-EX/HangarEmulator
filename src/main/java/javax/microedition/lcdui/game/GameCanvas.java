@@ -18,7 +18,6 @@ package javax.microedition.lcdui.game;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
-import aq.waferex.hangaremulator.graphics.opengl.HangarGLOffscreenBuffer;
 import aq.waferex.hangaremulator.graphics.swing.HangarSwingOffscreenBuffer;
 
 import javax.microedition.lcdui.Canvas;
@@ -44,10 +43,7 @@ public abstract class GameCanvas extends Canvas {
         int width = graphicsSettings.getResolution().width;
         int height = graphicsSettings.getResolution().height;
 
-        offscreenBuffer = switch (graphicsSettings.getGraphicsEngine()) {
-            case Swing -> new HangarSwingOffscreenBuffer(width, height);
-            case OpenGL -> new HangarGLOffscreenBuffer(width, height);
-        };
+        offscreenBuffer = new HangarSwingOffscreenBuffer(width, height);
         graphics = new Graphics(offscreenBuffer.getGraphicsProvider());
     }
 

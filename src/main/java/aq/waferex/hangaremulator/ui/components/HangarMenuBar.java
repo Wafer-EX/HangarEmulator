@@ -17,7 +17,6 @@
 package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.MIDletLoader;
-import aq.waferex.hangaremulator.enums.GraphicsEngines;
 import aq.waferex.hangaremulator.ui.dialogs.HangarFileChooser;
 import aq.waferex.hangaremulator.utils.AudioUtils;
 import aq.waferex.hangaremulator.HangarKeyCodes;
@@ -112,7 +111,6 @@ public class HangarMenuBar extends JMenuBar {
 
         private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
         private final JCheckBoxMenuItem antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing");
-        private final JMenu graphicsEnginePopupMenu = new JMenu("Graphics engine");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
@@ -128,9 +126,6 @@ public class HangarMenuBar extends JMenuBar {
 
             antiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getAntiAliasing());
             antiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setAntiAliasing(!HangarState.getGraphicsSettings().getAntiAliasing()));
-
-            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.Swing));
-            graphicsEnginePopupMenu.add(new HangarGraphicsEngineRadio(GraphicsEngines.OpenGL));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -177,7 +172,6 @@ public class HangarMenuBar extends JMenuBar {
 
             this.add(canvasClearingCheckBox);
             this.add(antiAliasingCheckBox);
-            this.add(graphicsEnginePopupMenu);
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);
             this.add(resolutionPopupMenu);
@@ -188,28 +182,6 @@ public class HangarMenuBar extends JMenuBar {
             this.add(allowResizingCheckBox);
             this.add(new JSeparator());
             this.add(keyboardPopupMenu);
-        }
-
-        private class HangarGraphicsEngineRadio extends JRadioButtonMenuItem {
-            public HangarGraphicsEngineRadio(GraphicsEngines graphicsEngine) {
-                super();
-                this.addItemListener(e -> {
-                    HangarState.getGraphicsSettings().setGraphicsEngine(graphicsEngine);
-                    if (graphicsEngine == GraphicsEngines.OpenGL && this.isSelected()) {
-                        JOptionPane.showMessageDialog(this, """
-                                        I don't recommended to use OpenGL graphics engine because
-                                        it's on a early stage of development and can't display anything
-                                        correctly. If you interested in comfortable game process,
-                                        please use Swing graphics engine.
-                                        """,
-                                "Warning!", JOptionPane.WARNING_MESSAGE);
-                    }
-                });
-
-                this.setText(graphicsEngine.toString());
-                this.setSelected(HangarState.getGraphicsSettings().getGraphicsEngine() == graphicsEngine);
-                graphicsEngineRadioGroup.add(this);
-            }
         }
 
         private class HangarFrameRateRadio extends JRadioButtonMenuItem {
