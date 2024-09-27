@@ -16,7 +16,6 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.nokia.ImageManipulationInfo;
 
 import javax.microedition.lcdui.Graphics;
@@ -38,7 +37,7 @@ public class Sprite extends Layer {
     private int[] sequence;
     private int selectedIndex = 0;
     private final Point referencePixel = new Point();
-    private final ArrayList<HangarImage> frameList = new ArrayList<>();
+    private final ArrayList<Image> frameList = new ArrayList<>();
     private int transform = TRANS_NONE;
 
     public Sprite(Image image) throws NullPointerException {
@@ -140,7 +139,7 @@ public class Sprite extends Layer {
         frameList.clear();
         for (int y = 0; y < img.getHeight() / frameHeight; y++) {
             for (int x = 0; x < img.getWidth() / frameWidth; x++) {
-                var image = img.getHangarImage().getCopy(frameWidth * x, frameHeight * y, frameWidth, frameHeight, 0);
+                var image = Image.createImage(img, frameWidth * x, frameHeight * y, frameWidth, frameHeight, 0);
                 frameList.add(image);
             }
         }

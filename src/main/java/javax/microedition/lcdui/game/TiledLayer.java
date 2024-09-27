@@ -16,8 +16,6 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.graphics.HangarImage;
-
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.util.ArrayList;
@@ -28,7 +26,7 @@ public class TiledLayer extends Layer {
     private final int tileWidth;
     private final int tileHeight;
     private final int[][] cellGrid;
-    private final ArrayList<HangarImage> tileImages = new ArrayList<>();
+    private final ArrayList<Image> tileImages = new ArrayList<>();
 
     public TiledLayer(int columns, int rows, Image image, int tileWidth, int tileHeight) throws NullPointerException, IllegalArgumentException {
         this.columns = columns;
@@ -40,7 +38,7 @@ public class TiledLayer extends Layer {
 
         for (int y = 0; y < image.getHeight() / tileHeight; y++) {
             for (int x = 0; x < image.getWidth() / tileWidth; x++) {
-                var tileImage = image.getHangarImage().getCopy(tileWidth * x, tileHeight * y, tileWidth, tileHeight, 0);
+                var tileImage = Image.createImage(image, tileWidth * x, tileHeight * y, tileWidth, tileHeight, 0);
                 tileImages.add(tileImage);
             }
         }

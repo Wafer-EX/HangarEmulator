@@ -16,8 +16,6 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers;
 
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingImage;
-
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ImageItem;
 import javax.microedition.lcdui.StringItem;
@@ -42,11 +40,9 @@ public class HangarFormWrapper extends JPanel {
             }
             else if (item instanceof ImageItem imageItem) {
                 // TODO: check it
-                if (imageItem.getImage().getHangarImage() instanceof HangarSwingImage swingImage) {
-                    var imageIcon = new ImageIcon(swingImage.getBufferedImage());
-                    var label = new JLabel(imageIcon);
-                    this.add(label, constraints);
-                }
+                var imageIcon = new ImageIcon(imageItem.getImage().getBufferedImage());
+                var label = new JLabel(imageIcon);
+                this.add(label, constraints);
             }
             else {
                 // TODO: add another items

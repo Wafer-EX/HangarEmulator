@@ -16,7 +16,6 @@
 
 package com.nokia.mid.ui;
 
-import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 import aq.waferex.hangaremulator.utils.nokia.ImageManipulationInfo;
@@ -49,7 +48,7 @@ public class DirectUtils {
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
 
                 var transform = ImageManipulationInfo.getInfo(manipulation, img.getWidth(), img.getHeight());
-                g.getGraphicsProvider().drawImage(img.getHangarImage(), x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
+                g.getGraphicsProvider().drawImage(img, x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
             }
 
             @Override
@@ -85,7 +84,8 @@ public class DirectUtils {
                 // TODO: add method to graphics provider that draws pixels
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
+                // TODO: why create new image?
+                g.getGraphicsProvider().drawImage(new Image(image, false), x, y, transform.rotateTimes(), transform.flipX(), transform.flipY());
             }
 
             @Override
@@ -144,6 +144,6 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        return new Image(HangarImage.create(width, height, ARGBcolor, true), true);
+        return new Image(width, height, ARGBcolor, true);
     }
 }

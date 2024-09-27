@@ -17,6 +17,7 @@
 package aq.waferex.hangaremulator.graphics;
 
 import javax.microedition.lcdui.Font;
+import javax.microedition.lcdui.Image;
 import java.awt.*;
 
 public abstract class HangarGraphicsProvider {
@@ -60,9 +61,9 @@ public abstract class HangarGraphicsProvider {
     public abstract void drawString(String str, int x, int y, int anchor, Color color) throws NullPointerException, IllegalArgumentException;
 
     // TODO: rotate as first then flip (vertical -> horizontal, as it in DirectGraphicsUtils in manipulateImage)
-    public abstract void drawImage(HangarImage img, int x, int y, int rotateTimes, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawImage(Image img, int x, int y, int rotateTimes, boolean flipX, boolean flipY) throws IllegalArgumentException, NullPointerException;
 
-    public abstract void drawRegion(HangarImage src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
+    public abstract void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException;
 
     public abstract void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException;
 
