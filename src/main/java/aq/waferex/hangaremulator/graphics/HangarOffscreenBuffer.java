@@ -16,14 +16,43 @@
 
 package aq.waferex.hangaremulator.graphics;
 
-public interface HangarOffscreenBuffer {
-    HangarGraphicsProvider getGraphicsProvider();
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.graphics.swing.HangarSwingGraphicsProvider;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
-    void flushToCanvasWrapper(int x, int y, int width, int height);
+import java.awt.image.BufferedImage;
 
-    int getWidth();
+public class HangarOffscreenBuffer {
+    private BufferedImage additionalBuffer;
+    private HangarSwingGraphicsProvider graphicsProvider;
 
-    int getHeight();
+    public HangarOffscreenBuffer(int width, int height) {
+        refreshResolution(width, height);
+    }
 
-    void refreshResolution(int width, int height);
+    public BufferedImage getBufferedImage() {
+        return additionalBuffer;
+    }
+
+    public HangarGraphicsProvider getGraphicsProvider() {
+        return graphicsProvider;
+    }
+
+    public void flushToCanvasWrapper(int x, int y, int width, int height) {
+        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
+        canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+    }
+
+    public int getWidth() {
+        return additionalBuffer.getWidth();
+    }
+
+    public int getHeight() {
+        return additionalBuffer.getHeight();
+    }
+
+    public void refreshResolution(int width, int height) {
+        this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        this.graphicsProvider = new HangarSwingGraphicsProvider(additionalBuffer.getGraphics());
+    }
 }
