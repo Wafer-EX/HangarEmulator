@@ -17,10 +17,8 @@
 package aq.waferex.hangaremulator.utils;
 
 import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.canvas.HangarCanvasWrapperSwing;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
-import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.swing.*;
 import java.awt.*;

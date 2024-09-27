@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui;
 
-import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
+import aq.waferex.hangaremulator.graphics.opengl.HangarGLGraphicsProvider;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.*;
@@ -32,16 +32,17 @@ public class Graphics {
     public static final int SOLID = 0;
     public static final int DOTTED = 1;
 
-    private final HangarGraphicsProvider graphicsProvider;
+    private final HangarGLGraphicsProvider graphicsProvider;
+
     private Rectangle clip = new Rectangle(0, 0, 240, 320);
     private Color color;
 
-    public Graphics(HangarGraphicsProvider graphicsProvider) {
+    public Graphics(HangarGLGraphicsProvider graphicsProvider) {
         this.graphicsProvider = graphicsProvider;
         this.color = Color.BLACK;
     }
 
-    public HangarGraphicsProvider getGraphicsProvider() {
+    public HangarGLGraphicsProvider getGraphicsProvider() {
         return graphicsProvider;
     }
 

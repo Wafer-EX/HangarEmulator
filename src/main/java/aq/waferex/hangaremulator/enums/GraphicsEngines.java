@@ -17,7 +17,6 @@
 package aq.waferex.hangaremulator.enums;
 
 public enum GraphicsEngines {
-    Swing("Swing"),
     OpenGL("OpenGL (raw)");
 
     private final String name;

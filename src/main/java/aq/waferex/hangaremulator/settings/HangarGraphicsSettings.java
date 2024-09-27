@@ -24,7 +24,7 @@ import java.awt.*;
 public class HangarGraphicsSettings {
     private boolean isCanvasClearingEnabled = false;
     private boolean isAntiAliasingEnabled = false;
-    private GraphicsEngines graphicsEngine = GraphicsEngines.Swing;
+    private GraphicsEngines graphicsEngine = GraphicsEngines.OpenGL;
     private int frameRate = 60;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);

@@ -35,33 +35,33 @@ public abstract class HangarImage {
 
     public static HangarImage create(int width, int height, int color, boolean hasAlpha) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
-            case Swing -> new HangarSwingImage(width, height, color, hasAlpha);
+            //case Swing -> new HangarSwingImage(width, height, color, hasAlpha);
             // TODO: use HangarGLImage
-            case OpenGL -> new HangarSwingImage(width, height, color, hasAlpha);
+            default -> new HangarSwingImage(width, height, color, hasAlpha);
         };
     }
 
     public static HangarImage create(InputStream stream) throws IOException {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
-            case Swing -> new HangarSwingImage(stream);
+            //case Swing -> new HangarSwingImage(stream);
             // TODO: use HangarGLImage
-            case OpenGL -> new HangarSwingImage(stream);
+            default -> new HangarSwingImage(stream);
         };
     }
 
     public static HangarImage create(int[] rgb, int width, int height, boolean processAlpha) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
-            case Swing -> new HangarSwingImage(rgb, width, height, processAlpha);
+            //case Swing -> new HangarSwingImage(rgb, width, height, processAlpha);
             // TODO: use HangarGLImage
-            case OpenGL -> new HangarSwingImage(rgb, width, height, processAlpha);
+            default -> new HangarSwingImage(rgb, width, height, processAlpha);
         };
     }
 
     public static HangarImage create(BufferedImage bufferedImage) {
         return switch (HangarState.getGraphicsSettings().getGraphicsEngine()) {
-            case Swing -> new HangarSwingImage(bufferedImage);
+            //case Swing -> new HangarSwingImage(bufferedImage);
             // TODO: use HangarGLImage
-            case OpenGL -> new HangarSwingImage(bufferedImage);
+            default -> new HangarSwingImage(bufferedImage);
         };
     }
 
