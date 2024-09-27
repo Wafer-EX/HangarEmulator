@@ -197,8 +197,4 @@ public class HangarGraphicsProvider {
             seGraphics.drawImage(image, x, y, null);
         }
     }
-
-    public void paintOffscreenBuffer(HangarOffscreenBuffer offscreenBuffer) {
-        seGraphics.drawImage(offscreenBuffer.getBufferedImage(), 0, 0, null);
-    }
 }

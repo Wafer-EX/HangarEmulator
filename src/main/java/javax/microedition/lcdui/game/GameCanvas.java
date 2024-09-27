@@ -17,10 +17,13 @@
 package javax.microedition.lcdui.game;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
+import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
+import javax.microedition.lcdui.Image;
+import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
     public static final int UP_PRESSED = 1 << Canvas.UP;
@@ -33,8 +36,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private final HangarOffscreenBuffer offscreenBuffer;
-    private final Graphics graphics;
+    private BufferedImage additionalBuffer;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -42,12 +44,11 @@ public abstract class GameCanvas extends Canvas {
         int width = graphicsSettings.getResolution().width;
         int height = graphicsSettings.getResolution().height;
 
-        offscreenBuffer = new HangarOffscreenBuffer(width, height);
-        graphics = new Graphics(offscreenBuffer.getGraphicsProvider());
+        additionalBuffer = ImageUtils.createCompatibleImage(width, height);
     }
 
     protected Graphics getGraphics() {
-        return graphics;
+        return new Graphics(new HangarGraphicsProvider(additionalBuffer.getGraphics()));
     }
 
     public int getKeyStates() {
@@ -57,21 +58,24 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        g.getGraphicsProvider().paintOffscreenBuffer(offscreenBuffer);
+        // TODO: don't create image each time
+        g.drawImage(new Image(additionalBuffer, false), 0, 0, 0);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        offscreenBuffer.flushToCanvasWrapper(x, y, width, height);
+        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
+        canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        offscreenBuffer.flushToCanvasWrapper(0, 0, offscreenBuffer.getWidth(), offscreenBuffer.getHeight());
+        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
+        canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
-        offscreenBuffer.refreshResolution(w, h);
+        this.additionalBuffer = ImageUtils.createCompatibleImage(w, h);
     }
 }
