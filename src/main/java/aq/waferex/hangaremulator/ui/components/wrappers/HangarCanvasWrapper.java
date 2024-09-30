@@ -28,7 +28,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
-import java.awt.image.BufferedImage;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -36,8 +35,6 @@ public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
-
-    private final BufferedImage bufferedImage;
 
     protected Dimension bufferScale;
     protected double bufferScaleFactor = 1.0;
@@ -48,7 +45,8 @@ public class HangarCanvasWrapper extends JPanel {
         this.canvas = canvas;
 
         var resolution = HangarState.getGraphicsSettings().getResolution();
-        this.bufferedImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
+        // TODO: initialize it in different place
+        HangarState.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
 
         var mouseListener = new HangarMouseListener(this);
         this.addMouseListener(mouseListener);
@@ -94,10 +92,6 @@ public class HangarCanvasWrapper extends JPanel {
         }
     }
 
-    public BufferedImage getBufferedImage() {
-        return bufferedImage;
-    }
-
     public Rectangle getDisplayedArea() {
         var graphicsSettings = HangarState.getGraphicsSettings();
         var resolution = graphicsSettings.getResolution();
@@ -136,15 +130,16 @@ public class HangarCanvasWrapper extends JPanel {
         graphics2d.setTransform(transform);
 
         var graphicsSettings = HangarState.getGraphicsSettings();
-        if (bufferedImage != null) {
-            var graphicsWithHints = HangarState.applyAntiAliasing(bufferedImage.getGraphics());
+        var screenImage = HangarState.getScreenImage();
+
+        if (screenImage != null) {
+            var graphicsWithHints = HangarState.applyAntiAliasing(screenImage.getGraphics());
             if (graphicsSettings.getCanvasClearing()) {
-                graphicsWithHints.clearRect(0, 0, bufferedImage.getWidth(), bufferedImage.getHeight());
+                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
             }
-            //canvas.paint(new javax.microedition.lcdui.Graphics(new HangarGraphicsProvider(graphicsWithHints)));
             // TODO: use graphics with hints or setup these settings in graphics object?
-            canvas.paint(new javax.microedition.lcdui.Graphics(bufferedImage));
-            graphics2d.drawImage(bufferedImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+            canvas.paint(new javax.microedition.lcdui.Graphics(screenImage));
+            graphics2d.drawImage(screenImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
         }
     }
 }
