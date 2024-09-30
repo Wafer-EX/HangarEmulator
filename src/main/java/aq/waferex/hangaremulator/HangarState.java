@@ -24,7 +24,7 @@ import java.awt.image.BufferedImage;
 import java.util.Properties;
 
 public class HangarState {
-    // TODO: remove main frame, get displayable from here, call event when displayable is changed
+    // TODO: store displayable as another property, call when displayable is changed
     private static HangarMainFrame mainFrame;
     private static BufferedImage screenImage;
     private static Properties properties;
