@@ -17,7 +17,6 @@
 package javax.microedition.lcdui.game;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -48,7 +47,8 @@ public abstract class GameCanvas extends Canvas {
     }
 
     protected Graphics getGraphics() {
-        return new Graphics(new HangarGraphicsProvider(additionalBuffer.getGraphics()));
+        // TODO: cache graphics?
+        return new Graphics(additionalBuffer);
     }
 
     public int getKeyStates() {
@@ -69,8 +69,11 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics() {
+        // TODO: get buffered image in different place
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        if (canvasWrapper != null) {
+            canvasWrapper.getBufferedImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        }
         super.repaint();
     }
 

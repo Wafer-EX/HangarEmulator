@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.MIDletResources;
-import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.imageio.ImageIO;
@@ -26,7 +25,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.ByteBuffer;
 
 public class Image {
     private final BufferedImage bufferedImage;
@@ -61,10 +59,9 @@ public class Image {
             throw new NullPointerException();
         }
 
-        var bufferedImage = source.bufferedImage;
-        var colorModel = bufferedImage.getColorModel();
+        var colorModel = source.bufferedImage.getColorModel();
         var isAlphaPremultiplied = colorModel.isAlphaPremultiplied();
-        var writableRaster = bufferedImage.copyData(null);
+        var writableRaster = source.bufferedImage.copyData(null);
         var bufferedImageClone = new BufferedImage(colorModel, writableRaster, isAlphaPremultiplied, null);
 
         return source.isMutable ? new Image(bufferedImageClone, false) : source;
@@ -109,7 +106,7 @@ public class Image {
             throw new IllegalStateException();
         }
         // TODO: store one graphics
-        return new Graphics(new HangarGraphicsProvider(bufferedImage.getGraphics()));
+        return new Graphics(bufferedImage);
     }
 
     public int getWidth() {
@@ -153,18 +150,5 @@ public class Image {
             throw new IllegalArgumentException();
         }
         bufferedImage.getRGB(x, y, width, height, rgbData, offset, scanlength);
-    }
-
-    public ByteBuffer convertToByteBuffer() {
-        int[] pixels = bufferedImage.getRGB(0, 0, bufferedImage.getData().getWidth(), bufferedImage.getData().getHeight(), null, 0, bufferedImage.getData().getWidth());
-        ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
-        for (int pixel : pixels) {
-            buffer.put((byte) ((pixel >> 16) & 0xFF));
-            buffer.put((byte) ((pixel >> 8) & 0xFF));
-            buffer.put((byte) (pixel & 0xFF));
-            buffer.put((byte) ((pixel >> 24) & 0xFF));
-        }
-        buffer.flip();
-        return buffer;
     }
 }

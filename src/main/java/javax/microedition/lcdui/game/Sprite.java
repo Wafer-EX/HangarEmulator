@@ -16,7 +16,7 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.utils.nokia.ImageManipulationInfo;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
@@ -109,8 +109,8 @@ public class Sprite extends Layer {
     @Override
     public void paint(Graphics g) throws NullPointerException {
         var image = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
-        var manipulationInfo = ImageManipulationInfo.getInfo(transform, image.getWidth(), image.getHeight());
-        g.getGraphicsProvider().drawImage(image, position.x, position.y, manipulationInfo.rotateTimes(), manipulationInfo.flipX(), manipulationInfo.flipY());
+        var manipulatedImage = ImageUtils.manipulateImage(image.getBufferedImage(), transform);
+        g.getGraphics2D().drawImage(manipulatedImage, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {

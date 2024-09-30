@@ -16,6 +16,8 @@
 
 package aq.waferex.hangaremulator.utils.microedition;
 
+import aq.waferex.hangaremulator.utils.nokia.ImageManipulationInfo;
+
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.game.Sprite;
 import java.awt.*;
@@ -99,6 +101,20 @@ public final class ImageUtils {
             }
         }
         return image;
+    }
+
+    // TODO: merge with methods above to optimize it?
+    public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
+        var manipulationInfo = ImageManipulationInfo.getInfo(manipulation, image.getWidth(), image.getHeight());
+        var manipulatedImage = ImageUtils.rotateImage(image, manipulationInfo.rotateTimes());
+
+        if (manipulationInfo.flipY()) {
+            manipulatedImage = ImageUtils.mirrorImageVertical(manipulatedImage);
+        }
+        if (manipulationInfo.flipX()) {
+            manipulatedImage = ImageUtils.mirrorImageHorizontal(manipulatedImage);
+        }
+        return manipulatedImage;
     }
 
     public static BufferedImage createCompatibleImage(int width, int height) {
