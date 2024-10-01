@@ -22,14 +22,20 @@ import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
+import org.lwjgl.opengl.awt.AWTGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.image.BufferedImage;
+import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import static org.lwjgl.opengl.GL.createCapabilities;
+import static org.lwjgl.opengl.GL30.*;
 
 public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
@@ -40,9 +46,17 @@ public class HangarCanvasWrapper extends JPanel {
     protected double bufferScaleFactor = 1.0;
     protected Point bufferPosition = new Point(0, 0);
 
+    private final HangarOpenGLCanvas openGLCanvas;
+
     public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
         this.canvas = canvas;
+
+        openGLCanvas = new HangarCanvasWrapper.HangarOpenGLCanvas();
+        openGLCanvas.setFocusable(false);
+        openGLCanvas.setPreferredSize(this.getPreferredSize());
+        this.add(openGLCanvas);
+        // TODO: refactor below, remove unused and etc
 
         var resolution = HangarState.getGraphicsSettings().getResolution();
         // TODO: initialize it in different place
@@ -120,26 +134,151 @@ public class HangarCanvasWrapper extends JPanel {
         bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
     }
 
+//    @Override
+//    public void paintComponent(Graphics graphics) {
+//        super.paintComponent(graphics);
+//
+//        var graphics2d = (Graphics2D) graphics;
+//        var transform = graphics2d.getTransform();
+//        transform.setToScale(1.0, 1.0);
+//        graphics2d.setTransform(transform);
+//
+//        var graphicsSettings = HangarState.getGraphicsSettings();
+//        var screenImage = HangarState.getScreenImage();
+//
+//        if (screenImage != null) {
+//            var graphicsWithHints = HangarState.applyAntiAliasing(screenImage.getGraphics());
+//            if (graphicsSettings.getCanvasClearing()) {
+//                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+//            }
+//            // TODO: use graphics with hints or setup these settings in graphics object?
+//            canvas.paint(new javax.microedition.lcdui.Graphics(screenImage));
+//            graphics2d.drawImage(screenImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+//        }
+//    }
+
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
+        openGLCanvas.render();
+    }
 
-        var graphics2d = (Graphics2D) graphics;
-        var transform = graphics2d.getTransform();
-        transform.setToScale(1.0, 1.0);
-        graphics2d.setTransform(transform);
+    private static final class HangarOpenGLCanvas extends AWTGLCanvas {
+        private int vertexArrayObject;
+        private int vertexBufferObject;
+        private int shaderProgram;
 
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        var screenImage = HangarState.getScreenImage();
+        private final float[] vertices = {
+                // Left top
+                -1.0f, -1.0f, 0.0f, 0.0f,
+                // Right bottom
+                1.0f, 1.0f, 1.0f, 1.0f,
+                // Left bottom
+                -1.0f, 1.0f, 0.0f, 1.0f,
 
-        if (screenImage != null) {
-            var graphicsWithHints = HangarState.applyAntiAliasing(screenImage.getGraphics());
-            if (graphicsSettings.getCanvasClearing()) {
-                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+                // Left top
+                -1.0f, -1.0f, 0.0f, 0.0f,
+                // Right top
+                1.0f, -1.0f, 1.0f, 0.0f,
+                // Right bottom
+                1.0f, 1.0f, 1.0f, 1.0f,
+        };
+
+        public HangarOpenGLCanvas() {
+            super();
+        }
+
+        @Override
+        public void initGL() {
+            createCapabilities();
+
+            int red = getBackground().getRed();
+            int green = getBackground().getGreen();
+            int blue = getBackground().getBlue();
+            int alpha = getBackground().getAlpha();
+            glClearColor(red / 255.0f, green / 255.0f, blue / 255.0f, alpha / 255.0f);
+
+            vertexArrayObject = glGenVertexArrays();
+            glBindVertexArray(vertexArrayObject);
+
+            vertexBufferObject = glGenBuffers();
+            glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
+            glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+            glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
+            glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
+            glEnableVertexAttribArray(0);
+            glEnableVertexAttribArray(1);
+
+            String vertexShaderSource = """
+                    #version 330 core
+                    layout (location = 0) in vec2 position;
+                    layout (location = 1) in vec2 uv;
+                    
+                    out vec2 UV;
+                    
+                    void main() {
+                        UV = uv;
+                        gl_Position = vec4(position.x, position.y, 0.0, 1.0);
+                    }
+                    """;
+
+            String fragmentShaderSource = """
+                    #version 330 core
+                    out vec4 FragColor;
+                    
+                    in vec2 UV;
+                    
+                    void main() {
+                        FragColor = vec4(UV.x, UV.y, 1.0, 1.0);
+                    }
+                    """;
+
+            int vertexShader = glCreateShader(GL_VERTEX_SHADER);
+            glShaderSource(vertexShader, vertexShaderSource);
+            glCompileShader(vertexShader);
+
+            int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+            glShaderSource(fragmentShader, fragmentShaderSource);
+            glCompileShader(fragmentShader);
+
+            shaderProgram = glCreateProgram();
+            glAttachShader(shaderProgram, vertexShader);
+            glAttachShader(shaderProgram, fragmentShader);
+            glLinkProgram(shaderProgram);
+
+            glDetachShader(shaderProgram, vertexShader);
+            glDetachShader(shaderProgram, fragmentShader);
+            glDeleteShader(vertexShader);
+            glDeleteShader(fragmentShader);
+        }
+
+        @Override
+        public void paintGL() {
+            glBindFramebuffer(GL_FRAMEBUFFER, 0);
+            glViewport(0, 0, 240, 320);
+            glClear(GL_COLOR_BUFFER_BIT);
+
+            // TODO: render texture
+            glBindVertexArray(vertexArrayObject);
+            glUseProgram(shaderProgram);
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            swapBuffers();
+        }
+
+        // TODO: use it
+        private static ByteBuffer convertToByteBuffer(BufferedImage image) {
+            int[] pixels = image.getRGB(0, 0, image.getData().getWidth(), image.getData().getHeight(), null, 0, image.getData().getWidth());
+            ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
+            for (int pixel : pixels) {
+                buffer.put((byte) ((pixel >> 16) & 0xFF));
+                buffer.put((byte) ((pixel >> 8) & 0xFF));
+                buffer.put((byte) (pixel & 0xFF));
+                buffer.put((byte) ((pixel >> 24) & 0xFF));
             }
-            // TODO: use graphics with hints or setup these settings in graphics object?
-            canvas.paint(new javax.microedition.lcdui.Graphics(screenImage));
-            graphics2d.drawImage(screenImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
+            buffer.flip();
+            return buffer;
         }
     }
 }
