@@ -160,13 +160,19 @@ public class HangarCanvasWrapper extends JPanel {
     @Override
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
-        openGLCanvas.render();
+
+        var screenImage = HangarState.getScreenImage();
+        if (screenImage != null) {
+            canvas.paint(new javax.microedition.lcdui.Graphics(HangarState.getScreenImage()));
+            openGLCanvas.render();
+        }
     }
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
         private int vertexArrayObject;
         private int vertexBufferObject;
         private int shaderProgram;
+        private int texture;
 
         private final float[] vertices = {
                 // Left top
@@ -229,8 +235,10 @@ public class HangarCanvasWrapper extends JPanel {
                     
                     in vec2 UV;
                     
+                    uniform sampler2D sprite;
+                    
                     void main() {
-                        FragColor = vec4(UV.x, UV.y, 1.0, 1.0);
+                        FragColor = texture(sprite, UV);
                     }
                     """;
 
@@ -251,19 +259,29 @@ public class HangarCanvasWrapper extends JPanel {
             glDetachShader(shaderProgram, fragmentShader);
             glDeleteShader(vertexShader);
             glDeleteShader(fragmentShader);
+
+            texture = glGenTextures();
+            glBindTexture(GL_TEXTURE_2D, texture);
+            glActiveTexture(GL_TEXTURE0);
         }
 
         @Override
         public void paintGL() {
+            var screenImage = HangarState.getScreenImage();
+            var screenImageBuffer = convertToByteBuffer(HangarState.getScreenImage());
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, 240, 320);
+            glViewport(0, 0, screenImage.getWidth(), screenImage.getHeight());
             glClear(GL_COLOR_BUFFER_BIT);
 
-            // TODO: render texture
             glBindVertexArray(vertexArrayObject);
             glUseProgram(shaderProgram);
-            glDrawArrays(GL_TRIANGLES, 0, 6);
 
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenImage.getWidth(), screenImage.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImageBuffer);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+            glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
         }
 
