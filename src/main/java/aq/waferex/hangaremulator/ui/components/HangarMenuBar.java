@@ -133,7 +133,7 @@ public class HangarMenuBar extends JMenuBar {
             frameRatePopupMenu.add(new HangarFrameRateRadio(-1));
 
             scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.None));
-            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.Contain));
+            scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.Fit));
             scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.ChangeResolution));
 
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 128)));

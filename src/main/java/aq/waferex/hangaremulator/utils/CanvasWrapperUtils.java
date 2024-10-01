@@ -27,7 +27,7 @@ public final class CanvasWrapperUtils {
         return switch (HangarState.getGraphicsSettings().getScalingMode()) {
             // TODO: replace None with Percent
             case None, ChangeResolution -> 1.0f;
-            case Contain -> {
+            case Fit -> {
                 float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
                 float scaleFactorVertical = ((float) viewportHeight / imageHeight);
                 yield Math.min(scaleFactorHorizontal, scaleFactorVertical);
