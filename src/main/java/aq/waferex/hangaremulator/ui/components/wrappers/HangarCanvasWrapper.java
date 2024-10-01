@@ -22,6 +22,7 @@ import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
@@ -176,18 +177,18 @@ public class HangarCanvasWrapper extends JPanel {
 
         private final float[] vertices = {
                 // Left top
-                -1.0f, -1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 0.0f,
                 // Right bottom
-                1.0f, 1.0f, 1.0f, 1.0f,
+                240.0f, 320.0f, 1.0f, 1.0f,
                 // Left bottom
-                -1.0f, 1.0f, 0.0f, 1.0f,
+                0.0f, 320.0f, 0.0f, 1.0f,
 
                 // Left top
-                -1.0f, -1.0f, 0.0f, 0.0f,
+                0.0f, 0.0f, 0.0f, 0.0f,
                 // Right top
-                1.0f, -1.0f, 1.0f, 0.0f,
+                240.0f, 0.0f, 1.0f, 0.0f,
                 // Right bottom
-                1.0f, 1.0f, 1.0f, 1.0f,
+                240.0f, 320.0f, 1.0f, 1.0f,
         };
 
         public HangarOpenGLCanvas() {
@@ -221,11 +222,13 @@ public class HangarCanvasWrapper extends JPanel {
                     layout (location = 0) in vec2 position;
                     layout (location = 1) in vec2 uv;
                     
+                    uniform mat4 projectionMatrix;
+                    
                     out vec2 UV;
                     
                     void main() {
                         UV = uv;
-                        gl_Position = vec4(position.x, position.y, 0.0, 1.0);
+                        gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
                     }
                     """;
 
@@ -285,11 +288,21 @@ public class HangarCanvasWrapper extends JPanel {
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
+            int location = glGetUniformLocation(shaderProgram, "projectionMatrix");
+            float[] data = new float[16];
+            glUniformMatrix4fv(location, false, getProjectionMatrix(viewportWidth, viewportHeight).get(data));
+
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
         }
 
-        // TODO: use it
+        private Matrix4f getProjectionMatrix(int viewportWidth, int viewportHeight) {
+            var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
+            // TODO: move to center and scale it
+            //matrix = matrix.mul(new Matrix4f().translate(getTranslateX(), getTranslateY(), 0.0f));
+            return matrix;
+        }
+
         private static ByteBuffer convertToByteBuffer(BufferedImage image) {
             int[] pixels = image.getRGB(0, 0, image.getData().getWidth(), image.getData().getHeight(), null, 0, image.getData().getWidth());
             ByteBuffer buffer = ByteBuffer.allocateDirect(pixels.length * 4);
