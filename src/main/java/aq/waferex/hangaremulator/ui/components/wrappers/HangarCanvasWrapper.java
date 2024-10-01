@@ -270,8 +270,12 @@ public class HangarCanvasWrapper extends JPanel {
             var screenImage = HangarState.getScreenImage();
             var screenImageBuffer = convertToByteBuffer(HangarState.getScreenImage());
 
+            var scalingInUnits = SystemUtils.getScalingInUnits();
+            int viewportWidth = (int) (getSize().width * scalingInUnits);
+            int viewportHeight = (int) (getSize().height * scalingInUnits);
+
             glBindFramebuffer(GL_FRAMEBUFFER, 0);
-            glViewport(0, 0, screenImage.getWidth(), screenImage.getHeight());
+            glViewport(0, 0, viewportWidth, viewportHeight);
             glClear(GL_COLOR_BUFFER_BIT);
 
             glBindVertexArray(vertexArrayObject);
