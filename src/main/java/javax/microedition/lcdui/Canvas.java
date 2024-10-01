@@ -89,6 +89,7 @@ public abstract class Canvas extends Displayable {
 
     public void pointerDragged(int x, int y) { }
 
+    // TODO: reimplement?
     public final void repaint(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
         if (canvasWrapper != null) {

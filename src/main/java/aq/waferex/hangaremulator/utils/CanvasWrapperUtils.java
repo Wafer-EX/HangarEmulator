@@ -69,25 +69,14 @@ public final class CanvasWrapperUtils {
         );
     }
 
-
+    // TODO: reimplement?
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
-        // TODO: check this method
         var scaleFactor = canvasWrapper.getScaleFactor();
         var position = canvasWrapper.getDisplayedArea();
 
         return new Point(
                 position.x + (int) (x * scaleFactor),
                 position.y + (int) (y * scaleFactor)
-        );
-    }
-
-    public static Point panelPointToCanvas(HangarCanvasWrapper canvasWrapper, int x, int y) {
-        var scaleFactor = canvasWrapper.getScaleFactor();
-        var position = canvasWrapper.getDisplayedArea();
-
-        return new Point(
-                (int) ((x - position.x) / scaleFactor),
-                (int) ((y - position.y) / scaleFactor)
         );
     }
 }
