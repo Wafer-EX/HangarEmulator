@@ -77,8 +77,8 @@ public class HangarCanvasWrapper extends JPanel {
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
 
                     HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
-                    // I don't change resolution because the resolution settings represent only the setting,
-                    // screen image is independent
+                    // I don't change resolution because the resolution settings represent
+                    // only the setting, screen image is independent
 
                     canvas.sizeChanged(viewportWidth, viewportHeight);
                 }
@@ -151,7 +151,10 @@ public class HangarCanvasWrapper extends JPanel {
         private int vertexArrayObject;
         private int vertexBufferObject;
         private int shaderProgram;
+
         private int texture;
+        private int textureWidth;
+        private int textureHeight;
 
         public HangarOpenGLCanvas() {
             super();
@@ -220,8 +223,11 @@ public class HangarCanvasWrapper extends JPanel {
             glViewport(0, 0, viewportWidth, viewportHeight);
             glClear(GL_COLOR_BUFFER_BIT);
 
-            // TODO: change only when changing resolution
-            glBufferData(GL_ARRAY_BUFFER, getScreenImageVertices(screenImage.getWidth(), screenImage.getHeight()), GL_STATIC_DRAW);
+            if (screenImage.getWidth() != textureWidth || screenImage.getHeight() != textureHeight) {
+                glBufferData(GL_ARRAY_BUFFER, getScreenImageVertices(screenImage.getWidth(), screenImage.getHeight()), GL_STATIC_DRAW);
+                textureWidth = screenImage.getWidth();
+                textureHeight = screenImage.getHeight();
+            }
 
             glBindVertexArray(vertexArrayObject);
             glUseProgram(shaderProgram);
