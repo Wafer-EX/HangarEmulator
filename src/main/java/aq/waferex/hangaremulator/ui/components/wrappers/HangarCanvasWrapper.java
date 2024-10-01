@@ -290,16 +290,23 @@ public class HangarCanvasWrapper extends JPanel {
 
             int location = glGetUniformLocation(shaderProgram, "projectionMatrix");
             float[] data = new float[16];
-            glUniformMatrix4fv(location, false, getProjectionMatrix(viewportWidth, viewportHeight).get(data));
+            Matrix4f projectionMatrix = getProjectionMatrix(viewportWidth, viewportHeight, screenImage.getWidth(), screenImage.getHeight());
+            glUniformMatrix4fv(location, false, projectionMatrix.get(data));
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
         }
 
-        private Matrix4f getProjectionMatrix(int viewportWidth, int viewportHeight) {
+        private Matrix4f getProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
             var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
-            // TODO: move to center and scale it
-            //matrix = matrix.mul(new Matrix4f().translate(getTranslateX(), getTranslateY(), 0.0f));
+
+            // TODO: scale it
+
+            matrix = matrix.mul(new Matrix4f().translate(
+                    viewportWidth / 2.0f - screenImageWidth / 2.0f,
+                    viewportHeight / 2.0f - screenImageHeight / 2.0f, 0.0f)
+            );
+
             return matrix;
         }
 
