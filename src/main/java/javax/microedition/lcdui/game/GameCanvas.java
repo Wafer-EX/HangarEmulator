@@ -46,8 +46,12 @@ public abstract class GameCanvas extends Canvas {
         int height = HangarState.getGraphicsSettings().getResolution().height;
 
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            width = HangarState.getScreenImage().getWidth();
-            height = HangarState.getScreenImage().getHeight();
+            var screenImage = HangarState.getScreenImage();
+            // TODO: If null... initialize?
+            if (screenImage != null) {
+                width = HangarState.getScreenImage().getWidth();
+                height = HangarState.getScreenImage().getHeight();
+            }
         }
 
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
