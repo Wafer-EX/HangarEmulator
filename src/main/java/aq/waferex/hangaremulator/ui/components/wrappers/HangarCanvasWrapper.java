@@ -18,7 +18,6 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
-import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import org.joml.Matrix4f;
@@ -26,9 +25,11 @@ import org.lwjgl.opengl.awt.AWTGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
+import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -58,15 +59,15 @@ public class HangarCanvasWrapper extends JPanel {
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
-        // TODO: refactor below, remove unused and etc
 
         var resolution = HangarState.getGraphicsSettings().getResolution();
-        // TODO: initialize it in different place
+        // TODO: initialize in a different place?
         HangarState.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
 
-        var mouseListener = new HangarMouseListener(this);
-        this.addMouseListener(mouseListener);
-        this.addMouseMotionListener(mouseListener);
+        // TODO: write logic
+//        var mouseListener = new HangarMouseListener(this);
+//        this.addMouseListener(mouseListener);
+//        this.addMouseMotionListener(mouseListener);
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -158,6 +159,22 @@ public class HangarCanvasWrapper extends JPanel {
 
         public HangarOpenGLCanvas() {
             super();
+            this.addMouseListener(new MouseInputAdapter() {
+                @Override
+                public void mousePressed(MouseEvent e) {
+                    // TODO: write method logic
+                }
+
+                @Override
+                public void mouseReleased(MouseEvent e) {
+                    // TODO: write method logic
+                }
+
+                @Override
+                public void mouseDragged(MouseEvent e) {
+                    // TODO: write method logic
+                }
+            });
         }
 
         @Override
@@ -175,7 +192,6 @@ public class HangarCanvasWrapper extends JPanel {
 
             vertexBufferObject = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-            //glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
             glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
             glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
