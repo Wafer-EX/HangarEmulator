@@ -16,7 +16,6 @@
 
 package aq.waferex.hangaremulator.utils;
 
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import org.joml.Matrix4f;
@@ -66,17 +65,6 @@ public final class CanvasWrapperUtils {
         return new Point(
                 (int) ((mouseX * scalingInUnits - imagePosX) / scaleFactor),
                 (int) ((mouseY * scalingInUnits - imagePosY) / scaleFactor)
-        );
-    }
-
-    // TODO: reimplement?
-    public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
-        var scaleFactor = canvasWrapper.getScaleFactor();
-        var position = canvasWrapper.getDisplayedArea();
-
-        return new Point(
-                position.x + (int) (x * scaleFactor),
-                position.y + (int) (y * scaleFactor)
         );
     }
 }

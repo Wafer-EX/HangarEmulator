@@ -44,13 +44,10 @@ import static org.lwjgl.opengl.GL30.*;
 
 public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
+    private final HangarOpenGLCanvas openGLCanvas;
+
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
-
-    protected double bufferScaleFactor = 1.0;
-    protected Point bufferPosition = new Point(0, 0);
-
-    private final HangarOpenGLCanvas openGLCanvas;
 
     public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
@@ -73,9 +70,9 @@ public class HangarCanvasWrapper extends JPanel {
                     int viewportWidth = (int) (getSize().width * scalingInUnits);
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
 
-                    HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
                     // I don't change resolution because the resolution settings represent
-                    // only the setting, screen image is independent
+                    // only the setting, screen image size is independent form resolution
+                    HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
 
                     canvas.sizeChanged(viewportWidth, viewportHeight);
                 }
@@ -105,19 +102,6 @@ public class HangarCanvasWrapper extends JPanel {
                 }
             }, 0, frameRateInMilliseconds);
         }
-    }
-
-    public Rectangle getDisplayedArea() {
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        var resolution = graphicsSettings.getResolution();
-
-        int width = (int) (resolution.width * bufferScaleFactor);
-        int height = (int) (resolution.height * bufferScaleFactor);
-        return new Rectangle(bufferPosition.x, bufferPosition.y, width, height);
-    }
-
-    public double getScaleFactor() {
-        return bufferScaleFactor;
     }
 
     @Override
