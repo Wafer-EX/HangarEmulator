@@ -38,6 +38,7 @@ public abstract class GameCanvas extends Canvas {
 
     private BufferedImage additionalBuffer;
     private Graphics2D graphics2D;
+    private final Graphics meGraphics;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -51,11 +52,11 @@ public abstract class GameCanvas extends Canvas {
 
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
         this.graphics2D = additionalBuffer.createGraphics();
+        this.meGraphics = new Graphics(graphics2D);
     }
 
     protected Graphics getGraphics() {
-        // TODO: cache graphics?
-        return new Graphics(graphics2D);
+        return meGraphics;
     }
 
     public int getKeyStates() {
@@ -82,5 +83,6 @@ public abstract class GameCanvas extends Canvas {
     public void sizeChanged(int w, int h) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(w, h);
         this.graphics2D = additionalBuffer.createGraphics();
+        this.meGraphics.setGraphics2D(graphics2D);
     }
 }

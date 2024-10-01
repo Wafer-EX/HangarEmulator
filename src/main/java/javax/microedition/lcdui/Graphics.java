@@ -34,7 +34,7 @@ public class Graphics {
     public static final int SOLID = 0;
     public static final int DOTTED = 1;
 
-    private final Graphics2D graphics2D;
+    private Graphics2D graphics2D;
 
     private java.awt.Font seFont;
     private int selectedStroke = SOLID;
@@ -50,6 +50,10 @@ public class Graphics {
 
     public Graphics2D getGraphics2D() {
         return graphics2D;
+    }
+
+    public void setGraphics2D(Graphics2D graphics2D) {
+        this.graphics2D = graphics2D;
     }
 
     public void translate(int x, int y) {

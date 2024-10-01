@@ -29,20 +29,23 @@ import java.io.InputStream;
 public class Image {
     private final BufferedImage bufferedImage;
     private final Graphics2D graphics2D;
+    private final Graphics meGraphics;
     private final boolean isMutable;
 
     public Image(BufferedImage image, boolean isMutable) {
         this.bufferedImage = image;
         this.graphics2D = (Graphics2D) bufferedImage.getGraphics();
+        this.meGraphics = new Graphics(graphics2D);
         this.isMutable = isMutable;
     }
 
     public Image(int width, int height, int color, boolean hasAlpha) {
-        bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        graphics2D = bufferedImage.createGraphics();
+        this.bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        this.graphics2D = bufferedImage.createGraphics();
         graphics2D.setColor(new Color(color, hasAlpha));
         graphics2D.fillRect(0, 0, width, height);
-        isMutable = true;
+        this.meGraphics = new Graphics(graphics2D);
+        this.isMutable = true;
     }
 
     public BufferedImage getBufferedImage() {
@@ -107,8 +110,7 @@ public class Image {
         if (!isMutable) {
             throw new IllegalStateException();
         }
-        // TODO: cache graphics?
-        return new Graphics(graphics2D);
+        return meGraphics;
     }
 
     public int getWidth() {
