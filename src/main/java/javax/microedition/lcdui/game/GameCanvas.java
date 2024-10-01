@@ -17,6 +17,7 @@
 package javax.microedition.lcdui.game;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
@@ -40,12 +41,16 @@ public abstract class GameCanvas extends Canvas {
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        int width = graphicsSettings.getResolution().width;
-        int height = graphicsSettings.getResolution().height;
+        int width = HangarState.getGraphicsSettings().getResolution().width;
+        int height = HangarState.getGraphicsSettings().getResolution().height;
 
-        additionalBuffer = ImageUtils.createCompatibleImage(width, height);
-        graphics2D = additionalBuffer.createGraphics();
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+            width = HangarState.getScreenImage().getWidth();
+            height = HangarState.getScreenImage().getHeight();
+        }
+
+        this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        this.graphics2D = additionalBuffer.createGraphics();
     }
 
     protected Graphics getGraphics() {

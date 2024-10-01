@@ -75,7 +75,8 @@ public class HangarCanvasWrapper extends JPanel {
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
 
                     HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
-                    HangarState.getGraphicsSettings().setResolution(new Dimension(viewportWidth, viewportHeight));
+                    // I don't change resolution because the resolution settings represent only the setting,
+                    // screen image is independent
 
                     canvas.sizeChanged(viewportWidth, viewportHeight);
                 }
