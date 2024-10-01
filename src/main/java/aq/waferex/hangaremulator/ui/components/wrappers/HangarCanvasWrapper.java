@@ -65,11 +65,6 @@ public class HangarCanvasWrapper extends JPanel {
         // TODO: initialize in a different place?
         HangarState.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
 
-        // TODO: write logic
-//        var mouseListener = new HangarMouseListener(this);
-//        this.addMouseListener(mouseListener);
-//        this.addMouseMotionListener(mouseListener);
-
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
