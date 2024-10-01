@@ -19,6 +19,7 @@ package aq.waferex.hangaremulator.utils;
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
+import org.joml.Matrix4f;
 
 import javax.swing.*;
 import java.awt.*;
@@ -38,6 +39,27 @@ public final class CanvasWrapperUtils {
         float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
         float scaleFactorVertical = ((float) viewportHeight / imageHeight);
         return Math.min(scaleFactorHorizontal, scaleFactorVertical);
+    }
+
+    public static Matrix4f getScreenImageProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
+        var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
+
+        // TODO: replace None with Percent
+        float scaleFactor = switch (HangarState.getGraphicsSettings().getScalingMode()) {
+            case None, ChangeResolution -> 1.0f;
+            case Contain -> CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
+        };
+
+        matrix = matrix.mul(new Matrix4f()
+                .scale(scaleFactor)
+                .translate(
+                        viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
+                        viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
+                        0.0f
+                )
+        );
+
+        return matrix;
     }
 
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {

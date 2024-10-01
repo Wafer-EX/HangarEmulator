@@ -35,6 +35,7 @@ import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static aq.waferex.hangaremulator.utils.CanvasWrapperUtils.getScreenImageProjectionMatrix;
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL30.*;
 
@@ -295,27 +296,6 @@ public class HangarCanvasWrapper extends JPanel {
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
-        }
-
-        private static Matrix4f getScreenImageProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
-            var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
-
-            // TODO: replace None with Percent
-            float scaleFactor = switch (HangarState.getGraphicsSettings().getScalingMode()) {
-                case None, ChangeResolution -> 1.0f;
-                case Contain -> CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
-            };
-
-            matrix = matrix.mul(new Matrix4f()
-                    .scale(scaleFactor)
-                    .translate(
-                            viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
-                            viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
-                            0.0f
-                    )
-            );
-
-            return matrix;
         }
 
         private static ByteBuffer convertToByteBuffer(BufferedImage image) {
