@@ -165,7 +165,12 @@ public class HangarCanvasWrapper extends JPanel {
 
         var screenImage = HangarState.getScreenImage();
         if (screenImage != null) {
-            canvas.paint(new javax.microedition.lcdui.Graphics(HangarState.getScreenImage()));
+            var graphicsWithHints = HangarState.applyAntiAliasing(screenImage.getGraphics());
+            if (HangarState.getGraphicsSettings().getCanvasClearing()) {
+                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+            }
+
+            canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
             openGLCanvas.render();
         }
     }

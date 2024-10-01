@@ -34,7 +34,6 @@ public class Graphics {
     public static final int SOLID = 0;
     public static final int DOTTED = 1;
 
-    private final BufferedImage bufferedImage;
     private final Graphics2D graphics2D;
 
     private java.awt.Font seFont;
@@ -44,9 +43,8 @@ public class Graphics {
     private Rectangle clip = new Rectangle(0, 0, 240, 320);
     private Color color;
 
-    public Graphics(BufferedImage bufferedImage) {
-        this.bufferedImage = bufferedImage;
-        this.graphics2D = HangarState.applyAntiAliasing(bufferedImage.getGraphics());
+    public Graphics(Graphics2D graphics2D) {
+        this.graphics2D = HangarState.applyAntiAliasing(graphics2D);
         this.color = Color.BLACK;
     }
 

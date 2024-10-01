@@ -28,18 +28,20 @@ import java.io.InputStream;
 
 public class Image {
     private final BufferedImage bufferedImage;
+    private final Graphics2D graphics2D;
     private final boolean isMutable;
 
     public Image(BufferedImage image, boolean isMutable) {
         this.bufferedImage = image;
+        this.graphics2D = (Graphics2D) bufferedImage.getGraphics();
         this.isMutable = isMutable;
     }
 
     public Image(int width, int height, int color, boolean hasAlpha) {
         bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-        var graphics = bufferedImage.createGraphics();
-        graphics.setColor(new Color(color, hasAlpha));
-        graphics.fillRect(0, 0, width, height);
+        graphics2D = bufferedImage.createGraphics();
+        graphics2D.setColor(new Color(color, hasAlpha));
+        graphics2D.fillRect(0, 0, width, height);
         isMutable = true;
     }
 
@@ -105,8 +107,8 @@ public class Image {
         if (!isMutable) {
             throw new IllegalStateException();
         }
-        // TODO: store one graphics
-        return new Graphics(bufferedImage);
+        // TODO: cache graphics?
+        return new Graphics(graphics2D);
     }
 
     public int getWidth() {

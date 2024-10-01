@@ -21,7 +21,7 @@ import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
-import javax.microedition.lcdui.Image;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -36,6 +36,7 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     private BufferedImage additionalBuffer;
+    private Graphics2D graphics2D;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
@@ -44,11 +45,12 @@ public abstract class GameCanvas extends Canvas {
         int height = graphicsSettings.getResolution().height;
 
         additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        graphics2D = additionalBuffer.createGraphics();
     }
 
     protected Graphics getGraphics() {
         // TODO: cache graphics?
-        return new Graphics(additionalBuffer);
+        return new Graphics(graphics2D);
     }
 
     public int getKeyStates() {
@@ -58,8 +60,7 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        // TODO: don't create image each time
-        g.drawImage(new Image(additionalBuffer, false), 0, 0, 0);
+        g.getGraphics2D().drawImage(additionalBuffer, 0, 0, null);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
@@ -75,5 +76,6 @@ public abstract class GameCanvas extends Canvas {
     @Override
     public void sizeChanged(int w, int h) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(w, h);
+        this.graphics2D = additionalBuffer.createGraphics();
     }
 }
