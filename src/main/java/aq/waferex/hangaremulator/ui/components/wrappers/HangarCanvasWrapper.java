@@ -30,6 +30,8 @@ import java.awt.*;
 import java.awt.event.ComponentAdapter;
 import java.awt.event.ComponentEvent;
 import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -177,33 +179,10 @@ public class HangarCanvasWrapper extends JPanel {
             glEnableVertexAttribArray(0);
             glEnableVertexAttribArray(1);
 
-            String vertexShaderSource = """
-                    #version 330 core
-                    layout (location = 0) in vec2 position;
-                    layout (location = 1) in vec2 uv;
-                    
-                    uniform mat4 projectionMatrix;
-                    
-                    out vec2 UV;
-                    
-                    void main() {
-                        UV = uv;
-                        gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
-                    }
-                    """;
-
-            String fragmentShaderSource = """
-                    #version 330 core
-                    out vec4 FragColor;
-                    
-                    in vec2 UV;
-                    
-                    uniform sampler2D sprite;
-                    
-                    void main() {
-                        FragColor = texture(sprite, UV);
-                    }
-                    """;
+            CharSequence vertexShaderSource = readShaderFile("/shaders/screenimage.vert");
+            CharSequence fragmentShaderSource = readShaderFile("/shaders/screenimage.frag");
+            assert fragmentShaderSource != null;
+            assert vertexShaderSource != null;
 
             int vertexShader = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertexShader, vertexShaderSource);
@@ -258,6 +237,27 @@ public class HangarCanvasWrapper extends JPanel {
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
+        }
+
+        private static CharSequence readShaderFile(String name) {
+            // TODO: improve code quality?
+            try {
+                var resource = HangarCanvasWrapper.class.getResourceAsStream(name);
+                var bufferedReader = new BufferedReader(new InputStreamReader(resource));
+                var stringBuilder = new StringBuilder();
+                var line = bufferedReader.readLine();
+
+                while (line != null) {
+                    stringBuilder.append(line);
+                    stringBuilder.append(System.lineSeparator());
+                    line = bufferedReader.readLine();
+                }
+                return stringBuilder.toString();
+            }
+            catch (Exception exception) {
+                exception.printStackTrace();
+                return null;
+            }
         }
 
         private static float[] getScreenImageVertices(int imageWidth, int imageHeight) {
