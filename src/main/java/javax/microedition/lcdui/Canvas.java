@@ -89,15 +89,24 @@ public abstract class Canvas extends Displayable {
 
     public void pointerDragged(int x, int y) { }
 
+    // TODO: check it because I'm not sure is it work
     public final void repaint(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
         if (canvasWrapper != null) {
-            var position = CanvasWrapperUtils.canvasPointToPanel(canvasWrapper, x, y);
-            var scaleFactor = canvasWrapper.getScaleFactor();
+            var screenImage = HangarState.getScreenImage();
+            int screenImageWidth = screenImage.getWidth();
+            int screenImageHeight = screenImage.getHeight();
 
-            int newWidth = (int) (width * scaleFactor);
-            int newHeight = (int) (height * scaleFactor);
-            canvasWrapper.repaint(position.x, position.y, newWidth, newHeight);
+            float scaleFactor = CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, canvasWrapper.getWidth(), canvasWrapper.getHeight());
+            float imagePosX = canvasWrapper.getWidth() / 2.0f - (screenImageWidth * scaleFactor) / 2.0f;
+            float imagePosY = canvasWrapper.getHeight() / 2.0f - (screenImageHeight * scaleFactor) / 2.0f;
+
+            canvasWrapper.repaint(
+                    (int) (imagePosX + x * scaleFactor),
+                    (int) (imagePosY + y * scaleFactor),
+                    (int) (width * scaleFactor),
+                    (int) (height * scaleFactor)
+            );
         }
         HangarState.syncWithFrameRate();
     }

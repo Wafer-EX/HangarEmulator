@@ -16,7 +16,6 @@
 
 package com.nokia.mid.ui;
 
-import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import aq.waferex.hangaremulator.utils.nokia.DirectGraphicsUtils;
 
@@ -28,15 +27,13 @@ import java.io.ByteArrayInputStream;
 
 public class DirectUtils {
     public static DirectGraphics getDirectGraphics(Graphics g) {
-        if (g == null || g.getGraphicsProvider() == null) {
+        if (g == null) {
             throw new NullPointerException();
         }
         return new DirectGraphics() {
-            private Color argbColor;
-
             @Override
             public void setARGBColor(int argbColor) {
-                this.argbColor = new Color(argbColor, true);
+                g.getGraphics2D().setColor(new Color(argbColor, true));
             }
 
             @Override
@@ -44,35 +41,41 @@ public class DirectUtils {
                 if (img == null) {
                     throw new NullPointerException();
                 }
-                // TODO: manipulate HangarImage instead of this
-                var image = new Image(HangarImage.create(DirectGraphicsUtils.manipulateImage(img.getSEImage(), manipulation)), true);
                 x = ImageUtils.alignX(img.getWidth(), x, anchor);
                 y = ImageUtils.alignY(img.getHeight(), y, anchor);
-                g.getGraphicsProvider().drawImage(image.getHangarImage(), x, y);
+
+                var manipulatedImage = ImageUtils.manipulateImage(img.getBufferedImage(), manipulation);
+                g.getGraphics2D().drawImage(manipulatedImage, x, y, null);
             }
 
             @Override
             public void drawTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                setARGBColor(argbColor);
-                g.getGraphicsProvider().drawTriangle(x1, y1, x2, y2, x3, y3, this.argbColor, false);
+                int[] xPoints = new int[] { x1, x2, x3 };
+                int[] yPoints = new int[] { y1, y2, y3 };
+
+                g.getGraphics2D().setColor(new Color(argbColor, true));
+                g.getGraphics2D().drawPolygon(xPoints, yPoints, 3);
             }
 
             @Override
             public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3, int argbColor) {
-                setARGBColor(argbColor);
-                g.getGraphicsProvider().drawTriangle(x1, y1, x2, y2, x3, y3, this.argbColor, true);
+                int[] xPoints = new int[] { x1, x2, x3 };
+                int[] yPoints = new int[] { y1, y2, y3 };
+
+                g.getGraphics2D().setColor(new Color(argbColor, true));
+                g.getGraphics2D().fillPolygon(xPoints, yPoints, 3);
             }
 
             @Override
             public void drawPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                setARGBColor(argbColor);
-                g.getGraphicsProvider().drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints, this.argbColor, false);
+                g.getGraphics2D().setColor(new Color(argbColor, true));
+                g.getGraphics2D().drawPolygon(xPoints, yPoints, nPoints);
             }
 
             @Override
             public void fillPolygon(int[] xPoints, int xOffset, int[] yPoints, int yOffset, int nPoints, int argbColor) throws NullPointerException, ArrayIndexOutOfBoundsException {
-                setARGBColor(argbColor);
-                g.getGraphicsProvider().drawPolygon(xPoints, xOffset, yPoints, yOffset, nPoints, this.argbColor, true);
+                g.getGraphics2D().setColor(new Color(argbColor, true));
+                g.getGraphics2D().fillPolygon(xPoints, yPoints, nPoints);
             }
 
             @Override
@@ -82,8 +85,8 @@ public class DirectUtils {
                 }
                 var image = new BufferedImage(width, height, DirectGraphicsUtils.getBufferedImageType(format));
                 image.setRGB(0, 0, width, height, pixels, offset, scanlength);
-                image = DirectGraphicsUtils.manipulateImage(image, manipulation);
-                g.getGraphicsProvider().drawImage(HangarImage.create(image), x, y);
+                // TODO: don't create the new image?
+                drawImage(new Image(image, false), x, y, 0, manipulation);
             }
 
             @Override
@@ -120,7 +123,7 @@ public class DirectUtils {
             @Override
             public int getAlphaComponent() {
                 // TODO: check it
-                return argbColor.getAlpha();
+                return g.getGraphics2D().getColor().getAlpha();
             }
         };
     }
@@ -142,6 +145,6 @@ public class DirectUtils {
         if (width <= 0 || height <= 0) {
             throw new IllegalArgumentException();
         }
-        return new Image(HangarImage.create(width, height, ARGBcolor, true), true);
+        return new Image(width, height, ARGBcolor, true);
     }
 }

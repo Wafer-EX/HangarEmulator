@@ -1,5 +1,5 @@
 /*
- * Copyright 2023-2024 Wafer EX
+ * Copyright 2024 Wafer EX
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package aq.waferex.hangaremulator.enums;
+#version 330 core
+layout (location = 0) in vec2 position;
+layout (location = 1) in vec2 uv;
 
-public enum GraphicsEngines {
-    Swing("Swing"),
-    OpenGL("OpenGL (raw)");
+uniform mat4 projectionMatrix;
 
-    private final String name;
+out vec2 UV;
 
-    GraphicsEngines(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return name;
-    }
+void main() {
+    UV = uv;
+    gl_Position = projectionMatrix * vec4(position.x, position.y, 0.0, 1.0);
 }

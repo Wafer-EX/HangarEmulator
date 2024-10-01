@@ -83,13 +83,15 @@ public final class MIDletResources {
                 iconPath = info[1].trim();
             }
             var inputStream = getResource(iconPath);
-            assert inputStream != null;
-            return ImageIO.read(inputStream);
+            if (inputStream != null) {
+                return ImageIO.read(inputStream);
+            }
         }
         catch (Exception exception) {
             exception.printStackTrace();
-            return null;
         }
+
+        return null;
     }
 
     public static void initializeProperties() {

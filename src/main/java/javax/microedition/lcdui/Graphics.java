@@ -16,10 +16,12 @@
 
 package javax.microedition.lcdui;
 
-import aq.waferex.hangaremulator.graphics.HangarGraphicsProvider;
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class Graphics {
     public static final int HCENTER = 1;
@@ -32,29 +34,40 @@ public class Graphics {
     public static final int SOLID = 0;
     public static final int DOTTED = 1;
 
-    private final HangarGraphicsProvider graphicsProvider;
+    private Graphics2D graphics2D;
+
+    private java.awt.Font seFont;
+    private int selectedStroke = SOLID;
+    private int translateX = 0, translateY = 0;
+
     private Rectangle clip = new Rectangle(0, 0, 240, 320);
     private Color color;
 
-    public Graphics(HangarGraphicsProvider graphicsProvider) {
-        this.graphicsProvider = graphicsProvider;
+    public Graphics(Graphics2D graphics2D) {
+        this.graphics2D = HangarState.applyAntiAliasing(graphics2D);
         this.color = Color.BLACK;
     }
 
-    public HangarGraphicsProvider getGraphicsProvider() {
-        return graphicsProvider;
+    public Graphics2D getGraphics2D() {
+        return graphics2D;
+    }
+
+    public void setGraphics2D(Graphics2D graphics2D) {
+        this.graphics2D = graphics2D;
     }
 
     public void translate(int x, int y) {
-        graphicsProvider.translate(x, y);
+        graphics2D.translate(x, y);
+        translateX += x;
+        translateY += y;
     }
 
     public int getTranslateX() {
-        return graphicsProvider.getTranslateX();
+        return translateX;
     }
 
     public int getTranslateY() {
-        return graphicsProvider.getTranslateY();
+        return translateY;
     }
 
     public int getColor() {
@@ -95,19 +108,37 @@ public class Graphics {
     }
 
     public Font getFont() {
-        return graphicsProvider.getFont();
+        // TODO: should I cache font object?
+        return new Font(seFont);
     }
 
     public void setStrokeStyle(int style) throws IllegalArgumentException {
-        graphicsProvider.setStrokeStyle(style);
+        switch (style) {
+            case SOLID -> {
+                graphics2D.setStroke(new BasicStroke());
+                selectedStroke = SOLID;
+            }
+            case DOTTED -> {
+                var stroke = new BasicStroke(1, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 0, new float[] { 1 }, 0);
+                graphics2D.setStroke(stroke);
+                selectedStroke = DOTTED;
+            }
+            default -> throw new IllegalArgumentException();
+        }
     }
 
     public int getStrokeStyle() {
-        return graphicsProvider.getStrokeStyle();
+        return selectedStroke;
     }
 
     public void setFont(Font font) {
-        graphicsProvider.setFont(font);
+        if (font != null) {
+            int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
+            this.seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
+        }
+        else {
+            this.seFont = javax.microedition.lcdui.Font.getDefaultFont().getSEFont();
+        }
     }
 
     public int getClipX() {
@@ -133,47 +164,62 @@ public class Graphics {
 
     public void setClip(int x, int y, int width, int height) {
         clip = new Rectangle(x, y, width, height);
-        graphicsProvider.setClip(x, y, width, height);
+        graphics2D.setClip(x, y, width, height);
     }
 
     public void drawLine(int x1, int y1, int x2, int y2) {
-        graphicsProvider.drawLine(x1, y1, x2, y2, color);
+        graphics2D.setColor(color);
+        graphics2D.drawLine(x1, y1, x2, y2);
     }
 
     public void fillRect(int x, int y, int width, int height) {
         if (width > 0 && height > 0) {
-            graphicsProvider.drawRectangle(x, y, width, height, color, true);
+            graphics2D.setColor(color);
+            graphics2D.fillRect(x, y, width, height);
         }
     }
 
     public void drawRect(int x, int y, int width, int height) {
         if (width > 0 && height > 0) {
-            graphicsProvider.drawRectangle(x, y, width, height, color, false);
+            graphics2D.setColor(color);
+            graphics2D.drawRect(x, y, width, height);
         }
     }
 
     public void drawRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         if (width > 0 && height > 0) {
-            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, color, false);
+            graphics2D.setColor(color);
+            graphics2D.drawRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
     }
 
     public void fillRoundRect(int x, int y, int width, int height, int arcWidth, int arcHeight) {
         if (width > 0 && height > 0) {
-            graphicsProvider.drawRoundRectangle(x, y, width, height, arcWidth, arcHeight, color, true);
+            graphics2D.setColor(color);
+            graphics2D.fillRoundRect(x, y, width, height, arcWidth, arcHeight);
         }
     }
 
     public void fillArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, color, true);
+        graphics2D.setColor(color);
+        graphics2D.fillArc(x, y, width, height, startAngle, arcAngle);
     }
 
     public void drawArc(int x, int y, int width, int height, int startAngle, int arcAngle) {
-        graphicsProvider.drawArc(x, y, width, height, startAngle, arcAngle, color, false);
+        graphics2D.setColor(color);
+        graphics2D.drawArc(x, y, width, height, startAngle, arcAngle);
     }
 
     public void drawString(String str, int x, int y, int anchor) throws NullPointerException, IllegalArgumentException {
-        graphicsProvider.drawString(str, x, y, anchor, color);
+        graphics2D.setColor(color);
+        if (str == null) {
+            throw new NullPointerException();
+        }
+        var meFont = getFont();
+        x = FontUtils.alignX(meFont, str, x, anchor);
+        y = FontUtils.alignY(meFont, str, y, anchor);
+        graphics2D.setFont(seFont);
+        graphics2D.drawString(str, x, y);
     }
 
     public void drawSubstring(String str, int offset, int len, int x, int y, int anchor) throws StringIndexOutOfBoundsException, IllegalArgumentException, NullPointerException {
@@ -206,7 +252,7 @@ public class Graphics {
         }
         x = ImageUtils.alignX(img.getWidth(), x, anchor);
         y = ImageUtils.alignY(img.getHeight(), y, anchor);
-        graphicsProvider.drawImage(img.getHangarImage(), x, y);
+        graphics2D.drawImage(img.getBufferedImage(), x, y, null);
     }
 
     public void drawRegion(Image src, int x_src, int y_src, int width, int height, int transform, int x_dest, int y_dest, int anchor) throws IllegalArgumentException, NullPointerException {
@@ -214,20 +260,36 @@ public class Graphics {
             throw new NullPointerException();
         }
         if (width > 0 && height > 0) {
-            graphicsProvider.drawRegion(src.getHangarImage(), x_src, y_src, width, height, transform, x_dest, y_dest, anchor);
+            var imageRegion = src.getBufferedImage().getSubimage(x_src, y_src, width, height);
+            var transformedImage = ImageUtils.transformImage(imageRegion, transform);
+            x_dest = ImageUtils.alignX(transformedImage.getWidth(), x_dest, anchor);
+            y_dest = ImageUtils.alignY(transformedImage.getHeight(), y_dest, anchor);
+            graphics2D.drawImage(transformedImage, x_dest, y_dest, width, height, null);
         }
     }
 
     public void copyArea(int x_src, int y_src, int width, int height, int x_dest, int y_dest, int anchor) throws IllegalStateException, IllegalArgumentException {
-        graphicsProvider.copyArea(x_src, y_src, width, height, x_dest, y_dest, anchor);
+        x_dest = ImageUtils.alignX(width, x_dest, anchor);
+        y_dest = ImageUtils.alignY(height, y_dest, anchor);
+        graphics2D.copyArea(x_src, y_src, width, height, x_dest, y_dest);
     }
 
     public void fillTriangle(int x1, int y1, int x2, int y2, int x3, int y3) {
-        graphicsProvider.drawTriangle(x1, y1, x2, y2, x3, y3, color, true);
+        graphics2D.setColor(color);
+        int[] xPoints = new int[] { x1, x2, x3 };
+        int[] yPoints = new int[] { y1, y2, y3 };
+        graphics2D.fillPolygon(xPoints, yPoints, 3);
     }
 
     public void drawRGB(int[] rgbData, int offset, int scanlength, int x, int y, int width, int height, boolean processAlpha) throws ArrayIndexOutOfBoundsException, NullPointerException {
-        graphicsProvider.drawRGB(rgbData, offset, scanlength, x, y, width, height, processAlpha);
+        if (rgbData == null) {
+            throw new NullPointerException();
+        }
+        if (width > 0 && height > 0) {
+            var image = new BufferedImage(width, height, processAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
+            image.setRGB(0, 0, width, height, rgbData, offset, scanlength);
+            graphics2D.drawImage(image, x, y, null);
+        }
     }
 
     public int getDisplayColor(int color) {

@@ -16,7 +16,6 @@
 
 package aq.waferex.hangaremulator.settings;
 
-import aq.waferex.hangaremulator.enums.GraphicsEngines;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 
 import java.awt.*;
@@ -24,17 +23,15 @@ import java.awt.*;
 public class HangarGraphicsSettings {
     private boolean isCanvasClearingEnabled = false;
     private boolean isAntiAliasingEnabled = false;
-    private GraphicsEngines graphicsEngine = GraphicsEngines.Swing;
     private int frameRate = 60;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
 
     public HangarGraphicsSettings() { }
 
-    public HangarGraphicsSettings(boolean isCanvasClearingEnabled, boolean isAntiAliasingEnabled, GraphicsEngines graphicsEngine, int frameRate, ScalingModes scalingMode, Dimension resolution) {
-        setCanvasClearing(isAntiAliasingEnabled);
+    public HangarGraphicsSettings(boolean isCanvasClearingEnabled, boolean isAntiAliasingEnabled, int frameRate, ScalingModes scalingMode, Dimension resolution) {
+        setCanvasClearing(isCanvasClearingEnabled);
         setAntiAliasing(isAntiAliasingEnabled);
-        setGraphicsEngine(graphicsEngine);
         setFrameRate(frameRate);
         setScalingMode(scalingMode);
         setResolution(resolution);
@@ -54,14 +51,6 @@ public class HangarGraphicsSettings {
 
     public void setAntiAliasing(boolean isEnabled) {
         isAntiAliasingEnabled = isEnabled;
-    }
-
-    public GraphicsEngines getGraphicsEngine() {
-        return graphicsEngine;
-    }
-
-    public void setGraphicsEngine(GraphicsEngines graphicsEngine) {
-        this.graphicsEngine = graphicsEngine;
     }
 
     public int getFrameRate() {

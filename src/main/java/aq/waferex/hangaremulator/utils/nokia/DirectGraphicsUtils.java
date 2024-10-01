@@ -17,30 +17,10 @@
 package aq.waferex.hangaremulator.utils.nokia;
 
 import com.nokia.mid.ui.DirectGraphics;
-import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.image.BufferedImage;
 
 public class DirectGraphicsUtils {
-    public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
-        if ((manipulation & DirectGraphics.ROTATE_90) == DirectGraphics.ROTATE_90) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2, true);
-        }
-        if ((manipulation & DirectGraphics.ROTATE_180) == DirectGraphics.ROTATE_180) {
-            image = ImageUtils.rotateImage(image, -Math.PI, false);
-        }
-        if ((manipulation & DirectGraphics.ROTATE_270) == DirectGraphics.ROTATE_270) {
-            image = ImageUtils.rotateImage(image, -Math.PI / 2 * 3, true);
-        }
-        if ((manipulation & DirectGraphics.FLIP_VERTICAL) == DirectGraphics.FLIP_VERTICAL) {
-            image = ImageUtils.mirrorImageVertical(image);
-        }
-        if ((manipulation & DirectGraphics.FLIP_HORIZONTAL) == DirectGraphics.FLIP_HORIZONTAL) {
-            image = ImageUtils.mirrorImageHorizontal(image);
-        }
-        return image;
-    }
-
     public static int getBufferedImageType(int directGraphicsImageType) throws IllegalArgumentException {
         // TODO: do something with formats without analogues
         return switch (directGraphicsImageType) {

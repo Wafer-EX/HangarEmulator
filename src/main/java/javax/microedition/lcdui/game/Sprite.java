@@ -16,13 +16,11 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.graphics.HangarImage;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Graphics;
 import javax.microedition.lcdui.Image;
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 public class Sprite extends Layer {
@@ -39,7 +37,7 @@ public class Sprite extends Layer {
     private int[] sequence;
     private int selectedIndex = 0;
     private final Point referencePixel = new Point();
-    private final ArrayList<BufferedImage> frameList = new ArrayList<>();
+    private final ArrayList<Image> frameList = new ArrayList<>();
     private int transform = TRANS_NONE;
 
     public Sprite(Image image) throws NullPointerException {
@@ -110,10 +108,9 @@ public class Sprite extends Layer {
 
     @Override
     public void paint(Graphics g) throws NullPointerException {
-        var bufferedImage = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
-        // TODO: transform HangarImage instead of this
-        var transformedImage = ImageUtils.transformImage(bufferedImage, transform);
-        g.getGraphicsProvider().drawImage(HangarImage.create(transformedImage), position.x, position.y);
+        var image = frameList.get(sequence == null ? selectedIndex : sequence[selectedIndex]);
+        var manipulatedImage = ImageUtils.manipulateImage(image.getBufferedImage(), transform);
+        g.getGraphics2D().drawImage(manipulatedImage, position.x, position.y, null);
     }
 
     public void setFrameSequence(int[] sequence) throws ArrayIndexOutOfBoundsException, IllegalArgumentException {
@@ -142,11 +139,8 @@ public class Sprite extends Layer {
         frameList.clear();
         for (int y = 0; y < img.getHeight() / frameHeight; y++) {
             for (int x = 0; x < img.getWidth() / frameWidth; x++) {
-                var bufferedImage = new BufferedImage(frameWidth, frameHeight, BufferedImage.TYPE_INT_ARGB);
-                var subImage = img.getSEImage().getSubimage(frameWidth * x, frameHeight * y, frameWidth, frameHeight);
-
-                bufferedImage.getGraphics().drawImage(subImage, 0, 0, null);
-                frameList.add(bufferedImage);
+                var image = Image.createImage(img, frameWidth * x, frameHeight * y, frameWidth, frameHeight, 0);
+                frameList.add(image);
             }
         }
 

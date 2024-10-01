@@ -39,7 +39,8 @@ public class HangarFormWrapper extends JPanel {
                 this.add(label, constraints);
             }
             else if (item instanceof ImageItem imageItem) {
-                var imageIcon = new ImageIcon(imageItem.getImage().getSEImage());
+                // TODO: check it
+                var imageIcon = new ImageIcon(imageItem.getImage().getBufferedImage());
                 var label = new JLabel(imageIcon);
                 this.add(label, constraints);
             }
