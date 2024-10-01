@@ -19,7 +19,6 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.ui.listeners.HangarMouseListener;
-import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import org.joml.Matrix4f;
@@ -44,7 +43,6 @@ public class HangarCanvasWrapper extends JPanel {
     private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
-    protected Dimension bufferScale;
     protected double bufferScaleFactor = 1.0;
     protected Point bufferPosition = new Point(0, 0);
 
@@ -71,18 +69,18 @@ public class HangarCanvasWrapper extends JPanel {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                var graphicsSettings = HangarState.getGraphicsSettings();
-                if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
-                    float scalingInUnits = SystemUtils.getScalingInUnits();
-                    int realWidth = (int) (getWidth() * scalingInUnits);
-                    int realHeight = (int) (getHeight() * scalingInUnits);
-                    graphicsSettings.setResolution(new Dimension(realWidth, realHeight));
+                if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+                    var scalingInUnits = SystemUtils.getScalingInUnits();
+                    int viewportWidth = (int) (getSize().width * scalingInUnits);
+                    int viewportHeight = (int) (getSize().height * scalingInUnits);
+
+                    // TODO: I don't know what's wrong
+                    //HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
+                    HangarState.getGraphicsSettings().setResolution(new Dimension(viewportWidth, viewportHeight));
                 }
-                updateBufferTransformations();
             }
         });
 
-        this.updateBufferTransformations();
         this.refreshSerialCallTimer();
     }
 
@@ -120,44 +118,6 @@ public class HangarCanvasWrapper extends JPanel {
     public double getScaleFactor() {
         return bufferScaleFactor;
     }
-
-    public void updateBufferTransformations() {
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        var resolution = graphicsSettings.getResolution();
-
-        bufferScaleFactor = CanvasWrapperUtils.getBufferScaleFactor(this, resolution.width, resolution.height);
-        float scalingInUnits = SystemUtils.getScalingInUnits();
-
-        int newWidth = (int) (resolution.width * bufferScaleFactor);
-        int newHeight = (int) (resolution.height * bufferScaleFactor);
-        bufferScale = new Dimension(newWidth, newHeight);
-
-        bufferPosition.x = (int) ((getWidth() * scalingInUnits) / 2 - bufferScale.width / 2);
-        bufferPosition.y = (int) ((getHeight() * scalingInUnits) / 2 - bufferScale.height / 2);
-    }
-
-//    @Override
-//    public void paintComponent(Graphics graphics) {
-//        super.paintComponent(graphics);
-//
-//        var graphics2d = (Graphics2D) graphics;
-//        var transform = graphics2d.getTransform();
-//        transform.setToScale(1.0, 1.0);
-//        graphics2d.setTransform(transform);
-//
-//        var graphicsSettings = HangarState.getGraphicsSettings();
-//        var screenImage = HangarState.getScreenImage();
-//
-//        if (screenImage != null) {
-//            var graphicsWithHints = HangarState.applyAntiAliasing(screenImage.getGraphics());
-//            if (graphicsSettings.getCanvasClearing()) {
-//                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
-//            }
-//            // TODO: use graphics with hints or setup these settings in graphics object?
-//            canvas.paint(new javax.microedition.lcdui.Graphics(screenImage));
-//            graphics2d.drawImage(screenImage, bufferPosition.x, bufferPosition.y, bufferScale.width, bufferScale.height, null);
-//        }
-//    }
 
     @Override
     public void paintComponent(Graphics graphics) {

@@ -21,20 +21,9 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import org.joml.Matrix4f;
 
-import javax.swing.*;
 import java.awt.*;
 
 public final class CanvasWrapperUtils {
-    public static double getBufferScaleFactor(JPanel panel, int width, int height) {
-        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Contain) {
-            float scalingInUnits = SystemUtils.getScalingInUnits();
-            double scaleFactorHorizontal = ((double) panel.getWidth() / width) * scalingInUnits;
-            double scaleFactorVertical = ((double) panel.getHeight() / height) * scalingInUnits;
-            return Math.min(scaleFactorHorizontal, scaleFactorVertical);
-        }
-        return 1.0;
-    }
-
     public static float getImageScaleFactor(int imageWidth, int imageHeight, int viewportWidth, int viewportHeight) {
         float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
         float scaleFactorVertical = ((float) viewportHeight / imageHeight);
@@ -50,14 +39,16 @@ public final class CanvasWrapperUtils {
             case Contain -> CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
         };
 
-        matrix = matrix.mul(new Matrix4f()
-                .scale(scaleFactor)
-                .translate(
-                        viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
-                        viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
-                        0.0f
-                )
-        );
+        if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
+            matrix = matrix.mul(new Matrix4f()
+                    .scale(scaleFactor)
+                    .translate(
+                            viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
+                            viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
+                            0.0f
+                    )
+            );
+        }
 
         return matrix;
     }
