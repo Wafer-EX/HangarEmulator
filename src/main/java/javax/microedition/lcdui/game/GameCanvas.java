@@ -17,12 +17,13 @@
 package javax.microedition.lcdui.game;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.graphics.HangarOffscreenBuffer;
-import aq.waferex.hangaremulator.graphics.opengl.HangarGLOffscreenBuffer;
-import aq.waferex.hangaremulator.graphics.swing.HangarSwingOffscreenBuffer;
+import aq.waferex.hangaremulator.enums.ScalingModes;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
     public static final int UP_PRESSED = 1 << Canvas.UP;
@@ -35,24 +36,27 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_C_PRESSED = 1 << Canvas.GAME_C;
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
-    private final HangarOffscreenBuffer offscreenBuffer;
-    private final Graphics graphics;
+    private BufferedImage additionalBuffer;
+    private Graphics2D graphics2D;
+    private final Graphics meGraphics;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        var graphicsSettings = HangarState.getGraphicsSettings();
-        int width = graphicsSettings.getResolution().width;
-        int height = graphicsSettings.getResolution().height;
+        int width = HangarState.getGraphicsSettings().getResolution().width;
+        int height = HangarState.getGraphicsSettings().getResolution().height;
 
-        offscreenBuffer = switch (graphicsSettings.getGraphicsEngine()) {
-            case Swing -> new HangarSwingOffscreenBuffer(width, height);
-            case OpenGL -> new HangarGLOffscreenBuffer(width, height);
-        };
-        graphics = new Graphics(offscreenBuffer.getGraphicsProvider());
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+            width = HangarState.getScreenImage().getWidth();
+            height = HangarState.getScreenImage().getHeight();
+        }
+
+        this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
+        this.graphics2D = additionalBuffer.createGraphics();
+        this.meGraphics = new Graphics(graphics2D);
     }
 
     protected Graphics getGraphics() {
-        return graphics;
+        return meGraphics;
     }
 
     public int getKeyStates() {
@@ -62,21 +66,23 @@ public abstract class GameCanvas extends Canvas {
 
     @Override
     public void paint(Graphics g) {
-        g.getGraphicsProvider().paintOffscreenBuffer(offscreenBuffer);
+        g.getGraphics2D().drawImage(additionalBuffer, 0, 0, null);
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        offscreenBuffer.flushToCanvasWrapper(x, y, width, height);
+        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        offscreenBuffer.flushToCanvasWrapper(0, 0, offscreenBuffer.getWidth(), offscreenBuffer.getHeight());
+        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
-        offscreenBuffer.refreshResolution(w, h);
+        this.additionalBuffer = ImageUtils.createCompatibleImage(w, h);
+        this.graphics2D = additionalBuffer.createGraphics();
+        this.meGraphics.setGraphics2D(graphics2D);
     }
 }
