@@ -53,7 +53,7 @@ public class HangarCanvasWrapper extends JPanel {
         super(new CardLayout());
         this.canvas = canvas;
 
-        openGLCanvas = new HangarCanvasWrapper.HangarOpenGLCanvas();
+        openGLCanvas = new HangarOpenGLCanvas();
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
@@ -290,21 +290,29 @@ public class HangarCanvasWrapper extends JPanel {
 
             int location = glGetUniformLocation(shaderProgram, "projectionMatrix");
             float[] data = new float[16];
-            Matrix4f projectionMatrix = getProjectionMatrix(viewportWidth, viewportHeight, screenImage.getWidth(), screenImage.getHeight());
+            Matrix4f projectionMatrix = getScreenImageProjectionMatrix(viewportWidth, viewportHeight, screenImage.getWidth(), screenImage.getHeight());
             glUniformMatrix4fv(location, false, projectionMatrix.get(data));
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
         }
 
-        private Matrix4f getProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
+        private static Matrix4f getScreenImageProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
             var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
 
-            // TODO: scale it
+            // TODO: replace None with Percent
+            float scaleFactor = switch (HangarState.getGraphicsSettings().getScalingMode()) {
+                case None, ChangeResolution -> 1.0f;
+                case Contain -> CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
+            };
 
-            matrix = matrix.mul(new Matrix4f().translate(
-                    viewportWidth / 2.0f - screenImageWidth / 2.0f,
-                    viewportHeight / 2.0f - screenImageHeight / 2.0f, 0.0f)
+            matrix = matrix.mul(new Matrix4f()
+                    .scale(scaleFactor)
+                    .translate(
+                            viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
+                            viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
+                            0.0f
+                    )
             );
 
             return matrix;

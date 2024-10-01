@@ -34,22 +34,11 @@ public final class CanvasWrapperUtils {
         return 1.0;
     }
 
-    // TODO: or use it, or remove
-//    public static void fitBufferToResolution(HangarCanvasWrapperSwing canvasWrapper, Dimension resolution) {
-//        if (resolution.width > 0 && resolution.height > 0) {
-//            if (canvasWrapper != null) {
-//                var changedBuffer = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
-//                var displayable = HangarState.getMainFrame().getViewport().getDisplayable();
-//
-//                canvasWrapper.setBuffer(changedBuffer);
-//                canvasWrapper.updateBufferTransformations();
-//
-//                if (displayable != null) {
-//                    displayable.sizeChanged(resolution.width, resolution.height);
-//                }
-//            }
-//        }
-//    }
+    public static float getImageScaleFactor(int imageWidth, int imageHeight, int viewportWidth, int viewportHeight) {
+        float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
+        float scaleFactorVertical = ((float) viewportHeight / imageHeight);
+        return Math.min(scaleFactorHorizontal, scaleFactorVertical);
+    }
 
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
         // TODO: check this method
