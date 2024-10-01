@@ -25,19 +25,20 @@ import java.awt.*;
 
 public final class CanvasWrapperUtils {
     public static float getImageScaleFactor(int imageWidth, int imageHeight, int viewportWidth, int viewportHeight) {
-        float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
-        float scaleFactorVertical = ((float) viewportHeight / imageHeight);
-        return Math.min(scaleFactorHorizontal, scaleFactorVertical);
+        return switch (HangarState.getGraphicsSettings().getScalingMode()) {
+            // TODO: replace None with Percent
+            case None, ChangeResolution -> 1.0f;
+            case Contain -> {
+                float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
+                float scaleFactorVertical = ((float) viewportHeight / imageHeight);
+                yield Math.min(scaleFactorHorizontal, scaleFactorVertical);
+            }
+        };
     }
 
     public static Matrix4f getScreenImageProjectionMatrix(int viewportWidth, int viewportHeight, int screenImageWidth, int screenImageHeight) {
+        float scaleFactor = getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
         var matrix = new Matrix4f().ortho2D(0, viewportWidth, viewportHeight, 0);
-
-        // TODO: replace None with Percent
-        float scaleFactor = switch (HangarState.getGraphicsSettings().getScalingMode()) {
-            case None, ChangeResolution -> 1.0f;
-            case Contain -> CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
-        };
 
         if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
             matrix = matrix.mul(new Matrix4f()
@@ -52,6 +53,22 @@ public final class CanvasWrapperUtils {
 
         return matrix;
     }
+
+    public static Point convertMousePointToScreenImage(int mouseX, int mouseY, int viewportWidth, int viewportHeight, float scalingInUnits) {
+        var screenImage = HangarState.getScreenImage();
+        int screenImageWidth = screenImage.getWidth();
+        int screenImageHeight = screenImage.getHeight();
+
+        float scaleFactor = CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
+        float imagePosX = viewportWidth / 2.0f - (screenImageWidth * scaleFactor) / 2.0f;
+        float imagePosY = viewportHeight / 2.0f - (screenImageHeight * scaleFactor) / 2.0f;
+
+        return new Point(
+                (int) ((mouseX * scalingInUnits - imagePosX) / scaleFactor),
+                (int) ((mouseY * scalingInUnits - imagePosY) / scaleFactor)
+        );
+    }
+
 
     public static Point canvasPointToPanel(HangarCanvasWrapper canvasWrapper, int x, int y) {
         // TODO: check this method

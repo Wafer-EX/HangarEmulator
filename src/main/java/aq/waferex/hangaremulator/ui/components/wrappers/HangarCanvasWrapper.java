@@ -18,6 +18,7 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
+import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 import org.joml.Matrix4f;
@@ -55,7 +56,7 @@ public class HangarCanvasWrapper extends JPanel {
         super(new CardLayout());
         this.canvas = canvas;
 
-        openGLCanvas = new HangarOpenGLCanvas();
+        openGLCanvas = new HangarOpenGLCanvas(canvas);
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
@@ -157,22 +158,34 @@ public class HangarCanvasWrapper extends JPanel {
         private int textureWidth;
         private int textureHeight;
 
-        public HangarOpenGLCanvas() {
+        public HangarOpenGLCanvas(Canvas canvas) {
             super();
+
             this.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    // TODO: write method logic
+                    var point = getConvertedPoint(e.getX(), e.getY());
+                    canvas.pointerPressed(point.x, point.y);
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    // TODO: write method logic
+                    var point = getConvertedPoint(e.getX(), e.getY());
+                    canvas.pointerReleased(point.x, point.y);
                 }
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    // TODO: write method logic
+                    var point = getConvertedPoint(e.getX(), e.getY());
+                    canvas.pointerDragged(point.x, point.y);
+                }
+
+                private Point getConvertedPoint(int mouseX, int mouseY) {
+                    var scalingInUnits = SystemUtils.getScalingInUnits();
+                    int viewportWidth = (int) (getSize().width * scalingInUnits);
+                    int viewportHeight = (int) (getSize().height * scalingInUnits);
+
+                    return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
                 }
             });
         }
