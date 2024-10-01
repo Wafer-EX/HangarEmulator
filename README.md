@@ -9,13 +9,12 @@ This is an experimental J2ME-emulator that let you play some old game fade for f
 - Custom soundbanks
 - Custom resolution (you can even strength the game to window size!)
 - Unlimited frame rate
-- Experimental OpenGL support through LWJGL 3 (extremely raw)
 - And more...
 
 ## Requirements
 - Java 17
 - ~512 MB free RAM
-- OpenGL 3.3 (if you prefer using OpenGL backend instead of Swing)
+- OpenGL 3.3
 ## How to build
 You need Java Development Kit 17 installed on your PC. Go to the root folder of the project (where is gradle script located) using terminal and run building by one of these command below. As a result of the assembly, the `HangarEmulator-VERSION-all.jar` file will appear in the `build\libs` directory, which includes all the necessary libraries, it's the builded Hangar Emulator.
 
