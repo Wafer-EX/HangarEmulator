@@ -74,9 +74,10 @@ public class HangarCanvasWrapper extends JPanel {
                     int viewportWidth = (int) (getSize().width * scalingInUnits);
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
 
-                    // TODO: I don't know what's wrong
-                    //HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
+                    HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
                     HangarState.getGraphicsSettings().setResolution(new Dimension(viewportWidth, viewportHeight));
+
+                    canvas.sizeChanged(viewportWidth, viewportHeight);
                 }
             }
         });
@@ -141,22 +142,6 @@ public class HangarCanvasWrapper extends JPanel {
         private int shaderProgram;
         private int texture;
 
-        private final float[] vertices = {
-                // Left top
-                0.0f, 0.0f, 0.0f, 0.0f,
-                // Right bottom
-                240.0f, 320.0f, 1.0f, 1.0f,
-                // Left bottom
-                0.0f, 320.0f, 0.0f, 1.0f,
-
-                // Left top
-                0.0f, 0.0f, 0.0f, 0.0f,
-                // Right top
-                240.0f, 0.0f, 1.0f, 0.0f,
-                // Right bottom
-                240.0f, 320.0f, 1.0f, 1.0f,
-        };
-
         public HangarOpenGLCanvas() {
             super();
         }
@@ -176,7 +161,7 @@ public class HangarCanvasWrapper extends JPanel {
 
             vertexBufferObject = glGenBuffers();
             glBindBuffer(GL_ARRAY_BUFFER, vertexBufferObject);
-            glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+            //glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
             glVertexAttribPointer(0, 2, GL_FLOAT, false, 4 * 4, 0);
             glVertexAttribPointer(1, 2, GL_FLOAT, false, 4 * 4, 2 * 4);
@@ -247,6 +232,9 @@ public class HangarCanvasWrapper extends JPanel {
             glViewport(0, 0, viewportWidth, viewportHeight);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            // TODO: change only when changing resolution
+            glBufferData(GL_ARRAY_BUFFER, getScreenImageVertices(screenImage.getWidth(), screenImage.getHeight()), GL_STATIC_DRAW);
+
             glBindVertexArray(vertexArrayObject);
             glUseProgram(shaderProgram);
 
@@ -261,6 +249,17 @@ public class HangarCanvasWrapper extends JPanel {
 
             glDrawArrays(GL_TRIANGLES, 0, 6);
             swapBuffers();
+        }
+
+        private static float[] getScreenImageVertices(int imageWidth, int imageHeight) {
+            return new float[] {
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    imageWidth, imageHeight, 1.0f, 1.0f,
+                    0.0f, imageHeight, 0.0f, 1.0f,
+                    0.0f, 0.0f, 0.0f, 0.0f,
+                    imageWidth, 0.0f, 1.0f, 0.0f,
+                    imageWidth, imageHeight, 1.0f, 1.0f,
+            };
         }
 
         private static ByteBuffer convertToByteBuffer(BufferedImage image) {
