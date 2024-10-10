@@ -24,7 +24,7 @@ public class HangarGraphicsSettings {
     private boolean isScreenClearingEnabled = false;
     private boolean isVectorAntiAliasingEnabled = false;
     private int frameRate = 60;
-    private ScalingModes scalingMode = ScalingModes.None;
+    private ScalingModes scalingMode = ScalingModes.Percent;
     private Dimension resolution = new Dimension(240, 320);
 
     public HangarGraphicsSettings() { }

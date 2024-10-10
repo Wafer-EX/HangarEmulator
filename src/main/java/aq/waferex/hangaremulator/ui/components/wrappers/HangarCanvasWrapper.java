@@ -28,9 +28,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -165,6 +163,14 @@ public class HangarCanvasWrapper extends JPanel {
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
 
                     return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
+                }
+            });
+
+            this.addMouseWheelListener(e -> {
+                if (e.getWheelRotation() != 0) {
+                    float currentScaleFactor = CanvasWrapperUtils.getPercentScalingModeScaleFactor();
+                    float scaleChange = e.getWheelRotation() == -1 ? 2 : 0.5f;
+                    CanvasWrapperUtils.setPercentScalingModeScaleFactor(currentScaleFactor * scaleChange);
                 }
             });
         }
