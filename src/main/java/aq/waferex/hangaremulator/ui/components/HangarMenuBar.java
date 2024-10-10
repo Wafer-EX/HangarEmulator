@@ -115,7 +115,6 @@ public class HangarMenuBar extends JMenuBar {
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
         private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank");
         private final JMenuItem clearSoundBankItem = new JMenuItem("Clear soundbank");
-        private final JCheckBoxMenuItem allowResizingCheckBox = new JCheckBoxMenuItem("Allow window resizing");
         private final JMenu keyboardPopupMenu = new JMenu("Keyboard");
 
         public HangarOptionsMenu() {
@@ -163,9 +162,6 @@ public class HangarMenuBar extends JMenuBar {
 
             clearSoundBankItem.addActionListener(e -> AudioUtils.setSoundbank(null));
 
-            allowResizingCheckBox.setSelected(HangarState.getWindowSettings().getWindowResizing());
-            allowResizingCheckBox.addActionListener(e -> HangarState.getWindowSettings().setWindowResizing(allowResizingCheckBox.getState()));
-
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
 
@@ -177,8 +173,6 @@ public class HangarMenuBar extends JMenuBar {
             this.add(new JSeparator());
             this.add(loadSoundbankItem);
             this.add(clearSoundBankItem);
-            this.add(new JSeparator());
-            this.add(allowResizingCheckBox);
             this.add(new JSeparator());
             this.add(keyboardPopupMenu);
         }
