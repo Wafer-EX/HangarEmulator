@@ -44,7 +44,7 @@ public class Graphics {
     private Color color;
 
     public Graphics(Graphics2D graphics2D) {
-        this.graphics2D = HangarState.applyAntiAliasing(graphics2D);
+        this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
         this.color = Color.BLACK;
     }
 

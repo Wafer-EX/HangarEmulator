@@ -104,13 +104,12 @@ public class HangarMenuBar extends JMenuBar {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static class HangarOptionsMenu extends JMenu {
-        private final ButtonGroup graphicsEngineRadioGroup = new ButtonGroup();
         private final ButtonGroup frameRateRadioGroup = new ButtonGroup();
         private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
         private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
 
-        private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
-        private final JCheckBoxMenuItem antiAliasingCheckBox = new JCheckBoxMenuItem("Anti-aliasing");
+        private final JCheckBoxMenuItem screenClearingCheckBox = new JCheckBoxMenuItem("Apply screen clearing");
+        private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Apply vector anti-aliasing");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
@@ -121,11 +120,11 @@ public class HangarMenuBar extends JMenuBar {
 
         public HangarOptionsMenu() {
             super("Options");
-            canvasClearingCheckBox.setSelected(HangarState.getGraphicsSettings().getCanvasClearing());
-            canvasClearingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setCanvasClearing(!HangarState.getGraphicsSettings().getCanvasClearing()));
+            screenClearingCheckBox.setSelected(HangarState.getGraphicsSettings().getScreenClearing());
+            screenClearingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setScreenClearing(!HangarState.getGraphicsSettings().getScreenClearing()));
 
-            antiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getAntiAliasing());
-            antiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setAntiAliasing(!HangarState.getGraphicsSettings().getAntiAliasing()));
+            vectorAntiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getVectorAntiAliasing());
+            vectorAntiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setVectorAntiAliasing(!HangarState.getGraphicsSettings().getVectorAntiAliasing()));
 
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
@@ -170,8 +169,8 @@ public class HangarMenuBar extends JMenuBar {
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
 
-            this.add(canvasClearingCheckBox);
-            this.add(antiAliasingCheckBox);
+            this.add(screenClearingCheckBox);
+            this.add(vectorAntiAliasingCheckBox);
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);
             this.add(resolutionPopupMenu);
