@@ -119,7 +119,7 @@ public class HangarCanvasWrapper extends JPanel {
             }
 
             var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
-            if (HangarState.getGraphicsSettings().getCanvasClearing()) {
+            if (HangarState.getGraphicsSettings().getScreenClearing()) {
                 graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
             }
 

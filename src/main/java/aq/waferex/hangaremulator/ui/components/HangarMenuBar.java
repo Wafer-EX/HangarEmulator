@@ -108,7 +108,7 @@ public class HangarMenuBar extends JMenuBar {
         private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
         private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
 
-        private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Apply canvas clearing");
+        private final JCheckBoxMenuItem screenClearingCheckBox = new JCheckBoxMenuItem("Apply screen clearing");
         private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Apply vector anti-aliasing");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
@@ -120,8 +120,8 @@ public class HangarMenuBar extends JMenuBar {
 
         public HangarOptionsMenu() {
             super("Options");
-            canvasClearingCheckBox.setSelected(HangarState.getGraphicsSettings().getCanvasClearing());
-            canvasClearingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setCanvasClearing(!HangarState.getGraphicsSettings().getCanvasClearing()));
+            screenClearingCheckBox.setSelected(HangarState.getGraphicsSettings().getScreenClearing());
+            screenClearingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setScreenClearing(!HangarState.getGraphicsSettings().getScreenClearing()));
 
             vectorAntiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getVectorAntiAliasing());
             vectorAntiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setVectorAntiAliasing(!HangarState.getGraphicsSettings().getVectorAntiAliasing()));
@@ -169,7 +169,7 @@ public class HangarMenuBar extends JMenuBar {
             keyboardPopupMenu.add(new HangarKeyboardRadio("Default", HangarKeyCodes.MIDLET_KEYCODES_DEFAULT));
             keyboardPopupMenu.add(new HangarKeyboardRadio("Nokia", HangarKeyCodes.MIDLET_KEYCODES_NOKIA));
 
-            this.add(canvasClearingCheckBox);
+            this.add(screenClearingCheckBox);
             this.add(vectorAntiAliasingCheckBox);
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);

@@ -21,7 +21,7 @@ import aq.waferex.hangaremulator.enums.ScalingModes;
 import java.awt.*;
 
 public class HangarGraphicsSettings {
-    private boolean isCanvasClearingEnabled = false;
+    private boolean isScreenClearingEnabled = false;
     private boolean isVectorAntiAliasingEnabled = false;
     private int frameRate = 60;
     private ScalingModes scalingMode = ScalingModes.None;
@@ -30,19 +30,19 @@ public class HangarGraphicsSettings {
     public HangarGraphicsSettings() { }
 
     public HangarGraphicsSettings(boolean isCanvasClearingEnabled, boolean isAntiAliasingEnabled, int frameRate, ScalingModes scalingMode, Dimension resolution) {
-        setCanvasClearing(isCanvasClearingEnabled);
+        setScreenClearing(isCanvasClearingEnabled);
         setVectorAntiAliasing(isAntiAliasingEnabled);
         setFrameRate(frameRate);
         setScalingMode(scalingMode);
         setResolution(resolution);
     }
 
-    public boolean getCanvasClearing() {
-        return isCanvasClearingEnabled;
+    public boolean getScreenClearing() {
+        return isScreenClearingEnabled;
     }
 
-    public void setCanvasClearing(boolean isEnabled) {
-        isCanvasClearingEnabled = isEnabled;
+    public void setScreenClearing(boolean isEnabled) {
+        isScreenClearingEnabled = isEnabled;
     }
 
     public boolean getVectorAntiAliasing() {
