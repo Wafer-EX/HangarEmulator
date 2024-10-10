@@ -38,7 +38,7 @@ public class HangarMainFrame extends JFrame {
         this.setLayout(new GridBagLayout());
         this.setPreferredSize(new Dimension(360, 360));
         this.setTitle("Hangar Emulator");
-        this.setResizable(false);
+        this.setResizable(true);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
 
