@@ -39,7 +39,7 @@ public final class CanvasWrapperUtils {
             // TODO: replace None with Percent
             case Percent -> percentScalingModeScaleFactor;
             case ChangeResolution -> 1.0f;
-            case Fit -> {
+            case FitToWindow -> {
                 float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
                 float scaleFactorVertical = ((float) viewportHeight / imageHeight);
                 yield Math.min(scaleFactorHorizontal, scaleFactorVertical);
