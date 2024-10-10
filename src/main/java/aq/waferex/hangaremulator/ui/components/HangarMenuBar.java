@@ -220,7 +220,7 @@ public class HangarMenuBar extends JMenuBar {
             }
         }
 
-        private static class HangarCustomResolutionItem extends JMenuItem {
+        private static class HangarCustomResolutionItem extends JRadioButtonMenuItem {
             public HangarCustomResolutionItem() {
                 super("Custom...");
                 this.addActionListener(e -> {
