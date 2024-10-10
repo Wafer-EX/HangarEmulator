@@ -98,9 +98,9 @@ public class HangarState {
         return 1000 / graphicsSettings.getFrameRate();
     }
 
-    public static Graphics2D applyAntiAliasing(Graphics graphics) {
+    public static Graphics2D applyVectorAntiAliasing(Graphics graphics) {
         var graphics2d = (Graphics2D) graphics;
-        var hintValue = graphicsSettings.getAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
+        var hintValue = graphicsSettings.getVectorAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
         graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
         return graphics2d;
     }

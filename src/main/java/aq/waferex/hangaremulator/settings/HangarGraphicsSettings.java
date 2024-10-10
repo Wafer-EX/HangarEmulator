@@ -22,7 +22,7 @@ import java.awt.*;
 
 public class HangarGraphicsSettings {
     private boolean isCanvasClearingEnabled = false;
-    private boolean isAntiAliasingEnabled = false;
+    private boolean isVectorAntiAliasingEnabled = false;
     private int frameRate = 60;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
@@ -31,7 +31,7 @@ public class HangarGraphicsSettings {
 
     public HangarGraphicsSettings(boolean isCanvasClearingEnabled, boolean isAntiAliasingEnabled, int frameRate, ScalingModes scalingMode, Dimension resolution) {
         setCanvasClearing(isCanvasClearingEnabled);
-        setAntiAliasing(isAntiAliasingEnabled);
+        setVectorAntiAliasing(isAntiAliasingEnabled);
         setFrameRate(frameRate);
         setScalingMode(scalingMode);
         setResolution(resolution);
@@ -45,12 +45,12 @@ public class HangarGraphicsSettings {
         isCanvasClearingEnabled = isEnabled;
     }
 
-    public boolean getAntiAliasing() {
-        return isAntiAliasingEnabled;
+    public boolean getVectorAntiAliasing() {
+        return isVectorAntiAliasingEnabled;
     }
 
-    public void setAntiAliasing(boolean isEnabled) {
-        isAntiAliasingEnabled = isEnabled;
+    public void setVectorAntiAliasing(boolean isEnabled) {
+        isVectorAntiAliasingEnabled = isEnabled;
     }
 
     public int getFrameRate() {
