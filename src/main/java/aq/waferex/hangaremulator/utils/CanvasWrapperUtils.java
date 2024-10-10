@@ -43,8 +43,8 @@ public final class CanvasWrapperUtils {
             matrix = matrix.mul(new Matrix4f()
                     .scale(scaleFactor)
                     .translate(
-                            viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f,
-                            viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f,
+                            (float) Math.floor(viewportWidth / scaleFactor / 2.0f - screenImageWidth / 2.0f),
+                            (float) Math.floor(viewportHeight / scaleFactor / 2.0f - screenImageHeight / 2.0f),
                             0.0f
                     )
             );
