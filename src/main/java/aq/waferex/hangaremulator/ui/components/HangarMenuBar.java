@@ -108,8 +108,8 @@ public class HangarMenuBar extends JMenuBar {
         private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
         private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
 
-        private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Canvas clearing");
-        private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Vector anti-aliasing");
+        private final JCheckBoxMenuItem canvasClearingCheckBox = new JCheckBoxMenuItem("Apply canvas clearing");
+        private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Apply vector anti-aliasing");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
