@@ -138,6 +138,7 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 160)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 220)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
+            //resolutionPopupMenu.add(new HangarCustomResolutionItem());
 
             loadSoundbankItem.addActionListener(e -> {
                 var fileChooser = new HangarFileChooser(new String[] { "sf2" }, "Soundbank (*.sf2)");
@@ -216,6 +217,24 @@ public class HangarMenuBar extends JMenuBar {
                     }
                 });
                 resolutionRadioGroup.add(this);
+            }
+        }
+
+        private static class HangarCustomResolutionItem extends JMenuItem {
+            public HangarCustomResolutionItem() {
+                super("Custom...");
+                this.addActionListener(e -> {
+                    var customResolutionFrame = new HangarCustomResolutionFrame();
+                    customResolutionFrame.setLocationRelativeTo(HangarState.getMainFrame());
+                    customResolutionFrame.setVisible(true);
+                });
+            }
+
+            private static class HangarCustomResolutionFrame extends JFrame {
+                public HangarCustomResolutionFrame() {
+                    super("Set custom resolution");
+                    // TODO: add items
+                }
             }
         }
 
