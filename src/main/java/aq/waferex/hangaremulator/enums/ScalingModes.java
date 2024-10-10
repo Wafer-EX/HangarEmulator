@@ -17,8 +17,8 @@
 package aq.waferex.hangaremulator.enums;
 
 public enum ScalingModes {
-    Percent("Percent"),
-    FitToWindow("Fit to window"),
+    None("None"),
+    Fit("Fit"),
     ChangeResolution("Change resolution");
 
     private final String name;

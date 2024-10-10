@@ -23,23 +23,11 @@ import org.joml.Matrix4f;
 import java.awt.*;
 
 public final class CanvasWrapperUtils {
-    // TODO: should I move it somewhere?
-    private static float percentScalingModeScaleFactor = 1.0f;
-
-    public static float getPercentScalingModeScaleFactor() {
-        return percentScalingModeScaleFactor;
-    }
-
-    public static void setPercentScalingModeScaleFactor(float value) {
-        percentScalingModeScaleFactor = value;
-    }
-
     public static float getImageScaleFactor(int imageWidth, int imageHeight, int viewportWidth, int viewportHeight) {
         return switch (HangarState.getGraphicsSettings().getScalingMode()) {
             // TODO: replace None with Percent
-            case Percent -> percentScalingModeScaleFactor;
-            case ChangeResolution -> 1.0f;
-            case FitToWindow -> {
+            case None, ChangeResolution -> 1.0f;
+            case Fit -> {
                 float scaleFactorHorizontal = ((float) viewportWidth / imageWidth);
                 float scaleFactorVertical = ((float) viewportHeight / imageHeight);
                 yield Math.min(scaleFactorHorizontal, scaleFactorVertical);

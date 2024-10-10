@@ -165,14 +165,6 @@ public class HangarCanvasWrapper extends JPanel {
                     return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
                 }
             });
-
-            this.addMouseWheelListener(e -> {
-                if (e.getWheelRotation() != 0) {
-                    float currentScaleFactor = CanvasWrapperUtils.getPercentScalingModeScaleFactor();
-                    float scaleChange = e.getWheelRotation() == -1 ? 2 : 0.5f;
-                    CanvasWrapperUtils.setPercentScalingModeScaleFactor(currentScaleFactor * scaleChange);
-                }
-            });
         }
 
         @Override
