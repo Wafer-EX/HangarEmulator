@@ -37,7 +37,7 @@ public class Graphics {
 
     private Graphics2D graphics2D;
 
-    private java.awt.Font seFont;
+    private Font meFont;
     private int selectedStroke = SOLID;
     private int translateX = 0, translateY = 0;
 
@@ -47,10 +47,7 @@ public class Graphics {
     public Graphics(Graphics2D graphics2D) {
         this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
         this.color = Color.BLACK;
-
-        // TODO: find normal way to get font
-        var object = new JPanel();
-        this.seFont = object.getFont();
+        this.meFont = Font.getDefaultFont();
     }
 
     public Graphics2D getGraphics2D() {
@@ -113,8 +110,7 @@ public class Graphics {
     }
 
     public Font getFont() {
-        // TODO: cache j2me font object
-        return new Font(seFont);
+        return meFont;
     }
 
     public void setStrokeStyle(int style) throws IllegalArgumentException {
@@ -137,13 +133,7 @@ public class Graphics {
     }
 
     public void setFont(Font font) {
-        if (font != null) {
-            int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, font.getSize());
-            this.seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, font.getStyle(), convertedSize);
-        }
-        else {
-            this.seFont = javax.microedition.lcdui.Font.getDefaultFont().getSEFont();
-        }
+        this.meFont = font;
     }
 
     public int getClipX() {
@@ -223,7 +213,7 @@ public class Graphics {
         var meFont = getFont();
         x = FontUtils.alignX(meFont, str, x, anchor);
         y = FontUtils.alignY(meFont, str, y, anchor);
-        graphics2D.setFont(seFont);
+        graphics2D.setFont(meFont.getSEFont());
         graphics2D.drawString(str, x, y);
     }
 
