@@ -20,6 +20,7 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
+import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -46,6 +47,10 @@ public class Graphics {
     public Graphics(Graphics2D graphics2D) {
         this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
         this.color = Color.BLACK;
+
+        // TODO: find normal way to get font
+        var object = new JPanel();
+        this.seFont = object.getFont();
     }
 
     public Graphics2D getGraphics2D() {
@@ -108,7 +113,7 @@ public class Graphics {
     }
 
     public Font getFont() {
-        // TODO: should I cache font object?
+        // TODO: cache j2me font object
         return new Font(seFont);
     }
 

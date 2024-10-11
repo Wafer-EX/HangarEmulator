@@ -34,9 +34,12 @@ public class Font {
     public static final int FONT_STATIC_TEXT = 0;
     public static final int FONT_INPUT_TEXT = 1;
 
-    private java.awt.Font seFont;
+    private final java.awt.Font seFont;
 
-    public Font(java.awt.Font font) {
+    public Font(java.awt.Font font) throws NullPointerException {
+        if (font == null) {
+            throw new NullPointerException();
+        }
         this.seFont = font;
     }
 

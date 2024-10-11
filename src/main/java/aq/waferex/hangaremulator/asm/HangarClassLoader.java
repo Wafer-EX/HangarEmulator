@@ -32,7 +32,7 @@ public class HangarClassLoader extends URLClassLoader {
 
     @Override
     public Class<?> loadClass(String name) throws ClassNotFoundException {
-        if (!name.contains("java") && !name.contains("nokia") && !name.contains("aq.waferex.hangaremulator")) {
+        if (!name.contains("java") && !name.contains("nokia") && !name.contains("aq.waferex.hangaremulator") && !name.contains("jdk")) {
             try {
                 var classPath = name.replaceAll("\\.", "/");
                 var classStream = MIDletResources.getResource(classPath + ".class");
