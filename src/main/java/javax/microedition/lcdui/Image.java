@@ -78,6 +78,7 @@ public class Image {
         }
         var stream = MIDletResources.getResource(name);
         if (stream == null) {
+            // TODO: this method doesn't work with Mini Game Pack
             throw new IOException();
         }
         return new Image(ImageIO.read(stream), false);
