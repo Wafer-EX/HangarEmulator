@@ -23,6 +23,13 @@ public final class RangeCondition implements Condition {
     private final String upperOp;
 
     public RangeCondition(double lowerLimit, String lowerOp, double upperLimit, String upperOp) {
+        if (lowerLimit > upperLimit) {
+            throw new IllegalArgumentException();
+        }
+        if (lowerLimit == upperLimit && !(lowerOp.equals(Condition.OP_GREATER_THAN_OR_EQUALS) && upperOp.equals(Condition.OP_LESS_THAN_OR_EQUALS))) {
+            throw new IllegalArgumentException();
+        }
+
         this.lowerLimit = lowerLimit;
         this.lowerOp = lowerOp;
         this.upperLimit = upperLimit;
@@ -45,15 +52,32 @@ public final class RangeCondition implements Condition {
         return upperOp;
     }
 
+    // TODO: check it
     @Override
-    public boolean isMet(double doubleValue) {
-        // TODO: write method logic
-        return false;
+    public boolean isMet(double value) {
+        boolean comparedToLowerLimit = switch (lowerOp) {
+            case Condition.OP_EQUALS -> value == lowerLimit;
+            case Condition.OP_GREATER_THAN -> value > lowerLimit;
+            case Condition.OP_GREATER_THAN_OR_EQUALS -> value >= lowerLimit;
+            case Condition.OP_LESS_THAN -> value < lowerLimit;
+            case Condition.OP_LESS_THAN_OR_EQUALS -> value <= lowerLimit;
+            default -> throw new IllegalStateException();
+        };
+
+        boolean comparedToUpperLimit = switch (upperOp) {
+            case Condition.OP_EQUALS -> value == upperLimit;
+            case Condition.OP_GREATER_THAN -> value > upperLimit;
+            case Condition.OP_GREATER_THAN_OR_EQUALS -> value >= upperLimit;
+            case Condition.OP_LESS_THAN -> value < upperLimit;
+            case Condition.OP_LESS_THAN_OR_EQUALS -> value <= upperLimit;
+            default -> throw new IllegalStateException();
+        };
+
+        return comparedToLowerLimit && comparedToUpperLimit;
     }
 
     @Override
     public boolean isMet(Object value) {
-        // TODO: write method logic
         return false;
     }
 }
