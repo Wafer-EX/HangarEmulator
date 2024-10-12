@@ -44,7 +44,6 @@ public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
     private final HangarOpenGLCanvas openGLCanvas;
 
-    private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
     public HangarCanvasWrapper(Canvas canvas) {
@@ -76,15 +75,9 @@ public class HangarCanvasWrapper extends JPanel {
                 }
             }
         });
-
-        this.refreshSerialCallTimer();
     }
 
-    public void setCallSerially(Runnable runnable) {
-        this.callSerially = runnable;
-    }
-
-    public void refreshSerialCallTimer() {
+    public void refreshSerialCallTimer(Runnable callSerially) {
         serialCallTimer.cancel();
         serialCallTimer.purge();
         serialCallTimer = new Timer();
