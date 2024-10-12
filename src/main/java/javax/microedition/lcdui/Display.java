@@ -31,10 +31,16 @@ public class Display {
     public static final int COLOR_BORDER = 4;
     public static final int COLOR_HIGHLIGHTED_BORDER = 5;
 
-    private static final Display display = new Display();
+    private static final Display displaySingleton = new Display();
+
+    private Displayable displayable;
+
+    public static Display getDisplaySingleton() {
+        return displaySingleton;
+    }
 
     public static Display getDisplay(MIDlet m) {
-        return display;
+        return displaySingleton;
     }
 
     public int getColor(int colorSpecifier) throws IllegalArgumentException {
@@ -70,11 +76,12 @@ public class Display {
     }
 
     public Displayable getCurrent() {
-        return HangarState.getMainFrame().getViewport().getDisplayable();
+        return displayable;
     }
 
     public void setCurrent(Displayable displayable) {
-        HangarState.getMainFrame().getViewport().setDisplayable(displayable);
+        this.displayable = displayable;
+        HangarState.getMainFrame().getViewport().displayableWasUpdated(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
@@ -93,7 +100,7 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarState.getMainFrame().getViewport().getCanvasWrapper().setCallSerially(r);
+        HangarState.getMainFrame().getViewport().getCanvasWrapper().refreshSerialCallTimer(r);
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

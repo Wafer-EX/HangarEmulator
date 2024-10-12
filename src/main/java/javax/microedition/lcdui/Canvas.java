@@ -18,7 +18,6 @@ package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
-import aq.waferex.hangaremulator.utils.CanvasWrapperUtils;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
@@ -51,11 +50,11 @@ public abstract class Canvas extends Displayable {
     }
 
     public boolean hasPointerEvents() {
-        return true;
+        return HangarState.getKeyboardSettings().getTouchscreenInput();
     }
 
     public boolean hasPointerMotionEvents() {
-        return true;
+        return HangarState.getKeyboardSettings().getTouchscreenInput();
     }
 
     public boolean hasRepeatEvents() {
@@ -89,24 +88,14 @@ public abstract class Canvas extends Displayable {
 
     public void pointerDragged(int x, int y) { }
 
-    // TODO: check it because I'm not sure is it work
     public final void repaint(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
-            var screenImage = HangarState.getScreenImage();
-            int screenImageWidth = screenImage.getWidth();
-            int screenImageHeight = screenImage.getHeight();
+        var screenImage = HangarState.getScreenImage();
 
-            float scaleFactor = CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, canvasWrapper.getWidth(), canvasWrapper.getHeight());
-            float imagePosX = canvasWrapper.getWidth() / 2.0f - (screenImageWidth * scaleFactor) / 2.0f;
-            float imagePosY = canvasWrapper.getHeight() / 2.0f - (screenImageHeight * scaleFactor) / 2.0f;
-
-            canvasWrapper.repaint(
-                    (int) (imagePosX + x * scaleFactor),
-                    (int) (imagePosY + y * scaleFactor),
-                    (int) (width * scaleFactor),
-                    (int) (height * scaleFactor)
-            );
+        if (canvasWrapper != null && screenImage != null) {
+            screenImage.getGraphics().setClip(x, y, width, height);
+            canvasWrapper.repaint();
+            screenImage.getGraphics().setClip(0, 0, screenImage.getWidth(), screenImage.getHeight());
         }
         HangarState.syncWithFrameRate();
     }

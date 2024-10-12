@@ -16,25 +16,40 @@
 
 package javax.microedition.sensor;
 
+import java.util.HashMap;
+
 public final class SensorManager {
+    private static final HashMap<SensorListener, SensorInfo> sensorsWithInfo = new HashMap<>();
+    private static final HashMap<SensorListener, String> sensorsWithQuantity = new HashMap<>();
+
     public static void addSensorListener(SensorListener listener, SensorInfo info) {
-        // TODO: write method logic
+        if (listener == null || info == null) {
+            throw new NullPointerException();
+        }
+        if (!sensorsWithInfo.containsKey(listener) && !sensorsWithQuantity.containsKey(listener)) {
+            sensorsWithInfo.put(listener, info);
+        }
     }
 
     public static void addSensorListener(SensorListener listener, String quantity) {
-        // TODO: write method logic
+        if (listener == null || quantity == null) {
+            throw new NullPointerException();
+        }
+        if (!sensorsWithQuantity.containsKey(listener) && !sensorsWithInfo.containsKey(listener)) {
+            sensorsWithQuantity.put(listener, quantity);
+        }
     }
 
+    // TODO: write method logic
     public static SensorInfo[] findSensors(String quantity, String contextType) {
-        // TODO: write method logic
         return new SensorInfo[]{};
     }
 
+    // TODO: write method logic
     public static SensorInfo[] findSensors(String url) {
         if (url == null) {
             throw new NullPointerException();
         }
-        // TODO: write method logic
         return new SensorInfo[]{};
     }
 
@@ -42,6 +57,7 @@ public final class SensorManager {
         if (listener == null) {
             throw new NullPointerException();
         }
-        // TODO: write method logic
+        sensorsWithInfo.remove(listener);
+        sensorsWithQuantity.remove(listener);
     }
 }

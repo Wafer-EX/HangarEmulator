@@ -33,7 +33,8 @@ public class DirectUtils {
         return new DirectGraphics() {
             @Override
             public void setARGBColor(int argbColor) {
-                g.getGraphics2D().setColor(new Color(argbColor, true));
+                var color = new Color(argbColor, true);
+                g.getGraphics2D().setColor(color);
             }
 
             @Override

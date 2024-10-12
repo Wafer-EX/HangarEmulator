@@ -44,7 +44,6 @@ public class HangarCanvasWrapper extends JPanel {
     protected final Canvas canvas;
     private final HangarOpenGLCanvas openGLCanvas;
 
-    private Runnable callSerially;
     private Timer serialCallTimer = new Timer();
 
     public HangarCanvasWrapper(Canvas canvas) {
@@ -76,15 +75,9 @@ public class HangarCanvasWrapper extends JPanel {
                 }
             }
         });
-
-        this.refreshSerialCallTimer();
     }
 
-    public void setCallSerially(Runnable runnable) {
-        this.callSerially = runnable;
-    }
-
-    public void refreshSerialCallTimer() {
+    public void refreshSerialCallTimer(Runnable callSerially) {
         serialCallTimer.cancel();
         serialCallTimer.purge();
         serialCallTimer = new Timer();
@@ -141,20 +134,26 @@ public class HangarCanvasWrapper extends JPanel {
             this.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    var point = getConvertedPoint(e.getX(), e.getY());
-                    canvas.pointerPressed(point.x, point.y);
+                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                        var point = getConvertedPoint(e.getX(), e.getY());
+                        canvas.pointerPressed(point.x, point.y);
+                    }
                 }
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    var point = getConvertedPoint(e.getX(), e.getY());
-                    canvas.pointerReleased(point.x, point.y);
+                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                        var point = getConvertedPoint(e.getX(), e.getY());
+                        canvas.pointerReleased(point.x, point.y);
+                    }
                 }
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    var point = getConvertedPoint(e.getX(), e.getY());
-                    canvas.pointerDragged(point.x, point.y);
+                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                        var point = getConvertedPoint(e.getX(), e.getY());
+                        canvas.pointerDragged(point.x, point.y);
+                    }
                 }
 
                 private Point getConvertedPoint(int mouseX, int mouseY) {
@@ -238,6 +237,7 @@ public class HangarCanvasWrapper extends JPanel {
             glBindVertexArray(vertexArrayObject);
             glUseProgram(shaderProgram);
 
+            // TODO: call paintGL in x fps by timer, don't convert it until canvas.paint haven't called
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenImage.getWidth(), screenImage.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);

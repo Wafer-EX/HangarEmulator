@@ -74,7 +74,7 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, x, y, width, height, null);
+        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint(x, y, width, height);
     }
 

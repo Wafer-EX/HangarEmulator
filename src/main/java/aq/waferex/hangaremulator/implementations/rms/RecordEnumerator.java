@@ -59,9 +59,10 @@ public class RecordEnumerator implements RecordEnumeration, Serializable {
         if (isDestroyed) {
             throw new IllegalStateException();
         }
-        if (currentRecord + 1 > records.size()) {
-            throw new InvalidRecordIDException();
-        }
+        // TODO: I don't know what's wrong here, but comment this fixed Maze game (from Nokia Asha 311)
+//        if (currentRecord + 1 > records.size()) {
+//            throw new InvalidRecordIDException();
+//        }
         currentRecord += 1;
         return currentRecord;
     }

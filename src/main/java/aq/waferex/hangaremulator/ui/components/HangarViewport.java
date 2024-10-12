@@ -31,7 +31,6 @@ import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
     private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
-    private Displayable displayable = null;
     private HangarCanvasWrapper canvasWrapper = null;
 
     public HangarViewport() {
@@ -42,13 +41,8 @@ public class HangarViewport extends JPanel {
         return canvasWrapper;
     }
 
-    public Displayable getDisplayable() {
-        return displayable;
-    }
-
-    public void setDisplayable(Displayable displayable) {
+    public void displayableWasUpdated(Displayable displayable) {
         this.removeAll();
-        this.displayable = displayable;
 
         var scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);

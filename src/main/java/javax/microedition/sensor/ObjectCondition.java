@@ -28,12 +28,10 @@ public final class ObjectCondition implements Condition {
     }
 
     public boolean isMet(double value) {
-        // TODO: write method logic
         return false;
     }
 
     public boolean isMet(Object value) {
-        // TODO: write method logic
-        return false;
+        return value == limit;
     }
 }

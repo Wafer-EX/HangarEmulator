@@ -21,6 +21,9 @@ public final class LimitCondition implements Condition {
     private final String operator;
 
     public LimitCondition(double limit, String operator) {
+        if (operator == null) {
+            throw new NullPointerException();
+        }
         this.limit = limit;
         this.operator = operator;
     }
@@ -29,19 +32,24 @@ public final class LimitCondition implements Condition {
         return limit;
     }
 
-    public final java.lang.String getOperator() {
+    public final String getOperator() {
         return operator;
     }
 
     @Override
-    public boolean isMet(double doubleValue) {
-        // TODO: write method logic
-        return false;
+    public boolean isMet(double value) {
+        return switch (operator) {
+            case Condition.OP_EQUALS -> value == limit;
+            case Condition.OP_GREATER_THAN -> value > limit;
+            case Condition.OP_GREATER_THAN_OR_EQUALS -> value >= limit;
+            case Condition.OP_LESS_THAN -> value < limit;
+            case Condition.OP_LESS_THAN_OR_EQUALS -> value <= limit;
+            default -> throw new IllegalStateException();
+        };
     }
 
     @Override
     public boolean isMet(Object value) {
-        // TODO: write method logic
         return false;
     }
 }

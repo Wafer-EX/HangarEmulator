@@ -40,7 +40,7 @@ public class Image {
     }
 
     public Image(int width, int height, int color, boolean hasAlpha) {
-        this.bufferedImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        this.bufferedImage = new BufferedImage(width, height, hasAlpha ? BufferedImage.TYPE_INT_ARGB : BufferedImage.TYPE_INT_RGB);
         this.graphics2D = bufferedImage.createGraphics();
         graphics2D.setColor(new Color(color, hasAlpha));
         graphics2D.fillRect(0, 0, width, height);
@@ -78,6 +78,7 @@ public class Image {
         }
         var stream = MIDletResources.getResource(name);
         if (stream == null) {
+            // TODO: this method doesn't work with Mini Game Pack
             throw new IOException();
         }
         return new Image(ImageIO.read(stream), false);

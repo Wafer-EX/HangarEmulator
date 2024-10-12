@@ -23,28 +23,39 @@ public class Sound {
     public static final int SOUND_STOPPED = 1;
     public static final int SOUND_UNINITIALIZED = 3;
 
+    private SoundListener soundListener;
+    private int state = SOUND_STOPPED;
+
     public Sound(byte[] data, int type) throws IllegalArgumentException, NullPointerException {
-        // TODO: write constructor logic
+        init(data, type);
     }
 
     public Sound(int freq, long duration) throws IllegalArgumentException {
-        // TODO: write constructor logic
+        init(freq, duration);
     }
 
     public void init(int freq, long duration) throws IllegalArgumentException  {
+        if (duration <= 0) {
+            throw new IllegalArgumentException();
+        }
         // TODO: write method logic
     }
 
     public void init(byte[] data, int type) throws IllegalArgumentException, NullPointerException {
+        if (data == null) {
+            throw new NullPointerException();
+        }
         // TODO: write method logic
     }
 
     public int getState() {
-        // TODO: write method logic
-        return SOUND_UNINITIALIZED;
+        return state;
     }
 
     public void play(int loop) throws IllegalArgumentException {
+        if (loop < 0) {
+            throw new IllegalArgumentException();
+        }
         // TODO: write method logic
     }
 
@@ -79,6 +90,6 @@ public class Sound {
     }
 
     public void setSoundListener(SoundListener listener) {
-        // TODO: write method logic
+        soundListener = listener;
     }
 }

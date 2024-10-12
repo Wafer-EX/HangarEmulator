@@ -43,7 +43,7 @@ public final class MIDletResources {
 
     public static InputStream getResource(String resourcePath) {
         try {
-            if (resourcePath.charAt(0) == '/') {
+            while (resourcePath.charAt(0) == '/') {
                 resourcePath = resourcePath.substring(1);
             }
             return classLoader.getResourceAsStream(resourcePath);
