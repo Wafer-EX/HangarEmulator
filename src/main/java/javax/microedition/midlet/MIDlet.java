@@ -41,7 +41,10 @@ public abstract class MIDlet {
         HangarState.getMainFrame().getViewport().getCanvasWrapper().repaint();
     }
 
-    public final String getAppProperty(String key) {
+    public final String getAppProperty(String key) throws NullPointerException {
+        if (key == null) {
+            throw new NullPointerException();
+        }
         return HangarState.getProperties().getProperty(key);
     }
 
