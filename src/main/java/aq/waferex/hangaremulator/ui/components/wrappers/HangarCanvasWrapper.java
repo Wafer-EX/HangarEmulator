@@ -238,6 +238,7 @@ public class HangarCanvasWrapper extends JPanel {
             glBindVertexArray(vertexArrayObject);
             glUseProgram(shaderProgram);
 
+            // TODO: call paintGL in x fps by timer, don't convert it until canvas.paint haven't called
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenImage.getWidth(), screenImage.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImageBuffer);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
             glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
