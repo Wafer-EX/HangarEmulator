@@ -113,6 +113,7 @@ public class HangarMenuBar extends JMenuBar {
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
+        private final JCheckBoxMenuItem touchscreenInputCheckBox = new JCheckBoxMenuItem("Enable touchscreen input");
         private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank");
         private final JMenuItem clearSoundBankItem = new JMenuItem("Clear soundbank");
         private final JMenu keyboardPopupMenu = new JMenu("Keyboard");
@@ -139,6 +140,9 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 220)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
             //resolutionPopupMenu.add(new HangarCustomResolutionItem());
+
+            touchscreenInputCheckBox.setSelected(HangarState.getKeyboardSettings().getTouchscreenInput());
+            touchscreenInputCheckBox.addActionListener(e -> HangarState.getKeyboardSettings().setTouchscreenInput(!HangarState.getKeyboardSettings().getTouchscreenInput()));
 
             loadSoundbankItem.addActionListener(e -> {
                 var fileChooser = new HangarFileChooser(new String[] { "sf2" }, "Soundbank (*.sf2)");
@@ -171,6 +175,7 @@ public class HangarMenuBar extends JMenuBar {
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);
             this.add(resolutionPopupMenu);
+            this.add(touchscreenInputCheckBox);
             this.add(new JSeparator());
             this.add(loadSoundbankItem);
             this.add(clearSoundBankItem);

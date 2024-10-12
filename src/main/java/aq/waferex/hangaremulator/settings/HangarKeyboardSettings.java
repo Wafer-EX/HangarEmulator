@@ -20,6 +20,7 @@ import aq.waferex.hangaremulator.HangarKeyCodes;
 
 public class HangarKeyboardSettings {
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
+    private boolean isTouchscreenInputEnabled = true;
 
     public HangarKeyCodes getMidletKeyCodes() {
         return midletKeyCodes;
@@ -27,5 +28,13 @@ public class HangarKeyboardSettings {
 
     public void setMidletKeyCodes(HangarKeyCodes keyCodes) {
         this.midletKeyCodes = keyCodes;
+    }
+
+    public boolean getTouchscreenInput() {
+        return isTouchscreenInputEnabled;
+    }
+
+    public void setTouchscreenInput(boolean value) {
+        isTouchscreenInputEnabled = value;
     }
 }

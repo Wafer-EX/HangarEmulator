@@ -50,11 +50,11 @@ public abstract class Canvas extends Displayable {
     }
 
     public boolean hasPointerEvents() {
-        return true;
+        return HangarState.getKeyboardSettings().getTouchscreenInput();
     }
 
     public boolean hasPointerMotionEvents() {
-        return true;
+        return HangarState.getKeyboardSettings().getTouchscreenInput();
     }
 
     public boolean hasRepeatEvents() {
