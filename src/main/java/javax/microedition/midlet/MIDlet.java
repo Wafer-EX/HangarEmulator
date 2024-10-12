@@ -32,7 +32,8 @@ public abstract class MIDlet {
     }
 
     public final void notifyPaused() {
-        HangarState.getMainFrame().getViewport().getCanvasWrapper().repaint();
+        // TODO: render OpenGL canvas in 60 fps, remove it
+        HangarState.getMainFrame().getViewport().repaint();
     }
 
     public final String getAppProperty(String key) throws NullPointerException {
