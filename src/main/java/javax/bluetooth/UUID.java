@@ -32,7 +32,7 @@ public class UUID {
         if (uuidValue == null) {
             throw new NullPointerException();
         }
-        if (uuidValue.length() == 0 || (shortUUID && uuidValue.length() > 8) || uuidValue.length() > 32) {
+        if (uuidValue.isEmpty() || (shortUUID && uuidValue.length() > 8) || uuidValue.length() > 32) {
             throw new IllegalArgumentException();
         }
         this.value = uuidValue;
