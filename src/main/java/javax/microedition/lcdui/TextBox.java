@@ -32,6 +32,7 @@ public class TextBox extends Screen {
         return string;
     }
 
+    // TODO: use another method for TextBox wrapper, when app call this refresh the wrapper
     public void setString(String text) throws IllegalArgumentException {
         this.string = text;
     }
@@ -52,10 +53,16 @@ public class TextBox extends Screen {
     }
 
     public void insert(String src, int position) {
+        if (src == null) {
+            throw new NullPointerException();
+        }
         // TODO: write method logic
     }
 
     public void insert(char[] data, int offset, int length, int position) {
+        if (data == null) {
+            throw new NullPointerException();
+        }
         // TODO: write method logic
     }
 
@@ -68,6 +75,9 @@ public class TextBox extends Screen {
     }
 
     public int setMaxSize(int maxSize) {
+        if (maxSize <= 0) {
+            throw new IllegalArgumentException();
+        }
         return this.maxSize = maxSize;
     }
 
@@ -76,7 +86,7 @@ public class TextBox extends Screen {
     }
 
     public int getCaretPosition() {
-        // TODO: write method logic
+        // TODO: get it from wrapper
         return 0;
     }
 
