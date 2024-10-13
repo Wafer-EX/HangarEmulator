@@ -17,6 +17,7 @@
 package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarTextBoxWrapper;
 import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
 import aq.waferex.hangaremulator.ui.listeners.HangarDisplayableListener;
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarFormWrapper;
@@ -63,6 +64,10 @@ public class HangarViewport extends JPanel {
             else if (displayable instanceof Form form) {
                 var formWrapper = new HangarFormWrapper(form);
                 scrollPane.setViewportView(formWrapper);
+            }
+            else if (displayable instanceof TextBox textBox) {
+                var textBoxWrapper = new HangarTextBoxWrapper(textBox);
+                scrollPane.setViewportView(textBoxWrapper);
             }
             else {
                 // TODO: add more screens support
