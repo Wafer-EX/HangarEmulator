@@ -55,10 +55,6 @@ public class HangarCanvasWrapper extends JPanel {
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
 
-        var resolution = HangarState.getGraphicsSettings().getResolution();
-        // TODO: initialize in a canvas constructor?
-        canvas.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
-
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
@@ -99,23 +95,21 @@ public class HangarCanvasWrapper extends JPanel {
         super.paintComponent(graphics);
 
         var screenImage = canvas.getScreenImage();
-        if (screenImage != null) {
-            if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
-                var screenResolution = HangarState.getGraphicsSettings().getResolution();
-                if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
-                    screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
-                    canvas.setScreenImage(screenImage);
-                }
+        if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
+            var screenResolution = HangarState.getGraphicsSettings().getResolution();
+            if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
+                screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
+                canvas.setScreenImage(screenImage);
             }
-
-            var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
-            if (HangarState.getGraphicsSettings().getScreenClearing()) {
-                graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
-            }
-
-            canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
-            openGLCanvas.render();
         }
+
+        var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
+        if (HangarState.getGraphicsSettings().getScreenClearing()) {
+            graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+        }
+
+        canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
+        openGLCanvas.render();
     }
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
@@ -160,12 +154,13 @@ public class HangarCanvasWrapper extends JPanel {
 
                 private Point getConvertedPoint(int mouseX, int mouseY) {
                     var scalingInUnits = SystemUtils.getScalingInUnits();
+
                     int viewportWidth = (int) (getSize().width * scalingInUnits);
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
+
                     int screenImageWidth = canvas.getScreenImage().getWidth();
                     int screenImageHeight = canvas.getScreenImage().getHeight();
 
-                    //return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
                     return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, screenImageWidth, screenImageHeight, viewportWidth, viewportHeight, scalingInUnits);
                 }
             });
