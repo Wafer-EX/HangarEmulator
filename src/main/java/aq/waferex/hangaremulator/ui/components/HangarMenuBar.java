@@ -141,8 +141,8 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
             //resolutionPopupMenu.add(new HangarCustomResolutionItem());
 
-            touchscreenInputCheckBox.setSelected(HangarState.getKeyboardSettings().getTouchscreenInput());
-            touchscreenInputCheckBox.addActionListener(e -> HangarState.getKeyboardSettings().setTouchscreenInput(!HangarState.getKeyboardSettings().getTouchscreenInput()));
+            touchscreenInputCheckBox.setSelected(HangarState.getInputSettings().getTouchscreenInput());
+            touchscreenInputCheckBox.addActionListener(e -> HangarState.getInputSettings().setTouchscreenInput(!HangarState.getInputSettings().getTouchscreenInput()));
 
             loadSoundbankItem.addActionListener(e -> {
                 var fileChooser = new HangarFileChooser(new String[] { "sf2" }, "Soundbank (*.sf2)");
@@ -250,10 +250,10 @@ public class HangarMenuBar extends JMenuBar {
                 super();
                 // TODO: rewrite text setting
                 this.setText(keyboardName);
-                this.setSelected(HangarState.getKeyboardSettings().getMidletKeyCodes() == keyCodes);
+                this.setSelected(HangarState.getInputSettings().getMidletKeyCodes() == keyCodes);
                 this.addItemListener(e -> {
                     if (this.isSelected()) {
-                        HangarState.getKeyboardSettings().setMidletKeyCodes(keyCodes);
+                        HangarState.getInputSettings().setMidletKeyCodes(keyCodes);
                     }
                 });
                 keyboardRadioGroup.add(this);

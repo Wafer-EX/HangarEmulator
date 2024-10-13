@@ -18,7 +18,7 @@ package aq.waferex.hangaremulator.settings;
 
 import aq.waferex.hangaremulator.HangarKeyCodes;
 
-public class HangarKeyboardSettings {
+public class HangarInputSettings {
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
     private boolean isTouchscreenInputEnabled = true;
 

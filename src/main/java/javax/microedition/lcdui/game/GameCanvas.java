@@ -16,13 +16,10 @@
 
 package javax.microedition.lcdui.game;
 
-import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.Graphics;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class GameCanvas extends Canvas {
@@ -37,26 +34,15 @@ public abstract class GameCanvas extends Canvas {
     public static final int GAME_D_PRESSED = 1 << Canvas.GAME_D;
 
     private BufferedImage additionalBuffer;
-    private Graphics2D graphics2D;
     private final Graphics meGraphics;
 
     protected GameCanvas(boolean suppressKeyEvents) {
         super();
-        int width = HangarState.getGraphicsSettings().getResolution().width;
-        int height = HangarState.getGraphicsSettings().getResolution().height;
-
-        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            var screenImage = HangarState.getScreenImage();
-            // TODO: If null... initialize?
-            if (screenImage != null) {
-                width = HangarState.getScreenImage().getWidth();
-                height = HangarState.getScreenImage().getHeight();
-            }
-        }
+        int width = getScreenImage().getWidth();
+        int height = getScreenImage().getHeight();
 
         this.additionalBuffer = ImageUtils.createCompatibleImage(width, height);
-        this.graphics2D = additionalBuffer.createGraphics();
-        this.meGraphics = new Graphics(graphics2D);
+        this.meGraphics = new Graphics(additionalBuffer.createGraphics());
     }
 
     protected Graphics getGraphics() {
@@ -74,19 +60,18 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint();
     }
 
     @Override
     public void sizeChanged(int w, int h) {
         this.additionalBuffer = ImageUtils.createCompatibleImage(w, h);
-        this.graphics2D = additionalBuffer.createGraphics();
-        this.meGraphics.setGraphics2D(graphics2D);
+        this.meGraphics.setGraphics2D(additionalBuffer.createGraphics());
     }
 }

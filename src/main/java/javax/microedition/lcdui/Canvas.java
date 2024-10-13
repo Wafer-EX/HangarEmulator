@@ -17,7 +17,11 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
+import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
+
+import java.awt.image.BufferedImage;
 
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
@@ -42,7 +46,24 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
 
-    protected Canvas() { }
+    private BufferedImage screenImage;
+
+    protected Canvas() {
+        // TODO: set all canvas resolution if scaling mode is change resolution
+        var resolution = HangarState.getGraphicsSettings().getResolution();
+        screenImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
+    }
+
+    public BufferedImage getScreenImage() {
+        return screenImage;
+    }
+
+    public void setScreenImage(BufferedImage image) {
+        if (image == null) {
+            throw new NullPointerException();
+        }
+        screenImage = image;
+    }
 
     public boolean isDoubleBuffered() {
         // TODO: it is correct?
@@ -50,11 +71,11 @@ public abstract class Canvas extends Displayable {
     }
 
     public boolean hasPointerEvents() {
-        return HangarState.getKeyboardSettings().getTouchscreenInput();
+        return HangarState.getInputSettings().getTouchscreenInput();
     }
 
     public boolean hasPointerMotionEvents() {
-        return HangarState.getKeyboardSettings().getTouchscreenInput();
+        return HangarState.getInputSettings().getTouchscreenInput();
     }
 
     public boolean hasRepeatEvents() {
@@ -90,9 +111,7 @@ public abstract class Canvas extends Displayable {
 
     public final void repaint(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        var screenImage = HangarState.getScreenImage();
-
-        if (canvasWrapper != null && screenImage != null) {
+        if (canvasWrapper != null) {
             screenImage.getGraphics().setClip(x, y, width, height);
             canvasWrapper.repaint();
             screenImage.getGraphics().setClip(0, 0, screenImage.getWidth(), screenImage.getHeight());
@@ -117,6 +136,21 @@ public abstract class Canvas extends Displayable {
     public void hideNotify() { }
 
     public abstract void paint(Graphics graphics);
+
+    @Override
+    public int getWidth() {
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+            return screenImage.getWidth();
+        }
+        return super.getWidth();
+    }
+
+    public int getHeight() {
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+            return screenImage.getHeight();
+        }
+        return super.getHeight();
+    }
 
     @Override
     public void sizeChanged(int w, int h) { }

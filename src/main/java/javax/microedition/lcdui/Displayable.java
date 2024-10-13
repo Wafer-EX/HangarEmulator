@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.enums.ScalingModes;
 
 import java.util.ArrayList;
 
@@ -74,16 +73,10 @@ public abstract class Displayable {
     }
 
     public int getWidth() {
-        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            return HangarState.getScreenImage().getWidth();
-        }
         return HangarState.getGraphicsSettings().getResolution().width;
     }
 
     public int getHeight() {
-        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            return HangarState.getScreenImage().getHeight();
-        }
         return HangarState.getGraphicsSettings().getResolution().height;
     }
 

@@ -41,7 +41,7 @@ public class HangarViewport extends JPanel {
         return canvasWrapper;
     }
 
-    public void displayableWasUpdated(Displayable displayable) {
+    public void displayableHasChanged(Displayable displayable) {
         this.removeAll();
 
         var scrollPane = new JScrollPane();
