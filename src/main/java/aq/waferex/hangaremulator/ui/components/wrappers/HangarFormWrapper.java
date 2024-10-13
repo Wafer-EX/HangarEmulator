@@ -19,6 +19,7 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 import javax.microedition.lcdui.Form;
 import javax.microedition.lcdui.ImageItem;
 import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.TextField;
 import javax.swing.*;
 import java.awt.*;
 
@@ -40,9 +41,14 @@ public class HangarFormWrapper extends JPanel {
             }
             else if (item instanceof ImageItem imageItem) {
                 // TODO: check it
-                var imageIcon = new ImageIcon(imageItem.getImage().getBufferedImage());
-                var label = new JLabel(imageIcon);
+                var icon = new ImageIcon(imageItem.getImage().getBufferedImage());
+                var label = new JLabel(icon);
                 this.add(label, constraints);
+            }
+            else if (item instanceof TextField textField) {
+                var jTextField = new JTextField();
+                // TODO: influence to textField when type
+                this.add(jTextField, constraints);
             }
             else {
                 // TODO: add another items
