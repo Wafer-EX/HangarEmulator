@@ -18,6 +18,8 @@ package aq.waferex.hangaremulator.ui.components.wrappers;
 
 import javax.microedition.lcdui.TextBox;
 import javax.swing.*;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class HangarTextBoxWrapper extends JPanel {
@@ -25,6 +27,23 @@ public class HangarTextBoxWrapper extends JPanel {
         super(new CardLayout());
 
         var textArea = new JTextArea();
+        textArea.getDocument().addDocumentListener(new DocumentListener() {
+            @Override
+            public void insertUpdate(DocumentEvent e) {
+                textBox.setString(textArea.getText());
+            }
+
+            @Override
+            public void removeUpdate(DocumentEvent e) {
+                textBox.setString(textArea.getText());
+            }
+
+            @Override
+            public void changedUpdate(DocumentEvent e) {
+                // I don't know what it's doing
+            }
+        });
+
         this.add(textArea);
     }
 }
