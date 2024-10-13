@@ -81,7 +81,7 @@ public class Display {
 
     public void setCurrent(Displayable displayable) {
         this.displayable = displayable;
-        HangarState.getMainFrame().getViewport().displayableWasUpdated(displayable);
+        HangarState.getMainFrame().getViewport().displayableHasChanged(displayable);
     }
 
     public void setCurrent(Alert alert, Displayable nextDisplayable) throws NullPointerException, IllegalArgumentException {
