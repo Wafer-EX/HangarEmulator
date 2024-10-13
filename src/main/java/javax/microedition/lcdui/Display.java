@@ -17,6 +17,7 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -100,7 +101,9 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarState.getMainFrame().getViewport().getCanvasWrapper().refreshSerialCallTimer(r);
+        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
+            canvasWrapper.refreshSerialCallTimer(r);
+        }
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

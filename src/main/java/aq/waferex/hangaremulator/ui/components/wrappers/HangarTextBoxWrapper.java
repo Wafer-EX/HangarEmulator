@@ -22,7 +22,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import java.awt.*;
 
-public class HangarTextBoxWrapper extends JPanel {
+public class HangarTextBoxWrapper extends HangarWrapper {
     public HangarTextBoxWrapper(TextBox textBox) {
         super(new CardLayout());
 

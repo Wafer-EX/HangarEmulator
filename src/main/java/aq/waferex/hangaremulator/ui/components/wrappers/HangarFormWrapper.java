@@ -23,7 +23,7 @@ import javax.microedition.lcdui.TextField;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarFormWrapper extends JPanel {
+public class HangarFormWrapper extends HangarWrapper {
     public HangarFormWrapper(Form form) {
         super(new GridBagLayout());
 

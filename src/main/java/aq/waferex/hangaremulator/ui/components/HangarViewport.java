@@ -16,12 +16,9 @@
 
 package aq.waferex.hangaremulator.ui.components;
 
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarTextBoxWrapper;
+import aq.waferex.hangaremulator.ui.components.wrappers.*;
 import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
 import aq.waferex.hangaremulator.ui.listeners.HangarDisplayableListener;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarFormWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarListWrapper;
 
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.Canvas;
@@ -32,14 +29,14 @@ import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
     private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
-    private HangarCanvasWrapper canvasWrapper = null;
+    private HangarWrapper currentWrapper = null;
 
     public HangarViewport() {
         super(new BorderLayout());
     }
 
-    public HangarCanvasWrapper getCanvasWrapper() {
-        return canvasWrapper;
+    public HangarWrapper getCurrentWrapper() {
+        return currentWrapper;
     }
 
     public void displayableHasChanged(Displayable displayable) {
@@ -51,30 +48,24 @@ public class HangarViewport extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         this.add(scrollPane, BorderLayout.CENTER);
 
-        if (displayable != null) {
-            if (displayable instanceof Canvas canvas) {
-                this.canvasWrapper = new HangarCanvasWrapper(canvas);
-                scrollPane.setViewportView(canvasWrapper);
-                SwingUtilities.invokeLater(canvas::showNotify);
-            }
-            else if (displayable instanceof List list) {
-                var listWrapper = new HangarListWrapper(list);
-                scrollPane.setViewportView(listWrapper);
-            }
-            else if (displayable instanceof Form form) {
-                var formWrapper = new HangarFormWrapper(form);
-                scrollPane.setViewportView(formWrapper);
-            }
-            else if (displayable instanceof TextBox textBox) {
-                var textBoxWrapper = new HangarTextBoxWrapper(textBox);
-                scrollPane.setViewportView(textBoxWrapper);
-            }
-            else {
-                // TODO: add more screens support
-                throw new IllegalArgumentException();
-            }
+        if (displayable instanceof Canvas canvas) {
+            currentWrapper = new HangarCanvasWrapper(canvas);
+            scrollPane.setViewportView(currentWrapper);
+            SwingUtilities.invokeLater(canvas::showNotify);
         }
-        else {
+        else if (displayable instanceof List list) {
+            currentWrapper = new HangarListWrapper(list);
+            scrollPane.setViewportView(currentWrapper);
+        }
+        else if (displayable instanceof Form form) {
+            currentWrapper = new HangarFormWrapper(form);
+            scrollPane.setViewportView(currentWrapper);
+        }
+        else if (displayable instanceof TextBox textBox) {
+            currentWrapper = new HangarTextBoxWrapper(textBox);
+            scrollPane.setViewportView(currentWrapper);
+        }
+        else if (displayable == null) {
             int choice = JOptionPane.showConfirmDialog(this, """
                             The MIDlet just have set null as displayable object,
                             usually it means that the MIDlet trying to close itself.
@@ -84,6 +75,10 @@ public class HangarViewport extends JPanel {
             if (choice == JOptionPane.YES_OPTION) {
                 System.exit(0);
             }
+        }
+        else {
+            // TODO: add more screens support
+            throw new IllegalArgumentException();
         }
 
         // TODO: assert displayable, should I move it up?

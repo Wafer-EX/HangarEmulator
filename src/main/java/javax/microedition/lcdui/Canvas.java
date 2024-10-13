@@ -18,6 +18,7 @@ package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
@@ -110,8 +111,7 @@ public abstract class Canvas extends Displayable {
     public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
+        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
             screenImage.getGraphics().setClip(x, y, width, height);
             canvasWrapper.repaint();
             screenImage.getGraphics().setClip(0, 0, screenImage.getWidth(), screenImage.getHeight());
@@ -120,8 +120,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public final void repaint() {
-        var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        if (canvasWrapper != null) {
+        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
             canvasWrapper.repaint();
         }
         HangarState.syncWithFrameRate();
