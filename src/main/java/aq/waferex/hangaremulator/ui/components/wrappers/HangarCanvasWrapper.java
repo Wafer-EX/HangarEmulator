@@ -41,14 +41,16 @@ import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL30.*;
 
 public class HangarCanvasWrapper extends JPanel {
-    protected final Canvas canvas;
-    private final HangarOpenGLCanvas openGLCanvas;
+    private final Canvas canvas;
+    private final javax.microedition.lcdui.Graphics meGraphics;
 
+    private final HangarOpenGLCanvas openGLCanvas;
     private Timer serialCallTimer = new Timer();
 
     public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
         this.canvas = canvas;
+        this.meGraphics = new javax.microedition.lcdui.Graphics((Graphics2D) canvas.getScreenImage().getGraphics());
 
         openGLCanvas = new HangarOpenGLCanvas(canvas);
         openGLCanvas.setFocusable(false);
@@ -108,7 +110,8 @@ public class HangarCanvasWrapper extends JPanel {
             graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
         }
 
-        canvas.paint(new javax.microedition.lcdui.Graphics(graphicsWithHints));
+        meGraphics.setGraphics2D(graphicsWithHints);
+        canvas.paint(meGraphics);
         openGLCanvas.render();
     }
 
