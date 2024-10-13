@@ -19,6 +19,8 @@ package javax.microedition.lcdui;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
 
+import java.awt.image.BufferedImage;
+
 public abstract class Canvas extends Displayable {
     public static final int UP = 1;
     public static final int DOWN = 6;
@@ -42,7 +44,17 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_STAR = 42;
     public static final int KEY_POUND = 35;
 
+    private BufferedImage screenImage;
+
     protected Canvas() { }
+
+    public BufferedImage getScreenImage() {
+        return screenImage;
+    }
+
+    public void setScreenImage(BufferedImage image) {
+        screenImage = image;
+    }
 
     public boolean isDoubleBuffered() {
         // TODO: it is correct?
@@ -90,7 +102,7 @@ public abstract class Canvas extends Displayable {
 
     public final void repaint(int x, int y, int width, int height) {
         var canvasWrapper = HangarState.getMainFrame().getViewport().getCanvasWrapper();
-        var screenImage = HangarState.getScreenImage();
+        //var screenImage = HangarState.getScreenImage();
 
         if (canvasWrapper != null && screenImage != null) {
             screenImage.getGraphics().setClip(x, y, width, height);

@@ -75,14 +75,21 @@ public abstract class Displayable {
 
     public int getWidth() {
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            return HangarState.getScreenImage().getWidth();
+            //return HangarState.getScreenImage().getWidth();
+            // TODO: return real size for other displayables? or just override width and height methods in canvas
+            if (this instanceof Canvas canvas) {
+                return canvas.getScreenImage().getWidth();
+            }
         }
         return HangarState.getGraphicsSettings().getResolution().width;
     }
 
     public int getHeight() {
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            return HangarState.getScreenImage().getHeight();
+            //return HangarState.getScreenImage().getHeight();
+            if (this instanceof Canvas canvas) {
+                return canvas.getScreenImage().getHeight();
+            }
         }
         return HangarState.getGraphicsSettings().getResolution().height;
     }

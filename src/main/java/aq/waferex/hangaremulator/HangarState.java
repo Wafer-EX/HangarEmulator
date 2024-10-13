@@ -20,13 +20,11 @@ import aq.waferex.hangaremulator.settings.*;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 import java.util.Properties;
 
 public class HangarState {
     // TODO: store displayable as another property, call when displayable is changed
     private static HangarMainFrame mainFrame;
-    private static BufferedImage screenImage;
     private static Properties properties;
     private static MIDletLoader midletLoader;
 
@@ -40,14 +38,6 @@ public class HangarState {
 
     public static void setMainFrame(HangarMainFrame mainFrame) {
         HangarState.mainFrame = mainFrame;
-    }
-
-    public static BufferedImage getScreenImage() {
-        return screenImage;
-    }
-
-    public static void setScreenImage(BufferedImage image) {
-        screenImage = image;
     }
 
     public static Properties getProperties() {

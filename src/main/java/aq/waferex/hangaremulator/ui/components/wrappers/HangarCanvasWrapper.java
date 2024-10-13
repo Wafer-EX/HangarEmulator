@@ -56,8 +56,8 @@ public class HangarCanvasWrapper extends JPanel {
         this.add(openGLCanvas);
 
         var resolution = HangarState.getGraphicsSettings().getResolution();
-        // TODO: initialize in a different place?
-        HangarState.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
+        // TODO: initialize in a canvas constructor?
+        canvas.setScreenImage(ImageUtils.createCompatibleImage(resolution.width, resolution.height));
 
         this.addComponentListener(new ComponentAdapter() {
             @Override
@@ -69,8 +69,7 @@ public class HangarCanvasWrapper extends JPanel {
 
                     // I don't change resolution because the resolution settings represent
                     // only the setting, screen image size is independent form resolution
-                    HangarState.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
-
+                    canvas.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
                     canvas.sizeChanged(viewportWidth, viewportHeight);
                 }
             }
@@ -99,13 +98,13 @@ public class HangarCanvasWrapper extends JPanel {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        var screenImage = HangarState.getScreenImage();
+        var screenImage = canvas.getScreenImage();
         if (screenImage != null) {
             if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
                 var screenResolution = HangarState.getGraphicsSettings().getResolution();
                 if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
                     screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
-                    HangarState.setScreenImage(screenImage);
+                    canvas.setScreenImage(screenImage);
                 }
             }
 
@@ -120,6 +119,8 @@ public class HangarCanvasWrapper extends JPanel {
     }
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
+        private final Canvas canvas;
+
         private int vertexArrayObject;
         private int vertexBufferObject;
         private int shaderProgram;
@@ -131,6 +132,7 @@ public class HangarCanvasWrapper extends JPanel {
         public HangarOpenGLCanvas(Canvas canvas) {
             super();
 
+            this.canvas = canvas;
             this.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
@@ -160,8 +162,11 @@ public class HangarCanvasWrapper extends JPanel {
                     var scalingInUnits = SystemUtils.getScalingInUnits();
                     int viewportWidth = (int) (getSize().width * scalingInUnits);
                     int viewportHeight = (int) (getSize().height * scalingInUnits);
+                    int screenImageWidth = canvas.getScreenImage().getWidth();
+                    int screenImageHeight = canvas.getScreenImage().getHeight();
 
-                    return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
+                    //return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, viewportWidth, viewportHeight, scalingInUnits);
+                    return CanvasWrapperUtils.convertMousePointToScreenImage(mouseX, mouseY, screenImageWidth, screenImageHeight, viewportWidth, viewportHeight, scalingInUnits);
                 }
             });
         }
@@ -217,8 +222,8 @@ public class HangarCanvasWrapper extends JPanel {
 
         @Override
         public void paintGL() {
-            var screenImage = HangarState.getScreenImage();
-            var screenImageBuffer = convertToByteBuffer(HangarState.getScreenImage());
+            var screenImage = canvas.getScreenImage();
+            var screenImageBuffer = convertToByteBuffer(canvas.getScreenImage());
 
             var scalingInUnits = SystemUtils.getScalingInUnits();
             int viewportWidth = (int) (getSize().width * scalingInUnits);

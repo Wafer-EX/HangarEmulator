@@ -53,11 +53,7 @@ public final class CanvasWrapperUtils {
         return matrix;
     }
 
-    public static Point convertMousePointToScreenImage(int mouseX, int mouseY, int viewportWidth, int viewportHeight, float scalingInUnits) {
-        var screenImage = HangarState.getScreenImage();
-        int screenImageWidth = screenImage.getWidth();
-        int screenImageHeight = screenImage.getHeight();
-
+    public static Point convertMousePointToScreenImage(int mouseX, int mouseY, int screenImageWidth, int screenImageHeight, int viewportWidth, int viewportHeight, float scalingInUnits) {
         float scaleFactor = CanvasWrapperUtils.getImageScaleFactor(screenImageWidth, screenImageHeight, viewportWidth, viewportHeight);
         float imagePosX = viewportWidth / 2.0f - (screenImageWidth * scaleFactor) / 2.0f;
         float imagePosY = viewportHeight / 2.0f - (screenImageHeight * scaleFactor) / 2.0f;

@@ -46,11 +46,11 @@ public abstract class GameCanvas extends Canvas {
         int height = HangarState.getGraphicsSettings().getResolution().height;
 
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            var screenImage = HangarState.getScreenImage();
+            var screenImage = getScreenImage();
             // TODO: If null... initialize?
             if (screenImage != null) {
-                width = HangarState.getScreenImage().getWidth();
-                height = HangarState.getScreenImage().getHeight();
+                width = getScreenImage().getWidth();
+                height = getScreenImage().getHeight();
             }
         }
 
@@ -74,12 +74,12 @@ public abstract class GameCanvas extends Canvas {
     }
 
     public void flushGraphics(int x, int y, int width, int height) {
-        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint(x, y, width, height);
     }
 
     public void flushGraphics() {
-        HangarState.getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
+        getScreenImage().getGraphics().drawImage(additionalBuffer, 0, 0, additionalBuffer.getWidth(), additionalBuffer.getHeight(), null);
         super.repaint();
     }
 
