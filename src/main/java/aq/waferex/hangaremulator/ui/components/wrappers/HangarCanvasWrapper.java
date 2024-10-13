@@ -133,7 +133,7 @@ public class HangarCanvasWrapper extends JPanel {
             this.addMouseListener(new MouseInputAdapter() {
                 @Override
                 public void mousePressed(MouseEvent e) {
-                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                    if (HangarState.getInputSettings().getTouchscreenInput()) {
                         var point = getConvertedPoint(e.getX(), e.getY());
                         canvas.pointerPressed(point.x, point.y);
                     }
@@ -141,7 +141,7 @@ public class HangarCanvasWrapper extends JPanel {
 
                 @Override
                 public void mouseReleased(MouseEvent e) {
-                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                    if (HangarState.getInputSettings().getTouchscreenInput()) {
                         var point = getConvertedPoint(e.getX(), e.getY());
                         canvas.pointerReleased(point.x, point.y);
                     }
@@ -149,7 +149,7 @@ public class HangarCanvasWrapper extends JPanel {
 
                 @Override
                 public void mouseDragged(MouseEvent e) {
-                    if (HangarState.getKeyboardSettings().getTouchscreenInput()) {
+                    if (HangarState.getInputSettings().getTouchscreenInput()) {
                         var point = getConvertedPoint(e.getX(), e.getY());
                         canvas.pointerDragged(point.x, point.y);
                     }

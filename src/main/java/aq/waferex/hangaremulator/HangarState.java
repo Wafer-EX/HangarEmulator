@@ -30,7 +30,7 @@ public class HangarState {
 
     private static final HangarGraphicsSettings graphicsSettings = new HangarGraphicsSettings();
     private static final HangarAudioSettings audioSettings = new HangarAudioSettings();
-    private static final HangarKeyboardSettings keyboardSettings = new HangarKeyboardSettings();
+    private static final HangarInputSettings inputSettings = new HangarInputSettings();
 
     public static HangarMainFrame getMainFrame() {
         return mainFrame;
@@ -64,8 +64,8 @@ public class HangarState {
         return audioSettings;
     }
 
-    public static HangarKeyboardSettings getKeyboardSettings() {
-        return keyboardSettings;
+    public static HangarInputSettings getInputSettings() {
+        return inputSettings;
     }
 
     public static void syncWithFrameRate() {
