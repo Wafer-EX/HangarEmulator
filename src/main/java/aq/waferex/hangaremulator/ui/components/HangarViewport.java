@@ -48,24 +48,40 @@ public class HangarViewport extends JPanel {
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         this.add(scrollPane, BorderLayout.CENTER);
 
-        if (displayable instanceof Canvas canvas) {
-            currentWrapper = new HangarCanvasWrapper(canvas);
-            scrollPane.setViewportView(currentWrapper);
-            SwingUtilities.invokeLater(canvas::showNotify);
+        if (displayable != null) {
+            if (!displayable.getCommands().isEmpty()) {
+                var displayableCommands = new HangarViewportCommands(displayable);
+                this.add(displayableCommands, BorderLayout.SOUTH);
+            }
+
+            for (var displayableListener : displayableListeners) {
+                var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
+                displayableListener.displayableStateChanged(displayableEvent);
+            }
+
+            if (displayable instanceof Canvas canvas) {
+                currentWrapper = new HangarCanvasWrapper(canvas);
+                scrollPane.setViewportView(currentWrapper);
+                SwingUtilities.invokeLater(canvas::showNotify);
+            }
+            else if (displayable instanceof List list) {
+                currentWrapper = new HangarListWrapper(list);
+                scrollPane.setViewportView(currentWrapper);
+            }
+            else if (displayable instanceof Form form) {
+                currentWrapper = new HangarFormWrapper(form);
+                scrollPane.setViewportView(currentWrapper);
+            }
+            else if (displayable instanceof TextBox textBox) {
+                currentWrapper = new HangarTextBoxWrapper(textBox);
+                scrollPane.setViewportView(currentWrapper);
+            }
+            else {
+                // TODO: add more screens support
+                throw new IllegalArgumentException();
+            }
         }
-        else if (displayable instanceof List list) {
-            currentWrapper = new HangarListWrapper(list);
-            scrollPane.setViewportView(currentWrapper);
-        }
-        else if (displayable instanceof Form form) {
-            currentWrapper = new HangarFormWrapper(form);
-            scrollPane.setViewportView(currentWrapper);
-        }
-        else if (displayable instanceof TextBox textBox) {
-            currentWrapper = new HangarTextBoxWrapper(textBox);
-            scrollPane.setViewportView(currentWrapper);
-        }
-        else if (displayable == null) {
+        else {
             int choice = JOptionPane.showConfirmDialog(this, """
                             The MIDlet just have set null as displayable object,
                             usually it means that the MIDlet trying to close itself.
@@ -76,21 +92,7 @@ public class HangarViewport extends JPanel {
                 System.exit(0);
             }
         }
-        else {
-            // TODO: add more screens support
-            throw new IllegalArgumentException();
-        }
 
-        // TODO: assert displayable, should I move it up?
-        if (!displayable.getCommands().isEmpty()) {
-            var displayableCommands = new HangarViewportCommands(displayable);
-            this.add(displayableCommands, BorderLayout.SOUTH);
-        }
-
-        for (var displayableListener : displayableListeners) {
-            var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
-            displayableListener.displayableStateChanged(displayableEvent);
-        }
         this.revalidate();
         this.repaint();
     }
