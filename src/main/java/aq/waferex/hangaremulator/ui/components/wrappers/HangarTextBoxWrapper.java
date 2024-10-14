@@ -23,19 +23,21 @@ import javax.swing.event.DocumentListener;
 import java.awt.*;
 
 public class HangarTextBoxWrapper extends HangarWrapper {
+    private final JTextArea textArea;
+
     public HangarTextBoxWrapper(TextBox textBox) {
         super(new CardLayout());
 
-        var textArea = new JTextArea();
+        textArea = new JTextArea();
         textArea.getDocument().addDocumentListener(new DocumentListener() {
             @Override
             public void insertUpdate(DocumentEvent e) {
-                textBox.setString(textArea.getText());
+                textBox.setInternalString(textArea.getText());
             }
 
             @Override
             public void removeUpdate(DocumentEvent e) {
-                textBox.setString(textArea.getText());
+                textBox.setInternalString(textArea.getText());
             }
 
             @Override
@@ -45,5 +47,9 @@ public class HangarTextBoxWrapper extends HangarWrapper {
         });
 
         this.add(textArea);
+    }
+
+    public JTextArea getTextArea() {
+        return textArea;
     }
 }

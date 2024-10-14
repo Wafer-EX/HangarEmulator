@@ -16,6 +16,9 @@
 
 package javax.microedition.lcdui;
 
+import aq.waferex.hangaremulator.HangarState;
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarTextBoxWrapper;
+
 public class TextBox extends Screen {
     private String string;
     private int maxSize;
@@ -32,9 +35,9 @@ public class TextBox extends Screen {
         return string;
     }
 
-    // TODO: use another method for TextBox wrapper, when app call this refresh the wrapper
     public void setString(String text) throws IllegalArgumentException {
         this.string = text;
+        refreshWrapperText();
     }
 
     public int getChars(char[] data) throws ArrayIndexOutOfBoundsException, NullPointerException {
@@ -56,7 +59,10 @@ public class TextBox extends Screen {
         if (src == null) {
             throw new NullPointerException();
         }
-        // TODO: write method logic
+        String begin = string.substring(0, position);
+        String end = string.substring(position);
+        string = begin + src + end;
+        refreshWrapperText();
     }
 
     public void insert(char[] data, int offset, int length, int position) {
@@ -67,7 +73,14 @@ public class TextBox extends Screen {
     }
 
     public void delete(int offset, int length) {
-        // TODO: write method logic
+        if (offset + length > string.length()) {
+            throw new StringIndexOutOfBoundsException();
+        }
+        String begin = string.substring(0, offset);
+        String end = string.substring(offset + length);
+        string = begin + end;
+
+        refreshWrapperText();
     }
 
     public int getMaxSize() {
@@ -86,7 +99,9 @@ public class TextBox extends Screen {
     }
 
     public int getCaretPosition() {
-        // TODO: get it from wrapper
+        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarTextBoxWrapper textBoxWrapper) {
+            return textBoxWrapper.getTextArea().getCaretPosition();
+        }
         return 0;
     }
 
@@ -102,11 +117,23 @@ public class TextBox extends Screen {
         // TODO: write method logic
     }
 
+    @Override
     public void setTitle(String s) {
         super.setTitle(s);
     }
 
+    @Override
     public void setTicker(Ticker ticker) {
         super.setTicker(ticker);
+    }
+
+    public void setInternalString(String string) {
+        this.string = string;
+    }
+
+    private void refreshWrapperText() {
+        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarTextBoxWrapper textBoxWrapper) {
+            textBoxWrapper.getTextArea().setText(string);
+        }
     }
 }
