@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
 
 import javax.microedition.midlet.MIDlet;
 
@@ -101,8 +100,10 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
-            canvasWrapper.refreshSerialCallTimer(r);
+        if (displayable instanceof Canvas canvas) {
+            if (canvas.getRelatedWrapper() != null) {
+                canvas.getRelatedWrapper().refreshSerialCallTimer(r);
+            }
         }
     }
 

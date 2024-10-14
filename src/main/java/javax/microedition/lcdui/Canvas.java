@@ -156,6 +156,10 @@ public abstract class Canvas extends Displayable {
     @Override
     public void sizeChanged(int w, int h) { }
 
+    public HangarCanvasWrapper getRelatedWrapper() {
+        return canvasWrapper;
+    }
+
     public void setRelatedWrapper(HangarCanvasWrapper wrapper) {
         this.canvasWrapper = wrapper;
     }
