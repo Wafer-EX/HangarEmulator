@@ -16,13 +16,14 @@
 
 package javax.microedition.lcdui;
 
-import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarTextBoxWrapper;
 
 public class TextBox extends Screen {
     private String string;
     private int maxSize;
     private int constraints;
+
+    private HangarTextBoxWrapper wrapper;
 
     public TextBox(String title, String text, int maxSize, int constraints) throws IllegalArgumentException {
         this.setTitle(title);
@@ -99,8 +100,8 @@ public class TextBox extends Screen {
     }
 
     public int getCaretPosition() {
-        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarTextBoxWrapper textBoxWrapper) {
-            return textBoxWrapper.getTextArea().getCaretPosition();
+        if (wrapper != null) {
+            return wrapper.getTextArea().getCaretPosition();
         }
         return 0;
     }
@@ -132,8 +133,12 @@ public class TextBox extends Screen {
     }
 
     private void refreshWrapperText() {
-        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarTextBoxWrapper textBoxWrapper) {
-            textBoxWrapper.getTextArea().setText(string);
+        if (wrapper != null) {
+            wrapper.getTextArea().setText(string);
         }
+    }
+
+    public void setRelatedWrapper(HangarTextBoxWrapper wrapper) {
+        this.wrapper = wrapper;
     }
 }

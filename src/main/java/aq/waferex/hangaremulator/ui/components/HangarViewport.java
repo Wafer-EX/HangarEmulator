@@ -61,25 +61,27 @@ public class HangarViewport extends JPanel {
 
             if (displayable instanceof Canvas canvas) {
                 currentWrapper = new HangarCanvasWrapper(canvas);
-                scrollPane.setViewportView(currentWrapper);
+                canvas.setRelatedWrapper((HangarCanvasWrapper) currentWrapper);
                 SwingUtilities.invokeLater(canvas::showNotify);
             }
             else if (displayable instanceof List list) {
                 currentWrapper = new HangarListWrapper(list);
-                scrollPane.setViewportView(currentWrapper);
+                list.setRelatedWrapper((HangarListWrapper) currentWrapper);
             }
             else if (displayable instanceof Form form) {
                 currentWrapper = new HangarFormWrapper(form);
-                scrollPane.setViewportView(currentWrapper);
+                form.setRelatedWrapper((HangarFormWrapper) currentWrapper);
             }
             else if (displayable instanceof TextBox textBox) {
                 currentWrapper = new HangarTextBoxWrapper(textBox);
-                scrollPane.setViewportView(currentWrapper);
+                textBox.setRelatedWrapper((HangarTextBoxWrapper) currentWrapper);
             }
+            // TODO: add more screens support
             else {
-                // TODO: add more screens support
                 throw new IllegalArgumentException();
             }
+
+            scrollPane.setViewportView(currentWrapper);
         }
         else {
             int choice = JOptionPane.showConfirmDialog(this, """

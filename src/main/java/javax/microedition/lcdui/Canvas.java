@@ -48,6 +48,8 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_POUND = 35;
 
     private BufferedImage screenImage;
+    // TODO: use it
+    private HangarCanvasWrapper wrapper;
 
     protected Canvas() {
         // TODO: set all canvas resolution if scaling mode is change resolution
@@ -153,4 +155,8 @@ public abstract class Canvas extends Displayable {
 
     @Override
     public void sizeChanged(int w, int h) { }
+
+    public void setRelatedWrapper(HangarCanvasWrapper wrapper) {
+        this.wrapper = wrapper;
+    }
 }

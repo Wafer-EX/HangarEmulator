@@ -16,11 +16,16 @@
 
 package javax.microedition.lcdui;
 
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarFormWrapper;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Form extends Screen {
     private final ArrayList<Item> items = new ArrayList<>();
+
+    // TODO: use it
+    private HangarFormWrapper wrapper;
 
     public Form(String title) {
         this.setTitle(title);
@@ -95,5 +100,9 @@ public class Form extends Screen {
     public int getHeight() {
         // TODO: write method logic
         return 0;
+    }
+
+    public void setRelatedWrapper(HangarFormWrapper wrapper) {
+        this.wrapper = wrapper;
     }
 }
