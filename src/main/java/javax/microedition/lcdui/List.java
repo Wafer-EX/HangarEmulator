@@ -32,7 +32,7 @@ public class List extends Screen implements Choice {
     private int selectedElement = 0;
 
     // TODO: use it
-    private HangarListWrapper wrapper;
+    private HangarListWrapper listWrapper;
 
     public List(String title, int listType) {
         setTitle(title);
@@ -175,6 +175,6 @@ public class List extends Screen implements Choice {
     }
 
     public void setRelatedWrapper(HangarListWrapper wrapper) {
-        this.wrapper = wrapper;
+        this.listWrapper = wrapper;
     }
 }

@@ -49,7 +49,7 @@ public abstract class Canvas extends Displayable {
 
     private BufferedImage screenImage;
     // TODO: use it
-    private HangarCanvasWrapper wrapper;
+    private HangarCanvasWrapper canvasWrapper;
 
     protected Canvas() {
         // TODO: set all canvas resolution if scaling mode is change resolution
@@ -113,7 +113,7 @@ public abstract class Canvas extends Displayable {
     public void pointerDragged(int x, int y) { }
 
     public final void repaint(int x, int y, int width, int height) {
-        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
+        if (canvasWrapper != null) {
             screenImage.getGraphics().setClip(x, y, width, height);
             canvasWrapper.repaint();
             screenImage.getGraphics().setClip(0, 0, screenImage.getWidth(), screenImage.getHeight());
@@ -122,7 +122,7 @@ public abstract class Canvas extends Displayable {
     }
 
     public final void repaint() {
-        if (HangarState.getMainFrame().getViewport().getCurrentWrapper() instanceof HangarCanvasWrapper canvasWrapper) {
+        if (canvasWrapper != null) {
             canvasWrapper.repaint();
         }
         HangarState.syncWithFrameRate();
@@ -157,6 +157,6 @@ public abstract class Canvas extends Displayable {
     public void sizeChanged(int w, int h) { }
 
     public void setRelatedWrapper(HangarCanvasWrapper wrapper) {
-        this.wrapper = wrapper;
+        this.canvasWrapper = wrapper;
     }
 }

@@ -23,7 +23,7 @@ public class TextBox extends Screen {
     private int maxSize;
     private int constraints;
 
-    private HangarTextBoxWrapper wrapper;
+    private HangarTextBoxWrapper textBoxWrapper;
 
     public TextBox(String title, String text, int maxSize, int constraints) throws IllegalArgumentException {
         this.setTitle(title);
@@ -100,8 +100,8 @@ public class TextBox extends Screen {
     }
 
     public int getCaretPosition() {
-        if (wrapper != null) {
-            return wrapper.getTextArea().getCaretPosition();
+        if (textBoxWrapper != null) {
+            return textBoxWrapper.getTextArea().getCaretPosition();
         }
         return 0;
     }
@@ -133,12 +133,12 @@ public class TextBox extends Screen {
     }
 
     private void refreshWrapperText() {
-        if (wrapper != null) {
-            wrapper.getTextArea().setText(string);
+        if (textBoxWrapper != null) {
+            textBoxWrapper.getTextArea().setText(string);
         }
     }
 
     public void setRelatedWrapper(HangarTextBoxWrapper wrapper) {
-        this.wrapper = wrapper;
+        this.textBoxWrapper = wrapper;
     }
 }

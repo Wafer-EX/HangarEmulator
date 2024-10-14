@@ -25,7 +25,7 @@ public class Form extends Screen {
     private final ArrayList<Item> items = new ArrayList<>();
 
     // TODO: use it
-    private HangarFormWrapper wrapper;
+    private HangarFormWrapper formWrapper;
 
     public Form(String title) {
         this.setTitle(title);
@@ -103,6 +103,6 @@ public class Form extends Screen {
     }
 
     public void setRelatedWrapper(HangarFormWrapper wrapper) {
-        this.wrapper = wrapper;
+        this.formWrapper = wrapper;
     }
 }
