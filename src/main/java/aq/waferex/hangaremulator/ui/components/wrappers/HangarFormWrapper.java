@@ -16,9 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components.wrappers;
 
-import javax.microedition.lcdui.Form;
-import javax.microedition.lcdui.ImageItem;
-import javax.microedition.lcdui.StringItem;
+import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.TextField;
 import javax.swing.*;
 import java.awt.*;
