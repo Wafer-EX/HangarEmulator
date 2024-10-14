@@ -59,6 +59,7 @@ public class HangarFormWrapper extends HangarWrapper {
                 this.add(jTextField, constraints);
             }
             else if (item instanceof Gauge gauge) {
+                // TODO: change component when change gauge
                 var label = new JLabel(String.valueOf(gauge.getValue()));
 
                 constraints.ipady = 8;
