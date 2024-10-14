@@ -25,7 +25,6 @@ import org.joml.Matrix4f;
 import org.lwjgl.opengl.awt.AWTGLCanvas;
 
 import javax.microedition.lcdui.Canvas;
-import javax.swing.*;
 import javax.swing.event.MouseInputAdapter;
 import java.awt.*;
 import java.awt.event.*;
@@ -40,7 +39,7 @@ import static aq.waferex.hangaremulator.utils.CanvasWrapperUtils.getScreenImageP
 import static org.lwjgl.opengl.GL.createCapabilities;
 import static org.lwjgl.opengl.GL30.*;
 
-public class HangarCanvasWrapper extends JPanel {
+public class HangarCanvasWrapper extends HangarWrapper {
     private final Canvas canvas;
     private final javax.microedition.lcdui.Graphics meGraphics;
 

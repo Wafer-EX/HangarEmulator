@@ -23,60 +23,88 @@ public class Gauge extends Item {
     public static final int CONTINUOUS_RUNNING = 2;
     public static final int INCREMENTAL_UPDATING = 3;
 
+    private final boolean isInteractive;
+    private int value;
+    private int maxValue;
+
     public Gauge(String label, boolean interactive, int maxValue, int initialValue) {
-        // TODO: write constructor logic
+        if (interactive && maxValue < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        this.isInteractive = interactive;
+
+        setMaxValue(maxValue);
+        setValue(initialValue);
+        setLabel(label);
     }
 
     @Override
     public void setLabel(String label) {
-        // TODO: write method logic
+        super.setLabel(label);
     }
 
     @Override
     public void setLayout(int layout) {
-        // TODO: write method logic
+        super.setLayout(layout);
     }
 
     @Override
     public void addCommand(Command cmd) {
-        // TODO: write method logic
+        super.addCommand(cmd);
     }
 
     @Override
     public void setItemCommandListener(ItemCommandListener l) {
-        // TODO: write method logic
+        super.setItemCommandListener(l);
     }
 
     @Override
     public void setPreferredSize(int width, int height) {
-        // TODO: write method logic
+        super.setPreferredSize(width, height);
     }
 
     @Override
     public void setDefaultCommand(Command cmd) {
-        // TODO: write method logic
+        super.setDefaultCommand(cmd);
     }
 
     public void setValue(int value) {
-        // TODO: write method logic
+        if (isInteractive) {
+            if (value < 0) {
+                value = 0;
+            }
+            if (value > maxValue) {
+                value = maxValue;
+            }
+        }
+        else {
+            if (maxValue == INDEFINITE && (value != CONTINUOUS_IDLE && value != INCREMENTAL_IDLE && value != CONTINUOUS_RUNNING && value != INCREMENTAL_UPDATING)) {
+                throw new IllegalArgumentException();
+            }
+        }
+        this.value = value;
     }
 
     public int getValue() {
-        // TODO: write method logic
-        return 0;
+        return value;
     }
 
     public void setMaxValue(int maxValue) {
-        // TODO: write method logic
+        if (isInteractive && maxValue < 0) {
+            throw new IllegalArgumentException();
+        }
+        if (!isInteractive && maxValue < 0 && maxValue != INDEFINITE) {
+            throw new IllegalArgumentException();
+        }
+        this.maxValue = maxValue;
     }
 
     public int getMaxValue() {
-        // TODO: write method logic
-        return 0;
+        return maxValue;
     }
 
     public boolean isInteractive() {
-        // TODO: write method logic
-        return false;
+        return isInteractive;
     }
 }

@@ -100,7 +100,11 @@ public class Display {
     }
 
     public void callSerially(Runnable r) {
-        HangarState.getMainFrame().getViewport().getCanvasWrapper().refreshSerialCallTimer(r);
+        if (displayable instanceof Canvas canvas) {
+            if (canvas.getRelatedWrapper() != null) {
+                canvas.getRelatedWrapper().refreshSerialCallTimer(r);
+            }
+        }
     }
 
     public boolean flashBacklight(int duration) throws IllegalArgumentException {

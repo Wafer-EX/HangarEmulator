@@ -16,12 +16,9 @@
 
 package aq.waferex.hangaremulator.ui.components;
 
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarTextBoxWrapper;
+import aq.waferex.hangaremulator.ui.components.wrappers.*;
 import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
 import aq.waferex.hangaremulator.ui.listeners.HangarDisplayableListener;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarFormWrapper;
-import aq.waferex.hangaremulator.ui.components.wrappers.HangarListWrapper;
 
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.Canvas;
@@ -32,14 +29,9 @@ import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
     private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
-    private HangarCanvasWrapper canvasWrapper = null;
 
     public HangarViewport() {
         super(new BorderLayout());
-    }
-
-    public HangarCanvasWrapper getCanvasWrapper() {
-        return canvasWrapper;
     }
 
     public void displayableHasChanged(Displayable displayable) {
@@ -52,25 +44,39 @@ public class HangarViewport extends JPanel {
         this.add(scrollPane, BorderLayout.CENTER);
 
         if (displayable != null) {
+            if (!displayable.getCommands().isEmpty()) {
+                var displayableCommands = new HangarViewportCommands(displayable);
+                this.add(displayableCommands, BorderLayout.SOUTH);
+            }
+
+            for (var displayableListener : displayableListeners) {
+                var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
+                displayableListener.displayableStateChanged(displayableEvent);
+            }
+
             if (displayable instanceof Canvas canvas) {
-                this.canvasWrapper = new HangarCanvasWrapper(canvas);
+                var canvasWrapper = new HangarCanvasWrapper(canvas);
+                canvas.setRelatedWrapper(canvasWrapper);
                 scrollPane.setViewportView(canvasWrapper);
                 SwingUtilities.invokeLater(canvas::showNotify);
             }
             else if (displayable instanceof List list) {
                 var listWrapper = new HangarListWrapper(list);
+                list.setRelatedWrapper(listWrapper);
                 scrollPane.setViewportView(listWrapper);
             }
             else if (displayable instanceof Form form) {
                 var formWrapper = new HangarFormWrapper(form);
+                form.setRelatedWrapper(formWrapper);
                 scrollPane.setViewportView(formWrapper);
             }
             else if (displayable instanceof TextBox textBox) {
                 var textBoxWrapper = new HangarTextBoxWrapper(textBox);
+                textBox.setRelatedWrapper(textBoxWrapper);
                 scrollPane.setViewportView(textBoxWrapper);
             }
+            // TODO: add more screens support
             else {
-                // TODO: add more screens support
                 throw new IllegalArgumentException();
             }
         }
@@ -86,16 +92,6 @@ public class HangarViewport extends JPanel {
             }
         }
 
-        // TODO: assert displayable, should I move it up?
-        if (!displayable.getCommands().isEmpty()) {
-            var displayableCommands = new HangarViewportCommands(displayable);
-            this.add(displayableCommands, BorderLayout.SOUTH);
-        }
-
-        for (var displayableListener : displayableListeners) {
-            var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
-            displayableListener.displayableStateChanged(displayableEvent);
-        }
         this.revalidate();
         this.repaint();
     }

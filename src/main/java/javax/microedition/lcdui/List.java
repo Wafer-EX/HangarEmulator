@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import aq.waferex.hangaremulator.ui.components.wrappers.HangarListWrapper;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -28,6 +30,9 @@ public class List extends Screen implements Choice {
     private Command selectCommand = SELECT_COMMAND;
     private int fitPolicy = TEXT_WRAP_DEFAULT;
     private int selectedElement = 0;
+
+    // TODO: use it
+    private HangarListWrapper listWrapper;
 
     public List(String title, int listType) {
         setTitle(title);
@@ -167,5 +172,9 @@ public class List extends Screen implements Choice {
     public Font getFont(int elementNum) throws IndexOutOfBoundsException {
         // TODO: write method logic
         return Font.getDefaultFont();
+    }
+
+    public void setRelatedWrapper(HangarListWrapper wrapper) {
+        this.listWrapper = wrapper;
     }
 }

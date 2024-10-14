@@ -20,7 +20,7 @@ import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
 
-public class HangarListWrapper extends JPanel {
+public class HangarListWrapper extends HangarWrapper {
     public HangarListWrapper(List list) {
         super(new GridBagLayout());
 
