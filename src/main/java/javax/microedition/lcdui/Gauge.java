@@ -70,15 +70,17 @@ public class Gauge extends Item {
     }
 
     public void setValue(int value) {
-        if (!isInteractive && maxValue == INDEFINITE && (value != CONTINUOUS_IDLE && value != INCREMENTAL_IDLE && value != CONTINUOUS_RUNNING && value != INCREMENTAL_UPDATING)) {
-            throw new IllegalArgumentException();
-        }
-        else {
+        if (isInteractive) {
             if (value < 0) {
                 value = 0;
             }
             if (value > maxValue) {
                 value = maxValue;
+            }
+        }
+        else {
+            if (maxValue == INDEFINITE && (value != CONTINUOUS_IDLE && value != INCREMENTAL_IDLE && value != CONTINUOUS_RUNNING && value != INCREMENTAL_UPDATING)) {
+                throw new IllegalArgumentException();
             }
         }
         this.value = value;

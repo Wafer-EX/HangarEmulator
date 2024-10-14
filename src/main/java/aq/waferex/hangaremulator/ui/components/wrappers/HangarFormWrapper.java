@@ -58,6 +58,12 @@ public class HangarFormWrapper extends HangarWrapper {
                 constraints.ipady = 12;
                 this.add(jTextField, constraints);
             }
+            else if (item instanceof Gauge gauge) {
+                var label = new JLabel(String.valueOf(gauge.getValue()));
+
+                constraints.ipady = 8;
+                this.add(label, constraints);
+            }
             else {
                 // TODO: add another items
                 throw new IllegalArgumentException();
