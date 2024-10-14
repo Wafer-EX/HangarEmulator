@@ -29,14 +29,9 @@ import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
     private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
-    private HangarWrapper currentWrapper = null;
 
     public HangarViewport() {
         super(new BorderLayout());
-    }
-
-    public HangarWrapper getCurrentWrapper() {
-        return currentWrapper;
     }
 
     public void displayableHasChanged(Displayable displayable) {
@@ -60,28 +55,30 @@ public class HangarViewport extends JPanel {
             }
 
             if (displayable instanceof Canvas canvas) {
-                currentWrapper = new HangarCanvasWrapper(canvas);
-                canvas.setRelatedWrapper((HangarCanvasWrapper) currentWrapper);
+                var canvasWrapper = new HangarCanvasWrapper(canvas);
+                canvas.setRelatedWrapper(canvasWrapper);
+                scrollPane.setViewportView(canvasWrapper);
                 SwingUtilities.invokeLater(canvas::showNotify);
             }
             else if (displayable instanceof List list) {
-                currentWrapper = new HangarListWrapper(list);
-                list.setRelatedWrapper((HangarListWrapper) currentWrapper);
+                var listWrapper = new HangarListWrapper(list);
+                list.setRelatedWrapper(listWrapper);
+                scrollPane.setViewportView(listWrapper);
             }
             else if (displayable instanceof Form form) {
-                currentWrapper = new HangarFormWrapper(form);
-                form.setRelatedWrapper((HangarFormWrapper) currentWrapper);
+                var formWrapper = new HangarFormWrapper(form);
+                form.setRelatedWrapper(formWrapper);
+                scrollPane.setViewportView(formWrapper);
             }
             else if (displayable instanceof TextBox textBox) {
-                currentWrapper = new HangarTextBoxWrapper(textBox);
-                textBox.setRelatedWrapper((HangarTextBoxWrapper) currentWrapper);
+                var textBoxWrapper = new HangarTextBoxWrapper(textBox);
+                textBox.setRelatedWrapper(textBoxWrapper);
+                scrollPane.setViewportView(textBoxWrapper);
             }
             // TODO: add more screens support
             else {
                 throw new IllegalArgumentException();
             }
-
-            scrollPane.setViewportView(currentWrapper);
         }
         else {
             int choice = JOptionPane.showConfirmDialog(this, """
