@@ -82,12 +82,13 @@ public class HangarCanvasWrapper extends HangarWrapper {
         refreshScreenImageResolution();
 
         var screenImage = canvas.getScreenImage();
-        var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
+        var screenImageGraphics = (Graphics2D) canvas.getScreenImage().getGraphics();
+
         if (HangarState.getGraphicsSettings().getScreenClearing()) {
-            graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+            screenImageGraphics.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
         }
 
-        meGraphics.setGraphics2D(graphicsWithHints);
+        meGraphics.setGraphics2D(screenImageGraphics);
         canvas.paint(meGraphics);
         openGLCanvas.render();
     }

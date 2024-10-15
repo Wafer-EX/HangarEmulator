@@ -45,7 +45,7 @@ public class Graphics {
     private Color color;
 
     public Graphics(Graphics2D graphics2D) {
-        this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
+        setGraphics2D(graphics2D);
         this.color = Color.BLACK;
         this.meFont = Font.getDefaultFont();
     }
@@ -55,7 +55,7 @@ public class Graphics {
     }
 
     public void setGraphics2D(Graphics2D graphics2D) {
-        this.graphics2D = graphics2D;
+        this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
     }
 
     public void translate(int x, int y) {
