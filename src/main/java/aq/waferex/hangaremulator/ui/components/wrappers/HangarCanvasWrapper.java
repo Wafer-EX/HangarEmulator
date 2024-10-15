@@ -44,7 +44,7 @@ public class HangarCanvasWrapper extends HangarWrapper {
     private final javax.microedition.lcdui.Graphics meGraphics;
 
     private final HangarOpenGLCanvas openGLCanvas;
-    private Timer serialCallTimer = new Timer();
+    private Timer serialCallTimer = null;
 
     public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
@@ -55,31 +55,16 @@ public class HangarCanvasWrapper extends HangarWrapper {
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
-
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-                    var scalingInUnits = SystemUtils.getScalingInUnits();
-                    int viewportWidth = (int) (getSize().width * scalingInUnits);
-                    int viewportHeight = (int) (getSize().height * scalingInUnits);
-
-                    // I don't change resolution because the resolution settings represent
-                    // only the setting, screen image size is independent form resolution
-                    canvas.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
-                    canvas.sizeChanged(viewportWidth, viewportHeight);
-                }
-            }
-        });
     }
 
     public void refreshSerialCallTimer(Runnable callSerially) {
-        serialCallTimer.cancel();
-        serialCallTimer.purge();
-        serialCallTimer = new Timer();
-
-        var frameRateInMilliseconds = HangarState.frameRateInMilliseconds();
+        if (serialCallTimer != null) {
+            serialCallTimer.cancel();
+            serialCallTimer.purge();
+        }
+        var frameRateInMilliseconds = HangarState.getFrameRateInMilliseconds();
         if (frameRateInMilliseconds >= 0) {
+            serialCallTimer = new Timer();
             serialCallTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -95,23 +80,36 @@ public class HangarCanvasWrapper extends HangarWrapper {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
+        refreshScreenImageResolution();
+
         var screenImage = canvas.getScreenImage();
-        if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
-            var screenResolution = HangarState.getGraphicsSettings().getResolution();
-            if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
-                screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
-                canvas.setScreenImage(screenImage);
-            }
-        }
+        var screenImageGraphics = (Graphics2D) canvas.getScreenImage().getGraphics();
 
-        var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
         if (HangarState.getGraphicsSettings().getScreenClearing()) {
-            graphicsWithHints.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
+            screenImageGraphics.clearRect(0, 0, screenImage.getWidth(), screenImage.getHeight());
         }
 
-        meGraphics.setGraphics2D(graphicsWithHints);
+        meGraphics.setGraphics2D(screenImageGraphics);
         canvas.paint(meGraphics);
         openGLCanvas.render();
+    }
+
+    private void refreshScreenImageResolution() {
+        var screenImage = canvas.getScreenImage();
+        int expectedWidth = canvas.getWidth();
+        int expectedHeight = canvas.getHeight();
+
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
+            var scalingInUnits = SystemUtils.getScalingInUnits();
+            expectedWidth = (int) (getSize().width * scalingInUnits);
+            expectedHeight = (int) (getSize().height * scalingInUnits);
+        }
+
+        if (expectedWidth != screenImage.getWidth() || expectedHeight != screenImage.getHeight()) {
+            var newScreenImage = ImageUtils.createCompatibleImage(expectedWidth, expectedHeight);
+            canvas.setScreenImage(newScreenImage);
+            canvas.sizeChanged(expectedWidth, expectedHeight);
+        }
     }
 
     private static final class HangarOpenGLCanvas extends AWTGLCanvas {
@@ -241,8 +239,14 @@ public class HangarCanvasWrapper extends HangarWrapper {
 
             // TODO: call paintGL in x fps by timer, don't convert it until canvas.paint haven't called
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, screenImage.getWidth(), screenImage.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, screenImageBuffer);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            if (HangarState.getGraphicsSettings().getInterpolation()) {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            }
+            else {
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+                glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+            }
 
             int location = glGetUniformLocation(shaderProgram, "projectionMatrix");
             float[] data = new float[16];

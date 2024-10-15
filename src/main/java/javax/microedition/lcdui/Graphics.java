@@ -20,7 +20,6 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -45,7 +44,7 @@ public class Graphics {
     private Color color;
 
     public Graphics(Graphics2D graphics2D) {
-        this.graphics2D = HangarState.applyVectorAntiAliasing(graphics2D);
+        setGraphics2D(graphics2D);
         this.color = Color.BLACK;
         this.meFont = Font.getDefaultFont();
     }
@@ -55,6 +54,11 @@ public class Graphics {
     }
 
     public void setGraphics2D(Graphics2D graphics2D) {
+        boolean isAntiAliasingEnabled = HangarState.getGraphicsSettings().getVectorAntiAliasing();
+        if (isAntiAliasingEnabled) {
+            graphics2D.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        }
+
         this.graphics2D = graphics2D;
     }
 

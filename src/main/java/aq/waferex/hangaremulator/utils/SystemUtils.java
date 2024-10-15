@@ -16,6 +16,8 @@
 
 package aq.waferex.hangaremulator.utils;
 
+import aq.waferex.hangaremulator.HangarState;
+
 import java.awt.*;
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +31,17 @@ public final class SystemUtils {
         float defaultDpi = 96;
         float dpi = Toolkit.getDefaultToolkit().getScreenResolution();
         return dpi / defaultDpi;
+    }
+
+    public static void syncWithFrameRate() {
+        if (HangarState.getGraphicsSettings().getFrameRate() != -1) {
+            try {
+                Thread.sleep(HangarState.getFrameRateInMilliseconds());
+            }
+            catch (Exception exception) {
+                exception.printStackTrace();
+            }
+        }
     }
 
     public static File getProgramFile() throws URISyntaxException {

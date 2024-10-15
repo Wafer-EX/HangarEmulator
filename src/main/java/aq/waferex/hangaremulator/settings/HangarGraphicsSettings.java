@@ -26,6 +26,7 @@ public class HangarGraphicsSettings {
     private int frameRate = 60;
     private ScalingModes scalingMode = ScalingModes.None;
     private Dimension resolution = new Dimension(240, 320);
+    private boolean isInterpolationEnabled = true;
 
     public HangarGraphicsSettings() { }
 
@@ -75,5 +76,13 @@ public class HangarGraphicsSettings {
 
     public void setResolution(Dimension resolution) {
         this.resolution = resolution;
+    }
+
+    public boolean getInterpolation() {
+        return isInterpolationEnabled;
+    }
+
+    public void setInterpolation(boolean value) {
+        this.isInterpolationEnabled = value;
     }
 }

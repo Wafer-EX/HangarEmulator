@@ -40,8 +40,8 @@ public class HangarMenuBar extends JMenuBar {
 
     @SuppressWarnings("FieldCanBeLocal")
     private static class HangarMIDletMenu extends JMenu {
-        private final JMenuItem loadMenuItem = new JMenuItem("Load MIDlet");
-        private final JMenuItem pauseMenuItem = new JMenuItem("Call pauseApp()");
+        private final JMenuItem loadMenuItem = new JMenuItem("Load...");
+        private final JMenuItem pauseMenuItem = new JMenuItem("Call pause");
         private final JCheckBoxMenuItem systemLanguageCheckbox = new JCheckBoxMenuItem("Use system language");
         private final JMenuItem restartMenuItem = new JMenuItem("Restart");
         private final JMenuItem exitMenuItem = new JMenuItem("Exit");
@@ -56,9 +56,14 @@ public class HangarMenuBar extends JMenuBar {
                     var selectedFile = fileChooser.getSelectedFile();
                     if (selectedFile != null) {
                         if (HangarState.getMIDletLoader() == null) {
-                            var midletLoader = new MIDletLoader(fileChooser.getSelectedFile().getAbsolutePath());
+                            var midletPath = fileChooser.getSelectedFile().getAbsolutePath();
+                            var midletLoader = new MIDletLoader(midletPath);
+
                             HangarState.setMIDletLoader(midletLoader);
                             midletLoader.startMIDlet();
+
+                            pauseMenuItem.setEnabled(true);
+                            restartMenuItem.setEnabled(true);
                         }
                         else {
                             SystemUtils.restartApp(fileChooser.getSelectedFile().getAbsolutePath());
@@ -67,18 +72,15 @@ public class HangarMenuBar extends JMenuBar {
                 });
             });
 
-            pauseMenuItem.addActionListener(e -> {
-                var currentMidlet = HangarState.getMIDletLoader().getMIDlet();
-                if (currentMidlet != null) {
-                    currentMidlet.pauseApp();
-                }
-            });
+            pauseMenuItem.setEnabled(false);
+            pauseMenuItem.addActionListener(e -> HangarState.getMIDletLoader().getMIDlet().pauseApp());
 
             systemLanguageCheckbox.addActionListener(e -> {
                 var property = systemLanguageCheckbox.getState() ? Locale.getDefault().toLanguageTag() : "en-US";
                 HangarState.getProperties().setProperty("microedition.locale", property);
             });
 
+            restartMenuItem.setEnabled(false);
             restartMenuItem.addActionListener(e ->  {
                 var currentMidlet = HangarState.getMIDletLoader();
                 if (currentMidlet != null) {
@@ -108,13 +110,14 @@ public class HangarMenuBar extends JMenuBar {
         private final ButtonGroup scalingModeRadioGroup = new ButtonGroup();
         private final ButtonGroup resolutionRadioGroup = new ButtonGroup();
 
-        private final JCheckBoxMenuItem screenClearingCheckBox = new JCheckBoxMenuItem("Apply screen clearing");
-        private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Apply vector anti-aliasing");
+        private final JCheckBoxMenuItem screenClearingCheckBox = new JCheckBoxMenuItem("Enable screen clearing");
+        private final JCheckBoxMenuItem vectorAntiAliasingCheckBox = new JCheckBoxMenuItem("Enable vector anti-aliasing");
         private final JMenu frameRatePopupMenu = new JMenu("Frame rate");
         private final JMenu scalingModePopupMenu = new JMenu("Scaling mode");
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
+        private final JCheckBoxMenuItem interpolationCheckBox = new JCheckBoxMenuItem("Enable interpolation");
         private final JCheckBoxMenuItem touchscreenInputCheckBox = new JCheckBoxMenuItem("Enable touchscreen input");
-        private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank");
+        private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank...");
         private final JMenuItem clearSoundBankItem = new JMenuItem("Clear soundbank");
         private final JMenu keyboardPopupMenu = new JMenu("Keyboard");
 
@@ -140,6 +143,9 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 220)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
             //resolutionPopupMenu.add(new HangarCustomResolutionItem());
+
+            interpolationCheckBox.setSelected(HangarState.getGraphicsSettings().getInterpolation());;
+            interpolationCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setInterpolation(!HangarState.getGraphicsSettings().getInterpolation()));
 
             touchscreenInputCheckBox.setSelected(HangarState.getInputSettings().getTouchscreenInput());
             touchscreenInputCheckBox.addActionListener(e -> HangarState.getInputSettings().setTouchscreenInput(!HangarState.getInputSettings().getTouchscreenInput()));
@@ -175,6 +181,7 @@ public class HangarMenuBar extends JMenuBar {
             this.add(frameRatePopupMenu);
             this.add(scalingModePopupMenu);
             this.add(resolutionPopupMenu);
+            this.add(interpolationCheckBox);
             this.add(touchscreenInputCheckBox);
             this.add(new JSeparator());
             this.add(loadSoundbankItem);

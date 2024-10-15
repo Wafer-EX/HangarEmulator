@@ -19,6 +19,7 @@ package javax.microedition.lcdui;
 import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.ui.components.wrappers.HangarCanvasWrapper;
+import aq.waferex.hangaremulator.utils.SystemUtils;
 import aq.waferex.hangaremulator.utils.microedition.CanvasUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
@@ -48,11 +49,10 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_POUND = 35;
 
     private BufferedImage screenImage;
-    // TODO: use it
     private HangarCanvasWrapper canvasWrapper;
 
     protected Canvas() {
-        // TODO: set all canvas resolution if scaling mode is change resolution
+        // TODO: get different resolution if scaling mode is ChangeResolution
         var resolution = HangarState.getGraphicsSettings().getResolution();
         screenImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
     }
@@ -118,14 +118,14 @@ public abstract class Canvas extends Displayable {
             canvasWrapper.repaint();
             screenImage.getGraphics().setClip(0, 0, screenImage.getWidth(), screenImage.getHeight());
         }
-        HangarState.syncWithFrameRate();
+        SystemUtils.syncWithFrameRate();
     }
 
     public final void repaint() {
         if (canvasWrapper != null) {
             canvasWrapper.repaint();
         }
-        HangarState.syncWithFrameRate();
+        SystemUtils.syncWithFrameRate();
     }
 
     public final void serviceRepaints() {

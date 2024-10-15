@@ -19,11 +19,9 @@ package aq.waferex.hangaremulator;
 import aq.waferex.hangaremulator.settings.*;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 
-import java.awt.*;
 import java.util.Properties;
 
 public class HangarState {
-    // TODO: store displayable as another property, call when displayable is changed
     private static HangarMainFrame mainFrame;
     private static Properties properties;
     private static MIDletLoader midletLoader;
@@ -68,25 +66,7 @@ public class HangarState {
         return inputSettings;
     }
 
-    public static void syncWithFrameRate() {
-        if (graphicsSettings.getFrameRate() != -1) {
-            try {
-                Thread.sleep(frameRateInMilliseconds());
-            }
-            catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-    }
-
-    public static int frameRateInMilliseconds() {
+    public static int getFrameRateInMilliseconds() {
         return 1000 / graphicsSettings.getFrameRate();
-    }
-
-    public static Graphics2D applyVectorAntiAliasing(Graphics graphics) {
-        var graphics2d = (Graphics2D) graphics;
-        var hintValue = graphicsSettings.getVectorAntiAliasing() ? RenderingHints.VALUE_ANTIALIAS_ON : RenderingHints.VALUE_ANTIALIAS_OFF;
-        graphics2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, hintValue);
-        return graphics2d;
     }
 }
