@@ -62,7 +62,7 @@ public class HangarCanvasWrapper extends HangarWrapper {
         serialCallTimer.purge();
         serialCallTimer = new Timer();
 
-        var frameRateInMilliseconds = HangarState.frameRateInMilliseconds();
+        var frameRateInMilliseconds = HangarState.getFrameRateInMilliseconds();
         if (frameRateInMilliseconds >= 0) {
             serialCallTimer.schedule(new TimerTask() {
                 @Override

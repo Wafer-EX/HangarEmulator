@@ -36,7 +36,7 @@ public final class SystemUtils {
     public static void syncWithFrameRate() {
         if (HangarState.getGraphicsSettings().getFrameRate() != -1) {
             try {
-                Thread.sleep(HangarState.frameRateInMilliseconds());
+                Thread.sleep(HangarState.getFrameRateInMilliseconds());
             }
             catch (Exception exception) {
                 exception.printStackTrace();

@@ -66,7 +66,7 @@ public class HangarState {
         return inputSettings;
     }
 
-    public static int frameRateInMilliseconds() {
+    public static int getFrameRateInMilliseconds() {
         return 1000 / graphicsSettings.getFrameRate();
     }
 }
