@@ -66,17 +66,6 @@ public class HangarState {
         return inputSettings;
     }
 
-    public static void syncWithFrameRate() {
-        if (graphicsSettings.getFrameRate() != -1) {
-            try {
-                Thread.sleep(frameRateInMilliseconds());
-            }
-            catch (Exception exception) {
-                exception.printStackTrace();
-            }
-        }
-    }
-
     public static int frameRateInMilliseconds() {
         return 1000 / graphicsSettings.getFrameRate();
     }
