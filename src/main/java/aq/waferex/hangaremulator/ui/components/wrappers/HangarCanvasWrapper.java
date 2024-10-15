@@ -44,7 +44,7 @@ public class HangarCanvasWrapper extends HangarWrapper {
     private final javax.microedition.lcdui.Graphics meGraphics;
 
     private final HangarOpenGLCanvas openGLCanvas;
-    private Timer serialCallTimer = new Timer();
+    private Timer serialCallTimer = null;
 
     public HangarCanvasWrapper(Canvas canvas) {
         super(new CardLayout());
@@ -58,12 +58,13 @@ public class HangarCanvasWrapper extends HangarWrapper {
     }
 
     public void refreshSerialCallTimer(Runnable callSerially) {
-        serialCallTimer.cancel();
-        serialCallTimer.purge();
-        serialCallTimer = new Timer();
-
+        if (serialCallTimer != null) {
+            serialCallTimer.cancel();
+            serialCallTimer.purge();
+        }
         var frameRateInMilliseconds = HangarState.getFrameRateInMilliseconds();
         if (frameRateInMilliseconds >= 0) {
+            serialCallTimer = new Timer();
             serialCallTimer.schedule(new TimerTask() {
                 @Override
                 public void run() {
