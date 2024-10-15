@@ -49,11 +49,10 @@ public abstract class Canvas extends Displayable {
     public static final int KEY_POUND = 35;
 
     private BufferedImage screenImage;
-    // TODO: use it
     private HangarCanvasWrapper canvasWrapper;
 
     protected Canvas() {
-        // TODO: set all canvas resolution if scaling mode is change resolution
+        // TODO: get different resolution if scaling mode is ChangeResolution
         var resolution = HangarState.getGraphicsSettings().getResolution();
         screenImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
     }
