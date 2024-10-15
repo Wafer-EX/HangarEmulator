@@ -117,7 +117,7 @@ public class HangarMenuBar extends JMenuBar {
         private final JMenu resolutionPopupMenu = new JMenu("Resolution");
         private final JCheckBoxMenuItem interpolationCheckBox = new JCheckBoxMenuItem("Enable interpolation");
         private final JCheckBoxMenuItem touchscreenInputCheckBox = new JCheckBoxMenuItem("Enable touchscreen input");
-        private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank");
+        private final JMenuItem loadSoundbankItem = new JMenuItem("Load soundbank...");
         private final JMenuItem clearSoundBankItem = new JMenuItem("Clear soundbank");
         private final JMenu keyboardPopupMenu = new JMenu("Keyboard");
 
