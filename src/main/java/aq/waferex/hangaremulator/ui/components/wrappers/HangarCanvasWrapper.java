@@ -79,7 +79,7 @@ public class HangarCanvasWrapper extends HangarWrapper {
     public void paintComponent(Graphics graphics) {
         super.paintComponent(graphics);
 
-        refreshScreenImage();
+        refreshScreenImageResolution();
 
         var screenImage = canvas.getScreenImage();
         var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
@@ -92,7 +92,7 @@ public class HangarCanvasWrapper extends HangarWrapper {
         openGLCanvas.render();
     }
 
-    private void refreshScreenImage() {
+    private void refreshScreenImageResolution() {
         var screenImage = canvas.getScreenImage();
         int expectedWidth = canvas.getWidth();
         int expectedHeight = canvas.getHeight();
