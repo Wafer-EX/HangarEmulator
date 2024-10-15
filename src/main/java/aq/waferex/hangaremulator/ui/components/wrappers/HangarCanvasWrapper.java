@@ -55,22 +55,6 @@ public class HangarCanvasWrapper extends HangarWrapper {
         openGLCanvas.setFocusable(false);
         openGLCanvas.setPreferredSize(this.getPreferredSize());
         this.add(openGLCanvas);
-
-        this.addComponentListener(new ComponentAdapter() {
-            @Override
-            public void componentResized(ComponentEvent e) {
-                if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-                    var scalingInUnits = SystemUtils.getScalingInUnits();
-                    int viewportWidth = (int) (getSize().width * scalingInUnits);
-                    int viewportHeight = (int) (getSize().height * scalingInUnits);
-
-                    // I don't change resolution because the resolution settings represent
-                    // only the setting, screen image size is independent form resolution
-                    canvas.setScreenImage(ImageUtils.createCompatibleImage(viewportWidth, viewportHeight));
-                    canvas.sizeChanged(viewportWidth, viewportHeight);
-                }
-            }
-        });
     }
 
     public void refreshSerialCallTimer(Runnable callSerially) {
@@ -101,6 +85,17 @@ public class HangarCanvasWrapper extends HangarWrapper {
             if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
                 screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
                 canvas.setScreenImage(screenImage);
+            }
+        }
+        else {
+            var scalingInUnits = SystemUtils.getScalingInUnits();
+            int viewportWidth = (int) (getSize().width * scalingInUnits);
+            int viewportHeight = (int) (getSize().height * scalingInUnits);
+
+            if (screenImage.getWidth() != viewportWidth || screenImage.getHeight() != viewportHeight) {
+                screenImage = ImageUtils.createCompatibleImage(viewportWidth, viewportHeight);
+                canvas.setScreenImage(screenImage);
+                canvas.sizeChanged(viewportWidth, viewportHeight);
             }
         }
 
