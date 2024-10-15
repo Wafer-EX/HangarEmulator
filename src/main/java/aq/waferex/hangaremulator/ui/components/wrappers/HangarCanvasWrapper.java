@@ -80,23 +80,21 @@ public class HangarCanvasWrapper extends HangarWrapper {
         super.paintComponent(graphics);
 
         var screenImage = canvas.getScreenImage();
-        if (HangarState.getGraphicsSettings().getScalingMode() != ScalingModes.ChangeResolution) {
-            var screenResolution = HangarState.getGraphicsSettings().getResolution();
-            if (screenImage.getWidth() != screenResolution.getWidth() || screenImage.getHeight() != screenResolution.getHeight()) {
-                screenImage = ImageUtils.createCompatibleImage(screenResolution.width, screenResolution.height);
-                canvas.setScreenImage(screenImage);
-            }
-        }
-        else {
+        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
             var scalingInUnits = SystemUtils.getScalingInUnits();
             int viewportWidth = (int) (getSize().width * scalingInUnits);
             int viewportHeight = (int) (getSize().height * scalingInUnits);
 
-            if (screenImage.getWidth() != viewportWidth || screenImage.getHeight() != viewportHeight) {
+            if (canvas.getWidth() != viewportWidth || canvas.getHeight() != viewportHeight) {
                 screenImage = ImageUtils.createCompatibleImage(viewportWidth, viewportHeight);
                 canvas.setScreenImage(screenImage);
                 canvas.sizeChanged(viewportWidth, viewportHeight);
             }
+        }
+        else if (canvas.getWidth() != screenImage.getWidth() || canvas.getHeight() != screenImage.getHeight()) {
+            screenImage = ImageUtils.createCompatibleImage(canvas.getWidth(), canvas.getHeight());
+            canvas.setScreenImage(screenImage);
+            canvas.sizeChanged(canvas.getWidth(), canvas.getHeight());
         }
 
         var graphicsWithHints = HangarState.applyVectorAntiAliasing(screenImage.getGraphics());
