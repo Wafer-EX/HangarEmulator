@@ -17,19 +17,14 @@
 package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.ui.components.wrappers.*;
-import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
-import aq.waferex.hangaremulator.ui.listeners.HangarDisplayableListener;
 
 import javax.microedition.lcdui.*;
 import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
 
 public class HangarViewport extends JPanel {
-    private final ArrayList<HangarDisplayableListener> displayableListeners = new ArrayList<>();
-
     public HangarViewport() {
         super(new BorderLayout());
     }
@@ -52,12 +47,6 @@ public class HangarViewport extends JPanel {
         if (!displayable.getCommands().isEmpty()) {
             var displayableCommands = new HangarViewportCommands(displayable);
             this.add(displayableCommands, BorderLayout.SOUTH);
-        }
-
-        // I don't know what is this
-        for (var displayableListener : displayableListeners) {
-            var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
-            displayableListener.displayableStateChanged(displayableEvent);
         }
 
         // Displayable is always not null here
@@ -87,12 +76,9 @@ public class HangarViewport extends JPanel {
             throw new IllegalArgumentException();
         }
 
+        this.setVisible(true);
         this.revalidate();
         this.repaint();
-    }
-
-    public void addDisplayableListener(HangarDisplayableListener listener) {
-        this.displayableListeners.add(listener);
     }
 
     private static class HangarViewportCommands extends JScrollPane {

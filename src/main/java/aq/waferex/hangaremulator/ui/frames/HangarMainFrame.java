@@ -16,14 +16,13 @@
 
 package aq.waferex.hangaremulator.ui.frames;
 
-import aq.waferex.hangaremulator.ui.listeners.events.HangarDisplayableEvent;
 import aq.waferex.hangaremulator.ui.components.*;
 import aq.waferex.hangaremulator.ui.listeners.HangarKeyListener;
 
-import javax.microedition.lcdui.Canvas;
-import javax.microedition.lcdui.Displayable;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class HangarMainFrame extends JFrame {
@@ -42,24 +41,13 @@ public class HangarMainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setJMenuBar(new HangarMenuBar());
 
-        this.viewport.addDisplayableListener(e -> {
-            if (e.getStateChange() == HangarDisplayableEvent.SET) {
-                for (var keyListener : getKeyListeners()) {
-                    removeKeyListener(keyListener);
-                }
-
-                var displayable = (Displayable) e.getSource();
-                if (displayable instanceof Canvas canvas) {
-                    addKeyListener(new HangarKeyListener(canvas));
-                    requestFocus();
-                }
-
-                HangarMainFrame.this.setTitle(displayable.getTitle());
+        viewport.setVisible(false);
+        viewport.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentShown(ComponentEvent e) {
                 mainPanel.setVisible(false);
-                viewport.setVisible(true);
             }
         });
-        viewport.setVisible(false);
 
         constraints.fill = GridBagConstraints.BOTH;
         constraints.gridx = 0;
@@ -70,6 +58,8 @@ public class HangarMainFrame extends JFrame {
         constraints.gridx = 1;
         this.add(viewport, constraints);
 
+        this.addKeyListener(new HangarKeyListener());
+        this.requestFocus();
         this.pack();
         this.revalidate();
     }
