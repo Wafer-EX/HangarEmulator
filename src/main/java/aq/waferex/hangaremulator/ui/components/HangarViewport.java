@@ -35,61 +35,56 @@ public class HangarViewport extends JPanel {
     }
 
     public void displayableHasChanged(Displayable displayable) {
+        if (displayable == null) {
+            throw new NullPointerException();
+        }
+
         this.removeAll();
 
+        // Add scroll pane for wrapper
         var scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setBorder(BorderFactory.createEmptyBorder());
         this.add(scrollPane, BorderLayout.CENTER);
 
-        if (displayable != null) {
-            if (!displayable.getCommands().isEmpty()) {
-                var displayableCommands = new HangarViewportCommands(displayable);
-                this.add(displayableCommands, BorderLayout.SOUTH);
-            }
-
-            for (var displayableListener : displayableListeners) {
-                var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
-                displayableListener.displayableStateChanged(displayableEvent);
-            }
-
-            if (displayable instanceof Canvas canvas) {
-                var canvasWrapper = new HangarCanvasWrapper(canvas);
-                canvas.setRelatedWrapper(canvasWrapper);
-                scrollPane.setViewportView(canvasWrapper);
-                SwingUtilities.invokeLater(canvas::showNotify);
-            }
-            else if (displayable instanceof List list) {
-                var listWrapper = new HangarListWrapper(list);
-                list.setRelatedWrapper(listWrapper);
-                scrollPane.setViewportView(listWrapper);
-            }
-            else if (displayable instanceof Form form) {
-                var formWrapper = new HangarFormWrapper(form);
-                form.setRelatedWrapper(formWrapper);
-                scrollPane.setViewportView(formWrapper);
-            }
-            else if (displayable instanceof TextBox textBox) {
-                var textBoxWrapper = new HangarTextBoxWrapper(textBox);
-                textBox.setRelatedWrapper(textBoxWrapper);
-                scrollPane.setViewportView(textBoxWrapper);
-            }
-            // TODO: add more screens support
-            else {
-                throw new IllegalArgumentException();
-            }
+        // Add button command at bottom
+        if (!displayable.getCommands().isEmpty()) {
+            var displayableCommands = new HangarViewportCommands(displayable);
+            this.add(displayableCommands, BorderLayout.SOUTH);
         }
+
+        // I don't know what is this
+        for (var displayableListener : displayableListeners) {
+            var displayableEvent = new HangarDisplayableEvent(displayable, HangarDisplayableEvent.SET);
+            displayableListener.displayableStateChanged(displayableEvent);
+        }
+
+        // Displayable is always not null here
+        if (displayable instanceof Canvas canvas) {
+            var canvasWrapper = new HangarCanvasWrapper(canvas);
+            canvas.setRelatedWrapper(canvasWrapper);
+            scrollPane.setViewportView(canvasWrapper);
+            SwingUtilities.invokeLater(canvas::showNotify);
+        }
+        else if (displayable instanceof List list) {
+            var listWrapper = new HangarListWrapper(list);
+            list.setRelatedWrapper(listWrapper);
+            scrollPane.setViewportView(listWrapper);
+        }
+        else if (displayable instanceof Form form) {
+            var formWrapper = new HangarFormWrapper(form);
+            form.setRelatedWrapper(formWrapper);
+            scrollPane.setViewportView(formWrapper);
+        }
+        else if (displayable instanceof TextBox textBox) {
+            var textBoxWrapper = new HangarTextBoxWrapper(textBox);
+            textBox.setRelatedWrapper(textBoxWrapper);
+            scrollPane.setViewportView(textBoxWrapper);
+        }
+        // TODO: add more screens support
         else {
-            int choice = JOptionPane.showConfirmDialog(this, """
-                            The MIDlet just have set null as displayable object,
-                            usually it means that the MIDlet trying to close itself.
-                            Close this Hangar Emulator instance?
-                            """,
-                    "Unusual behavior", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-            if (choice == JOptionPane.YES_OPTION) {
-                System.exit(0);
-            }
+            throw new IllegalArgumentException();
         }
 
         this.revalidate();
