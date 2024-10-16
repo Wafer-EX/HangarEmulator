@@ -21,16 +21,16 @@ import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.utils.KeyUtils;
 
 import javax.microedition.lcdui.Canvas;
+import javax.microedition.lcdui.Display;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.HashSet;
 
 public class HangarKeyListener implements KeyListener {
-    private final Canvas canvas;
     private final HashSet<Integer> pressedKeys = new HashSet<>();
 
-    public HangarKeyListener(Canvas canvas) {
-        this.canvas = canvas;
+    public HangarKeyListener() {
+        super();
     }
 
     public HashSet<Integer> getPressedKeys() {
@@ -48,10 +48,14 @@ public class HangarKeyListener implements KeyListener {
 
         if (keyCode != 0) {
             if (pressedKeys.add(keyCode)) {
-                canvas.keyPressed(keyCode);
+                if (Display.getDisplaySingleton().getCurrent() instanceof Canvas canvas) {
+                    canvas.keyPressed(keyCode);
+                }
             }
             else {
-                canvas.keyRepeated(keyCode);
+                if (Display.getDisplaySingleton().getCurrent() instanceof Canvas canvas) {
+                    canvas.keyRepeated(keyCode);
+                }
             }
         }
     }
@@ -64,7 +68,9 @@ public class HangarKeyListener implements KeyListener {
 
         if (keyCode != 0) {
             pressedKeys.remove(keyCode);
-            canvas.keyReleased(keyCode);
+            if (Display.getDisplaySingleton().getCurrent() instanceof Canvas canvas) {
+                canvas.keyReleased(keyCode);
+            }
         }
     }
 }
