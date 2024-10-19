@@ -140,8 +140,15 @@ public class HangarMenuBar extends JMenuBar {
 
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 128)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 160)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 208)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 220)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(208, 208)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 320)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(240, 400)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(400, 240)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(320, 240)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(352, 416)));
+            resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(360, 640)));
             //resolutionPopupMenu.add(new HangarCustomResolutionItem());
 
             interpolationCheckBox.setSelected(HangarState.getGraphicsSettings().getInterpolation());;
