@@ -17,9 +17,9 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.ow2.asm:asm:9.7'
-    implementation 'com.formdev:flatlaf:3.5'
-    implementation 'org.joml:joml:1.10.7'
+    implementation 'org.ow2.asm:asm:9.7.1'
+    implementation 'com.formdev:flatlaf:3.5.1'
+    implementation 'org.joml:joml:1.10.8'
 
     implementation platform("org.lwjgl:lwjgl-bom:3.3.2")
     implementation "org.lwjgl:lwjgl"
