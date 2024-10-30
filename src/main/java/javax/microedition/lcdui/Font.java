@@ -16,8 +16,6 @@
 
 package javax.microedition.lcdui;
 
-import aq.waferex.hangaremulator.utils.microedition.FontUtils;
-
 import java.awt.Canvas;
 import java.util.Arrays;
 
@@ -63,13 +61,19 @@ public class Font {
             throw new IllegalArgumentException();
         }
 
+        int convertedStyle = style;
+        // TODO: this old code looks weird, I need to check it
+        if (convertedStyle != Font.STYLE_PLAIN && convertedStyle != Font.STYLE_BOLD && convertedStyle != Font.STYLE_ITALIC) {
+            convertedStyle = Font.STYLE_PLAIN;
+        }
+
         int convertedSize = switch (size) {
             case Font.SIZE_SMALL -> 12;
             case Font.SIZE_MEDIUM -> 14;
             case Font.SIZE_LARGE -> 16;
             default -> throw new IllegalArgumentException();
         };
-        int convertedStyle = FontUtils.discardMismatchedStyle(style);
+
         var seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize);
         return new Font(seFont, face, style, size);
     }
