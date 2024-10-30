@@ -35,12 +35,15 @@ public class Font {
     public static final int FONT_INPUT_TEXT = 1;
 
     private final java.awt.Font seFont;
+    private final int meFace;
+    private final int meStyle;
+    private final int meSize;
 
-    public Font(java.awt.Font font) throws NullPointerException {
-        if (font == null) {
-            throw new NullPointerException();
-        }
+    private Font(java.awt.Font font, int meFace, int meStyle, int meSize) throws NullPointerException {
         this.seFont = font;
+        this.meFace = meFace;
+        this.meStyle = meStyle;
+        this.meSize = meSize;
     }
 
     public java.awt.Font getSEFont() {
@@ -52,23 +55,33 @@ public class Font {
     }
 
     public static Font getFont(int face, int style, int size) throws IllegalArgumentException {
-        // TODO; use face parameter
+        if (face != FACE_SYSTEM && face != FACE_MONOSPACE && face != FACE_PROPORTIONAL) {
+            throw new IllegalArgumentException();
+        }
+        if (style != STYLE_PLAIN && style != STYLE_BOLD && style != STYLE_ITALIC && style != STYLE_UNDERLINED) {
+            throw new IllegalArgumentException();
+        }
+        if (size != SIZE_SMALL && size != SIZE_MEDIUM && size != SIZE_LARGE) {
+            throw new IllegalArgumentException();
+        }
+
         int convertedStyle = FontUtils.discardMismatchedStyle(style);
         int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
-        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize));
+        var seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize);
+
+        return new Font(seFont, face, style, size);
     }
 
     public int getSize() {
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
+        return meSize;
     }
 
     public int getStyle() {
-        return FontUtils.discardMismatchedStyle(seFont.getStyle());
+        return meStyle;
     }
 
     public int getFace() {
-        // TODO: font face converter
-        return 0;
+        return meFace;
     }
 
     public boolean isPlain() {
@@ -84,7 +97,7 @@ public class Font {
     }
 
     public boolean isUnderlined() {
-        // TODO: check font for underline
+        // TODO: check underline
         return false;
     }
 
