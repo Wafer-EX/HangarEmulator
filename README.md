@@ -27,11 +27,11 @@ Linux:
 ./gradlew shadowJar build
 ```
 ## Third-party libraries
-| Name    |                                          |
-|---------|------------------------------------------|
+| Name    | Source                                                       |
+|---------|--------------------------------------------------------------|
 | FlatLaf | [Link (external resource)](https://www.formdev.com/flatlaf/) |
 | ASM     | [Link (external resource)](https://asm.ow2.io/)              |
 | LWJGL   | [Link (external resource)](https://www.lwjgl.org/)           |
-| JOML    | [Link](https://github.com/JOML-CI/JOML)  |
+| JOML    | [Link](https://github.com/JOML-CI/JOML)                      |
 ## License
 Copyright 2022-2024 Wafer EX. Hangar Emulator is licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full license text.

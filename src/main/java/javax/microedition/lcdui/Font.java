@@ -16,8 +16,9 @@
 
 package javax.microedition.lcdui;
 
-import aq.waferex.hangaremulator.utils.microedition.FontUtils;
+import aq.waferex.hangaremulator.HangarState;
 
+import java.awt.Canvas;
 import java.util.Arrays;
 
 public class Font {
@@ -35,12 +36,15 @@ public class Font {
     public static final int FONT_INPUT_TEXT = 1;
 
     private final java.awt.Font seFont;
+    private final int meFace;
+    private final int meStyle;
+    private final int meSize;
 
-    public Font(java.awt.Font font) throws NullPointerException {
-        if (font == null) {
-            throw new NullPointerException();
-        }
+    private Font(java.awt.Font font, int meFace, int meStyle, int meSize) throws NullPointerException {
         this.seFont = font;
+        this.meFace = meFace;
+        this.meStyle = meStyle;
+        this.meSize = meSize;
     }
 
     public java.awt.Font getSEFont() {
@@ -52,23 +56,40 @@ public class Font {
     }
 
     public static Font getFont(int face, int style, int size) throws IllegalArgumentException {
-        // TODO; use face parameter
-        int convertedStyle = FontUtils.discardMismatchedStyle(style);
-        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
-        return new Font(new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize));
+        if (face != FACE_SYSTEM && face != FACE_MONOSPACE && face != FACE_PROPORTIONAL) {
+            throw new IllegalArgumentException();
+        }
+        if (style != STYLE_PLAIN && style != STYLE_BOLD && style != STYLE_ITALIC && style != STYLE_UNDERLINED) {
+            throw new IllegalArgumentException();
+        }
+
+        int convertedStyle = style;
+        // TODO: this old code looks weird, I need to check it
+        if (convertedStyle != Font.STYLE_PLAIN && convertedStyle != Font.STYLE_BOLD && convertedStyle != Font.STYLE_ITALIC) {
+            convertedStyle = Font.STYLE_PLAIN;
+        }
+
+        int convertedSize = switch (size) {
+            case Font.SIZE_SMALL -> HangarState.getFontSettings().getSmallSize();
+            case Font.SIZE_MEDIUM -> HangarState.getFontSettings().getMediumSize();
+            case Font.SIZE_LARGE -> HangarState.getFontSettings().getLargeSize();
+            default -> throw new IllegalArgumentException();
+        };
+
+        var seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize);
+        return new Font(seFont, face, style, size);
     }
 
     public int getSize() {
-        return FontUtils.convertSize(FontUtils.STANDART_EDITION, FontUtils.MICRO_EDITION, seFont.getSize());
+        return meSize;
     }
 
     public int getStyle() {
-        return FontUtils.discardMismatchedStyle(seFont.getStyle());
+        return meStyle;
     }
 
     public int getFace() {
-        // TODO: font face converter
-        return 0;
+        return meFace;
     }
 
     public boolean isPlain() {
@@ -84,12 +105,12 @@ public class Font {
     }
 
     public boolean isUnderlined() {
-        // TODO: check font for underline
+        // TODO: check underline
         return false;
     }
 
     public int getHeight() {
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.getHeight();
     }
@@ -99,7 +120,7 @@ public class Font {
     }
 
     public int charWidth(char ch) {
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.charWidth(ch);
     }
@@ -115,7 +136,7 @@ public class Font {
         if (str == null) {
             throw new NullPointerException();
         }
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }

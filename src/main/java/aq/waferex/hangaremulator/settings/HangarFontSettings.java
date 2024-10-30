@@ -16,17 +16,34 @@
 
 package aq.waferex.hangaremulator.settings;
 
-import aq.waferex.hangaremulator.HangarState;
+public class HangarFontSettings {
+    private int smallSize = 12;
+    private int mediumSize = 14;
+    private int largeSize = 16;
 
-public class HangarWindowSettings {
-    private boolean isWindowResizingEnabled = false;
+    public HangarFontSettings() { }
 
-    public boolean getWindowResizing() {
-        return isWindowResizingEnabled;
+    public int getSmallSize() {
+        return smallSize;
     }
 
-    public void setWindowResizing(boolean isWindowResizingEnabled) {
-        this.isWindowResizingEnabled = isWindowResizingEnabled;
-        HangarState.getMainFrame().setResizable(isWindowResizingEnabled);
+    public void setSmallSize(int size) {
+        smallSize = size;
+    }
+
+    public int getMediumSize() {
+        return mediumSize;
+    }
+
+    public void setMediumSize(int size) {
+        mediumSize = size;
+    }
+
+    public int getLargeSize() {
+        return largeSize;
+    }
+
+    public void setLargeSize(int size) {
+        largeSize = size;
     }
 }

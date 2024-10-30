@@ -22,6 +22,8 @@ public class HangarInputSettings {
     private HangarKeyCodes midletKeyCodes = HangarKeyCodes.MIDLET_KEYCODES_NOKIA;
     private boolean isTouchscreenInputEnabled = true;
 
+    public HangarInputSettings() { }
+
     public HangarKeyCodes getMidletKeyCodes() {
         return midletKeyCodes;
     }

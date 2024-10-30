@@ -30,14 +30,6 @@ public class HangarGraphicsSettings {
 
     public HangarGraphicsSettings() { }
 
-    public HangarGraphicsSettings(boolean isCanvasClearingEnabled, boolean isAntiAliasingEnabled, int frameRate, ScalingModes scalingMode, Dimension resolution) {
-        setScreenClearing(isCanvasClearingEnabled);
-        setVectorAntiAliasing(isAntiAliasingEnabled);
-        setFrameRate(frameRate);
-        setScalingMode(scalingMode);
-        setResolution(resolution);
-    }
-
     public boolean getScreenClearing() {
         return isScreenClearingEnabled;
     }

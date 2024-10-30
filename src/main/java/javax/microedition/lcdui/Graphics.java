@@ -17,7 +17,6 @@
 package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.HangarState;
-import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 import aq.waferex.hangaremulator.utils.microedition.ImageUtils;
 
 import java.awt.*;
@@ -214,9 +213,27 @@ public class Graphics {
         if (str == null) {
             throw new NullPointerException();
         }
-        var meFont = getFont();
-        x = FontUtils.alignX(meFont, str, x, anchor);
-        y = FontUtils.alignY(meFont, str, y, anchor);
+
+        // Align X
+        int stringWidth = meFont.stringWidth(str);
+        if ((anchor & Graphics.RIGHT) != 0) {
+            x -= stringWidth;
+        }
+        else if ((anchor & Graphics.HCENTER) != 0) {
+            x -= stringWidth >> 1;
+        }
+
+        // Align Y
+        var canvas = new java.awt.Canvas();
+        var metrics = canvas.getFontMetrics(meFont.getSEFont());
+        var stringSize = metrics.getStringBounds(str, canvas.getGraphics());
+        if ((anchor & Graphics.BOTTOM) != 0) {
+            y -= (int) stringSize.getMaxY();
+        }
+        else if (anchor == 0 || (anchor & Graphics.TOP) != 0) {
+            y += (int) (stringSize.getMaxY() + (meFont.getHeight() >> 1));
+        }
+
         graphics2D.setFont(meFont.getSEFont());
         graphics2D.drawString(str, x, y);
     }

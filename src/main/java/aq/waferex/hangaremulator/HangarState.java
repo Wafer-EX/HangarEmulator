@@ -29,6 +29,7 @@ public class HangarState {
     private static final HangarGraphicsSettings graphicsSettings = new HangarGraphicsSettings();
     private static final HangarAudioSettings audioSettings = new HangarAudioSettings();
     private static final HangarInputSettings inputSettings = new HangarInputSettings();
+    private static final HangarFontSettings fontSettings = new HangarFontSettings();
 
     public static HangarMainFrame getMainFrame() {
         return mainFrame;
@@ -64,6 +65,10 @@ public class HangarState {
 
     public static HangarInputSettings getInputSettings() {
         return inputSettings;
+    }
+
+    public static HangarFontSettings getFontSettings() {
+        return fontSettings;
     }
 
     public static int getFrameRateInMilliseconds() {
