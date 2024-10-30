@@ -26,9 +26,11 @@ import aq.waferex.hangaremulator.utils.SystemUtils;
 
 import javax.sound.midi.InvalidMidiDataException;
 import javax.swing.*;
+import javax.swing.text.NumberFormatter;
 import java.awt.*;
 import java.io.IOException;
 import java.net.URL;
+import java.text.NumberFormat;
 import java.util.Locale;
 
 public class HangarMenuBar extends JMenuBar {
@@ -138,6 +140,8 @@ public class HangarMenuBar extends JMenuBar {
             scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.Fit));
             scalingModePopupMenu.add(new HangarScalingModeRadio(ScalingModes.ChangeResolution));
 
+            resolutionPopupMenu.add(new HangarCustomResolutionItem());
+            resolutionPopupMenu.add(new JSeparator());
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 128)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(128, 160)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(176, 208)));
@@ -149,7 +153,6 @@ public class HangarMenuBar extends JMenuBar {
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(320, 240)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(352, 416)));
             resolutionPopupMenu.add(new HangarResolutionRadio(new Dimension(360, 640)));
-            //resolutionPopupMenu.add(new HangarCustomResolutionItem());
 
             interpolationCheckBox.setSelected(HangarState.getGraphicsSettings().getInterpolation());;
             interpolationCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setInterpolation(!HangarState.getGraphicsSettings().getInterpolation()));
@@ -250,9 +253,71 @@ public class HangarMenuBar extends JMenuBar {
             }
 
             private static class HangarCustomResolutionFrame extends JFrame {
+                private final JButton applyButton = new JButton("Apply");
+                private final JButton cancelButton = new JButton("Cancel");
+
+                private final GridBagConstraints formConstraints = new GridBagConstraints();
+                private final NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
+                private final JFormattedTextField widthTextField;
+                private final JFormattedTextField heightTextField;
+
                 public HangarCustomResolutionFrame() {
                     super("Set custom resolution");
-                    // TODO: add items
+
+                    numberFormatter.setAllowsInvalid(false);
+                    widthTextField = new JFormattedTextField(numberFormatter);
+                    widthTextField.setValue(HangarState.getGraphicsSettings().getResolution().width);
+                    heightTextField = new JFormattedTextField(numberFormatter);
+                    heightTextField.setValue(HangarState.getGraphicsSettings().getResolution().height);
+
+                    applyButton.addActionListener(e -> {
+                        long width = (long) widthTextField.getValue();
+                        long height = (long) heightTextField.getValue();
+
+                        HangarState.getGraphicsSettings().setResolution(new Dimension((int) width, (int) height));
+                        HangarCustomResolutionFrame.this.setVisible(false);
+                    });
+                    cancelButton.addActionListener(e -> HangarCustomResolutionFrame.this.setVisible(false));
+
+                    var formPanel = new JPanel(new GridBagLayout());
+                    formConstraints.insets.set(0, 0, 4, 4);
+                    formPanel.add(new JLabel("Width:"), formConstraints);
+
+                    formConstraints.gridx = 1;
+                    formConstraints.insets.set(0, 4, 4, 0);
+                    formPanel.add(widthTextField, formConstraints);
+
+                    formConstraints.gridx = 0;
+                    formConstraints.gridy = 1;
+                    formConstraints.insets.set(4, 0, 0, 4);
+                    formPanel.add(new JLabel("Height:"), formConstraints);
+
+                    formConstraints.gridx = 1;
+                    formConstraints.insets.set(4, 4, 0, 0);
+                    formPanel.add(heightTextField, formConstraints);
+
+                    formConstraints.insets.set(0, 0, 0, 0);
+                    formConstraints.gridx = 2;
+                    formConstraints.gridy = 2;
+                    formConstraints.weightx = 1.0f;
+                    formConstraints.weighty = 1.0f;
+                    formPanel.add(Box.createGlue(), formConstraints);
+                    formPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
+
+                    var buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+                    buttonsPanel.add(applyButton);
+                    buttonsPanel.add(cancelButton);
+
+                    var contentPane = getContentPane();
+                    contentPane.setLayout(new BorderLayout());
+                    contentPane.add(formPanel, BorderLayout.CENTER);
+                    contentPane.add(buttonsPanel, BorderLayout.SOUTH);
+
+                    this.setPreferredSize(new Dimension(240, 160));
+                    this.setResizable(false);
+
+                    pack();
+                    revalidate();
                 }
             }
         }
