@@ -18,6 +18,7 @@ package javax.microedition.lcdui;
 
 import aq.waferex.hangaremulator.utils.microedition.FontUtils;
 
+import java.awt.Canvas;
 import java.util.Arrays;
 
 public class Font {
@@ -61,14 +62,15 @@ public class Font {
         if (style != STYLE_PLAIN && style != STYLE_BOLD && style != STYLE_ITALIC && style != STYLE_UNDERLINED) {
             throw new IllegalArgumentException();
         }
-        if (size != SIZE_SMALL && size != SIZE_MEDIUM && size != SIZE_LARGE) {
-            throw new IllegalArgumentException();
-        }
 
+        int convertedSize = switch (size) {
+            case Font.SIZE_SMALL -> 12;
+            case Font.SIZE_MEDIUM -> 14;
+            case Font.SIZE_LARGE -> 16;
+            default -> throw new IllegalArgumentException();
+        };
         int convertedStyle = FontUtils.discardMismatchedStyle(style);
-        int convertedSize = FontUtils.convertSize(FontUtils.MICRO_EDITION, FontUtils.STANDART_EDITION, size);
         var seFont = new java.awt.Font(java.awt.Font.SANS_SERIF, convertedStyle, convertedSize);
-
         return new Font(seFont, face, style, size);
     }
 
@@ -102,7 +104,7 @@ public class Font {
     }
 
     public int getHeight() {
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.getHeight();
     }
@@ -112,7 +114,7 @@ public class Font {
     }
 
     public int charWidth(char ch) {
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.charWidth(ch);
     }
@@ -128,7 +130,7 @@ public class Font {
         if (str == null) {
             throw new NullPointerException();
         }
-        var canvas = new java.awt.Canvas();
+        var canvas = new Canvas();
         var metrics = canvas.getFontMetrics(seFont);
         return metrics.stringWidth(str);
     }
