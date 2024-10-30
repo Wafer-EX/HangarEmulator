@@ -17,7 +17,6 @@
 package aq.waferex.hangaremulator.utils.microedition;
 
 import javax.microedition.lcdui.Font;
-import javax.microedition.lcdui.Graphics;
 
 public final class FontUtils {
     public static int discardMismatchedStyle(int fontStyle) {
@@ -25,32 +24,5 @@ public final class FontUtils {
             fontStyle = Font.STYLE_PLAIN;
         }
         return fontStyle;
-    }
-
-    public static int alignX(Font font, String str, int x, int anchor) {
-        int stringWidth = font.stringWidth(str);
-        int alignedX = x;
-        if ((anchor & Graphics.RIGHT) != 0) {
-            alignedX -= stringWidth;
-        }
-        else if ((anchor & Graphics.HCENTER) != 0) {
-            alignedX -= stringWidth >> 1;
-        }
-        return alignedX;
-    }
-
-    public static int alignY(Font font, String str, int y, int anchor) {
-        var canvas = new java.awt.Canvas();
-        var metrics = canvas.getFontMetrics(font.getSEFont());
-        var stringSize = metrics.getStringBounds(str, canvas.getGraphics());
-
-        int alignedY = y;
-        if ((anchor & Graphics.BOTTOM) != 0) {
-            alignedY -= (int) stringSize.getMaxY();
-        }
-        else if (anchor == 0 || (anchor & Graphics.TOP) != 0) {
-            alignedY += (int) (stringSize.getMaxY() + (font.getHeight() >> 1));
-        }
-        return alignedY;
     }
 }
