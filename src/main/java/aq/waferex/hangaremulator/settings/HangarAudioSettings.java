@@ -27,6 +27,8 @@ import java.io.IOException;
 public class HangarAudioSettings {
     private File soundbankFile = null;
 
+    public HangarAudioSettings() { }
+
     public File getSoundbankFile() {
         return soundbankFile;
     }

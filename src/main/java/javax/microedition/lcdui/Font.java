@@ -16,6 +16,8 @@
 
 package javax.microedition.lcdui;
 
+import aq.waferex.hangaremulator.HangarState;
+
 import java.awt.Canvas;
 import java.util.Arrays;
 
@@ -68,9 +70,9 @@ public class Font {
         }
 
         int convertedSize = switch (size) {
-            case Font.SIZE_SMALL -> 12;
-            case Font.SIZE_MEDIUM -> 14;
-            case Font.SIZE_LARGE -> 16;
+            case Font.SIZE_SMALL -> HangarState.getFontSettings().getSmallSize();
+            case Font.SIZE_MEDIUM -> HangarState.getFontSettings().getMediumSize();
+            case Font.SIZE_LARGE -> HangarState.getFontSettings().getLargeSize();
             default -> throw new IllegalArgumentException();
         };
 
