@@ -19,37 +19,36 @@ package aq.waferex.hangaremulator.ui.frames;
 import aq.waferex.hangaremulator.HangarState;
 
 import javax.swing.*;
-import javax.swing.text.NumberFormatter;
 import java.awt.*;
-import java.text.NumberFormat;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class HangarResolutionFrame extends JFrame {
-    private final JButton applyButton = new JButton("Apply");
     private final JButton cancelButton = new JButton("Cancel");
+    private final JButton applyButton = new JButton("Apply");
 
     private final GridBagConstraints formConstraints = new GridBagConstraints();
-    private final NumberFormatter numberFormatter = new NumberFormatter(NumberFormat.getIntegerInstance());
-    private final JFormattedTextField widthTextField;
-    private final JFormattedTextField heightTextField;
+    private final JTextField widthTextField = new JTextField();
+    private final JTextField heightTextField = new JTextField();
 
     public HangarResolutionFrame() {
         super("Set custom resolution");
 
-        numberFormatter.setAllowsInvalid(false);
-        widthTextField = new JFormattedTextField(numberFormatter);
-        widthTextField.setValue(HangarState.getGraphicsSettings().getResolution().width);
-        heightTextField = new JFormattedTextField(numberFormatter);
-        heightTextField.setValue(HangarState.getGraphicsSettings().getResolution().height);
+        widthTextField.setText(String.valueOf(HangarState.getGraphicsSettings().getResolution().width));
+        heightTextField.setText(String.valueOf(HangarState.getGraphicsSettings().getResolution().height));
 
-        applyButton.addActionListener(e -> {
-            long width = (long) widthTextField.getValue();
-            long height = (long) heightTextField.getValue();
-
-            HangarState.getGraphicsSettings().setResolution(new Dimension((int) width, (int) height));
-            setVisible(false);
-        });
         cancelButton.addActionListener(e -> setVisible(false));
+        applyButton.addActionListener(e -> {
+            try {
+                int width = Integer.parseInt(widthTextField.getText());
+                int height = Integer.parseInt(heightTextField.getText());
+
+                HangarState.getGraphicsSettings().setResolution(new Dimension(width, height));
+                setVisible(false);
+            }
+            catch (Exception exception) {
+                JOptionPane.showMessageDialog(this, "Width and height should be integer values.", "Resolution setting error!", JOptionPane.ERROR_MESSAGE);
+            }
+        });
 
         var formPanel = new JPanel(new GridBagLayout());
         formConstraints.insets.set(0, 0, 4, 4);
@@ -85,7 +84,7 @@ public class HangarResolutionFrame extends JFrame {
         contentPane.add(formPanel, BorderLayout.CENTER);
         contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 
-        this.setPreferredSize(new Dimension(240, 160));
+        this.setPreferredSize(new Dimension(280, 160));
         this.setResizable(false);
 
         pack();
