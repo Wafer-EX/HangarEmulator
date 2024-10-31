@@ -245,7 +245,7 @@ public class HangarMenuBar extends JMenuBar {
             }
         }
 
-        private static class HangarCustomFrameRateItem extends JRadioButtonMenuItem {
+        private class HangarCustomFrameRateItem extends JRadioButtonMenuItem {
             public HangarCustomFrameRateItem() {
                 super("Custom...");
                 this.addActionListener(e -> {
@@ -253,10 +253,11 @@ public class HangarMenuBar extends JMenuBar {
                     customFrameRateFrame.setLocationRelativeTo(HangarState.getMainFrame());
                     customFrameRateFrame.setVisible(true);
                 });
+                frameRateRadioGroup.add(this);
             }
         }
 
-        private static class HangarCustomResolutionItem extends JRadioButtonMenuItem {
+        private class HangarCustomResolutionItem extends JRadioButtonMenuItem {
             public HangarCustomResolutionItem() {
                 super("Custom...");
                 this.addActionListener(e -> {
@@ -264,6 +265,7 @@ public class HangarMenuBar extends JMenuBar {
                     customResolutionFrame.setLocationRelativeTo(HangarState.getMainFrame());
                     customResolutionFrame.setVisible(true);
                 });
+                resolutionRadioGroup.add(this);
             }
         }
 
