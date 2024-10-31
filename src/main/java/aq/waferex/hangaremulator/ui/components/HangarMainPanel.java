@@ -35,17 +35,6 @@ public class HangarMainPanel extends JPanel {
         label.setVerticalAlignment(JLabel.CENTER);
         this.add(label);
 
-        // TODO: the scale can not match with real viewport because of buttons in bottom
-        // TODO: remove?
-//        var profile = HangarState.getProfileManager().getCurrentProfile();
-//        profile.addProfileListener(e -> {
-//            if (e.getStateChange() == HangarProfileEvent.SCALING_MODE_CHANGED) {
-//                if (profile.getScalingMode() == ScalingModes.ChangeResolution) {
-//                    profile.setResolution(getSize());
-//                }
-//            }
-//        });
-
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
