@@ -22,6 +22,8 @@ import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public class HangarState {
@@ -78,6 +80,7 @@ public class HangarState {
         return 1000 / graphicsSettings.getFrameRate();
     }
 
+    // TODO: refactor this
     public static void initSettingsFromArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             String argument = args[i];
@@ -125,5 +128,51 @@ public class HangarState {
         if (midletLoader != null) {
             midletLoader.startMIDlet();
         }
+    }
+
+    // TODO: refactor this
+    public static List<String> getSettingsAsArgs() {
+        var argsList = new ArrayList<String>();
+
+        if (graphicsSettings.getScreenClearing()) {
+            argsList.add("--screen-clearing");
+        }
+
+        if (graphicsSettings.getVectorAntiAliasing()) {
+            argsList.add("--vector-anti-aliasing");
+        }
+
+        argsList.add("--fps");
+        argsList.add(String.valueOf(graphicsSettings.getFrameRate()));
+
+        argsList.add("--scaling-mode");
+        if (graphicsSettings.getScalingMode() == ScalingModes.None) {
+            argsList.add("none");
+        }
+        else if (graphicsSettings.getScalingMode() == ScalingModes.Fit) {
+            argsList.add("fit");
+        }
+        else if (graphicsSettings.getScalingMode() == ScalingModes.ChangeResolution) {
+            argsList.add("change-resolution");
+        }
+
+        argsList.add("--resolution");
+        argsList.add(String.valueOf(graphicsSettings.getResolution().width));
+        argsList.add(String.valueOf(graphicsSettings.getResolution().height));
+
+        if (graphicsSettings.getInterpolation()) {
+            argsList.add("--interpolation");
+        }
+
+        if (inputSettings.getTouchscreenInput()) {
+            argsList.add("--touchscreen-support");
+        }
+
+        if (midletLoader.getMIDlet() != null) {
+            argsList.add("--midlet");
+            argsList.add(midletLoader.getMIDletPath());
+        }
+
+        return argsList;
     }
 }

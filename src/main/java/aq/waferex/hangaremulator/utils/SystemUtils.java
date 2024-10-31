@@ -58,9 +58,7 @@ public final class SystemUtils {
                 command.add("bash -c");
             }
             command.addAll(Arrays.asList(javaBin, "-jar", getProgramFile().toString()));
-            if (midletPath != null) {
-                command.add(midletPath);
-            }
+            command.addAll(HangarState.getSettingsAsArgs());
             new ProcessBuilder(command).start();
             System.exit(0);
         }
