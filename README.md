@@ -9,7 +9,20 @@ This is an experimental J2ME-emulator that let you play some old game fade for f
 - Custom soundbanks
 - Custom resolution (you can even strength the game to window size!)
 - Unlimited frame rate
+- Setting with command line arguments
 - And more...
+
+#### Command line arguments
+| Argument                 | Value format                         | Allowed values                          |
+|--------------------------|--------------------------------------|-----------------------------------------|
+| `--screen-clearing`      |                                      |                                         |
+| `--vector-anti-aliasing` |                                      |                                         |
+| `--fps`                  | `Integer`                            | Any positive value, -1 to set unlimited |
+| `--scaling-mode`         | `String`                             | `none`, `fit`, `change-resolution`      |
+| `--resolution`           | `Integer (width)` `Integer (height)` | Any values is greater than 0            |
+| `--interpolation`        |                                      |                                         |
+| `--touchscreen-support`  |                                      |                                         |
+| `--midlet`               | `String`                             | Legal path to the MIDlet                |
 
 ## Requirements
 - Java 17
