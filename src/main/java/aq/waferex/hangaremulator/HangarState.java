@@ -16,9 +16,12 @@
 
 package aq.waferex.hangaremulator;
 
+import aq.waferex.hangaremulator.enums.ScalingModes;
 import aq.waferex.hangaremulator.settings.*;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 
+import java.awt.*;
+import java.io.File;
 import java.util.Properties;
 
 public class HangarState {
@@ -73,5 +76,54 @@ public class HangarState {
 
     public static int getFrameRateInMilliseconds() {
         return 1000 / graphicsSettings.getFrameRate();
+    }
+
+    public static void initSettingsFromArgs(String[] args) {
+        for (int i = 0; i < args.length; i++) {
+            String argument = args[i];
+
+            switch (argument) {
+                case "--screen-clearing" -> HangarState.getGraphicsSettings().setScreenClearing(true);
+                case "--vector-anti-aliasing" -> HangarState.getGraphicsSettings().setVectorAntiAliasing(true);
+                case "--fps" -> {
+                    int fps = Integer.parseInt(args[i + 1]);
+                    HangarState.getGraphicsSettings().setFrameRate(fps);
+                    i++;
+                }
+                case "--scaling-mode" -> {
+                    String scalingModeString = args[i + 1];
+                    if (scalingModeString.equals("none")) {
+                        HangarState.getGraphicsSettings().setScalingMode(ScalingModes.None);
+                    }
+                    if (scalingModeString.equals("fit")) {
+                        HangarState.getGraphicsSettings().setScalingMode(ScalingModes.Fit);
+                    }
+                    if (scalingModeString.equals("change-resolution")) {
+                        HangarState.getGraphicsSettings().setScalingMode(ScalingModes.ChangeResolution);
+                    }
+                    i++;
+                }
+                case "--resolution" -> {
+                    int width = Integer.parseInt(args[i + 1]);
+                    int height = Integer.parseInt(args[i + 2]);
+                    HangarState.getGraphicsSettings().setResolution(new Dimension(width, height));
+                    i += 2;
+                }
+                case "--interpolation" -> HangarState.getGraphicsSettings().setInterpolation(true);
+                case "--touchscreen-support" -> HangarState.getInputSettings().setTouchscreenInput(true);
+                case "--midlet" -> {
+                    String filePath = args[i + 1];
+                    if (new File(filePath).isFile()) {
+                        midletLoader = new MIDletLoader(filePath);
+                    }
+                    // TODO: throw exception else
+                    i++;
+                }
+            }
+        }
+
+        if (midletLoader != null) {
+            midletLoader.startMIDlet();
+        }
     }
 }
