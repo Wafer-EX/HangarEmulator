@@ -18,6 +18,7 @@ package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.MIDletLoader;
 import aq.waferex.hangaremulator.ui.dialogs.HangarFileChooser;
+import aq.waferex.hangaremulator.ui.frames.HangarCustomFrameRateFrame;
 import aq.waferex.hangaremulator.ui.frames.HangarCustomResolutionFrame;
 import aq.waferex.hangaremulator.utils.AudioUtils;
 import aq.waferex.hangaremulator.HangarKeyCodes;
@@ -130,6 +131,9 @@ public class HangarMenuBar extends JMenuBar {
             vectorAntiAliasingCheckBox.setSelected(HangarState.getGraphicsSettings().getVectorAntiAliasing());
             vectorAntiAliasingCheckBox.addActionListener(e -> HangarState.getGraphicsSettings().setVectorAntiAliasing(!HangarState.getGraphicsSettings().getVectorAntiAliasing()));
 
+            frameRatePopupMenu.add(new HangarCustomFrameRateItem());
+            frameRatePopupMenu.add(new JSeparator());
+            frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(15));
             frameRatePopupMenu.add(new HangarFrameRateRadio(30));
             frameRatePopupMenu.add(new HangarFrameRateRadio(60));
@@ -238,6 +242,17 @@ public class HangarMenuBar extends JMenuBar {
                     }
                 });
                 resolutionRadioGroup.add(this);
+            }
+        }
+
+        private static class HangarCustomFrameRateItem extends JRadioButtonMenuItem {
+            public HangarCustomFrameRateItem() {
+                super("Custom...");
+                this.addActionListener(e -> {
+                    var customFrameRateFrame = new HangarCustomFrameRateFrame();
+                    customFrameRateFrame.setLocationRelativeTo(HangarState.getMainFrame());
+                    customFrameRateFrame.setVisible(true);
+                });
             }
         }
 
