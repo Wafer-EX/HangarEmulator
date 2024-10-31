@@ -30,6 +30,7 @@ public class HangarMainFrame extends JFrame {
     private final GridBagConstraints constraints = new GridBagConstraints();
     private final HangarMainPanel mainPanel = new HangarMainPanel();
     private final HangarViewport viewport = new HangarViewport();
+    // private final HangarVirtualKeyboard virtualKeyboard = new HangarVirtualKeyboard();
 
     public HangarMainFrame() {
         super();
@@ -57,6 +58,9 @@ public class HangarMainFrame extends JFrame {
 
         constraints.gridx = 1;
         this.add(viewport, constraints);
+
+        //constraints.gridx = 2;
+        //this.add(virtualKeyboard, constraints);
 
         this.addKeyListener(new HangarKeyListener());
         this.requestFocus();
