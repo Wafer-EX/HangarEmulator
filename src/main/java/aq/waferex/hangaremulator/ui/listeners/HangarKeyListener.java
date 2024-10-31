@@ -33,10 +33,6 @@ public class HangarKeyListener implements KeyListener {
         super();
     }
 
-    public HashSet<Integer> getPressedKeys() {
-        return pressedKeys;
-    }
-
     @Override
     public void keyTyped(KeyEvent e) { }
 
