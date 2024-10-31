@@ -18,7 +18,6 @@ package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.MIDletLoader;
 import aq.waferex.hangaremulator.ui.dialogs.HangarFileChooser;
-import aq.waferex.hangaremulator.ui.frames.HangarCustomFrameRateFrame;
 import aq.waferex.hangaremulator.ui.frames.HangarCustomResolutionFrame;
 import aq.waferex.hangaremulator.utils.AudioUtils;
 import aq.waferex.hangaremulator.HangarKeyCodes;
@@ -249,9 +248,18 @@ public class HangarMenuBar extends JMenuBar {
             public HangarCustomFrameRateItem() {
                 super("Custom...");
                 this.addActionListener(e -> {
-                    var customFrameRateFrame = new HangarCustomFrameRateFrame();
-                    customFrameRateFrame.setLocationRelativeTo(HangarState.getMainFrame());
-                    customFrameRateFrame.setVisible(true);
+                    int currentFrameRate = HangarState.getGraphicsSettings().getFrameRate();
+                    String option = (String) JOptionPane.showInputDialog(this, "Frame rate:", "Set custom frame rate", JOptionPane.PLAIN_MESSAGE, null, null, currentFrameRate);
+
+                    if (option != null) {
+                        try {
+                            int frameRate = Integer.parseInt(option);
+                            HangarState.getGraphicsSettings().setFrameRate(frameRate);
+                        }
+                        catch (Exception ex) {
+                            JOptionPane.showMessageDialog(this, "The field should has integer value.", "Error!", JOptionPane.ERROR_MESSAGE);
+                        }
+                    }
                 });
                 frameRateRadioGroup.add(this);
             }
