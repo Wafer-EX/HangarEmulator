@@ -22,7 +22,7 @@ import javax.swing.*;
 import java.awt.*;
 
 @SuppressWarnings("FieldCanBeLocal")
-public class HangarResolutionFrame extends JFrame {
+public class HangarCustomResolutionFrame extends JFrame {
     private final JButton cancelButton = new JButton("Cancel");
     private final JButton applyButton = new JButton("Apply");
 
@@ -30,7 +30,7 @@ public class HangarResolutionFrame extends JFrame {
     private final JTextField widthTextField = new JTextField();
     private final JTextField heightTextField = new JTextField();
 
-    public HangarResolutionFrame() {
+    public HangarCustomResolutionFrame() {
         super("Set custom resolution");
 
         widthTextField.setText(String.valueOf(HangarState.getGraphicsSettings().getResolution().width));

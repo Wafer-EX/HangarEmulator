@@ -18,7 +18,7 @@ package aq.waferex.hangaremulator.ui.components;
 
 import aq.waferex.hangaremulator.MIDletLoader;
 import aq.waferex.hangaremulator.ui.dialogs.HangarFileChooser;
-import aq.waferex.hangaremulator.ui.frames.HangarResolutionFrame;
+import aq.waferex.hangaremulator.ui.frames.HangarCustomResolutionFrame;
 import aq.waferex.hangaremulator.utils.AudioUtils;
 import aq.waferex.hangaremulator.HangarKeyCodes;
 import aq.waferex.hangaremulator.HangarState;
@@ -245,9 +245,9 @@ public class HangarMenuBar extends JMenuBar {
             public HangarCustomResolutionItem() {
                 super("Custom...");
                 this.addActionListener(e -> {
-                    var resolutionFrame = new HangarResolutionFrame();
-                    resolutionFrame.setLocationRelativeTo(HangarState.getMainFrame());
-                    resolutionFrame.setVisible(true);
+                    var customResolutionFrame = new HangarCustomResolutionFrame();
+                    customResolutionFrame.setLocationRelativeTo(HangarState.getMainFrame());
+                    customResolutionFrame.setVisible(true);
                 });
             }
         }
