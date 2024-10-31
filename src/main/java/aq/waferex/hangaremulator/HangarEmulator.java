@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator;
 
+import aq.waferex.hangaremulator.utils.ArgsUtils;
 import com.formdev.flatlaf.FlatDarkLaf;
 import aq.waferex.hangaremulator.ui.frames.HangarMainFrame;
 import aq.waferex.hangaremulator.utils.SystemUtils;
@@ -31,7 +32,7 @@ public class HangarEmulator {
             var mainFrame = new HangarMainFrame();
             HangarState.setMainFrame(mainFrame);
 
-            HangarState.initSettingsFromArgs(args);
+            ArgsUtils.initSettingsFromArgs(args);
 
             mainFrame.setVisible(true);
             mainFrame.setLocationRelativeTo(null);
