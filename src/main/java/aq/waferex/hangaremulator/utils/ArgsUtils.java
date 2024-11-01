@@ -34,6 +34,7 @@ public class ArgsUtils {
     public static final String ARGUMENT_INTERPOLATION = "--interpolation";
     public static final String ARGUMENT_TOUCHSCREEN_SUPPORT = "--touchscreen-support";
     public static final String ARGUMENT_MIDLET = "--midlet";
+    public static final String ARGUMENT_SOUNDBANK = "--soundbank";
 
     public static void initSettingsFromArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
@@ -73,6 +74,20 @@ public class ArgsUtils {
                     String filePath = args[i + 1];
                     if (new File(filePath).isFile()) {
                         HangarState.setMIDletLoader(new MIDletLoader(filePath));
+                    }
+                    // TODO: throw exception else
+                    i++;
+                }
+                case ARGUMENT_SOUNDBANK -> {
+                    var soundbankFile = new File(args[i + 1]);
+                    if (soundbankFile.isFile()) {
+                        try {
+                            HangarState.getAudioSettings().setSoundbankFile(soundbankFile);
+                        }
+                        catch (Exception ex) {
+                            // TODO: throw exception, don't print exception
+                            ex.printStackTrace();
+                        }
                     }
                     // TODO: throw exception else
                     i++;
@@ -121,6 +136,11 @@ public class ArgsUtils {
         if (HangarState.getMIDletLoader().getMIDlet() != null) {
             argsList.add(ARGUMENT_MIDLET);
             argsList.add(HangarState.getMIDletLoader().getMIDletPath());
+        }
+
+        if (HangarState.getAudioSettings().getSoundbankFile() != null) {
+            argsList.add(ARGUMENT_SOUNDBANK);
+            argsList.add(HangarState.getAudioSettings().getSoundbankFile().getAbsolutePath());
         }
 
         return argsList;
