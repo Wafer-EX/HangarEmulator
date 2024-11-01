@@ -26,20 +26,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ArgsUtils {
+    public static final String ARGUMENT_SCREEN_CLEARING = "--screen-clearing";
+    public static final String ARGUMENT_VECTOR_ANTI_ALIASING = "--vector-anti-aliasing";
+    public static final String ARGUMENT_FRAME_RATE = "--fps";
+    public static final String ARGUMENT_SCALING_MODE = "--scaling-mode";
+    public static final String ARGUMENT_RESOLUTION = "--resolution";
+    public static final String ARGUMENT_INTERPOLATION = "--interpolation";
+    public static final String ARGUMENT_TOUCHSCREEN_SUPPORT = "--touchscreen-support";
+    public static final String ARGUMENT_MIDLET = "--midlet";
+
     // TODO: refactor this
     public static void initSettingsFromArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             String argument = args[i];
 
             switch (argument) {
-                case "--screen-clearing" -> HangarState.getGraphicsSettings().setScreenClearing(true);
-                case "--vector-anti-aliasing" -> HangarState.getGraphicsSettings().setVectorAntiAliasing(true);
-                case "--fps" -> {
+                case ARGUMENT_SCREEN_CLEARING -> HangarState.getGraphicsSettings().setScreenClearing(true);
+                case ARGUMENT_VECTOR_ANTI_ALIASING -> HangarState.getGraphicsSettings().setVectorAntiAliasing(true);
+                case ARGUMENT_FRAME_RATE -> {
                     int fps = Integer.parseInt(args[i + 1]);
                     HangarState.getGraphicsSettings().setFrameRate(fps);
                     i++;
                 }
-                case "--scaling-mode" -> {
+                case ARGUMENT_SCALING_MODE -> {
                     String scalingModeString = args[i + 1];
                     if (scalingModeString.equals("none")) {
                         HangarState.getGraphicsSettings().setScalingMode(ScalingModes.None);
@@ -52,15 +61,15 @@ public class ArgsUtils {
                     }
                     i++;
                 }
-                case "--resolution" -> {
+                case ARGUMENT_RESOLUTION -> {
                     int width = Integer.parseInt(args[i + 1]);
                     int height = Integer.parseInt(args[i + 2]);
                     HangarState.getGraphicsSettings().setResolution(new Dimension(width, height));
                     i += 2;
                 }
-                case "--interpolation" -> HangarState.getGraphicsSettings().setInterpolation(true);
-                case "--touchscreen-support" -> HangarState.getInputSettings().setTouchscreenInput(true);
-                case "--midlet" -> {
+                case ARGUMENT_INTERPOLATION -> HangarState.getGraphicsSettings().setInterpolation(true);
+                case ARGUMENT_TOUCHSCREEN_SUPPORT -> HangarState.getInputSettings().setTouchscreenInput(true);
+                case ARGUMENT_MIDLET -> {
                     String filePath = args[i + 1];
                     if (new File(filePath).isFile()) {
                         HangarState.setMIDletLoader(new MIDletLoader(filePath));
@@ -81,17 +90,17 @@ public class ArgsUtils {
         var argsList = new ArrayList<String>();
 
         if (HangarState.getGraphicsSettings().getScreenClearing()) {
-            argsList.add("--screen-clearing");
+            argsList.add(ARGUMENT_SCREEN_CLEARING);
         }
 
         if (HangarState.getGraphicsSettings().getVectorAntiAliasing()) {
-            argsList.add("--vector-anti-aliasing");
+            argsList.add(ARGUMENT_VECTOR_ANTI_ALIASING);
         }
 
-        argsList.add("--fps");
+        argsList.add(ARGUMENT_FRAME_RATE);
         argsList.add(String.valueOf(HangarState.getGraphicsSettings().getFrameRate()));
 
-        argsList.add("--scaling-mode");
+        argsList.add(ARGUMENT_SCALING_MODE);
         if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.None) {
             argsList.add("none");
         }
@@ -102,20 +111,20 @@ public class ArgsUtils {
             argsList.add("change-resolution");
         }
 
-        argsList.add("--resolution");
+        argsList.add(ARGUMENT_RESOLUTION);
         argsList.add(String.valueOf(HangarState.getGraphicsSettings().getResolution().width));
         argsList.add(String.valueOf(HangarState.getGraphicsSettings().getResolution().height));
 
         if (HangarState.getGraphicsSettings().getInterpolation()) {
-            argsList.add("--interpolation");
+            argsList.add(ARGUMENT_INTERPOLATION);
         }
 
         if (HangarState.getInputSettings().getTouchscreenInput()) {
-            argsList.add("--touchscreen-support");
+            argsList.add(ARGUMENT_TOUCHSCREEN_SUPPORT);
         }
 
         if (HangarState.getMIDletLoader().getMIDlet() != null) {
-            argsList.add("--midlet");
+            argsList.add(ARGUMENT_MIDLET);
             argsList.add(HangarState.getMIDletLoader().getMIDletPath());
         }
 
