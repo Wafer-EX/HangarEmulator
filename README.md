@@ -23,6 +23,7 @@ This is an experimental J2ME-emulator that let you play some old game fade for f
 | `--interpolation`        |                                      |                                         |
 | `--touchscreen-support`  |                                      |                                         |
 | `--midlet`               | `String`                             | Legal path to the MIDlet                |
+| `--soundbank`            | `String`                             | Legal path to the soundbank (.sf2)      |
 
 ## Requirements
 - Java 17
