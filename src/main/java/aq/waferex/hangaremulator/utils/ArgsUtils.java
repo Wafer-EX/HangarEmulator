@@ -35,7 +35,6 @@ public class ArgsUtils {
     public static final String ARGUMENT_TOUCHSCREEN_SUPPORT = "--touchscreen-support";
     public static final String ARGUMENT_MIDLET = "--midlet";
 
-    // TODO: refactor this
     public static void initSettingsFromArgs(String[] args) {
         for (int i = 0; i < args.length; i++) {
             String argument = args[i];
@@ -49,7 +48,8 @@ public class ArgsUtils {
                     i++;
                 }
                 case ARGUMENT_SCALING_MODE -> {
-                    String scalingModeString = args[i + 1];
+                    // TODO: refactor this
+                    final String scalingModeString = args[i + 1];
                     if (scalingModeString.equals("none")) {
                         HangarState.getGraphicsSettings().setScalingMode(ScalingModes.None);
                     }
@@ -85,7 +85,6 @@ public class ArgsUtils {
         }
     }
 
-    // TODO: refactor this
     public static List<String> getSettingsAsArgs() {
         var argsList = new ArrayList<String>();
 
@@ -101,14 +100,10 @@ public class ArgsUtils {
         argsList.add(String.valueOf(HangarState.getGraphicsSettings().getFrameRate()));
 
         argsList.add(ARGUMENT_SCALING_MODE);
-        if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.None) {
-            argsList.add("none");
-        }
-        else if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.Fit) {
-            argsList.add("fit");
-        }
-        else if (HangarState.getGraphicsSettings().getScalingMode() == ScalingModes.ChangeResolution) {
-            argsList.add("change-resolution");
+        switch (HangarState.getGraphicsSettings().getScalingMode()) {
+            case None -> argsList.add("none");
+            case Fit -> argsList.add("fit");
+            case ChangeResolution -> argsList.add("change-resolution");
         }
 
         argsList.add(ARGUMENT_RESOLUTION);
