@@ -19,7 +19,7 @@ package aq.waferex.hangaremulator.utils.nokia;
 import com.nokia.mid.ui.DirectGraphics;
 
 public record ImageManipulationInfo(boolean flipX, boolean flipY, int rotateTimes) {
-    public static ImageManipulationInfo getInfo(int manipulation, int imageWidth, int imageHeight) {
+    public static ImageManipulationInfo getInfo(int manipulation) {
         boolean flipX = (manipulation & DirectGraphics.FLIP_HORIZONTAL) == DirectGraphics.FLIP_HORIZONTAL;
         boolean flipY = (manipulation & DirectGraphics.FLIP_VERTICAL) == DirectGraphics.FLIP_VERTICAL;
         int rotateTimes = 0;
