@@ -105,7 +105,7 @@ public final class ImageUtils {
 
     // TODO: merge with methods above to optimize it?
     public static BufferedImage manipulateImage(BufferedImage image, int manipulation) {
-        var manipulationInfo = ImageManipulationInfo.getInfo(manipulation, image.getWidth(), image.getHeight());
+        var manipulationInfo = ImageManipulationInfo.getInfo(manipulation);
         var manipulatedImage = ImageUtils.rotateImage(image, manipulationInfo.rotateTimes());
 
         if (manipulationInfo.flipY()) {

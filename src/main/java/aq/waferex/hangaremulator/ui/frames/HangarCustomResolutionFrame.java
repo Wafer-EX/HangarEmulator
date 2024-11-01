@@ -54,23 +54,28 @@ public class HangarCustomResolutionFrame extends JFrame {
         formConstraints.insets.set(0, 0, 4, 4);
         formPanel.add(new JLabel("Width:"), formConstraints);
 
+        formConstraints.fill = GridBagConstraints.HORIZONTAL;
+        formConstraints.weightx = 1.0f;
         formConstraints.gridx = 1;
         formConstraints.insets.set(0, 4, 4, 0);
         formPanel.add(widthTextField, formConstraints);
 
+        formConstraints.fill = GridBagConstraints.NONE;
+        formConstraints.weightx = 0.0f;
         formConstraints.gridx = 0;
         formConstraints.gridy = 1;
         formConstraints.insets.set(4, 0, 0, 4);
         formPanel.add(new JLabel("Height:"), formConstraints);
 
+        formConstraints.fill = GridBagConstraints.HORIZONTAL;
+        formConstraints.weightx = 1.0f;
         formConstraints.gridx = 1;
         formConstraints.insets.set(4, 4, 0, 0);
         formPanel.add(heightTextField, formConstraints);
 
+        formConstraints.fill = GridBagConstraints.BOTH;
         formConstraints.insets.set(0, 0, 0, 0);
-        formConstraints.gridx = 2;
         formConstraints.gridy = 2;
-        formConstraints.weightx = 1.0f;
         formConstraints.weighty = 1.0f;
         formPanel.add(Box.createGlue(), formConstraints);
         formPanel.setBorder(BorderFactory.createEmptyBorder(12, 12, 12, 12));
@@ -78,12 +83,14 @@ public class HangarCustomResolutionFrame extends JFrame {
         var buttonsPanel = new JPanel(new FlowLayout(FlowLayout.RIGHT));
         buttonsPanel.add(applyButton);
         buttonsPanel.add(cancelButton);
+        buttonsPanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         var contentPane = getContentPane();
         contentPane.setLayout(new BorderLayout());
         contentPane.add(formPanel, BorderLayout.CENTER);
         contentPane.add(buttonsPanel, BorderLayout.SOUTH);
 
+        this.getRootPane().setDefaultButton(applyButton);
         this.setPreferredSize(new Dimension(280, 160));
         this.setResizable(false);
 
