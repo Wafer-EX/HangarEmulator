@@ -37,12 +37,6 @@ public class HangarViewport extends JPanel {
 
         this.removeAll();
 
-        // Adds title for lists
-        if (displayable.getTitle() != null && !(displayable instanceof Canvas)) {
-            var label = new JLabel(displayable.getTitle(), JLabel.CENTER);
-            this.add(label, BorderLayout.NORTH);
-        }
-
         // Add scroll pane for wrapper
         var scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -54,6 +48,12 @@ public class HangarViewport extends JPanel {
         if (!displayable.getCommands().isEmpty()) {
             var displayableCommands = new HangarViewportCommands(displayable);
             this.add(displayableCommands, BorderLayout.SOUTH);
+        }
+
+        // Add title at top
+        if (displayable.getTitle() != null && !(displayable instanceof Canvas canvas && canvas.isFullScreenEnabled())) {
+            var label = new JLabel(displayable.getTitle(), JLabel.CENTER);
+            this.add(label, BorderLayout.NORTH);
         }
 
         // Displayable is always not null here
