@@ -21,6 +21,8 @@ import aq.waferex.hangaremulator.HangarState;
 import java.util.ArrayList;
 
 public abstract class Displayable {
+    private String title;
+
     protected Ticker ticker;
     protected CommandListener commandListener;
     protected ArrayList<Command> commandList = new ArrayList<>();
@@ -34,11 +36,11 @@ public abstract class Displayable {
     }
 
     public String getTitle() {
-        return HangarState.getMainFrame().getTitle();
+        return title;
     }
 
     public void setTitle(String s) {
-        HangarState.getMainFrame().setTitle(s);
+        title = s;
     }
 
     public Ticker getTicker() {
