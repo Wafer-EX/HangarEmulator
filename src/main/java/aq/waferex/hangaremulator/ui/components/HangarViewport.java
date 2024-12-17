@@ -24,6 +24,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Font;
 
 public class HangarViewport extends JPanel {
     public HangarViewport() {
@@ -53,6 +54,10 @@ public class HangarViewport extends JPanel {
         // Add title at top
         if (displayable.getTitle() != null && !(displayable instanceof Canvas canvas && canvas.isFullScreenEnabled())) {
             var label = new JLabel(displayable.getTitle(), JLabel.CENTER);
+            var font = label.getFont();
+
+            label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
+            label.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
             this.add(label, BorderLayout.NORTH);
         }
 
