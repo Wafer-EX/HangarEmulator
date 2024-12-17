@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components;
 
+import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.ui.components.wrappers.*;
 
 import javax.microedition.lcdui.*;
@@ -60,7 +61,9 @@ public class HangarViewport extends JPanel {
             var canvasWrapper = new HangarCanvasWrapper(canvas);
             canvas.setRelatedWrapper(canvasWrapper);
             scrollPane.setViewportView(canvasWrapper);
+
             SwingUtilities.invokeLater(canvas::showNotify);
+            HangarState.getMainFrame().requestFocus();
         }
         else if (displayable instanceof List list) {
             var listWrapper = new HangarListWrapper(list);
