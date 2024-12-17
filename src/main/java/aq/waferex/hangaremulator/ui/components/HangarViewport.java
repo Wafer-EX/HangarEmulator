@@ -16,6 +16,7 @@
 
 package aq.waferex.hangaremulator.ui.components;
 
+import aq.waferex.hangaremulator.HangarState;
 import aq.waferex.hangaremulator.ui.components.wrappers.*;
 
 import javax.microedition.lcdui.*;
@@ -23,6 +24,7 @@ import javax.microedition.lcdui.Canvas;
 import javax.microedition.lcdui.List;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.Font;
 
 public class HangarViewport extends JPanel {
     public HangarViewport() {
@@ -49,12 +51,24 @@ public class HangarViewport extends JPanel {
             this.add(displayableCommands, BorderLayout.SOUTH);
         }
 
+        // Add title at top
+        if (displayable.getTitle() != null && !(displayable instanceof Canvas canvas && canvas.isFullScreenEnabled())) {
+            var label = new JLabel(displayable.getTitle(), JLabel.CENTER);
+            var font = label.getFont();
+
+            label.setFont(font.deriveFont(font.getStyle() | Font.BOLD));
+            label.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+            this.add(label, BorderLayout.NORTH);
+        }
+
         // Displayable is always not null here
         if (displayable instanceof Canvas canvas) {
             var canvasWrapper = new HangarCanvasWrapper(canvas);
             canvas.setRelatedWrapper(canvasWrapper);
             scrollPane.setViewportView(canvasWrapper);
+
             SwingUtilities.invokeLater(canvas::showNotify);
+            HangarState.getMainFrame().requestFocus();
         }
         else if (displayable instanceof List list) {
             var listWrapper = new HangarListWrapper(list);

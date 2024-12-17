@@ -50,11 +50,16 @@ public abstract class Canvas extends Displayable {
 
     private BufferedImage screenImage;
     private HangarCanvasWrapper canvasWrapper;
+    private boolean isFullScreenEnabled = false;
 
     protected Canvas() {
         // TODO: get different resolution if scaling mode is ChangeResolution
         var resolution = HangarState.getGraphicsSettings().getResolution();
         screenImage = ImageUtils.createCompatibleImage(resolution.width, resolution.height);
+    }
+
+    public boolean isFullScreenEnabled() {
+        return isFullScreenEnabled;
     }
 
     public BufferedImage getScreenImage() {
@@ -98,7 +103,9 @@ public abstract class Canvas extends Displayable {
         return CanvasUtils.keyCodeToGameAction(keyCode);
     }
 
-    public void setFullScreenMode(boolean mode) { }
+    public void setFullScreenMode(boolean mode) {
+        isFullScreenEnabled = mode;
+    }
 
     public void keyPressed(int keyCode) { }
 

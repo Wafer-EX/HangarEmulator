@@ -59,7 +59,7 @@ public class MIDletLoader {
         try {
             if (midlet != null) {
                 var hangarFrame = HangarState.getMainFrame();
-                hangarFrame.setTitle(System.getProperty("MIDlet-Name"));
+                hangarFrame.setTitle(System.getProperty("MIDlet-Name") + " - Hangar Emulator");
                 hangarFrame.setIconImage(MIDletResources.getIcon());
 
                 new Thread(() -> {
