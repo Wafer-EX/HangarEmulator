@@ -36,6 +36,12 @@ public class HangarViewport extends JPanel {
 
         this.removeAll();
 
+        // Adds title for lists
+        if (displayable.getTitle() != null && !(displayable instanceof Canvas)) {
+            var label = new JLabel(displayable.getTitle(), JLabel.CENTER);
+            this.add(label, BorderLayout.NORTH);
+        }
+
         // Add scroll pane for wrapper
         var scrollPane = new JScrollPane();
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
